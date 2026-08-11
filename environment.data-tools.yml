@@ -1,10 +1,7 @@
-name: aidrbench
+name: aidrbench-data-tools
 channels:
   - conda-forge
   - nodefaults
 dependencies:
   - python=3.12.13
-  - gh
-  - pip
-  - pip:
-      - -r requirements.lock.txt
+  - awscli=2.36.19

@@ -394,46 +394,43 @@ sudo apt update
 sudo apt install -y \
   git git-lfs curl wget jq unzip tar \
   build-essential pkg-config \
-  tmux htop nvme-cli smartmontools \
-  awscli
+  tmux htop nvme-cli smartmontools
 
 git lfs install
 ```
 
 ### 7.4 Python 项目环境
 
-推荐使用 `uv` 管理 Python、虚拟环境和锁文件：
+本仓库在论文服务器上使用独立 Conda 环境运行，避免污染 `base` 或其他项目环境。
+`uv` 只用于解析并锁定 Python 依赖；运行和测试都通过 Conda：
 
 ```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source ~/.bashrc
+conda env create --file environment.lock.yml
+conda activate aidrbench
 
-uv --version
-uv python install 3.12
-uv python pin 3.12
+python --version
+python -m pytest -q
+ruff check .
+mypy
+```
 
-# 仓库还未初始化时：
-uv init --package
+`environment.yml` 是便于阅读的环境定义，`environment.lock.yml` 固定 Conda build 和
+精确的 pip 版本，`uv.lock`/`requirements.lock.txt` 固定 Python 依赖解析结果。更新依赖时
+修改 `pyproject.toml` 后重新生成锁文件，不能手工编辑 `uv.lock`。
 
-uv add \
-  gymnasium \
-  "stable-baselines3[extra]" \
-  sb3-contrib \
-  numpy pandas pyarrow scipy scikit-learn \
-  pydantic pyyaml hydra-core \
-  cvxpy osqp \
-  tensorboard matplotlib joblib \
-  requests httpx rich typer
+AWS CLI 使用独立的数据工具环境，避免它的依赖约束进入主科学环境：
 
-uv add --dev pytest pytest-cov ruff mypy
-uv lock
-uv sync
+```bash
+conda env create --file environment.data-tools.lock.yml
+conda run --name aidrbench-data-tools aws --version
 ```
 
 AIPerf 建议作为独立工具安装，避免与主环境的依赖互相影响：
 
 ```bash
-uv tool install aiperf
+conda create --name aidrbench-aiperf --override-channels -c conda-forge python=3.12 pip
+conda activate aidrbench-aiperf
+python -m pip install aiperf
 
 aiperf --help
 ```
@@ -747,6 +744,30 @@ https://registry.opendata.aws/nrel-pds-building-stock/
 data/processed/community_load.parquet
 ```
 
+社区 profile 选择必须由 catalog/config 驱动，不能在代码中固定某个地点或气候区：
+
+```bash
+conda run --name aidrbench aidrbench data catalog-community \
+  --input 'data/raw/eulp/**/*.csv' \
+  --output data/manifests/community_profiles.yaml
+
+conda run --name aidrbench aidrbench data list-community-profiles \
+  --catalog data/manifests/community_profiles.yaml
+
+conda run --name aidrbench aidrbench data preprocess-community \
+  --catalog data/manifests/community_profiles.yaml \
+  --profile <LISTED_PROFILE_ID> \
+  --output data/processed/community_selected.parquet
+
+conda run --name aidrbench aidrbench data preprocess \
+  --config configs/data/community_eulp.yaml
+```
+
+仓库的 3A、3C、5A 是首个论文默认矩阵，不是 benchmark 的硬编码范围。新增官方
+profile 后重新生成 catalog，即可从列表用一个或多个 `--profile` 任意选择，也可在配置中的
+`profiles` 列表选择。相同气候区和建筑类型的多个地点文件会获得不同 profile ID，不会互相
+覆盖；地点级 OOD 切分与每个 profile 内的时间切分必须分别记录。
+
 标准 schema：
 
 ```text
@@ -805,15 +826,16 @@ uv run aidrbench data make-synthetic-community \
   --output data/processed/community_synthetic.parquet
 ```
 
-### 11.4 日本本地扩展
+### 11.4 可选区域扩展（不作为默认 benchmark）
 
-后续可加入：
+后续可通过 catalog/config 加入任意区域的：
 
-- JEPX 九州区域日前价格；
-- 九州电力区域实际用电或供需数据；
-- 福冈天气。
+- 日前价格；
+- 区域实际用电或供需数据；
+- 对应地点天气。
 
-这些数据可用于构建“九州案例”，但区域总负荷不能被表述为真实社区馈线数据。可将其归一化后作为背景形状或外部价格信号。
+区域总负荷不能被表述为真实社区馈线数据。可将其归一化后作为背景形状或外部价格信号，
+并在实验清单中记录具体地点、时间范围和来源版本。
 
 ---
 
@@ -2380,7 +2402,7 @@ YYYYMMDD_HHMMSS_<controller>_<split>_<seed>_<short_hash>
 完成：
 
 - README 入库；
-- `uv sync` 成功；
+- 独立 Conda 环境从锁文件同步成功；
 - Docker GPU 测试成功；
 - 系统信息和 power defaults 已保存；
 - `pytest` 可以运行空测试。
@@ -2589,4 +2611,3 @@ docker pull "$VLLM_IMAGE"
 ```text
 vLLM smoke → AIPerf 10-request replay → telemetry → calibration → surrogate → Gym env → RBC → MPC/RL → HIL
 ```
-

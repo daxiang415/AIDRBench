@@ -1,0 +1,21 @@
+schema_version: 1
+seed: 42
+policy: profile_level_climate_ood
+selection_is_configurable: true
+profile_catalog: data/manifests/community_profiles.yaml
+train:
+  - eulp_resstock_3a_single_family_detached
+  - eulp_comstock_3a_smalloffice
+  - eulp_mixed_3a
+validation:
+  - eulp_resstock_5a_single_family_detached
+  - eulp_comstock_5a_smalloffice
+  - eulp_mixed_5a
+test_ood:
+  - eulp_resstock_3c_single_family_detached
+  - eulp_comstock_3c_smalloffice
+  - eulp_mixed_3c
+notes:
+  - The three-zone matrix is the initial paper default, not a hard-coded benchmark limit.
+  - Any profiles present in the catalog can be selected through configs or CLI.
+  - Temporal 60/20/20 partitions are recorded separately in split_v1.yaml.

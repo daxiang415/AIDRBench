@@ -1,12 +1,36 @@
-# Offline development
+# Development environment
 
-The P0 checks intentionally use only Python 3.12's standard library:
+Use the project-specific Conda environment; do not install project packages in
+`base`:
+
+```bash
+conda env create --file environment.lock.yml
+conda activate aidrbench
+python -m pytest -q
+ruff check .
+mypy
+```
+
+For a dependency refresh, edit `pyproject.toml`, regenerate `uv.lock` and
+`requirements.lock.txt`, update the existing environment, then export the exact
+Conda state to `environment.lock.yml`. Never hand-edit `uv.lock`.
+
+The quick repository checks are:
 
 ```bash
 ./scripts/check_project.sh
-PYTHONPATH=src python3 -m aidrbench show-actions
+aidrbench project-check
+aidrbench show-actions
 ```
 
-When network access is explicitly approved in a later phase, install `uv`, run
-`uv lock` and `uv sync --extra dev`, then use `uv run pytest -q`, Ruff, and mypy.
-Do not hand-create `uv.lock`.
+Downloaded raw data, generated Parquet files, and machine-specific results stay
+outside Git. Their source metadata and SHA-256 manifests are tracked under
+`data/manifests/`.
+
+AWS data access is isolated from the scientific Python stack because current
+AWS CLI and pandas dependency constraints differ:
+
+```bash
+conda env create --file environment.data-tools.lock.yml
+conda run --name aidrbench-data-tools aws --version
+```

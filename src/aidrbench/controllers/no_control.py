@@ -8,7 +8,6 @@ from typing import Any
 from aidrbench.controllers.base import BaseController
 from aidrbench.envs.actions import ActionComponents, encode_action
 
-
 NO_CONTROL_ACTION = encode_action(ActionComponents(1.00, 2, 1.00))
 
 

@@ -2,7 +2,13 @@ from __future__ import annotations
 
 import unittest
 
-from aidrbench.envs.actions import ACTION_COUNT, ActionComponents, all_actions, decode_action, encode_action
+from aidrbench.envs.actions import (
+    ACTION_COUNT,
+    ActionComponents,
+    all_actions,
+    decode_action,
+    encode_action,
+)
 
 
 class ActionCodecTests(unittest.TestCase):

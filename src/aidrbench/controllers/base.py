@@ -12,6 +12,7 @@ class BaseController(ABC):
 
     def reset(self, scenario_metadata: Mapping[str, Any] | None = None) -> None:
         """Reset episode-local state."""
+        return None
 
     @abstractmethod
     def act(self, observation: Mapping[str, Any], deterministic: bool = True) -> int:
@@ -19,3 +20,4 @@ class BaseController(ABC):
 
     def close(self) -> None:
         """Release controller resources."""
+        return None

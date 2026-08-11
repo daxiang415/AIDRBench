@@ -1,0 +1,129 @@
+schema_version: 1
+last_reviewed: "2026-08-11"
+policy:
+  raw_data_read_only: true
+  raw_data_committed: false
+  processed_format: parquet
+  require_sha256: true
+  preserve_time_order: true
+
+sources:
+  burstgpt:
+    role: online_inference_arrivals_and_token_counts
+    official_repository: https://github.com/HPMLL/BurstGPT
+    release: v2.0
+    release_published_at_utc: "2026-01-15T16:39:16Z"
+    release_url: https://github.com/HPMLL/BurstGPT/releases/tag/v2.0
+    license: CC-BY-4.0
+    citation_doi: https://doi.org/10.1145/3711896.3737413
+    quick_trace:
+      url: https://raw.githubusercontent.com/HPMLL/BurstGPT/main/data/BurstGPT_1.csv
+      retrieved_at_utc: "2026-08-11T06:20:00Z"
+      local_path: data/raw/burstgpt/BurstGPT_1.csv
+      sha256: 46fc9480ef0b748ecb2b51d512ff08c196b031782cbe6f78e28044d768e86d5a
+      bytes: 50853373
+      purpose: preprocessing_smoke_test_only
+    formal_traces:
+      - local_path: data/raw/burstgpt/BurstGPT_without_fails_1.csv
+        url: https://github.com/HPMLL/BurstGPT/releases/download/v2.0/BurstGPT_without_fails_1.csv
+        retrieved_at_utc: "2026-08-11T07:04:00Z"
+        sha256: a4d068a7113ec0290e74063a1b3447dc6001a30e4298eb313581b71006dda1f4
+        bytes: 51429517
+      - local_path: data/raw/burstgpt/BurstGPT_without_fails_2.csv
+        url: https://github.com/HPMLL/BurstGPT/releases/download/v2.0/BurstGPT_without_fails_2.csv
+        retrieved_at_utc: "2026-08-11T07:04:00Z"
+        sha256: 56193aa9b2bb26128ded43d2d29a960df6bf5af062bcfc9b005f3fcaa4e6e501
+        bytes: 142376815
+      - local_path: data/raw/burstgpt/BurstGPT_without_fails_3.csv
+        url: https://github.com/HPMLL/BurstGPT/releases/download/v2.0/BurstGPT_without_fails_3.csv
+        retrieved_at_utc: "2026-08-11T07:04:00Z"
+        sha256: 3326259f9efb11845bc5ef85fa97e6f691050b0974621c91ef22acd566c43a40
+        bytes: 217312026
+
+  alibaba_gpu_v2020:
+    role: empirically_parameterized_batch_arrivals_sizes_and_gpu_demand
+    official_repository: https://github.com/alibaba/clusterdata
+    schema_url: https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2020/README.md
+    collection_period: July-August 2020
+    citation: "Weng et al., MLaaS in the Wild, USENIX NSDI 2022"
+    deadline_warning: source_has_no_deadlines_all_deadlines_are_scenario_generated
+    files:
+      pai_job_table.tar.gz:
+        url: https://aliopentrace.oss-cn-beijing.aliyuncs.com/v2020GPUTraces/pai_job_table.tar.gz
+        published_sha256: 5aad7f7caac501136d14ed6a48e40546f825d7b0617a3a4f337e2348fe0a6cb0
+        retrieved_at_utc: "2026-08-11T06:57:00Z"
+        local_path: data/raw/alibaba_v2020/pai_job_table.tar.gz
+        verified_sha256: 5aad7f7caac501136d14ed6a48e40546f825d7b0617a3a4f337e2348fe0a6cb0
+        bytes: 62065432
+        extracted_csv:
+          local_path: data/raw/alibaba_v2020/pai_job_table.csv
+          sha256: 379ecb3becaba347f44a53bf7eb53e54b185221b2a0338a3f828828d269ba96c
+          bytes: 133288147
+      pai_task_table.tar.gz:
+        url: https://aliopentrace.oss-cn-beijing.aliyuncs.com/v2020GPUTraces/pai_task_table.tar.gz
+        published_sha256: cd1d6dc3215d2a8607ccf6b6dd952b5db776df86926c73259fea7c1499ac40e5
+        retrieved_at_utc: "2026-08-11T06:57:00Z"
+        local_path: data/raw/alibaba_v2020/pai_task_table.tar.gz
+        verified_sha256: cd1d6dc3215d2a8607ccf6b6dd952b5db776df86926c73259fea7c1499ac40e5
+        bytes: 35514117
+        extracted_csv:
+          local_path: data/raw/alibaba_v2020/pai_task_table.csv
+          sha256: 6954802b457305f8a9e480ef97c40060baee59649fd3adc62c5a1e048aa058de
+          bytes: 113398956
+    redistribution_note: verify_the_official_trace_terms_before_redistributing_raw_files
+
+  nlr_nrel_eulp:
+    role: community_background_load
+    official_catalog: https://registry.opendata.aws/nrel-pds-building-stock/
+    documentation: https://www.nrel.gov/buildings/end-use-load-profiles.html
+    bucket: s3://oedi-data-lake/nrel-pds-building-stock/
+    resolution: 15_minutes
+    nature: physics_based_profiles_calibrated_and_validated_against_measured_data
+    license: ComStock_and_ResStock_licenses
+    selection_status: initial_multi_climate_matrix_downloaded
+    retrieved_at_utc: "2026-08-11T07:18:00Z"
+    profile_catalog: data/manifests/community_profiles.yaml
+    benchmark_selection: configs/data/community_eulp.yaml
+    initial_matrix:
+      climate_zones: [3A, 3C, 5A]
+      note: default_paper_matrix_not_a_hard_coded_benchmark_limit
+      profiles_per_zone: [single_family_detached, small_office, mixed]
+    selected_files:
+      - path: data/raw/eulp/resstock/up00-3a-single-family_detached.csv
+        s3_uri: s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/resstock_amy2018_release_1/timeseries_aggregates/by_ashrae_iecc_climate_zone_2004/upgrade=0/ashrae_iecc_climate_zone_2004=3A/up00-3a-single-family_detached.csv
+        sha256: c2c93294c1a4a5ce4ba1d6e5b92c4b78c0d96d7244a74ee11da7a1a68b751c9b
+        bytes: 31974822
+      - path: data/raw/eulp/resstock/up00-3c-single-family_detached.csv
+        s3_uri: s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/resstock_amy2018_release_1/timeseries_aggregates/by_ashrae_iecc_climate_zone_2004/upgrade=0/ashrae_iecc_climate_zone_2004=3C/up00-3c-single-family_detached.csv
+        sha256: 680769bd0b86288868cb7a87cd5040e9ed37a5993b80754b5da10a6ab4536d58
+        bytes: 31670667
+      - path: data/raw/eulp/resstock/up00-5a-single-family_detached.csv
+        s3_uri: s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/resstock_amy2018_release_1/timeseries_aggregates/by_ashrae_iecc_climate_zone_2004/upgrade=0/ashrae_iecc_climate_zone_2004=5A/up00-5a-single-family_detached.csv
+        sha256: e464f2f97cb50861d76b0cf5e7aec1cbc7a64ba54acbadc70fbc0a2e6879c056
+        bytes: 33009750
+      - path: data/raw/eulp/comstock/up0-3a-smalloffice.csv
+        s3_uri: s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/comstock_amy2018_release_3/timeseries_aggregates/by_ashrae_iecc_climate_zone_2006/upgrade=0/ashrae_iecc_climate_zone_2006=3A/up0-3a-smalloffice.csv
+        sha256: 58e75abb94fe976f40057155b9f6a435292b6032b7ea5826d3e79574557f3b1c
+        bytes: 10305676
+      - path: data/raw/eulp/comstock/up0-3c-smalloffice.csv
+        s3_uri: s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/comstock_amy2018_release_3/timeseries_aggregates/by_ashrae_iecc_climate_zone_2006/upgrade=0/ashrae_iecc_climate_zone_2006=3C/up0-3c-smalloffice.csv
+        sha256: 94c81a0116f1a19784929e31fe6addbc1de52f7fd3f11d0590d250f0df8f889b
+        bytes: 9304762
+      - path: data/raw/eulp/comstock/up0-5a-smalloffice.csv
+        s3_uri: s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/comstock_amy2018_release_3/timeseries_aggregates/by_ashrae_iecc_climate_zone_2006/upgrade=0/ashrae_iecc_climate_zone_2006=5A/up0-5a-smalloffice.csv
+        sha256: 6ccd64bfbef650930b8aa48423c6fc50a1ec951ddf8d19334fce0ac7162856c5
+        bytes: 10534407
+
+generated_sources:
+  community_synthetic:
+    role: development_and_ablation_only
+    generator: aidrbench.data.community.make_synthetic_community
+    real_measurements: false
+  dr_events:
+    role: controlled_scenario_manifest
+    generator: aidrbench.data.community.generate_dr_events
+    real_utility_events: false
+  alibaba_deadlines:
+    role: scenario_generated_slack_factors
+    real_production_deadlines: false
+    supported_slack_factors: [1.5, 2.0, 4.0, 8.0]

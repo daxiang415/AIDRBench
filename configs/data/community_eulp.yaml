@@ -1,0 +1,15 @@
+dataset: community_eulp
+phase: P1
+input_glob: data/raw/eulp/**/*.csv
+catalog: data/manifests/community_profiles.yaml
+profiles:
+  - eulp_resstock_3a_single_family_detached
+  - eulp_comstock_3a_smalloffice
+  - eulp_resstock_3c_single_family_detached
+  - eulp_comstock_3c_smalloffice
+  - eulp_resstock_5a_single_family_detached
+  - eulp_comstock_5a_smalloffice
+include_mixed: true
+commercial_weight: 0.25
+peak_kw: 100
+output: data/processed/community_load.parquet
