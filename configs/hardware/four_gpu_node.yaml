@@ -1,0 +1,17 @@
+# Values that depend on the physical server remain explicit placeholders.
+phase: P2
+expected_gpu_count: 4
+inference_gpu_ids: [0, 1]
+batch_gpu_ids: [2, 3]
+require_topology_check: true
+power:
+  infer_cap_ratios: [0.70, 0.85, 1.00]
+  batch_cap_ratios: [0.60, 0.80, 1.00]
+  absolute_limits_source: nvidia_smi_device_report
+safety:
+  max_gpu_temperature_c: null
+  max_consecutive_actuator_failures: 2
+  controller_heartbeat_timeout_s: 10
+  telemetry_timeout_s: 5
+  restore_defaults_on_exit: true
+  stop_batch_on_fault: true

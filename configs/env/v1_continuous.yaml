@@ -1,0 +1,4 @@
+# Reserved for V1. It is intentionally disabled during the first paper.
+enabled: false
+environment_id: AIDRBenchContinuous-v0
+action_space: continuous

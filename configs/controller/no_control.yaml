@@ -1,0 +1,4 @@
+controller: no_control
+inference_cap_ratio: 1.0
+batch_gpu_count: 2
+batch_cap_ratio: 1.0

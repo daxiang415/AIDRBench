@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling>=1.26,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aidrbench"
+version = "0.1.0.dev0"
+description = "Hardware-calibrated benchmark for demand-responsive AI data centers"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "License not yet selected" }
+authors = []
+dependencies = [
+  "gymnasium>=1.0,<2",
+  "numpy>=2,<3",
+  "pandas>=2.2,<3",
+  "pyarrow>=18,<22",
+  "pydantic>=2.10,<3",
+  "pyyaml>=6,<7",
+  "rich>=13,<15",
+  "typer>=0.15,<1",
+]
+
+[project.optional-dependencies]
+control = ["cvxpy>=1.6,<2", "osqp>=0.6,<2"]
+rl = ["stable-baselines3[extra]>=2.5,<3", "sb3-contrib>=2.5,<3"]
+analysis = [
+  "joblib>=1.4,<2",
+  "matplotlib>=3.9,<4",
+  "scikit-learn>=1.6,<2",
+  "scipy>=1.15,<2",
+]
+dev = [
+  "mypy>=1.14,<2",
+  "pytest>=8.3,<9",
+  "pytest-cov>=6,<7",
+  "ruff>=0.9,<1",
+]
+
+[project.scripts]
+aidrbench = "aidrbench.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aidrbench"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["aidrbench"]
+mypy_path = "src"

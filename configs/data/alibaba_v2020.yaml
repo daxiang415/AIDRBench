@@ -1,0 +1,9 @@
+dataset: alibaba_gpu_v2020
+phase: P1
+job_table: data/raw/alibaba_v2020/pai_job_table.csv
+task_table: data/raw/alibaba_v2020/pai_task_table.csv
+output: data/processed/batch_jobs.parquet
+max_local_batch_gpus: 2
+deadline_policy: slack_mixture
+deadline_is_synthetic: true
+seed: 42

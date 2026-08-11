@@ -1,0 +1,8 @@
+experiment: hil_main
+phase: P5
+backend: hardware
+enabled: false
+deterministic: true
+exploration_noise: false
+parameter_update: false
+virtual_nodes: 1
