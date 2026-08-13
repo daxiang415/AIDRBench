@@ -1,0 +1,51 @@
+schema_version: 1
+protocol_id: aidrbench_hourly_firm_flexibility_v1
+test_locked: true
+environment_interface:
+  observation_version: firm_v4
+  reward_version: firm_threshold_v2
+  step_order: arrivals_observation_action
+community_profile_split: data/manifests/community_profile_split_v1.yaml
+data:
+  community:
+    path: data/processed/community_load.parquet
+    sha256: daa513e8a6597232c47c5c0554fcf6723e59e785c3fe3c85c058ae54c6f235f0
+  workload_summary:
+    path: data/processed/jobs_summary.parquet
+    sha256: 95c91a8035197e15f29e9c1d15a9147d07b2a6959b2bb08322cb9f033b029124
+  workload_sampler:
+    path: data/processed/jobs_summary_sampler.parquet
+    sha256: 67e5cc0878e246e9de547cc838c6b0e3df5a25fcd52f043624235873ca2a0d66
+rl_training_seeds: [101, 102, 103, 104, 105]
+splits:
+  train:
+    role: policy_fit
+    episode_seed_range: [10000, 19999]
+    community_profiles: [eulp_mixed_3a]
+    configs:
+      - configs/env/hourly_formal_train_continuous.yaml
+      - configs/env/hourly_formal_train_discrete.yaml
+  validation:
+    role: controller_and_hyperparameter_selection
+    episode_seed_range: [20000, 20099]
+    community_profiles: [eulp_mixed_5a]
+    configs:
+      - configs/env/hourly_formal_validation.yaml
+  test:
+    role: locked_ood_evaluation
+    episode_seed_range: [30000, 30499]
+    community_profiles: [eulp_mixed_3c]
+    configs:
+      - configs/env/hourly_formal_test_ood.yaml
+frozen_criteria:
+  reliability_target: 0.95
+  confidence_level: 0.95
+  min_delivery_ratio: 0.95
+  max_deadline_miss_rate: 0.01
+  max_rebound_ratio: 0.25
+  min_window_peak_relief_fraction: 0.50
+  max_terminal_backlog_fraction: 0.02
+notes:
+  - Lite arrivals are independently resampled from the Alibaba 2026 summary for every seed.
+  - The test split is not used for controller selection or threshold tuning.
+  - The block arrival process and 3C profile make the locked test distribution OOD.

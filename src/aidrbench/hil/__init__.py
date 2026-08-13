@@ -1,5 +1,17 @@
-"""Hardware-in-the-loop interfaces; no hardware mutation is enabled in P0."""
+"""Hardware-in-the-loop interfaces with an explicit mutation boundary."""
 
+from aidrbench.hil.actuator_client import (
+    ActuatorError,
+    NvidiaSmiPowerBackend,
+    PowerActuator,
+    PowerActuatorConfig,
+)
 from aidrbench.hil.backend import Backend
 
-__all__ = ["Backend"]
+__all__ = [
+    "ActuatorError",
+    "Backend",
+    "NvidiaSmiPowerBackend",
+    "PowerActuator",
+    "PowerActuatorConfig",
+]

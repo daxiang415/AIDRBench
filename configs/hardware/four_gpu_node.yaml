@@ -5,10 +5,80 @@ inference_gpu_ids: [0, 1]
 batch_gpu_ids: [2, 3]
 require_topology_check: true
 power:
-  infer_cap_ratios: [0.70, 0.85, 1.00]
-  batch_cap_ratios: [0.60, 0.80, 1.00]
+  # The device reports a 250 W minimum and 300 W default. These ratios map to
+  # distinct safe limits (252/276/300 W); lower legacy ratios collapsed at 250 W.
+  infer_cap_ratios: [0.84, 0.92, 1.00]
+  batch_cap_ratios: [0.84, 0.92, 1.00]
   absolute_limits_source: nvidia_smi_device_report
+calibration:
+  batch_gpu_counts: [0, 1, 2]
+  request_rate_levels: [p25, p50, p75, p90]
+  token_mixes: [short, medium, long]
+  repetitions: 3
+  seed: 42
+  randomize_order: true
+  timing:
+    warmup_seconds: 300
+    measurement_seconds: 600
+    cooldown_seconds: 120
+  designs:
+    screening:
+      selection: maximin
+      configuration_count: 36
+      repetitions: 1
+      randomize_order: true
+    smoke:
+      repetitions: 1
+      randomize_order: false
+      timing:
+        warmup_seconds: 60
+        measurement_seconds: 120
+        cooldown_seconds: 60
+      configurations:
+        - inference_cap_ratio: 1.00
+          active_batch_gpus: 2
+          batch_cap_ratio: 1.00
+          request_rate_level: p25
+          token_mix: short
+        - inference_cap_ratio: 1.00
+          active_batch_gpus: 2
+          batch_cap_ratio: 1.00
+          request_rate_level: p90
+          token_mix: long
+        - inference_cap_ratio: 0.84
+          active_batch_gpus: 0
+          batch_cap_ratio: 0.84
+          request_rate_level: p25
+          token_mix: short
+        - inference_cap_ratio: 0.84
+          active_batch_gpus: 0
+          batch_cap_ratio: 0.84
+          request_rate_level: p90
+          token_mix: long
+        - inference_cap_ratio: 0.92
+          active_batch_gpus: 1
+          batch_cap_ratio: 0.92
+          request_rate_level: p50
+          token_mix: medium
+        - inference_cap_ratio: 1.00
+          active_batch_gpus: 0
+          batch_cap_ratio: 0.84
+          request_rate_level: p90
+          token_mix: medium
+        - inference_cap_ratio: 0.84
+          active_batch_gpus: 2
+          batch_cap_ratio: 1.00
+          request_rate_level: p75
+          token_mix: long
+        - inference_cap_ratio: 1.00
+          active_batch_gpus: 2
+          batch_cap_ratio: 0.84
+          request_rate_level: p75
+          token_mix: short
 safety:
+  allow_hardware_mutation: false
+  reject_collapsed_cap_levels: true
+  require_inference_p2p: true
   max_gpu_temperature_c: null
   max_consecutive_actuator_failures: 2
   controller_heartbeat_timeout_s: 10

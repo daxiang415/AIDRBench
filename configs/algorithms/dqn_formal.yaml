@@ -1,0 +1,14 @@
+algorithm: dqn
+environment_config: configs/env/hourly_formal_train_discrete.yaml
+experiment_protocol: data/manifests/hourly_experiment_protocol_v1.yaml
+total_timesteps: 50000
+checkpoint_interval: 5000
+n_envs: 1
+policy: MlpPolicy
+hyperparameters:
+  learning_rate: 0.0001
+  buffer_size: 50000
+  learning_starts: 1000
+  batch_size: 128
+  gamma: 0.995
+  train_freq: 4

@@ -1,0 +1,7 @@
+controller: mpc
+phase: P3
+horizon_hours: 6
+solver: HIGHS
+arrival_forecast: historical_mean
+community_and_limit_forecast: environment_provided_6h
+full_horizon_oracle: false

@@ -1,0 +1,67 @@
+# V3 training distribution.  Evaluation/certification use fixed scenarios;
+# automatic training resets vary arrival/community seeds and these DR factors.
+seed: 2026
+
+env:
+  timestep_hours: 1.0
+  episode_days: 7
+  clearance_tail_hours: 24
+  forecast_horizon_hours: 6
+  action_mode: continuous
+
+community:
+  source: synthetic
+  target_peak_kw: 1000
+  pv_enabled: false
+
+virtual_datacenter:
+  gpus_per_node: 4
+  node_count: auto
+  target_dc_peak_share_of_community: 0.20
+  flexible_gpu_fraction: 0.50
+  pue: 1.20
+
+workload:
+  source: synthetic
+  target_total_utilization: 0.65
+  flexible_job_types: [training, offline_inference]
+  flexible_priorities: [LP]
+  max_deadline_hours: 48
+  deadline_buckets: [0, 1, 2, 3, 6, 12, 24, 48]
+  workload_mix:
+    shares: {training: 0.50, offline_inference: 0.30, online_inference: 0.20}
+    flexible_fractions: {training: 1.00, offline_inference: 0.80, online_inference: 0.00}
+
+hardware:
+  calibration_file: data/processed/workload_energy.csv
+  fallback_idle_power_w_per_gpu: 80
+  active_power_w_per_gpu_by_class: {training: 450, offline_inference: 350, online_inference: 400}
+  fallback_node_overhead_w: 300
+
+dr:
+  mode: capacity_limit
+  event_start_hours: [17, 65, 113]
+  event_duration_hours: 3
+  reduction_fraction: 0.20
+  recovery_window_hours: 12
+  recovery_backlog_tolerance_fraction: 0.02
+  event_start_jitter_hours: 4
+  event_duration_choices: [1, 2, 3, 4]
+  event_notice_choices: [0, 2, 4, 6]
+  event_reduction_fraction_range: [0.10, 0.30]
+
+reward:
+  version: firm_threshold_v2
+  min_delivery_ratio: 0.95
+  max_deadline_miss_rate: 0.01
+  max_rebound_ratio: 0.25
+  min_window_peak_relief_fraction: 0.50
+  max_terminal_backlog_fraction: 0.02
+  delivery_violation_weight: 1.0
+  feasibility_violation_weight: 1.0
+  deadline_violation_weight: 1.0
+  rebound_violation_weight: 1.0
+  window_violation_weight: 1.0
+  terminal_violation_weight: 1.0
+  excess_backlog_weight: 0.05
+  switching_weight: 0.001

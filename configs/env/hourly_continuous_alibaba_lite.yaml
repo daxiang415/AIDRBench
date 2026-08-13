@@ -1,0 +1,77 @@
+# Alibaba 2026 Lite scenario: distribution-calibrated synthetic arrivals, not
+# chronological production-trace replay. Run data preprocess-alibaba-summary
+# before using this configuration.
+seed: 2026
+
+env:
+  timestep_hours: 1.0
+  episode_days: 7
+  clearance_tail_hours: 24
+  forecast_horizon_hours: 6
+  action_mode: continuous
+
+community:
+  source: synthetic
+  target_peak_kw: 1000
+  pv_enabled: false
+
+virtual_datacenter:
+  gpus_per_node: 4
+  node_count: auto
+  target_dc_peak_share_of_community: 0.20
+  flexible_gpu_fraction: 0.50
+  pue: 1.20
+
+workload:
+  source: alibaba2026_lite
+  summary_path: data/processed/jobs_summary.parquet
+  arrivals_path: data/processed/arrivals_alibaba2026_lite_week_001.parquet
+  arrival_process: nhpp
+  target_total_utilization: 0.65
+  flexible_job_types: [training, offline_inference]
+  flexible_priorities: [LP]
+  max_deadline_hours: 48
+  deadline_buckets: [0, 1, 2, 3, 6, 12, 24, 48]
+  workload_mix:
+    shares: {training: 0.50, offline_inference: 0.30, online_inference: 0.20}
+    flexible_fractions: {training: 1.00, offline_inference: 0.80, online_inference: 0.00}
+  # Generated scenario assumptions; Alibaba Lite has no true deadlines.
+  deadline_policy:
+    training:
+      slack_multiplier_range: [2.0, 6.0]
+      minimum_slack_h: 6
+      maximum_slack_h: 48
+    offline_inference:
+      slack_multiplier_range: [1.5, 4.0]
+      minimum_slack_h: 2
+      maximum_slack_h: 24
+
+hardware:
+  calibration_file: data/processed/workload_energy.csv
+  fallback_idle_power_w_per_gpu: 80
+  active_power_w_per_gpu_by_class: {training: 450, offline_inference: 350, online_inference: 400}
+  fallback_node_overhead_w: 300
+
+dr:
+  mode: capacity_limit
+  event_start_hours: [17, 65, 113]
+  event_duration_hours: 3
+  reduction_fraction: 0.20
+  recovery_window_hours: 12
+  recovery_backlog_tolerance_fraction: 0.02
+
+reward:
+  version: firm_threshold_v2
+  min_delivery_ratio: 0.95
+  max_deadline_miss_rate: 0.01
+  max_rebound_ratio: 0.25
+  min_window_peak_relief_fraction: 0.50
+  max_terminal_backlog_fraction: 0.02
+  delivery_violation_weight: 1.0
+  feasibility_violation_weight: 1.0
+  deadline_violation_weight: 1.0
+  rebound_violation_weight: 1.0
+  window_violation_weight: 1.0
+  terminal_violation_weight: 1.0
+  excess_backlog_weight: 0.05
+  switching_weight: 0.001

@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-INFERENCE_CAP_RATIOS = (0.70, 0.85, 1.00)
+INFERENCE_CAP_RATIOS = (0.84, 0.92, 1.00)
 BATCH_GPU_COUNTS = (0, 1, 2)
-BATCH_CAP_RATIOS = (0.60, 0.80, 1.00)
+BATCH_CAP_RATIOS = (0.84, 0.92, 1.00)
 ACTION_COUNT = 27
 
 

@@ -24,4 +24,4 @@ class RuleBasedController(BaseController):
             return encode_action(ActionComponents(1.00, batch_gpus, 1.00))
 
         # First shed delay-tolerant work. Keep inference at its default cap in P0.
-        return encode_action(ActionComponents(1.00, 0, 0.60))
+        return encode_action(ActionComponents(1.00, 0, 0.84))

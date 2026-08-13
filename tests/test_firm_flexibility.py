@@ -1,0 +1,98 @@
+from __future__ import annotations
+
+from pathlib import Path
+
+import numpy as np
+import pytest
+
+from aidrbench.controllers.hourly import make_hourly_controller
+from aidrbench.envs.community_ai_dr_env import ContinuousCommunityAIDemandResponseEnv
+from aidrbench.evaluation.certification import (
+    certify_firm_flexibility,
+    make_certificate_scenario,
+)
+from aidrbench.evaluation.firm_flexibility import (
+    FirmFlexibilityCriteria,
+    derive_event_outcomes,
+    wilson_lower_bound,
+)
+from aidrbench.evaluation.hourly_rollout import rollout_hourly_episode
+
+ROOT = Path(__file__).resolve().parents[1]
+CONFIG = ROOT / "configs/env/hourly_continuous.yaml"
+TRAIN_CONFIG = ROOT / "configs/env/hourly_continuous_train.yaml"
+
+
+def test_wilson_lower_bound_is_conservative_and_monotone() -> None:
+    lower_all_success = wilson_lower_bound(10, 10, 0.95)
+    lower_partial_success = wilson_lower_bound(8, 10, 0.95)
+
+    assert 0.0 < lower_partial_success < lower_all_success < 1.0
+    assert wilson_lower_bound(0, 10, 0.95) == 0.0
+
+
+def test_rollout_exposes_compute_debt_and_rebound_aware_event_metrics() -> None:
+    env = ContinuousCommunityAIDemandResponseEnv(CONFIG)
+
+    frame, summary = rollout_hourly_episode(env, make_hourly_controller("threshold"), seed=3)
+    outcomes = derive_event_outcomes(
+        frame,
+        env.event_manifest,
+        recovery_tolerance_gpu_h=(
+            env.config.recovery_backlog_tolerance_fraction
+            * env.power_model.flexible_capacity_gpu_h
+        ),
+    )
+
+    assert {"compute_debt_kwh", "delivery_ratio", "event_id", "p10_slack_h"} <= set(frame)
+    assert len(outcomes) == len(env.event_manifest) == 3
+    assert np.isfinite(frame["compute_debt_kwh"]).all()
+    assert summary["event_count"] == 3
+    assert "mean_window_peak_relief_kw" in summary
+    assert "firm_event_success_rate" in summary
+    assert "max_event_rebound_ratio" in summary
+    assert summary["rebound_ratio"] == summary["max_event_rebound_ratio"]
+
+
+def test_certificate_uses_joint_success_and_one_sided_lower_bound() -> None:
+    criteria = FirmFlexibilityCriteria(
+        reliability_target=0.5,
+        confidence_level=0.5,
+        min_delivery_ratio=0.0,
+        max_deadline_miss_rate=1.0,
+        max_rebound_ratio=100.0,
+        min_window_peak_relief_fraction=0.0,
+        max_terminal_backlog_fraction=1.0,
+    )
+
+    certificate, candidates, outcomes = certify_firm_flexibility(
+        config=CONFIG,
+        controller="no_control",
+        model_path=None,
+        duration_h=2,
+        candidate_reduction_fractions=(0.0,),
+        seeds=(1, 2),
+        criteria=criteria,
+    )
+
+    assert certificate.certified_reduction_kw == pytest.approx(0.0)
+    assert certificate.success_rate_lower_ci >= criteria.reliability_target
+    assert candidates.loc[0, "certified"]
+    assert len(outcomes) == 2
+    assert outcomes["success"].all()
+
+
+def test_certificate_scenario_disables_training_randomization() -> None:
+    scenario = make_certificate_scenario(
+        TRAIN_CONFIG,
+        duration_h=2,
+        requested_reduction_kw=10.0,
+    )
+    dr = scenario["dr"]
+
+    assert isinstance(dr, dict)
+    assert dr["event_start_jitter_hours"] == 0
+    assert dr["event_duration_choices"] is None
+    assert dr["event_notice_choices"] is None
+    assert dr["event_notice_hours"] == 0
+    assert dr["event_reduction_fraction_range"] is None

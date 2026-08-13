@@ -109,6 +109,24 @@ def test_community_dr_and_split_are_reproducible(tmp_path: Path) -> None:
     assert len(dr_first) >= 3
     assert (dr_first["end_time"] > dr_first["start_time"]).all()
 
+    hourly_dr = tmp_path / "dr-hourly.parquet"
+    generate_dr_events(
+        community_a,
+        hourly_dr,
+        days=3,
+        reductions=[0.1, 0.2],
+        durations=[60, 120],
+        notices=[0, 120],
+        seed=13,
+        align_minutes=60,
+    )
+    aligned = pd.read_parquet(hourly_dr)
+    assert pd.to_datetime(aligned["start_time"]).dt.minute.eq(0).all()
+    assert aligned["duration_minutes"].mod(60).eq(0).all()
+    next_starts = aligned["start_time"].iloc[1:].reset_index(drop=True)
+    previous_ends = aligned["end_time"].iloc[:-1].reset_index(drop=True)
+    assert (next_starts >= previous_ends).all()
+
     manifest_path = tmp_path / "split.yaml"
     manifest = create_split_manifest({"community": community_a, "dr": dr_a}, manifest_path, seed=42)
     datasets = manifest["datasets"]

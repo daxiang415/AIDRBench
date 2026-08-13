@@ -24,7 +24,7 @@ class ActionCodecTests(unittest.TestCase):
                 self.assertEqual(encode_action(decode_action(action_id)), action_id)
 
     def test_documented_boundaries(self) -> None:
-        self.assertEqual(decode_action(0), ActionComponents(0.70, 0, 0.60))
+        self.assertEqual(decode_action(0), ActionComponents(0.84, 0, 0.84))
         self.assertEqual(decode_action(26), ActionComponents(1.00, 2, 1.00))
 
     def test_rejects_invalid_action_ids(self) -> None:

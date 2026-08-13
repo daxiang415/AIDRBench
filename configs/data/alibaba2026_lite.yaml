@@ -1,0 +1,4 @@
+dataset: alibaba_gpu_v2026_summary
+input: data/raw/alibaba2026/asi_opensource_job_execution_summary/part-000.parquet
+output: data/processed/jobs_summary.parquet
+winsorize_quantile: 0.995

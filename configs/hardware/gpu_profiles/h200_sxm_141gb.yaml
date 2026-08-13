@@ -1,0 +1,20 @@
+schema_version: 1
+profile_id: nvidia_h200_sxm_141gb_spec_v1
+evidence_class: spec_derived_synthetic
+gpu:
+  manufacturer: NVIDIA
+  model: H200 SXM 141GB
+  form_factor: SXM
+  compute_precision: BF16 dense
+  memory_gb: 141
+  memory_bandwidth_tb_s: 4.8
+  dense_tensor_tflops: 989
+  max_power_w: 700
+  interconnect_bandwidth_gb_s: 900
+sources:
+  - https://www.nvidia.com/en-us/data-center/h200/
+  - https://docs.mlcommons.org/inference_results_v5.1/
+notes:
+  - Public specification profile; no AIDRBench H200 hardware measurement is claimed.
+  - Dense BF16 throughput excludes the published structured-sparsity multiplier.
+  - MLPerf is a possible future serving anchor and is not silently treated as this profile's workload.

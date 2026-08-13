@@ -387,6 +387,7 @@ def generate_dr_events(
     notices: list[int],
     seed: int = 42,
     profile_id: str | None = None,
+    align_minutes: int | None = None,
 ) -> dict[str, object]:
     """Generate a fixed DR manifest against a community counterfactual baseline."""
 
@@ -396,6 +397,13 @@ def generate_dr_events(
         raise ValueError("reductions must be fractions strictly between zero and one")
     if any(value <= 0 for value in durations) or any(value < 0 for value in notices):
         raise ValueError("durations must be positive and notices must be non-negative")
+    if align_minutes is not None:
+        if align_minutes <= 0 or 1_440 % align_minutes != 0:
+            raise ValueError("align_minutes must be positive and divide one day")
+        if any(value % align_minutes != 0 for value in durations):
+            raise ValueError("durations must be multiples of align_minutes")
+        if any(value % align_minutes != 0 for value in notices):
+            raise ValueError("notices must be multiples of align_minutes")
 
     load = pd.read_parquet(community)
     required = {"timestamp", "net_community_load_kw"}
@@ -437,15 +445,31 @@ def generate_dr_events(
             notice = int(rng.choice(notices))
             reduction = float(rng.choice(reductions))
             if within_day == 0:
-                candidate = day_start + timedelta(minutes=int(rng.integers(11 * 60, 14 * 60 + 1)))
+                if align_minutes is None:
+                    start_minute = int(rng.integers(11 * 60, 14 * 60 + 1))
+                else:
+                    aligned_starts = np.arange(11 * 60, 14 * 60 + 1, align_minutes)
+                    start_minute = int(rng.choice(aligned_starts))
+                candidate = day_start + timedelta(minutes=start_minute)
             else:
-                gap = int(rng.choice([15, 30, 60, 180]))
+                gap_choices = [15, 30, 60, 180]
+                if align_minutes is not None:
+                    gap_choices = [gap for gap in gap_choices if gap % align_minutes == 0]
+                    if not gap_choices:
+                        gap_choices = [align_minutes]
+                gap = int(rng.choice(gap_choices))
                 candidate = previous_end + timedelta(minutes=gap)
-            latest_start = day_start + timedelta(days=1, minutes=-duration - 1)
-            start = min(candidate, latest_start)
+            start = candidate
             end = start + timedelta(minutes=duration)
+            if end > day_start + timedelta(days=1):
+                break
             nearest_index = int((load["timestamp"] - start).abs().idxmin())
             baseline_kw = cast(float, load.loc[nearest_index, "net_community_load_kw"])
+            ramp_choices = [15, 30, 60]
+            if align_minutes is not None:
+                ramp_choices = [ramp for ramp in ramp_choices if ramp % align_minutes == 0]
+                if not ramp_choices:
+                    ramp_choices = [align_minutes]
             event_counter += 1
             events.append(
                 {
@@ -456,7 +480,7 @@ def generate_dr_events(
                     "notice_minutes": notice,
                     "reduction_fraction": reduction,
                     "pcc_limit_kw": baseline_kw * (1.0 - reduction),
-                    "post_event_ramp_minutes": int(rng.choice([15, 30, 60])),
+                    "post_event_ramp_minutes": int(rng.choice(ramp_choices)),
                 }
             )
             previous_end = end
@@ -474,5 +498,6 @@ def generate_dr_events(
         "seed": seed,
         "baseline": "community_counterfactual_at_event_start",
         "community_profile_id": selected_profile_id,
+        "align_minutes": align_minutes,
         "output": str(output_path),
     }

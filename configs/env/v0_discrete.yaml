@@ -20,9 +20,9 @@ fleet:
   batch_gpus_per_node: [2, 3]
   facility_overhead_mode: none
 action:
-  inference_cap_ratios: [0.70, 0.85, 1.00]
+  inference_cap_ratios: [0.84, 0.92, 1.00]
   batch_gpu_counts: [0, 1, 2]
-  batch_cap_ratios: [0.60, 0.80, 1.00]
+  batch_cap_ratios: [0.84, 0.92, 1.00]
 reward:
   dr_exceedance: 20.0
   sla_violation: 20.0

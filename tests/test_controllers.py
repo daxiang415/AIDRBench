@@ -15,7 +15,7 @@ class ControllerSmokeTests(unittest.TestCase):
 
     def test_rule_based_sheds_batch_during_dr(self) -> None:
         action = RuleBasedController().act({"dr_active": True})
-        self.assertEqual(decode_action(action), ActionComponents(1.00, 0, 0.60))
+        self.assertEqual(decode_action(action), ActionComponents(1.00, 0, 0.84))
 
     def test_rule_based_uses_batch_capacity_without_dr(self) -> None:
         normal = decode_action(RuleBasedController().act({"dr_active": False}))
