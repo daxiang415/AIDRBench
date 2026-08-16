@@ -65,6 +65,12 @@ def test_zero_action_defers_and_full_action_executes_flexible_work() -> None:
     assert zero_info["executed_gpu_h"] == pytest.approx(0.0)
     assert full_info["executed_gpu_h"] > 0.0
     assert full_info["backlog_gpu_h"] < zero_info["backlog_gpu_h"]
+    assert sum(dict(full_info["executed_gpu_h_by_class"]).values()) == pytest.approx(
+        full_info["executed_gpu_h"]
+    )
+    assert sum(dict(full_info["arrival_gpu_h_by_class"]).values()) == pytest.approx(
+        full_info["arrival_gpu_h"]
+    )
 
 
 def test_tail_has_no_new_arrivals_and_conservation_holds() -> None:
@@ -131,15 +137,17 @@ def test_observation_is_scale_invariant_for_proportional_virtual_fleets() -> Non
     large_config = yaml.safe_load(CONTINUOUS_CONFIG.read_text(encoding="utf-8"))
     small_config["virtual_datacenter"]["node_count"] = 2
     large_config["virtual_datacenter"]["node_count"] = 4
-    small_config["community"]["target_peak_kw"] = 1_000.0
-    large_config["community"]["target_peak_kw"] = 2_000.0
+    small_config["community"]["background_peak_kw"] = 1_000.0
+    small_config["community"]["pcc_capacity_kw"] = 1_000.0
+    large_config["community"]["background_peak_kw"] = 2_000.0
+    large_config["community"]["pcc_capacity_kw"] = 2_000.0
     small = ContinuousCommunityAIDemandResponseEnv(small_config)
     large = ContinuousCommunityAIDemandResponseEnv(large_config)
 
     small_observation, _ = small.reset(seed=3)
     large_observation, _ = large.reset(seed=3)
 
-    assert small.observation_version == large.observation_version == "firm_v4"
+    assert small.observation_version == large.observation_version == "firm_v5"
     assert small.observation_space.shape == large.observation_space.shape == (63,)
     assert np.allclose(small_observation, large_observation, atol=1e-7)
     for _ in range(24):
@@ -148,6 +156,46 @@ def test_observation_is_scale_invariant_for_proportional_virtual_fleets() -> Non
         large_observation, large_reward, _, _, _ = large.step(action)
         assert np.allclose(small_observation, large_observation, atol=1e-6)
         assert small_reward == pytest.approx(large_reward, abs=1e-8)
+
+
+def test_auto_node_sizing_uses_actual_full_pool_power_and_records_bases() -> None:
+    env = ContinuousCommunityAIDemandResponseEnv(CONTINUOUS_CONFIG)
+    model = env.power_model
+    actual_dc_peak_kw = model.predict(model.flexible_capacity_gpu_h).dc_power_kw
+
+    assert actual_dc_peak_kw >= env.config.target_dc_peak_kw
+    assert actual_dc_peak_kw == pytest.approx(env._full_dc_power_kw)
+    assert env.power_model.data_center.node_count > 1
+    previous_model = env.config._power_model_for_node_count(
+        env.power_model.data_center.node_count - 1
+    )
+    assert (
+        previous_model.predict(previous_model.flexible_capacity_gpu_h).dc_power_kw
+        < env.config.target_dc_peak_kw
+    )
+
+    _, info = env.reset(seed=3)
+    assert info["background_community_peak_kw"] == pytest.approx(800.0)
+    assert info["pcc_capacity_kw"] == pytest.approx(1_000.0)
+    assert info["target_dc_peak_kw"] == pytest.approx(200.0)
+    assert info["actual_dc_peak_kw"] == pytest.approx(actual_dc_peak_kw)
+    assert info["actual_dc_peak_fraction_of_pcc"] == pytest.approx(
+        actual_dc_peak_kw / 1_000.0
+    )
+
+
+def test_pcc_capacity_is_an_always_active_limit_and_observation_base() -> None:
+    config = yaml.safe_load(CONTINUOUS_CONFIG.read_text(encoding="utf-8"))
+    config["community"]["pcc_capacity_kw"] = 500.0
+    env = ContinuousCommunityAIDemandResponseEnv(config)
+
+    observation, reset_info = env.reset(seed=3)
+    features = dict(zip(env.observation_feature_names, observation, strict=True))
+
+    assert reset_info["control_state"]["pcc_limit_kw"] == pytest.approx(500.0)
+    assert features["pcc_limit_fraction"] == pytest.approx(1.0)
+    _, _, _, _, info = env.step(np.asarray((1.0,), dtype=np.float32))
+    assert info["pcc_limit_kw"] == pytest.approx(500.0)
 
 
 def test_recovery_and_running_window_state_are_observable() -> None:

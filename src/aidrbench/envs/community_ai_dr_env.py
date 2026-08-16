@@ -14,6 +14,11 @@ import numpy as np
 import pandas as pd
 
 from aidrbench.data.alibaba2026 import make_alibaba_lite_hourly_arrivals
+from aidrbench.data.frozen_scenarios import (
+    FrozenHourlyScenario,
+    load_frozen_hourly_scenario,
+    power_model_fingerprint,
+)
 from aidrbench.data.hourly import (
     arrivals_for_hour,
     load_hourly_arrivals,
@@ -29,7 +34,7 @@ from aidrbench.models.power import HourlyDataCenterPowerModel
 from aidrbench.workloads.deadline_buckets import HourlyDeadlineBuckets
 
 DISCRETE_ACTION_FRACTIONS = np.asarray((0.0, 0.25, 0.50, 0.75, 1.0), dtype=np.float32)
-OBSERVATION_VERSION = "firm_v4"
+OBSERVATION_VERSION = "firm_v5"
 _MAX_NORMALIZED_LOAD = 4.0
 
 
@@ -46,6 +51,29 @@ class HourlyDREvent:
     notice_hours: float
 
 
+@dataclass(frozen=True, slots=True)
+class HourlyPlanningSnapshot:
+    """Perfect-future episode data exposed only to offline planning oracles."""
+
+    episode_seed: int
+    total_hours: int
+    main_hours: int
+    capacity_gpu_h: float
+    fixed_dc_power_kw: float
+    dynamic_kw_per_gpu_h: float
+    pcc_capacity_kw: float
+    community_power_kw: tuple[float, ...]
+    released_gpu_h: tuple[float, ...]
+    due_gpu_h: tuple[float, ...]
+    work_groups: tuple[tuple[int, int, float], ...]
+    total_arrival_gpu_h: float
+    baseline_execution_gpu_h: tuple[float, ...]
+    baseline_pcc_power_kw: tuple[float, ...]
+    baseline_deadline_miss_gpu_h: float
+    baseline_terminal_backlog_gpu_h: float
+    events: tuple[HourlyDREvent, ...]
+
+
 class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
     """V0 hourly fluid-workload environment with continuous or discrete action."""
 
@@ -60,18 +88,29 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         super().__init__()
         self.config = load_hourly_environment_config(config, action_mode_override=action_mode)
         self.power_model: HourlyDataCenterPowerModel = self.config.make_power_model()
+        self._frozen_scenario: FrozenHourlyScenario | None = None
+        if self.config.frozen_scenario_path is not None:
+            self._frozen_scenario = load_frozen_hourly_scenario(
+                self.config.frozen_scenario_path
+            )
+            self._frozen_scenario.assert_compatible(
+                total_hours=self.config.total_hours,
+                forecast_horizon_hours=self.config.forecast_horizon_hours,
+                pcc_capacity_kw=self.config.pcc_capacity_kw,
+                power_model_sha256=power_model_fingerprint(self.power_model),
+            )
         self._community_profile = None
-        if self.config.community_source == "nrel_eulp":
+        if self._frozen_scenario is None and self.config.community_source == "nrel_eulp":
             if self.config.community_path is None:
                 raise RuntimeError("NREL EULP community source has no path")
             self._community_profile = load_hourly_community_profile(
                 self.config.community_path,
                 profile_id=self.config.community_profile_id,
-                target_peak_kw=self.config.community_peak_kw,
+                target_peak_kw=self.config.background_community_peak_kw,
                 pv_enabled=self.config.pv_enabled,
             )
         self._dr_manifest = None
-        if self.config.dr_source == "manifest":
+        if self._frozen_scenario is None and self.config.dr_source == "manifest":
             if self.config.dr_manifest_path is None or self._community_profile is None:
                 raise RuntimeError("DR manifest source is missing its event or community data")
             selected_profile_id = str(self._community_profile["profile_id"].iloc[0])
@@ -164,12 +203,133 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         self._previous_pcc_power_kw = 0.0
         self._current_arrival_gpu_h = 0.0
         self._episode_seed = self.config.seed
+        self._random_stream_seeds: dict[str, int] = {}
 
     @property
     def event_manifest(self) -> tuple[HourlyDREvent, ...]:
         """Immutable event metadata for episode-level firm-flexibility KPIs."""
 
         return self._events
+
+    @property
+    def random_stream_seeds(self) -> dict[str, int]:
+        """Independent deterministic seeds for community, workload and events."""
+
+        return dict(self._random_stream_seeds)
+
+    def _scenario_provenance(self) -> dict[str, str]:
+        if self._frozen_scenario is None:
+            return {
+                "scenario_provenance": "generated_in_memory",
+                "frozen_scenario_id": "",
+                "frozen_scenario_hash": "",
+            }
+        return {
+            "scenario_provenance": "frozen_artifact",
+            "frozen_scenario_id": self._frozen_scenario.scenario_id,
+            "frozen_scenario_hash": self._frozen_scenario.scenario_hash,
+        }
+
+    def _sizing_metadata(self) -> dict[str, float]:
+        """Stable scenario bases and the exact realised virtual-DC peak."""
+
+        return {
+            "background_community_peak_kw": self.config.background_community_peak_kw,
+            "pcc_capacity_kw": self.config.pcc_capacity_kw,
+            "target_dc_peak_kw": self.config.target_dc_peak_kw,
+            "actual_dc_peak_kw": self._full_dc_power_kw,
+            "actual_dc_peak_fraction_of_pcc": (
+                self._full_dc_power_kw / self.config.pcc_capacity_kw
+            ),
+            "dc_peak_sizing_error_kw": (
+                self._full_dc_power_kw - self.config.target_dc_peak_kw
+            ),
+        }
+
+    def _hardware_provenance(self) -> dict[str, str]:
+        """Return the calibration identity recorded with every rollout row."""
+
+        artifact = self.config.calibration_artifact
+        if artifact is None:
+            return {
+                "calibration_artifact_id": "",
+                "calibration_artifact_sha256": "",
+                "calibration_power_case": "fallback_parameters",
+                "hardware_evidence_class": "fallback_parameters",
+            }
+        return {
+            "calibration_artifact_id": artifact.artifact_id,
+            "calibration_artifact_sha256": artifact.artifact_sha256,
+            "calibration_power_case": self.config.calibration_power_case,
+            "hardware_evidence_class": artifact.evidence_class.value,
+        }
+
+    def full_horizon_planning_snapshot(self) -> HourlyPlanningSnapshot:
+        """Return immutable perfect-future inputs for an explicitly labelled oracle.
+
+        Online controllers must not call this method. It intentionally reveals
+        all arrivals, deadlines, community loads, and DR events in the episode.
+        """
+
+        total_hours = self.config.total_hours
+        released = np.zeros(total_hours, dtype="float64")
+        due = np.zeros(total_hours, dtype="float64")
+        grouped_work: dict[tuple[int, int], float] = {}
+        for record in self._arrivals.to_dict(orient="records"):
+            release = int(record["timestamp_index"])
+            if not 0 <= release < total_hours:
+                continue
+            work = float(record["arrival_gpu_h"])
+            released[release] += work
+            deadline = release + math.ceil(float(record["slack_hours"])) - 1
+            key = (release, deadline)
+            grouped_work[key] = grouped_work.get(key, 0.0) + work
+            if deadline < total_hours:
+                due[max(deadline, 0)] += work
+
+        baseline_queue = HourlyDeadlineBuckets(
+            max_deadline_hours=self.config.max_deadline_hours,
+            bucket_labels_h=self.config.deadline_bucket_labels_h,
+        )
+        baseline_execution = np.zeros(total_hours, dtype="float64")
+        baseline_pcc = np.zeros(total_hours, dtype="float64")
+        community = self._community["net_community_load_kw"].iloc[:total_hours].to_numpy(
+            dtype="float64"
+        )
+        for index in range(total_hours):
+            step = baseline_queue.advance(
+                arrivals_for_hour(self._arrivals, index),
+                requested_gpu_h=self._capacity_gpu_h,
+                capacity_gpu_h=self._capacity_gpu_h,
+            )
+            baseline_execution[index] = step.executed_gpu_h
+            baseline_pcc[index] = community[index] + self.power_model.predict_by_class(
+                dict(step.executed_gpu_h_by_class),
+                timestep_hours=self.config.timestep_hours,
+            ).dc_power_kw
+
+        return HourlyPlanningSnapshot(
+            episode_seed=self._episode_seed,
+            total_hours=total_hours,
+            main_hours=self.config.main_hours,
+            capacity_gpu_h=self._capacity_gpu_h,
+            fixed_dc_power_kw=self._fixed_dc_power_kw,
+            dynamic_kw_per_gpu_h=self._flexible_power_range_kw / self._capacity_gpu_h,
+            pcc_capacity_kw=self.config.pcc_capacity_kw,
+            community_power_kw=tuple(float(value) for value in community),
+            released_gpu_h=tuple(float(value) for value in released),
+            due_gpu_h=tuple(float(value) for value in due),
+            work_groups=tuple(
+                (release, deadline, work)
+                for (release, deadline), work in sorted(grouped_work.items())
+            ),
+            total_arrival_gpu_h=float(released.sum()),
+            baseline_execution_gpu_h=tuple(float(value) for value in baseline_execution),
+            baseline_pcc_power_kw=tuple(float(value) for value in baseline_pcc),
+            baseline_deadline_miss_gpu_h=baseline_queue.cumulative_missed_gpu_h,
+            baseline_terminal_backlog_gpu_h=baseline_queue.backlog_gpu_h,
+            events=self._events,
+        )
 
     @property
     def observation_version(self) -> str:
@@ -250,65 +410,81 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
 
     def _build_episode(self, seed: int) -> None:
         total = self.config.total_hours + self.config.forecast_horizon_hours
-        if self._community_profile is None:
-            self._community = make_synthetic_hourly_community(
-                hours=total,
-                peak_kw=self.config.community_peak_kw,
-                seed=seed,
-                pv_enabled=self.config.pv_enabled,
-            )
+        seed_sequences = np.random.SeedSequence(seed).spawn(3)
+        community_seed, workload_seed, event_seed = (
+            int(sequence.generate_state(1, dtype=np.uint64)[0])
+            for sequence in seed_sequences
+        )
+        self._random_stream_seeds = {
+            "community": community_seed,
+            "workload": workload_seed,
+            "events": event_seed,
+        }
+        if self._frozen_scenario is not None:
+            self._community = self._frozen_scenario.community.copy()
+            self._arrivals = self._frozen_scenario.arrivals.copy()
         else:
-            episode_start = self.config.community_episode_start
-            if self._dr_manifest is not None:
-                episode_start = select_dr_aligned_episode_start(
+            if self._community_profile is None:
+                self._community = make_synthetic_hourly_community(
+                    hours=total,
+                    peak_kw=self.config.background_community_peak_kw,
+                    seed=community_seed,
+                    pv_enabled=self.config.pv_enabled,
+                )
+            else:
+                episode_start = self.config.community_episode_start
+                if self._dr_manifest is not None:
+                    episode_start = select_dr_aligned_episode_start(
+                        self._community_profile,
+                        self._dr_manifest,
+                        total_hours=total,
+                        main_hours=self.config.main_hours,
+                        seed=community_seed,
+                        episode_start=episode_start,
+                    )
+                self._community = select_hourly_community_window(
                     self._community_profile,
-                    self._dr_manifest,
-                    total_hours=total,
-                    main_hours=self.config.main_hours,
-                    seed=seed,
+                    hours=total,
+                    seed=community_seed,
                     episode_start=episode_start,
                 )
-            self._community = select_hourly_community_window(
-                self._community_profile,
-                hours=total,
-                seed=seed,
-                episode_start=episode_start,
-            )
-        # The clearance tail drains work from the seven-day main horizon; it
-        # must not introduce fresh workload, independent of arrival source.
-        if self.config.workload_source == "synthetic":
-            self._arrivals = make_synthetic_hourly_arrivals(
-                hours=self.config.main_hours,
-                total_gpu_count=self.power_model.data_center.total_gpu_count,
-                target_total_utilization=self.config.target_total_utilization,
-                workload_mix=self.config.workload_mix,
-                seed=seed + 1,
-            )
-        else:
-            if self.config.alibaba_arrivals_path is not None:
-                self._arrivals = load_hourly_arrivals(self.config.alibaba_arrivals_path)
-            else:
-                if self.config.alibaba_summary_path is None:
-                    raise RuntimeError("Alibaba Lite workload source has no summary path")
-                self._arrivals = make_alibaba_lite_hourly_arrivals(
-                    self.config.alibaba_summary_path,
+            # The clearance tail drains work from the seven-day main horizon;
+            # it must not introduce fresh workload, independent of source.
+            if self.config.workload_source == "synthetic":
+                self._arrivals = make_synthetic_hourly_arrivals(
                     hours=self.config.main_hours,
                     total_gpu_count=self.power_model.data_center.total_gpu_count,
                     target_total_utilization=self.config.target_total_utilization,
-                    workload_shares=self.config.workload_mix.shares,
-                    flexible_fractions=self.config.workload_mix.flexible_fractions,
-                    flexible_priorities=self.config.flexible_priorities,
-                    deadline_policy=self.config.deadline_policy,
-                    arrival_process=self.config.alibaba_arrival_process,
-                    seed=seed + 1,
+                    workload_mix=self.config.workload_mix,
+                    seed=workload_seed,
                 )
+            else:
+                if self.config.alibaba_arrivals_path is not None:
+                    self._arrivals = load_hourly_arrivals(self.config.alibaba_arrivals_path)
+                else:
+                    if self.config.alibaba_summary_path is None:
+                        raise RuntimeError("Alibaba Lite workload source has no summary path")
+                    self._arrivals = make_alibaba_lite_hourly_arrivals(
+                        self.config.alibaba_summary_path,
+                        hours=self.config.main_hours,
+                        total_gpu_count=self.power_model.data_center.total_gpu_count,
+                        target_total_utilization=self.config.target_total_utilization,
+                        workload_shares=self.config.workload_mix.shares,
+                        flexible_fractions=self.config.workload_mix.flexible_fractions,
+                        flexible_priorities=self.config.flexible_priorities,
+                        deadline_policy=self.config.deadline_policy,
+                        arrival_process=self.config.alibaba_arrival_process,
+                        seed=workload_seed,
+                    )
         net_community = self._community["net_community_load_kw"].to_numpy(dtype="float64")
         full_flexible = self.power_model.predict(self._capacity_gpu_h).dc_power_kw
         idle_flexible = self.power_model.predict(0.0).dc_power_kw
         dynamic_flexible_kw = full_flexible - idle_flexible
-        scenario_rng = np.random.default_rng(seed + 2)
-        unconstrained_limit = float(net_community.max() + full_flexible * 1.25)
-        limits = np.full(total, unconstrained_limit, dtype="float64")
+        scenario_rng = np.random.default_rng(event_seed)
+        # The PCC or transformer constraint applies in every interval, not
+        # only during a DR event.  Event limits may be tighter, but can never
+        # relax the physical interconnection limit.
+        limits = np.full(total, self.config.pcc_capacity_kw, dtype="float64")
         active = np.zeros(total, dtype=bool)
         remaining = np.zeros(total, dtype="float64")
         notice_remaining = np.zeros(total, dtype="float64")
@@ -322,7 +498,47 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         recovery_remaining = np.zeros(total, dtype="float64")
         events: list[HourlyDREvent] = []
         event_specs: list[tuple[str, int, int, float, float]] = []
-        if self._dr_manifest is None:
+        if self._frozen_scenario is not None:
+            if (
+                self.config.event_duration_choices is not None
+                or self.config.event_notice_choices is not None
+                or self.config.event_reduction_fraction_range is not None
+                or self.config.event_start_jitter_hours != 0
+            ):
+                raise ValueError(
+                    "frozen scenarios require fixed duration, notice, reduction, and event starts"
+                )
+            anchored_events = self._frozen_scenario.events
+            if self.config.frozen_event_ids is not None:
+                by_id = {int(event["event_id"]): event for event in anchored_events}
+                missing_event_ids = set(self.config.frozen_event_ids) - set(by_id)
+                if missing_event_ids:
+                    raise ValueError(
+                        "frozen scenario does not contain requested event IDs: "
+                        f"{sorted(missing_event_ids)}"
+                    )
+                anchored_events = tuple(
+                    by_id[event_id] for event_id in self.config.frozen_event_ids
+                )
+            event_specs.extend(
+                (
+                    str(event["source_event_id"]),
+                    int(event["start_hour"]),
+                    min(
+                        int(event["start_hour"]) + self.config.event_duration_hours,
+                        self.config.main_hours,
+                    ),
+                    (
+                        self.config.event_reduction_kw
+                        if self.config.event_reduction_kw is not None
+                        else float(event["requested_reduction_kw"])
+                    ),
+                    float(event["notice_hours"]),
+                )
+                for event in anchored_events
+                if int(event["start_hour"]) < self.config.main_hours
+            )
+        elif self._dr_manifest is None:
             event_duration_h = (
                 int(scenario_rng.choice(self.config.event_duration_choices))
                 if self.config.event_duration_choices is not None
@@ -402,7 +618,10 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             event_specs
         ):
             recovery_stop = min(stop + self.config.recovery_window_hours, self.config.total_hours)
-            limits[start:stop] = net_community[start:stop] + full_flexible - requested_reduction_kw
+            event_limits = (
+                net_community[start:stop] + full_flexible - requested_reduction_kw
+            )
+            limits[start:stop] = np.minimum(limits[start:stop], event_limits)
             active[start:stop] = True
             remaining[start:stop] = np.arange(stop - start, 0, -1, dtype="float64")
             event_ids[start:stop] = event_id
@@ -489,7 +708,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         return float(np.clip(value, lower, upper))
 
     def _normalize_power(self, power_kw: float) -> float:
-        ratio = power_kw / max(self.config.community_peak_kw, 1.0)
+        ratio = power_kw / max(self.config.pcc_capacity_kw, 1.0)
         return self._bounded(ratio, 0.0, 2.0)
 
     @staticmethod
@@ -761,19 +980,21 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             limit_forecast = np.pad(limit_forecast, (0, padding), mode="edge")
         return {
             "pcc_limit_kw": float(self._pcc_limit_kw[index]),
+            **self._sizing_metadata(),
             "community_power_kw": float(self._community["net_community_load_kw"].iloc[index]),
             # The idle flexible pool cannot be removed by an hourly workload
             # scheduler, so it belongs to the fixed term in Threshold RBC.
             "rigid_dc_power_kw": self._fixed_dc_power_kw,
             "flexible_pool_peak_power_kw": self._flexible_power_range_kw,
             "backlog_gpu_h": self._queue.backlog_gpu_h,
+            "backlog_gpu_h_by_class": self._queue.backlog_gpu_h_by_class,
             "baseline_backlog_gpu_h": self._baseline_queue.backlog_gpu_h,
             "backlog_excess_gpu_h": max(
                 self._queue.backlog_gpu_h - self._baseline_queue.backlog_gpu_h,
                 0.0,
             ),
             "compute_debt_kwh": (
-                self._queue.backlog_gpu_h * self.power_model.flexible_active_energy_per_gpu_h_kwh
+                self.power_model.queued_work_energy_kwh(dict(self._queue.backlog_gpu_h_by_class))
             ),
             "deadline_bucket_gpu_h": bucket_gpu_h,
             "remaining_by_deadline_gpu_h": self._queue.remaining_by_deadline_gpu_h,
@@ -844,6 +1065,9 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "flexible_workload_share": self.config.workload_mix.flexible_share,
             "virtual_node_count": self.power_model.data_center.node_count,
             "flexible_gpu_count": self.power_model.data_center.flexible_gpu_count,
+            **self._sizing_metadata(),
+            **self._scenario_provenance(),
+            **self._hardware_provenance(),
             "workload_source": self.config.workload_source,
             "episode_seed": self._episode_seed,
             "observation_version": self.observation_version,
@@ -878,11 +1102,13 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             capacity_gpu_h=self._capacity_gpu_h,
         )
         arrived_gpu_h = self._current_arrival_gpu_h
-        prediction = self.power_model.predict(
-            queue_step.executed_gpu_h, timestep_hours=self.config.timestep_hours
+        prediction = self.power_model.predict_by_class(
+            dict(queue_step.executed_gpu_h_by_class),
+            timestep_hours=self.config.timestep_hours,
         )
-        baseline_prediction = self.power_model.predict(
-            baseline_step.executed_gpu_h, timestep_hours=self.config.timestep_hours
+        baseline_prediction = self.power_model.predict_by_class(
+            dict(baseline_step.executed_gpu_h_by_class),
+            timestep_hours=self.config.timestep_hours,
         )
         community_gross_power_kw = float(self._community["community_load_kw"].iloc[index])
         pv_generation_kw = float(self._community["pv_generation_kw"].iloc[index])
@@ -1068,13 +1294,17 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "executed_gpu_h": queue_step.executed_gpu_h,
             "arrival_gpu_h": arrived_gpu_h,
             "backlog_gpu_h": queue_step.backlog_gpu_h,
+            "arrival_gpu_h_by_class": queue_step.arrived_gpu_h_by_class,
+            "executed_gpu_h_by_class": queue_step.executed_gpu_h_by_class,
+            "missed_gpu_h_by_class": queue_step.missed_gpu_h_by_class,
+            "backlog_gpu_h_by_class": queue_step.backlog_gpu_h_by_class,
             "baseline_backlog_gpu_h": baseline_step.backlog_gpu_h,
             "backlog_excess_gpu_h": backlog_excess_gpu_h,
             "missed_gpu_h": queue_step.missed_gpu_h,
             "mean_slack_h": queue_step.mean_slack_h,
             "p10_slack_h": queue_step.p10_slack_h,
             "compute_debt_kwh": (
-                queue_step.backlog_gpu_h * self.power_model.flexible_active_energy_per_gpu_h_kwh
+                self.power_model.queued_work_energy_kwh(dict(queue_step.backlog_gpu_h_by_class))
             ),
             "deadline_bucket_gpu_h": queue_step.bucket_gpu_h,
             "action_fraction": action_fraction,
@@ -1100,6 +1330,9 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "is_clearance_tail": index >= self.config.main_hours,
             "training_share": self.config.workload_mix.training_share,
             "flexible_workload_share": self.config.workload_mix.flexible_share,
+            **self._sizing_metadata(),
+            **self._hardware_provenance(),
+            **self._scenario_provenance(),
             "workload_source": self.config.workload_source,
             "episode_seed": self._episode_seed,
             "observation_version": self.observation_version,

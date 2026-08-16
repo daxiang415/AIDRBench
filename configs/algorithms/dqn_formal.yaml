@@ -1,6 +1,6 @@
 algorithm: dqn
 environment_config: configs/env/hourly_formal_train_discrete.yaml
-experiment_protocol: data/manifests/hourly_experiment_protocol_v1.yaml
+experiment_protocol: data/manifests/hourly_experiment_protocol_v2.yaml
 total_timesteps: 50000
 checkpoint_interval: 5000
 n_envs: 1

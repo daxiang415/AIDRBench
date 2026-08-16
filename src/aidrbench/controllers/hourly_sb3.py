@@ -17,6 +17,7 @@ class SB3HourlyPolicyController:
     """Use a saved SB3 policy while retaining the common rollout interface."""
 
     forecast_assumption = "policy_observation_only"
+    information_structure = "causal_normalized_policy_observation"
 
     def __init__(self, algorithm: SB3AlgorithmName, model_path: str | Path) -> None:
         try:

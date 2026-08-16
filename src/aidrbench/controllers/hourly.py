@@ -6,6 +6,7 @@ from typing import Any
 
 import numpy as np
 
+from aidrbench.controllers.hourly_oracle import HourlyFullHorizonOracleController
 from aidrbench.envs.community_ai_dr_env import DISCRETE_ACTION_FRACTIONS
 
 
@@ -26,6 +27,7 @@ class HourlyNoControlController:
     """Execute all available flexible capacity every hour."""
 
     name = "no_control"
+    information_structure = "causal_control_state"
 
     def act(self, env: Any, info: dict[str, Any]) -> np.ndarray | int:
         del info
@@ -36,6 +38,7 @@ class HourlyThresholdController:
     """Use the instantaneous PCC headroom rule from README section 18.2."""
 
     name = "threshold"
+    information_structure = "causal_control_state"
 
     def act(self, env: Any, info: dict[str, Any]) -> np.ndarray | int:
         state = info["control_state"]
@@ -60,6 +63,7 @@ class HourlyEDFValleyController:
     """Serve urgent buckets, otherwise shift flexible work into load valleys."""
 
     name = "edf_valley"
+    information_structure = "causal_control_state_plus_environment_forecast"
 
     def __init__(
         self, *, valley_percentile: float = 0.40, high_load_fraction: float = 0.25
@@ -98,6 +102,7 @@ class HourlyMPCController:
 
     name = "mpc"
     forecast_assumption = "6h_environment_load_limit_forecast+historical_mean_arrivals"
+    information_structure = "causal_control_state_plus_6h_environment_forecast"
 
     def __init__(
         self,
@@ -127,6 +132,8 @@ class HourlyMPCController:
         self._previous_fraction = 0.0
 
     def _forecast_arrivals(self, env: Any, horizon: int) -> np.ndarray:
+        """Forecast arrivals strictly after the already released current hour."""
+
         if self._arrival_history_gpu_h:
             mean_arrival = float(np.mean(self._arrival_history_gpu_h[-24:]))
         else:
@@ -135,7 +142,12 @@ class HourlyMPCController:
                 * env.config.target_total_utilization
                 * env.config.workload_mix.flexible_share
             )
-        return np.full(horizon, mean_arrival, dtype="float64")
+        forecast = np.full(horizon, mean_arrival, dtype="float64")
+        # At action time the environment has already placed this hour's jobs
+        # in ``state['backlog_gpu_h']``.  A causal MPC cannot execute an
+        # estimate of the next release in the current interval.
+        forecast[0] = 0.0
+        return forecast
 
     @staticmethod
     def _deadline_requirements(
@@ -230,6 +242,44 @@ class HourlyMPCController:
         return fraction_to_action(env, fraction)
 
 
+class HourlyRobustMPCController(HourlyMPCController):
+    """Causal MPC with an upper envelope for unreleased future arrivals."""
+
+    name = "robust_mpc"
+    forecast_assumption = (
+        "6h_environment_load_limit_forecast+historical_mean_plus_arrival_uncertainty_envelope"
+    )
+    information_structure = "causal_control_state_plus_6h_environment_forecast"
+
+    def __init__(
+        self,
+        *,
+        arrival_safety_sigma: float = 1.0,
+        minimum_arrival_safety_fraction: float = 0.15,
+        **kwargs: Any,
+    ) -> None:
+        if arrival_safety_sigma < 0.0:
+            raise ValueError("arrival_safety_sigma must be non-negative")
+        if minimum_arrival_safety_fraction < 0.0:
+            raise ValueError("minimum_arrival_safety_fraction must be non-negative")
+        super().__init__(**kwargs)
+        self.arrival_safety_sigma = arrival_safety_sigma
+        self.minimum_arrival_safety_fraction = minimum_arrival_safety_fraction
+
+    def _forecast_arrivals(self, env: Any, horizon: int) -> np.ndarray:
+        forecast = super()._forecast_arrivals(env, horizon)
+        baseline = float(forecast[1] if horizon > 1 else 0.0)
+        history = np.asarray(self._arrival_history_gpu_h[-24:], dtype="float64")
+        spread = float(history.std(ddof=1)) if len(history) > 1 else 0.0
+        safety_margin = max(
+            self.arrival_safety_sigma * spread,
+            self.minimum_arrival_safety_fraction * baseline,
+        )
+        if horizon > 1:
+            forecast[1:] += safety_margin
+        return forecast
+
+
 def make_hourly_controller(
     name: str,
 ) -> (
@@ -237,6 +287,8 @@ def make_hourly_controller(
     | HourlyThresholdController
     | HourlyEDFValleyController
     | HourlyMPCController
+    | HourlyRobustMPCController
+    | HourlyFullHorizonOracleController
 ):
     """Build one of the P1 baselines by CLI-safe controller name."""
 
@@ -248,4 +300,8 @@ def make_hourly_controller(
         return HourlyEDFValleyController()
     if name == "mpc":
         return HourlyMPCController()
+    if name == "robust_mpc":
+        return HourlyRobustMPCController()
+    if name == "oracle":
+        return HourlyFullHorizonOracleController()
     raise ValueError(f"unsupported hourly controller: {name}")

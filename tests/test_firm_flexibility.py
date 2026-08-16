@@ -3,10 +3,14 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 import pytest
 
 from aidrbench.controllers.hourly import make_hourly_controller
-from aidrbench.envs.community_ai_dr_env import ContinuousCommunityAIDemandResponseEnv
+from aidrbench.envs.community_ai_dr_env import (
+    ContinuousCommunityAIDemandResponseEnv,
+    HourlyDREvent,
+)
 from aidrbench.evaluation.certification import (
     certify_firm_flexibility,
     make_certificate_scenario,
@@ -52,6 +56,56 @@ def test_rollout_exposes_compute_debt_and_rebound_aware_event_metrics() -> None:
     assert "firm_event_success_rate" in summary
     assert "max_event_rebound_ratio" in summary
     assert summary["rebound_ratio"] == summary["max_event_rebound_ratio"]
+
+
+def test_interval_delivery_prevents_average_only_success() -> None:
+    frame = pd.DataFrame(
+        {
+            "hour": [0, 1, 2, 3, 4],
+            "event_active": [True, True, True, True, False],
+            "pcc_power_kw": [90.0, 90.0, 90.0, 92.0, 100.0],
+            "baseline_pcc_power_kw": [100.0] * 5,
+            "delivered_reduction_kw": [10.0, 10.0, 10.0, 8.0, 0.0],
+            "requested_reduction_kw": [10.0, 10.0, 10.0, 10.0, 0.0],
+            "backlog_gpu_h": [0.0] * 5,
+            "baseline_backlog_gpu_h": [0.0] * 5,
+            "missed_gpu_h": [0.0] * 5,
+            "arrival_gpu_h": [1.0, 0.0, 0.0, 0.0, 0.0],
+            "terminal_backlog_excess_gpu_h": [0.0] * 5,
+        }
+    )
+    event = HourlyDREvent(
+        event_id=0,
+        source_event_id="test-event",
+        start_hour=0,
+        stop_hour=4,
+        recovery_stop_hour=5,
+        requested_reduction_kw=10.0,
+        notice_hours=0.0,
+    )
+
+    outcome = derive_event_outcomes(
+        frame,
+        (event,),
+        recovery_tolerance_gpu_h=0.0,
+    )[0]
+    success, failures = outcome.success(
+        FirmFlexibilityCriteria(
+            reliability_target=0.5,
+            confidence_level=0.5,
+            min_delivery_ratio=0.95,
+            min_interval_delivery_ratio=0.95,
+            max_deadline_miss_rate=1.0,
+            max_rebound_ratio=1.0,
+            min_window_peak_relief_fraction=0.0,
+            max_terminal_backlog_fraction=1.0,
+        )
+    )
+
+    assert outcome.delivery_ratio == pytest.approx(0.95)
+    assert outcome.minimum_interval_delivery_ratio == pytest.approx(0.80)
+    assert not success
+    assert "interval_delivery" in failures
 
 
 def test_certificate_uses_joint_success_and_one_sided_lower_bound() -> None:

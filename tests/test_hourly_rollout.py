@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from aidrbench.controllers.hourly import make_hourly_controller
+from aidrbench.controllers.hourly import HourlyMPCController, make_hourly_controller
 from aidrbench.envs.community_ai_dr_env import ContinuousCommunityAIDemandResponseEnv
 from aidrbench.evaluation.hourly_rollout import rollout_hourly_episode, save_hourly_rollout
 
@@ -21,6 +21,11 @@ def test_hourly_threshold_rollout_writes_shared_kpis(tmp_path: Path) -> None:
     assert summary["community_source"] == "synthetic_hourly"
     assert float(summary["gross_community_energy_kwh"]) > 0.0
     assert float(summary["total_pcc_energy_kwh"]) > float(summary["net_community_energy_kwh"])
+    assert "minimum_interval_delivery_ratio" in summary
+    assert {"arrived_training_gpu_h", "executed_training_gpu_h", "backlog_training_gpu_h"} <= set(
+        frame
+    )
+    assert "completed_training_gpu_h" in summary
     assert Path(saved["timeseries"]).is_file()
     assert Path(saved["metrics"]).is_file()
 
@@ -45,6 +50,30 @@ def test_hourly_mpc_rollout_uses_online_forecast_metadata() -> None:
     assert len(frame) == env.config.total_hours
     assert summary["controller"] == "mpc"
     assert "historical_mean_arrivals" in str(summary["forecast_assumption"])
+    assert summary["information_structure"] == "causal_control_state_plus_6h_environment_forecast"
+    assert float(summary["mean_controller_action_time_ms"]) >= 0.0
+
+
+def test_causal_mpc_never_executes_an_estimated_future_release_immediately() -> None:
+    root = Path(__file__).resolve().parents[1]
+    env = ContinuousCommunityAIDemandResponseEnv(root / "configs/env/hourly_continuous.yaml")
+    controller = HourlyMPCController()
+    controller._arrival_history_gpu_h.extend((8.0, 12.0, 16.0))
+
+    arrivals = controller._forecast_arrivals(env, horizon=4)
+
+    assert arrivals[0] == 0.0
+    assert arrivals[1] == 12.0
+
+
+def test_hourly_robust_mpc_rollout_declares_its_arrival_envelope() -> None:
+    root = Path(__file__).resolve().parents[1]
+    env = ContinuousCommunityAIDemandResponseEnv(root / "configs/env/hourly_continuous.yaml")
+
+    _, summary = rollout_hourly_episode(env, make_hourly_controller("robust_mpc"), seed=3)
+
+    assert summary["controller"] == "robust_mpc"
+    assert "uncertainty_envelope" in str(summary["forecast_assumption"])
 
 
 def test_event_level_reward_costs_settle_once_at_recovery_end() -> None:

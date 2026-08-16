@@ -1,0 +1,21 @@
+# Reference DER portfolio for the frozen-scenario hosting-capacity planner.
+# The selected frozen scenario must retain a non-zero PV availability profile.
+pv:
+  enabled: true
+  rated_capacity_kw: 500
+
+bess:
+  enabled: true
+  power_capacity_kw: 100
+  energy_capacity_kwh: 200
+  charge_efficiency: 0.95
+  discharge_efficiency: 0.95
+  initial_soc_fraction: 0.50
+  terminal_soc_fraction: 0.50
+  # Default for large scenario ensembles. Use milp_exclusive only as the
+  # integer-storage sensitivity because it materially increases solve time.
+  dispatch_mode: convex_relaxation
+
+# Hosting capacity is a grid-import constraint. Set false only for a study
+# that explicitly permits/export-limits reverse flow separately.
+prohibit_export: true

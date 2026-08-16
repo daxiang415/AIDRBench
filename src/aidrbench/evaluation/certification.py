@@ -43,6 +43,7 @@ class FlexibilityCertificate:
     success_rate: float
     success_rate_lower_ci: float
     mean_delivery_ratio: float
+    minimum_interval_delivery_ratio: float
     p95_deadline_miss_rate: float
     p95_rebound_ratio: float
     mean_window_peak_relief_kw: float
@@ -192,6 +193,9 @@ def summarize_candidate_outcomes(
         "success_rate_lower_ci": lower_ci,
         "certified": lower_ci + 1e-12 >= criteria.reliability_target,
         "mean_delivery_ratio": float(outcomes["delivery_ratio"].mean()),
+        "minimum_interval_delivery_ratio": float(
+            outcomes["minimum_interval_delivery_ratio"].min()
+        ),
         "p95_deadline_miss_rate": _quantile(outcomes["deadline_miss_rate"], 0.95),
         "p95_rebound_ratio": _quantile(outcomes["rebound_ratio"], 0.95),
         "mean_window_peak_relief_kw": float(outcomes["window_peak_relief_kw"].mean()),
@@ -295,6 +299,9 @@ def certify_firm_flexibility(
         success_rate=float(selected["success_rate"]),
         success_rate_lower_ci=float(selected["success_rate_lower_ci"]),
         mean_delivery_ratio=float(selected["mean_delivery_ratio"]),
+        minimum_interval_delivery_ratio=float(
+            selected["minimum_interval_delivery_ratio"]
+        ),
         p95_deadline_miss_rate=float(selected["p95_deadline_miss_rate"]),
         p95_rebound_ratio=float(selected["p95_rebound_ratio"]),
         mean_window_peak_relief_kw=float(selected["mean_window_peak_relief_kw"]),
@@ -334,4 +341,268 @@ def save_flexibility_certificate(
         "certificate": str(certificate_path),
         "candidates": str(candidates_path),
         "outcomes": str(outcomes_path),
+    }
+
+
+def _protocol_split(
+    protocol_manifest: str | Path,
+    *,
+    split_name: Literal["validation", "test"],
+) -> tuple[Path, tuple[int, ...], FirmFlexibilityCriteria, str]:
+    """Read the declared config, seeds and frozen criteria for one protocol split."""
+
+    document = _read_mapping(protocol_manifest)
+    protocol_id = document.get("protocol_id")
+    if not isinstance(protocol_id, str) or not protocol_id:
+        raise ValueError("protocol manifest must define protocol_id")
+    raw_splits = document.get("splits")
+    if not isinstance(raw_splits, Mapping):
+        raise ValueError("protocol manifest must define splits")
+    split = raw_splits.get(split_name)
+    if not isinstance(split, Mapping):
+        raise ValueError(f"protocol manifest is missing the {split_name} split")
+    expected_role = (
+        "controller_and_hyperparameter_selection"
+        if split_name == "validation"
+        else "locked_ood_evaluation"
+    )
+    if split.get("role") != expected_role:
+        raise ValueError(f"protocol {split_name} split does not have role {expected_role}")
+    raw_range = split.get("episode_seed_range")
+    if (
+        not isinstance(raw_range, list)
+        or len(raw_range) != 2
+        or any(isinstance(value, bool) or not isinstance(value, int) for value in raw_range)
+        or raw_range[0] < 0
+        or raw_range[1] < raw_range[0]
+    ):
+        raise ValueError(f"protocol {split_name} episode_seed_range must be [first, last]")
+    raw_configs = split.get("configs")
+    if (
+        not isinstance(raw_configs, list)
+        or len(raw_configs) != 1
+        or not isinstance(raw_configs[0], str)
+    ):
+        raise ValueError(f"protocol {split_name} split must declare exactly one environment config")
+    raw_criteria = document.get("frozen_criteria")
+    if not isinstance(raw_criteria, Mapping):
+        raise ValueError("protocol manifest must define frozen_criteria")
+    criteria = FirmFlexibilityCriteria(**dict(raw_criteria))
+    return (
+        Path(raw_configs[0]),
+        tuple(range(raw_range[0], raw_range[1] + 1)),
+        criteria,
+        protocol_id,
+    )
+
+
+def _certificate_from_candidate_summary(
+    *,
+    controller: str,
+    duration_h: int,
+    criteria: FirmFlexibilityCriteria,
+    summary: Mapping[str, float | int | bool],
+    dc_peak_kw: float,
+) -> FlexibilityCertificate:
+    """Convert one fixed-capacity outcome summary to the public certificate schema."""
+
+    return FlexibilityCertificate(
+        controller=controller,
+        duration_h=duration_h,
+        reliability_target=criteria.reliability_target,
+        confidence_level=criteria.confidence_level,
+        certified_reduction_kw=float(summary["candidate_reduction_kw"]),
+        certified_reduction_fraction_of_dc_peak=float(
+            summary["candidate_reduction_fraction_of_dc_peak"]
+        ),
+        success_count=int(summary["success_count"]),
+        episode_count=int(summary["episode_count"]),
+        success_rate=float(summary["success_rate"]),
+        success_rate_lower_ci=float(summary["success_rate_lower_ci"]),
+        mean_delivery_ratio=float(summary["mean_delivery_ratio"]),
+        minimum_interval_delivery_ratio=float(summary["minimum_interval_delivery_ratio"]),
+        p95_deadline_miss_rate=float(summary["p95_deadline_miss_rate"]),
+        p95_rebound_ratio=float(summary["p95_rebound_ratio"]),
+        mean_window_peak_relief_kw=float(summary["mean_window_peak_relief_kw"]),
+        p05_window_peak_relief_fraction=float(summary["p05_window_peak_relief_fraction"]),
+        p95_recovery_time_h=float(summary["p95_recovery_time_h"]),
+        dc_peak_kw=dc_peak_kw,
+    )
+
+
+def select_firm_capacity_on_validation(
+    *,
+    protocol_manifest: str | Path,
+    controller: ControllerName,
+    model_path: str | Path | None,
+    durations_h: Sequence[int],
+    candidate_reduction_fractions: Sequence[float],
+    output_directory: str | Path,
+    search_method: Literal["grid", "binary"] = "binary",
+    binary_iterations: int = 8,
+) -> dict[str, str | int]:
+    """Select capacities only on the protocol's validation split and freeze them."""
+
+    if not durations_h or any(duration <= 0 for duration in durations_h):
+        raise ValueError("validation selection needs positive event durations")
+    if len(set(durations_h)) != len(durations_h):
+        raise ValueError("validation selection durations must be unique")
+    config, seeds, criteria, protocol_id = _protocol_split(
+        protocol_manifest, split_name="validation"
+    )
+    output = Path(output_directory)
+    output.mkdir(parents=True, exist_ok=True)
+    selected: list[dict[str, object]] = []
+    saved: dict[str, dict[str, str]] = {}
+    for duration_h in sorted(durations_h):
+        certificate, candidates, outcomes = certify_firm_flexibility(
+            config=config,
+            controller=controller,
+            model_path=model_path,
+            duration_h=duration_h,
+            candidate_reduction_fractions=candidate_reduction_fractions,
+            seeds=seeds,
+            criteria=criteria,
+            search_method=search_method,
+            binary_iterations=binary_iterations,
+        )
+        key = f"duration_{duration_h}h"
+        saved[key] = save_flexibility_certificate(
+            certificate, candidates, outcomes, criteria, output / key
+        )
+        selected.append(asdict(certificate))
+    selection_path = output / "selection.json"
+    selection_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "protocol_id": protocol_id,
+                "protocol_manifest": str(protocol_manifest),
+                "selection_split": "validation",
+                "controller": controller,
+                "model_path": str(model_path) if model_path is not None else None,
+                "criteria": criteria.as_dict(),
+                "validation_seed_count": len(seeds),
+                "search_method": search_method,
+                "candidate_reduction_fractions": list(candidate_reduction_fractions),
+                "selected_capacities": selected,
+                "artifacts": saved,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return {"selection": str(selection_path), "duration_count": len(selected)}
+
+
+def evaluate_selected_capacity_on_locked_test(
+    *,
+    selection_path: str | Path,
+    output_directory: str | Path,
+    expected_protocol_manifest: str | Path | None = None,
+) -> dict[str, str | int]:
+    """Evaluate frozen validation selections once on the declared locked test split.
+
+    This routine contains no candidate search. Calling it is intentionally an
+    explicit user action because its episode seeds belong to the locked OOD set.
+    """
+
+    selection_raw = json.loads(Path(selection_path).read_text(encoding="utf-8"))
+    if not isinstance(selection_raw, Mapping):
+        raise ValueError("selection file must be a mapping")
+    if (
+        selection_raw.get("schema_version") != 1
+        or selection_raw.get("selection_split") != "validation"
+    ):
+        raise ValueError("selection file is not a frozen validation selection")
+    manifest = selection_raw.get("protocol_manifest")
+    controller = selection_raw.get("controller")
+    raw_selected = selection_raw.get("selected_capacities")
+    if (
+        not isinstance(manifest, str)
+        or not isinstance(controller, str)
+        or not isinstance(raw_selected, list)
+    ):
+        raise ValueError("selection file is missing protocol, controller, or selected capacities")
+    if (
+        expected_protocol_manifest is not None
+        and Path(manifest).resolve() != Path(expected_protocol_manifest).resolve()
+    ):
+        raise ValueError(
+            "selection protocol manifest does not match the requested locked-test protocol"
+        )
+    if controller not in {*_RL_NAMES, "no_control", "threshold", "edf_valley", "mpc"}:
+        raise ValueError("selection file has an unsupported controller")
+    config, seeds, criteria, protocol_id = _protocol_split(manifest, split_name="test")
+    if selection_raw.get("protocol_id") != protocol_id:
+        raise ValueError("selection protocol ID does not match its locked-test protocol")
+    model_raw = selection_raw.get("model_path")
+    model_path = Path(model_raw) if isinstance(model_raw, str) else None
+    output = Path(output_directory)
+    output.mkdir(parents=True, exist_ok=True)
+    certificates: list[dict[str, object]] = []
+    saved: dict[str, dict[str, str]] = {}
+    for entry in raw_selected:
+        if not isinstance(entry, Mapping):
+            raise ValueError("selection contains a malformed capacity entry")
+        duration_h = entry.get("duration_h")
+        reduction_kw = entry.get("certified_reduction_kw")
+        if (
+            isinstance(duration_h, bool)
+            or not isinstance(duration_h, int)
+            or duration_h <= 0
+            or isinstance(reduction_kw, bool)
+            or not isinstance(reduction_kw, int | float)
+        ):
+            raise ValueError("selection contains invalid duration or capacity")
+        outcomes, dc_peak_kw = evaluate_flexibility_candidate(
+            config=config,
+            controller=cast(ControllerName, controller),
+            model_path=model_path,
+            duration_h=duration_h,
+            requested_reduction_kw=float(reduction_kw),
+            seeds=seeds,
+            criteria=criteria,
+        )
+        summary = summarize_candidate_outcomes(outcomes, criteria=criteria, dc_peak_kw=dc_peak_kw)
+        certificate = _certificate_from_candidate_summary(
+            controller=controller,
+            duration_h=duration_h,
+            criteria=criteria,
+            summary=summary,
+            dc_peak_kw=dc_peak_kw,
+        )
+        key = f"duration_{duration_h}h"
+        candidate_table = pd.DataFrame.from_records([summary])
+        saved[key] = save_flexibility_certificate(
+            certificate, candidate_table, outcomes, criteria, output / key
+        )
+        certificates.append(asdict(certificate))
+    summary_path = output / "locked_certificates.parquet"
+    pd.DataFrame.from_records(certificates).to_parquet(summary_path, index=False)
+    manifest_path = output / "locked_certificate.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "protocol_id": protocol_id,
+                "selection": str(selection_path),
+                "evaluation_split": "locked_test",
+                "test_seed_count": len(seeds),
+                "criteria": criteria.as_dict(),
+                "certificates": saved,
+                "summary": str(summary_path),
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "summary": str(summary_path),
+        "manifest": str(manifest_path),
+        "duration_count": len(certificates),
     }

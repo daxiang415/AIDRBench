@@ -9,7 +9,7 @@ from aidrbench.evaluation.protocol import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-PROTOCOL = ROOT / "data/manifests/hourly_experiment_protocol_v1.yaml"
+PROTOCOL = ROOT / "data/manifests/hourly_experiment_protocol_v2.yaml"
 
 
 def test_repository_hourly_experiment_protocol_is_valid() -> None:

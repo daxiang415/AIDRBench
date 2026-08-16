@@ -56,6 +56,7 @@ class FirmFlexibilityCriteria:
     reliability_target: float = 0.95
     confidence_level: float = 0.95
     min_delivery_ratio: float = 0.95
+    min_interval_delivery_ratio: float = 0.95
     max_deadline_miss_rate: float = 0.01
     max_rebound_ratio: float = 0.25
     min_window_peak_relief_fraction: float = 0.50
@@ -70,6 +71,7 @@ class FirmFlexibilityCriteria:
                 raise ValueError(f"{name} must be in (0, 1)")
         for name, value in (
             ("min_delivery_ratio", self.min_delivery_ratio),
+            ("min_interval_delivery_ratio", self.min_interval_delivery_ratio),
             ("min_window_peak_relief_fraction", self.min_window_peak_relief_fraction),
         ):
             if not 0.0 <= value <= 1.0:
@@ -95,6 +97,7 @@ class EventOutcome:
     duration_h: int
     requested_reduction_kw: float
     delivery_ratio: float
+    minimum_interval_delivery_ratio: float
     deadline_miss_rate: float
     rebound_peak_kw: float
     rebound_ratio: float
@@ -107,8 +110,15 @@ class EventOutcome:
         """Return the joint certificate decision and auditable failure labels."""
 
         failures: list[str] = []
-        if self.delivery_ratio + _EPSILON < criteria.min_delivery_ratio:
+        mean_delivery_failed = self.delivery_ratio + _EPSILON < criteria.min_delivery_ratio
+        interval_delivery_failed = (
+            self.minimum_interval_delivery_ratio + _EPSILON
+            < criteria.min_interval_delivery_ratio
+        )
+        if mean_delivery_failed or interval_delivery_failed:
             failures.append("delivery")
+        if interval_delivery_failed:
+            failures.append("interval_delivery")
         if self.deadline_miss_rate - _EPSILON > criteria.max_deadline_miss_rate:
             failures.append("deadline")
         if self.rebound_ratio - _EPSILON > criteria.max_rebound_ratio:
@@ -168,6 +178,15 @@ def derive_event_outcomes(
         delivery_ratio = (
             float(delivered.sum() / requested_total) if requested_total > _EPSILON else 1.0
         )
+        interval_requested = event_rows["requested_reduction_kw"]
+        interval_delivery_ratios = delivered.divide(
+            interval_requested.where(interval_requested > 0)
+        )
+        minimum_interval_delivery_ratio = (
+            float(interval_delivery_ratios.min())
+            if requested_total > _EPSILON
+            else 1.0
+        )
         rebound_peak_kw = (
             float(
                 (post_rows["pcc_power_kw"] - post_rows["baseline_pcc_power_kw"])
@@ -205,6 +224,7 @@ def derive_event_outcomes(
                 duration_h=event.stop_hour - event.start_hour,
                 requested_reduction_kw=event.requested_reduction_kw,
                 delivery_ratio=delivery_ratio,
+                minimum_interval_delivery_ratio=minimum_interval_delivery_ratio,
                 deadline_miss_rate=deadline_miss_rate,
                 rebound_peak_kw=rebound_peak_kw,
                 rebound_ratio=rebound_ratio,

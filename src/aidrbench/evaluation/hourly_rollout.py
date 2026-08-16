@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import re
+import time
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Protocol
@@ -28,6 +30,28 @@ class HourlyController(Protocol):
         self, env: HourlyCommunityAIDemandResponseEnv, info: dict[str, Any]
     ) -> HourlyAction: ...
 KPI_TOLERANCE_KW = 1e-4
+_CLASS_METRIC_PREFIXES = {
+    "arrival_gpu_h_by_class": "arrived",
+    "executed_gpu_h_by_class": "executed",
+    "missed_gpu_h_by_class": "missed",
+    "backlog_gpu_h_by_class": "backlog",
+}
+
+
+def _class_metric_columns(info: Mapping[str, Any]) -> dict[str, float]:
+    """Flatten per-class queue accounting into stable Parquet column names."""
+
+    columns: dict[str, float] = {}
+    for info_key, prefix in _CLASS_METRIC_PREFIXES.items():
+        values = info.get(info_key)
+        if not isinstance(values, tuple):
+            continue
+        for job_class, value in values:
+            normalized_class = re.sub(r"[^a-z0-9]+", "_", str(job_class).lower()).strip("_")
+            if not normalized_class:
+                raise ValueError("job class cannot normalize to an empty metric name")
+            columns[f"{prefix}_{normalized_class}_gpu_h"] = float(value)
+    return columns
 
 
 def rollout_hourly_episode(
@@ -47,18 +71,22 @@ def rollout_hourly_episode(
     truncated = False
     hour = 0
     while not (terminated or truncated):
+        action_start = time.perf_counter()
         action = controller.act(env, info)
+        action_time_ms = (time.perf_counter() - action_start) * 1_000.0
         _, reward, terminated, truncated, info = env.step(action)
         rows.append(
             {
                 "hour": hour,
                 "reward": reward,
                 "controller": controller.name,
+                "controller_action_time_ms": action_time_ms,
                 **{
                     key: value
                     for key, value in info.items()
                     if isinstance(value, bool | int | float | str)
                 },
+                **_class_metric_columns(info),
             }
         )
         hour += 1
@@ -88,6 +116,9 @@ def rollout_hourly_episode(
         ),
     )
     delivery_ratios = np.asarray([outcome.delivery_ratio for outcome in event_outcomes])
+    minimum_interval_delivery_ratios = np.asarray(
+        [outcome.minimum_interval_delivery_ratio for outcome in event_outcomes]
+    )
     window_reliefs = np.asarray([outcome.window_peak_relief_kw for outcome in event_outcomes])
     window_relief_fractions = np.asarray(
         [outcome.window_peak_relief_fraction for outcome in event_outcomes]
@@ -105,7 +136,14 @@ def rollout_hourly_episode(
     firm_event_successes = sum(success for success, _ in event_decisions)
     failure_counts = {
         reason: sum(reason in failures for _, failures in event_decisions)
-        for reason in ("delivery", "deadline", "rebound", "window_relief", "terminal_backlog")
+        for reason in (
+            "delivery",
+            "interval_delivery",
+            "deadline",
+            "rebound",
+            "window_relief",
+            "terminal_backlog",
+        )
     }
     pcc_limit_compliance_rate = (
         float((reportable_violations.loc[main["event_active"]] <= 0.0).mean())
@@ -119,6 +157,17 @@ def rollout_hourly_episode(
         "hours": len(frame),
         "main_hours": len(main),
         "pcc_peak_kw": float(main["pcc_power_kw"].max()),
+        "background_community_peak_kw": float(frame["background_community_peak_kw"].iloc[0]),
+        "pcc_capacity_kw": float(frame["pcc_capacity_kw"].iloc[0]),
+        "target_dc_peak_kw": float(frame["target_dc_peak_kw"].iloc[0]),
+        "actual_dc_peak_kw": float(frame["actual_dc_peak_kw"].iloc[0]),
+        "actual_dc_peak_fraction_of_pcc": float(
+            frame["actual_dc_peak_fraction_of_pcc"].iloc[0]
+        ),
+        "dc_peak_sizing_error_kw": float(frame["dc_peak_sizing_error_kw"].iloc[0]),
+        "scenario_provenance": str(frame["scenario_provenance"].iloc[0]),
+        "frozen_scenario_id": str(frame["frozen_scenario_id"].iloc[0]),
+        "frozen_scenario_hash": str(frame["frozen_scenario_hash"].iloc[0]),
         "gross_community_peak_kw": float(main["community_gross_power_kw"].max()),
         "net_community_peak_kw": float(main["community_power_kw"].max()),
         "peak_reduction_kw": peak_delivered_reduction_kw,
@@ -138,6 +187,16 @@ def rollout_hourly_episode(
         **{f"{reason}_failure_count": count for reason, count in failure_counts.items()},
         "mean_event_delivery_ratio": float(delivery_ratios.mean()) if len(delivery_ratios) else 1.0,
         "min_event_delivery_ratio": float(delivery_ratios.min()) if len(delivery_ratios) else 1.0,
+        "mean_event_minimum_interval_delivery_ratio": (
+            float(minimum_interval_delivery_ratios.mean())
+            if len(minimum_interval_delivery_ratios)
+            else 1.0
+        ),
+        "minimum_interval_delivery_ratio": (
+            float(minimum_interval_delivery_ratios.min())
+            if len(minimum_interval_delivery_ratios)
+            else 1.0
+        ),
         "mean_window_peak_relief_kw": float(window_reliefs.mean()) if len(window_reliefs) else 0.0,
         "min_window_peak_relief_kw": float(window_reliefs.min()) if len(window_reliefs) else 0.0,
         "mean_window_peak_relief_fraction": (
@@ -207,9 +266,26 @@ def rollout_hourly_episode(
             else "generated_in_memory"
         ),
         "forecast_assumption": getattr(controller, "forecast_assumption", "current_state_only"),
+        "information_structure": getattr(controller, "information_structure", "undeclared"),
+        "mean_controller_action_time_ms": float(frame["controller_action_time_ms"].mean()),
+        "max_controller_action_time_ms": float(frame["controller_action_time_ms"].max()),
         "observation_version": env.observation_version,
         "reward_version": env.config.reward.version,
     }
+    for column in sorted(str(column) for column in frame.columns):
+        if not (column.startswith("executed_") and column.endswith("_gpu_h")):
+            continue
+        if column == "executed_gpu_h":
+            continue
+        job_class = column.removeprefix("executed_").removesuffix("_gpu_h")
+        summary[f"completed_{job_class}_gpu_h"] = float(frame[column].sum())
+    summary_metadata = getattr(controller, "summary_metadata", None)
+    if callable(summary_metadata):
+        extra_metadata = summary_metadata()
+        overlap = sorted(set(summary).intersection(extra_metadata))
+        if overlap:
+            raise ValueError(f"controller summary metadata overlaps shared KPIs: {overlap}")
+        summary.update(extra_metadata)
     return frame, summary
 
 

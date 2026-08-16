@@ -11,13 +11,14 @@ env:
 
 community:
   source: synthetic
-  target_peak_kw: 1000
+  background_peak_kw: 800
+  pcc_capacity_kw: 1000
   pv_enabled: false
 
 virtual_datacenter:
   gpus_per_node: 4
   node_count: auto
-  target_dc_peak_share_of_community: 0.20
+  target_dc_peak_share_of_pcc: 0.20
   flexible_gpu_fraction: 0.50
   pue: 1.20
 

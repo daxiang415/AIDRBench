@@ -55,7 +55,7 @@ def test_dqn_smoke_training_saves_cpu_model(tmp_path: Path) -> None:
     assert summary["algorithm"] == "dqn"
     assert summary["environment"] == "discrete"
     assert summary["device"] == "cpu"
-    assert summary["observation_version"] == "firm_v4"
+    assert summary["observation_version"] == "firm_v5"
     assert summary["observation_size"] == 63
     assert Path(str(summary["model"])).is_file()
     assert Path(str(summary["replay_buffer"])).is_file()
@@ -64,7 +64,9 @@ def test_dqn_smoke_training_saves_cpu_model(tmp_path: Path) -> None:
     assert (checkpoint / "model.zip").is_file()
     assert (checkpoint / "replay_buffer.pkl").is_file()
     checkpoint_metadata = yaml.safe_load((checkpoint / "training.json").read_text())
-    assert checkpoint_metadata["observation_version"] == "firm_v4"
+    assert checkpoint_metadata["observation_version"] == "firm_v5"
+    assert checkpoint_metadata["reward_version"] == "firm_threshold_v2"
+    assert checkpoint_metadata["training_reward_version"] == "firm_threshold_v2"
     assert summary["checkpoint_interval"] == 8
 
     policy = SB3HourlyPolicyController("dqn", summary["model"])
@@ -90,6 +92,74 @@ def test_training_config_reads_algorithm_defaults() -> None:
     assert config.n_envs == 4
     assert config.experiment_protocol is None
     assert config.checkpoint_interval is None
+    assert config.reward_adapter is None
+
+
+def test_cmdp_dqn_training_persists_dual_state(tmp_path: Path) -> None:
+    root = Path(__file__).resolve().parents[1]
+    template = yaml.safe_load((root / "configs/algorithms/dqn_cmdp.yaml").read_text())
+    assert isinstance(template, dict)
+    template["total_timesteps"] = 16
+    template["checkpoint_interval"] = 8
+    hyperparameters = template["hyperparameters"]
+    assert isinstance(hyperparameters, dict)
+    hyperparameters.update({"learning_starts": 1, "buffer_size": 100, "batch_size": 8})
+    config = tmp_path / "dqn-cmdp-smoke.yaml"
+    config.write_text(yaml.safe_dump(template), encoding="utf-8")
+
+    summary = train_hourly_rl(config, seed=4, output_directory=tmp_path / "output")
+
+    assert summary["reward_version"] == "firm_threshold_v2"
+    assert summary["training_reward_version"] == "firm_cmdp_v4"
+    dual_state = summary["cmdp_dual_state"]
+    assert isinstance(dual_state, dict)
+    assert set(dual_state["multipliers"]) == {
+        "delivery",
+        "feasibility",
+        "deadline",
+        "rebound",
+        "window_relief",
+        "terminal_backlog",
+    }
+    checkpoint_metadata = yaml.safe_load(
+        (tmp_path / "output/checkpoints/step_000000008/training.json").read_text()
+    )
+    assert checkpoint_metadata["training_reward_version"] == "firm_cmdp_v4"
+    assert checkpoint_metadata["cmdp_dual_state"] is not None
+
+    resumed = train_hourly_rl(
+        config,
+        seed=4,
+        output_directory=tmp_path / "output",
+        resume_model=summary["model"],
+    )
+    resumed_dual_state = resumed["cmdp_dual_state"]
+    assert isinstance(resumed_dual_state, dict)
+    assert resumed_dual_state["updates"] >= dual_state["updates"]
+
+    changed = yaml.safe_load(config.read_text(encoding="utf-8"))
+    changed["reward_adapter"]["dual_learning_rate"] = 0.01
+    changed_config = tmp_path / "dqn-cmdp-changed.yaml"
+    changed_config.write_text(yaml.safe_dump(changed), encoding="utf-8")
+    with pytest.raises(ValueError, match="parameters do not match"):
+        train_hourly_rl(
+            changed_config,
+            seed=4,
+            output_directory=tmp_path / "output",
+            resume_model=summary["model"],
+        )
+
+    no_adapter = yaml.safe_load((root / "configs/algorithms/dqn.yaml").read_text())
+    no_adapter["total_timesteps"] = 8
+    no_adapter_config = tmp_path / "dqn-no-adapter.yaml"
+    no_adapter_config.write_text(yaml.safe_dump(no_adapter), encoding="utf-8")
+    with pytest.raises(ValueError, match="without reward_adapter"):
+        train_hourly_rl(
+            no_adapter_config,
+            seed=4,
+            output_directory=tmp_path / "output",
+            resume_model=summary["model"],
+        )
 
 
 def test_sac_config_uses_a_small_cpu_policy() -> None:

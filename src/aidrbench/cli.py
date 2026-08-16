@@ -138,6 +138,12 @@ def _add_calibration_parsers(subparsers: Any) -> None:
     make_plan.add_argument("--output", required=True)
     make_plan.add_argument("--design", default="full-factorial")
 
+    validate_artifact = commands.add_parser(
+        "validate-artifact",
+        help="verify a hardware calibration artifact's schema, checksum, and provenance",
+    )
+    validate_artifact.add_argument("--artifact", required=True)
+
     telemetry = commands.add_parser(
         "collect-telemetry", help="collect read-only nvidia-smi telemetry to Parquet"
     )
@@ -244,7 +250,9 @@ def _add_hourly_environment_parsers(subparsers: Any) -> None:
 
     rollout = subparsers.add_parser("rollout", help="run one V0 hourly baseline episode")
     rollout.add_argument(
-        "--controller", choices=("no_control", "threshold", "edf_valley", "mpc"), required=True
+        "--controller",
+        choices=("no_control", "threshold", "edf_valley", "mpc", "robust_mpc", "oracle"),
+        required=True,
     )
     rollout.add_argument(
         "--scenario",
@@ -256,11 +264,79 @@ def _add_hourly_environment_parsers(subparsers: Any) -> None:
     rollout.add_argument("--save", required=True)
 
 
+def _add_scenario_parsers(subparsers: Any) -> None:
+    scenario = subparsers.add_parser(
+        "scenario", help="freeze and inspect immutable hourly exogenous scenarios"
+    )
+    commands = scenario.add_subparsers(dest="scenario_command")
+    freeze = commands.add_parser(
+        "freeze",
+        help="materialize hash-verified community, workload, event, and baseline artifacts",
+    )
+    freeze.add_argument("--config", required=True)
+    freeze.add_argument("--seeds", nargs="+", type=int, required=True)
+    freeze.add_argument("--output", required=True)
+    inspect = commands.add_parser(
+        "inspect", help="verify one frozen scenario and display its provenance"
+    )
+    inspect.add_argument("--input", required=True)
+
+
+def _add_optimization_parsers(subparsers: Any) -> None:
+    optimize = subparsers.add_parser(
+        "optimize", help="compute auditable planning bounds on frozen scenarios"
+    )
+    commands = optimize.add_subparsers(dest="optimization_command")
+    frontier = commands.add_parser(
+        "pi-frontier",
+        help="compute a single-event perfect-information power-duration frontier",
+    )
+    frontier.add_argument("--scenarios", required=True)
+    frontier.add_argument("--durations", nargs="+", type=int, required=True)
+    frontier.add_argument("--event-id", type=int, default=0)
+    frontier.add_argument("--output", required=True)
+    non_anticipative = commands.add_parser(
+        "non-anticipative-firm",
+        help="compute a chance-constrained causal non-anticipative lower bound",
+    )
+    non_anticipative.add_argument("--scenarios", required=True)
+    non_anticipative.add_argument("--durations", nargs="+", type=int, required=True)
+    non_anticipative.add_argument("--event-id", type=int, default=0)
+    non_anticipative.add_argument("--reliability-target", type=float, default=1.0)
+    non_anticipative.add_argument(
+        "--information-structure",
+        choices=("common_open_loop", "coarse_observation_partition_tree"),
+        default="coarse_observation_partition_tree",
+        help=(
+            "causal policy restriction; the default bins current net load, a limited "
+            "forecast, arrivals and notified DR events"
+        ),
+    )
+    non_anticipative.add_argument("--forecast-horizon-hours", type=int, default=6)
+    non_anticipative.add_argument("--power-bin-width-pu", type=float, default=0.10)
+    non_anticipative.add_argument("--arrival-bin-width-fraction", type=float, default=0.10)
+    non_anticipative.add_argument("--minimum-shared-node-size", type=int, default=2)
+    non_anticipative.add_argument("--output", required=True)
+    hosting = commands.add_parser(
+        "hosting-capacity",
+        help="compute frozen-scenario absolute-PCC hosting-capacity planning bounds",
+    )
+    hosting.add_argument("--scenarios", required=True)
+    hosting.add_argument("--portfolio", required=True)
+    hosting.add_argument(
+        "--dc-operation",
+        choices=("rigid", "flexible", "matrix"),
+        default="matrix",
+        help="matrix evaluates the 2 x 2 x 2 rigid/flexible x PV x BESS comparison",
+    )
+    hosting.add_argument("--output", required=True)
+
+
 def _add_training_parsers(subparsers: Any) -> None:
     protocol = subparsers.add_parser(
         "protocol-check", help="validate the locked hourly experiment protocol"
     )
-    protocol.add_argument("--manifest", default="data/manifests/hourly_experiment_protocol_v1.yaml")
+    protocol.add_argument("--manifest", default="data/manifests/hourly_experiment_protocol_v2.yaml")
 
     train = subparsers.add_parser(
         "train", help="train a standard RL policy on the hourly environment"
@@ -291,7 +367,17 @@ def _add_training_parsers(subparsers: Any) -> None:
     benchmark.add_argument(
         "--controllers",
         nargs="+",
-        choices=("no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"),
+        choices=(
+            "no_control",
+            "threshold",
+            "edf_valley",
+            "mpc",
+            "robust_mpc",
+            "oracle",
+            "dqn",
+            "ppo",
+            "sac",
+        ),
         required=True,
     )
     benchmark.add_argument("--config", default="configs/env/hourly_continuous.yaml")
@@ -313,7 +399,17 @@ def _add_training_parsers(subparsers: Any) -> None:
     plot.add_argument(
         "--controllers",
         nargs="+",
-        choices=("no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"),
+        choices=(
+            "no_control",
+            "threshold",
+            "edf_valley",
+            "mpc",
+            "robust_mpc",
+            "oracle",
+            "dqn",
+            "ppo",
+            "sac",
+        ),
         help="default: every controller in episodes.parquet",
     )
     plot.add_argument("--seed", type=int, help="default: minimum available seed per controller")
@@ -325,31 +421,45 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
         "certify", help="certify rebound-aware reliable hourly flexibility"
     )
     certify.add_argument(
+        "certification_command",
+        nargs="?",
+        choices=("select", "locked-test"),
+        help=(
+            "select on validation or evaluate an already frozen selection on the "
+            "locked test split"
+        ),
+    )
+    certify.add_argument(
         "--controller",
         choices=("no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"),
-        required=True,
     )
     certify.add_argument("--model", help="required when controller is DQN, PPO, or SAC")
     certify.add_argument("--config", default="configs/env/hourly_continuous.yaml")
-    certify.add_argument("--durations", type=int, nargs="+", required=True)
-    certify.add_argument("--episodes", type=int, required=True)
+    certify.add_argument("--durations", type=int, nargs="+")
+    certify.add_argument("--episodes", type=int)
     certify.add_argument(
         "--candidate-fractions",
         type=float,
         nargs="+",
-        default=(0.0, 0.1, 0.2, 0.3, 0.4, 0.5),
+        default=(0.0, 1.0),
         help="grid points, or lower/upper bounds when --search binary",
     )
-    certify.add_argument("--search", choices=("grid", "binary"), default="grid")
+    certify.add_argument("--search", choices=("grid", "binary"), default="binary")
     certify.add_argument("--binary-iterations", type=int, default=8)
     certify.add_argument("--reliability", type=float, default=0.95)
     certify.add_argument("--confidence", type=float, default=0.95)
     certify.add_argument("--min-delivery-ratio", type=float, default=0.95)
+    certify.add_argument("--min-interval-delivery-ratio", type=float, default=0.95)
     certify.add_argument("--max-deadline-miss-rate", type=float, default=0.01)
     certify.add_argument("--max-rebound-ratio", type=float, default=0.25)
     certify.add_argument("--min-window-peak-relief-fraction", type=float, default=0.50)
     certify.add_argument("--max-terminal-backlog-fraction", type=float, default=0.02)
-    certify.add_argument("--save", required=True)
+    certify.add_argument("--save")
+    certify.add_argument(
+        "--protocol-manifest", default="data/manifests/hourly_experiment_protocol_v2.yaml"
+    )
+    certify.add_argument("--selection", help="frozen validation selection for certify locked-test")
+    certify.add_argument("--output", help="output directory for certify select or locked-test")
 
     compare_envelopes = subparsers.add_parser(
         "compare-envelopes", help="compare static planning envelopes with certificates"
@@ -387,6 +497,7 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
     stress_test.add_argument("--reliability", type=float, default=0.95)
     stress_test.add_argument("--confidence", type=float, default=0.95)
     stress_test.add_argument("--min-delivery-ratio", type=float, default=0.95)
+    stress_test.add_argument("--min-interval-delivery-ratio", type=float, default=0.95)
     stress_test.add_argument("--max-deadline-miss-rate", type=float, default=0.01)
     stress_test.add_argument("--max-rebound-ratio", type=float, default=0.25)
     stress_test.add_argument("--min-window-peak-relief-fraction", type=float, default=0.50)
@@ -407,6 +518,8 @@ def build_parser() -> argparse.ArgumentParser:
     _add_fleet_parsers(subparsers)
     _add_hil_parsers(subparsers)
     _add_hourly_environment_parsers(subparsers)
+    _add_scenario_parsers(subparsers)
+    _add_optimization_parsers(subparsers)
     _add_training_parsers(subparsers)
     _add_firm_flexibility_parsers(subparsers)
     return parser
@@ -655,6 +768,12 @@ def _run_data(args: argparse.Namespace) -> int:
 
 
 def _run_calibration(args: argparse.Namespace) -> int:
+    if args.calibration_command == "validate-artifact":
+        from aidrbench.calibration.artifact import load_hardware_calibration_artifact
+
+        artifact = load_hardware_calibration_artifact(args.artifact)
+        _print_summary(artifact.summary())
+        return 0
     if args.calibration_command == "make-plan":
         from aidrbench.calibration.plan import make_calibration_plan, summary_dict
 
@@ -906,6 +1025,94 @@ def _run_rollout(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_scenario(args: argparse.Namespace) -> int:
+    if args.scenario_command == "freeze":
+        from aidrbench.data.frozen_scenarios import freeze_hourly_scenarios
+
+        scenarios = freeze_hourly_scenarios(
+            args.config,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary({"scenario_count": len(scenarios), "scenarios": scenarios})
+        return 0
+    if args.scenario_command == "inspect":
+        from aidrbench.data.frozen_scenarios import load_frozen_hourly_scenario
+
+        scenario = load_frozen_hourly_scenario(args.input)
+        _print_summary(
+            {
+                "scenario_id": scenario.scenario_id,
+                "scenario_hash": scenario.scenario_hash,
+                "episode_seed": scenario.episode_seed,
+                "community_hours": len(scenario.community),
+                "arrival_rows": len(scenario.arrivals),
+                "baseline_hours": len(scenario.baseline),
+                "events": list(scenario.events),
+                "scenario_bases": scenario.metadata["scenario_bases"],
+                "power_model": scenario.metadata["power_model"],
+            }
+        )
+        return 0
+    raise ValueError("a scenario subcommand is required")
+
+
+def _run_optimization(args: argparse.Namespace) -> int:
+    if args.optimization_command == "pi-frontier":
+        from aidrbench.evaluation.pi_frontier import compute_and_save_pi_frontier
+
+        summary = compute_and_save_pi_frontier(
+            args.scenarios,
+            durations_h=args.durations,
+            output_directory=args.output,
+            event_id=args.event_id,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "non-anticipative-firm":
+        from aidrbench.evaluation.non_anticipative import (
+            ObservationPartitionSpecification,
+            compute_and_save_non_anticipative_frontier,
+        )
+
+        observation_specification = (
+            ObservationPartitionSpecification(
+                forecast_horizon_hours=args.forecast_horizon_hours,
+                power_bin_width_pu=args.power_bin_width_pu,
+                arrival_bin_width_fraction=args.arrival_bin_width_fraction,
+                minimum_shared_node_size=args.minimum_shared_node_size,
+            )
+            if args.information_structure == "coarse_observation_partition_tree"
+            else None
+        )
+        summary = compute_and_save_non_anticipative_frontier(
+            args.scenarios,
+            durations_h=args.durations,
+            output_directory=args.output,
+            event_id=args.event_id,
+            reliability_target=args.reliability_target,
+            information_structure=args.information_structure,
+            observation_specification=observation_specification,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "hosting-capacity":
+        from aidrbench.evaluation.hosting_capacity import (
+            compute_and_save_hosting_capacity,
+            load_community_portfolio,
+        )
+
+        summary = compute_and_save_hosting_capacity(
+            args.scenarios,
+            portfolio=load_community_portfolio(args.portfolio),
+            output_directory=args.output,
+            dc_operation=args.dc_operation,
+        )
+        _print_summary(summary)
+        return 0
+    raise ValueError("an optimize subcommand is required")
+
+
 def _run_train(args: argparse.Namespace) -> int:
     from aidrbench.training import train_hourly_rl
 
@@ -991,6 +1198,45 @@ def _run_plot(args: argparse.Namespace) -> int:
 
 
 def _run_certify(args: argparse.Namespace) -> int:
+    if args.certification_command == "select":
+        if args.controller is None or not args.durations or args.output is None:
+            raise ValueError("certify select requires --controller, --durations, and --output")
+        from aidrbench.evaluation.certification import select_firm_capacity_on_validation
+        from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+
+        protocol = validate_hourly_experiment_protocol(args.protocol_manifest)
+        if not protocol["valid"]:
+            raise ValueError("protocol manifest is invalid; cannot select a capacity")
+        summary = select_firm_capacity_on_validation(
+            protocol_manifest=args.protocol_manifest,
+            controller=args.controller,
+            model_path=args.model,
+            durations_h=args.durations,
+            candidate_reduction_fractions=args.candidate_fractions,
+            output_directory=args.output,
+            search_method=args.search,
+            binary_iterations=args.binary_iterations,
+        )
+        _print_summary(summary)
+        return 0
+    if args.certification_command == "locked-test":
+        if args.selection is None or args.output is None:
+            raise ValueError("certify locked-test requires --selection and --output")
+        from aidrbench.evaluation.certification import evaluate_selected_capacity_on_locked_test
+        from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+
+        protocol = validate_hourly_experiment_protocol(args.protocol_manifest)
+        if not protocol["valid"]:
+            raise ValueError("protocol manifest is invalid; cannot evaluate the locked test split")
+        summary = evaluate_selected_capacity_on_locked_test(
+            selection_path=args.selection,
+            output_directory=args.output,
+            expected_protocol_manifest=args.protocol_manifest,
+        )
+        _print_summary(summary)
+        return 0
+    if args.controller is None or not args.durations or args.episodes is None or args.save is None:
+        raise ValueError("certify requires --controller, --durations, --episodes, and --save")
     from aidrbench.evaluation.certification import (
         certify_firm_flexibility,
         save_flexibility_certificate,
@@ -1003,6 +1249,7 @@ def _run_certify(args: argparse.Namespace) -> int:
         reliability_target=args.reliability,
         confidence_level=args.confidence,
         min_delivery_ratio=args.min_delivery_ratio,
+        min_interval_delivery_ratio=args.min_interval_delivery_ratio,
         max_deadline_miss_rate=args.max_deadline_miss_rate,
         max_rebound_ratio=args.max_rebound_ratio,
         min_window_peak_relief_fraction=args.min_window_peak_relief_fraction,
@@ -1093,6 +1340,7 @@ def _firm_criteria_from_args(args: argparse.Namespace) -> FirmFlexibilityCriteri
         reliability_target=args.reliability,
         confidence_level=args.confidence,
         min_delivery_ratio=args.min_delivery_ratio,
+        min_interval_delivery_ratio=args.min_interval_delivery_ratio,
         max_deadline_miss_rate=args.max_deadline_miss_rate,
         max_rebound_ratio=args.max_rebound_ratio,
         min_window_peak_relief_fraction=args.min_window_peak_relief_fraction,
@@ -1209,6 +1457,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "env":
         try:
             return _run_env(args)
+        except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
+            parser.error(str(error))
+    if args.command == "scenario":
+        try:
+            return _run_scenario(args)
+        except (FileExistsError, FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
+            parser.error(str(error))
+    if args.command == "optimize":
+        try:
+            return _run_optimization(args)
         except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
             parser.error(str(error))
     if args.command == "rollout":
