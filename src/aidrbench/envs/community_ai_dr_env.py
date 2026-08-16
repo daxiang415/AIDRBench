@@ -61,13 +61,16 @@ class HourlyPlanningSnapshot:
     capacity_gpu_h: float
     fixed_dc_power_kw: float
     dynamic_kw_per_gpu_h: float
+    workload_classes: tuple[str, ...]
+    dynamic_kw_per_gpu_h_by_class: tuple[tuple[str, float], ...]
     pcc_capacity_kw: float
     community_power_kw: tuple[float, ...]
     released_gpu_h: tuple[float, ...]
     due_gpu_h: tuple[float, ...]
-    work_groups: tuple[tuple[int, int, float], ...]
+    work_groups: tuple[tuple[int, int, str, float], ...]
     total_arrival_gpu_h: float
     baseline_execution_gpu_h: tuple[float, ...]
+    baseline_execution_gpu_h_by_class: tuple[tuple[str, tuple[float, ...]], ...]
     baseline_pcc_power_kw: tuple[float, ...]
     baseline_deadline_miss_gpu_h: float
     baseline_terminal_backlog_gpu_h: float
@@ -274,15 +277,19 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         total_hours = self.config.total_hours
         released = np.zeros(total_hours, dtype="float64")
         due = np.zeros(total_hours, dtype="float64")
-        grouped_work: dict[tuple[int, int], float] = {}
+        grouped_work: dict[tuple[int, int, str], float] = {}
+        workload_classes = tuple(
+            sorted(str(value) for value in self._arrivals["job_class"].unique())
+        )
         for record in self._arrivals.to_dict(orient="records"):
             release = int(record["timestamp_index"])
             if not 0 <= release < total_hours:
                 continue
             work = float(record["arrival_gpu_h"])
+            job_class = str(record["job_class"])
             released[release] += work
             deadline = release + math.ceil(float(record["slack_hours"])) - 1
-            key = (release, deadline)
+            key = (release, deadline, job_class)
             grouped_work[key] = grouped_work.get(key, 0.0) + work
             if deadline < total_hours:
                 due[max(deadline, 0)] += work
@@ -292,6 +299,10 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             bucket_labels_h=self.config.deadline_bucket_labels_h,
         )
         baseline_execution = np.zeros(total_hours, dtype="float64")
+        baseline_execution_by_class = {
+            job_class: np.zeros(total_hours, dtype="float64")
+            for job_class in workload_classes
+        }
         baseline_pcc = np.zeros(total_hours, dtype="float64")
         community = self._community["net_community_load_kw"].iloc[:total_hours].to_numpy(
             dtype="float64"
@@ -303,6 +314,10 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                 capacity_gpu_h=self._capacity_gpu_h,
             )
             baseline_execution[index] = step.executed_gpu_h
+            for job_class, executed_gpu_h in step.executed_gpu_h_by_class:
+                baseline_execution_by_class.setdefault(
+                    job_class, np.zeros(total_hours, dtype="float64")
+                )[index] = executed_gpu_h
             baseline_pcc[index] = community[index] + self.power_model.predict_by_class(
                 dict(step.executed_gpu_h_by_class),
                 timestep_hours=self.config.timestep_hours,
@@ -315,16 +330,34 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             capacity_gpu_h=self._capacity_gpu_h,
             fixed_dc_power_kw=self._fixed_dc_power_kw,
             dynamic_kw_per_gpu_h=self._flexible_power_range_kw / self._capacity_gpu_h,
+            workload_classes=workload_classes,
+            dynamic_kw_per_gpu_h_by_class=tuple(
+                (
+                    job_class,
+                    self.power_model.flexible_dynamic_power_kw_per_gpu_h(
+                        job_class,
+                        timestep_hours=self.config.timestep_hours,
+                    ),
+                )
+                for job_class in workload_classes
+            ),
             pcc_capacity_kw=self.config.pcc_capacity_kw,
             community_power_kw=tuple(float(value) for value in community),
             released_gpu_h=tuple(float(value) for value in released),
             due_gpu_h=tuple(float(value) for value in due),
             work_groups=tuple(
-                (release, deadline, work)
-                for (release, deadline), work in sorted(grouped_work.items())
+                (release, deadline, job_class, work)
+                for (release, deadline, job_class), work in sorted(grouped_work.items())
             ),
             total_arrival_gpu_h=float(released.sum()),
             baseline_execution_gpu_h=tuple(float(value) for value in baseline_execution),
+            baseline_execution_gpu_h_by_class=tuple(
+                (
+                    job_class,
+                    tuple(float(value) for value in baseline_execution_by_class[job_class]),
+                )
+                for job_class in workload_classes
+            ),
             baseline_pcc_power_kw=tuple(float(value) for value in baseline_pcc),
             baseline_deadline_miss_gpu_h=baseline_queue.cumulative_missed_gpu_h,
             baseline_terminal_backlog_gpu_h=baseline_queue.backlog_gpu_h,

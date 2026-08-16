@@ -36,6 +36,7 @@ class FullHorizonOracleSolution:
     refinement_solve_seconds: float
     action_fractions: tuple[float, ...]
     execution_gpu_h: tuple[float, ...]
+    execution_gpu_h_by_class: tuple[tuple[str, tuple[float, ...]], ...]
 
     def summary(self) -> dict[str, float | str]:
         return {
@@ -104,7 +105,10 @@ def solve_full_horizon_oracle(
     capacity = snapshot.capacity_gpu_h
     community = np.asarray(snapshot.community_power_kw, dtype="float64")
     baseline_pcc = np.asarray(snapshot.baseline_pcc_power_kw, dtype="float64")
-    dynamic_range_kw = snapshot.dynamic_kw_per_gpu_h * capacity
+    dynamic_power_by_class = dict(snapshot.dynamic_kw_per_gpu_h_by_class)
+    if set(dynamic_power_by_class) != set(snapshot.workload_classes):
+        raise ValueError("planning snapshot has incomplete class-specific power coefficients")
+    dynamic_range_kw = max(dynamic_power_by_class.values()) * capacity
     big_m_kw = max(2.0 * dynamic_range_kw, 1.0)
     ratio_margin = 1e-6
 
@@ -114,10 +118,12 @@ def solve_full_horizon_oracle(
         raise ValueError("full-horizon oracle needs at least one flexible work group")
     edge_groups: list[int] = []
     edge_hours: list[int] = []
-    for group_index, (release, deadline, _) in enumerate(groups):
+    edge_classes: list[str] = []
+    for group_index, (release, deadline, job_class, _) in enumerate(groups):
         for hour in range(release, min(deadline, horizon - 1) + 1):
             edge_groups.append(group_index)
             edge_hours.append(hour)
+            edge_classes.append(job_class)
     edge_count = len(edge_groups)
     if edge_count == 0:
         raise ValueError("full-horizon oracle has no schedulable work edges")
@@ -130,7 +136,7 @@ def solve_full_horizon_oracle(
         (np.ones(edge_count), (edge_hours, edge_ids)),
         shape=(horizon, edge_count),
     ).tocsr()
-    group_work = np.asarray([group[2] for group in groups], dtype="float64")
+    group_work = np.asarray([group[3] for group in groups], dtype="float64")
     due_within_episode = np.asarray(
         [group[1] < horizon for group in groups], dtype=bool
     )
@@ -138,12 +144,22 @@ def solve_full_horizon_oracle(
     served = cp.Variable(edge_count, nonneg=True, name="served_gpu_h")
     missed = cp.Variable(group_count, nonneg=True, name="missed_gpu_h")
     remaining = cp.Variable(group_count, nonneg=True, name="terminal_backlog_gpu_h")
-    execution = time_incidence @ served
+    execution_by_class = {
+        job_class: time_incidence
+        @ cp.multiply(  # type: ignore[attr-defined]
+            np.asarray([value == job_class for value in edge_classes], dtype="float64"),
+            served,
+        )
+        for job_class in snapshot.workload_classes
+    }
+    execution = sum(execution_by_class.values())
+    dynamic_dc_power = sum(
+        dynamic_power_by_class[job_class] * execution_by_class[job_class]
+        for job_class in snapshot.workload_classes
+    )
     firm_reduction = cp.Variable(nonneg=True, name="firm_reduction_kw")
     terminal_backlog = cp.sum(remaining)  # type: ignore[attr-defined]
-    pcc_power = (
-        community + snapshot.fixed_dc_power_kw + snapshot.dynamic_kw_per_gpu_h * execution
-    )
+    pcc_power = community + snapshot.fixed_dc_power_kw + dynamic_dc_power
     constraints: list[Any] = [
         execution <= capacity,
         pcc_power <= snapshot.pcc_capacity_kw,
@@ -239,13 +255,20 @@ def solve_full_horizon_oracle(
     if execution.value is None or missed.value is None or remaining.value is None:
         raise RuntimeError("full-horizon oracle returned no primal schedule")
     execution_values = np.clip(np.asarray(execution.value), 0.0, capacity)
+    execution_values_by_class = {
+        job_class: np.clip(
+            np.asarray(execution_by_class[job_class].value),
+            0.0,
+            capacity,
+        )
+        for job_class in snapshot.workload_classes
+    }
     missed_gpu_h = max(float(np.asarray(missed.value).sum()), 0.0)
     terminal_gpu_h = max(float(np.asarray(remaining.value).sum()), 0.0)
     configured_requests = [event.requested_reduction_kw for event in snapshot.events]
-    optimized_pcc = (
-        community
-        + snapshot.fixed_dc_power_kw
-        + snapshot.dynamic_kw_per_gpu_h * execution_values
+    optimized_pcc = community + snapshot.fixed_dc_power_kw + sum(
+        dynamic_power_by_class[job_class] * execution_values_by_class[job_class]
+        for job_class in snapshot.workload_classes
     )
     mean_delivery_ratios: list[float] = []
     interval_delivery_ratios: list[float] = []
@@ -296,6 +319,13 @@ def solve_full_horizon_oracle(
         refinement_solve_seconds=refinement_seconds,
         action_fractions=tuple(float(value / capacity) for value in execution_values),
         execution_gpu_h=tuple(float(value) for value in execution_values),
+        execution_gpu_h_by_class=tuple(
+            (
+                job_class,
+                tuple(float(value) for value in execution_values_by_class[job_class]),
+            )
+            for job_class in snapshot.workload_classes
+        ),
     )
 
 

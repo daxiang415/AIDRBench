@@ -102,7 +102,10 @@ def solve_frozen_pi_frontier(
             min_window_peak_relief_fraction=reward.min_window_peak_relief_fraction,
             max_terminal_backlog_fraction=reward.max_terminal_backlog_fraction,
         )
-        physical_upper_bound_kw = snapshot.dynamic_kw_per_gpu_h * snapshot.capacity_gpu_h
+        physical_upper_bound_kw = (
+            max(dict(snapshot.dynamic_kw_per_gpu_h_by_class).values())
+            * snapshot.capacity_gpu_h
+        )
         if solution.perfect_information_capacity_kw > physical_upper_bound_kw + 1e-6:
             raise RuntimeError("perfect-information solution exceeds the physical dynamic bound")
         rows.append(

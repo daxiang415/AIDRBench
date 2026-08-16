@@ -2,9 +2,9 @@
 
 The module exposes two deliberately restricted causal policy classes: one
 common open-loop execution schedule, and a coarse observation-partition tree.
-Both use aggregate execution actions, which the environment realizes with its
-causal EDF queue discipline. They are lower bounds on a richer controller
-policy class, rather than clairvoyant planning results.
+Both schedule workload-class execution explicitly and use the same calibrated
+class power coefficients as the online environment. They are lower bounds on a
+richer controller policy class, rather than clairvoyant planning results.
 """
 
 from __future__ import annotations
@@ -194,15 +194,14 @@ def _assert_common_physics(snapshots: Sequence[HourlyPlanningSnapshot]) -> None:
         reference.total_hours,
         reference.capacity_gpu_h,
         reference.fixed_dc_power_kw,
-        reference.dynamic_kw_per_gpu_h,
         reference.pcc_capacity_kw,
     )
+    reference_class_power = dict(reference.dynamic_kw_per_gpu_h_by_class)
     for snapshot in snapshots[1:]:
         values = (
             snapshot.total_hours,
             snapshot.capacity_gpu_h,
             snapshot.fixed_dc_power_kw,
-            snapshot.dynamic_kw_per_gpu_h,
             snapshot.pcc_capacity_kw,
         )
         if values[0] != reference_values[0] or any(
@@ -210,6 +209,17 @@ def _assert_common_physics(snapshots: Sequence[HourlyPlanningSnapshot]) -> None:
             for value, expected in zip(values[1:], reference_values[1:], strict=True)
         ):
             raise ValueError("frozen scenarios must share one hourly physical configuration")
+        candidate_class_power = dict(snapshot.dynamic_kw_per_gpu_h_by_class)
+        if set(candidate_class_power) != set(reference_class_power) or any(
+            not math.isclose(
+                candidate_class_power[job_class],
+                coefficient,
+                rel_tol=0.0,
+                abs_tol=1e-9,
+            )
+            for job_class, coefficient in reference_class_power.items()
+        ):
+            raise ValueError("frozen scenarios must share class-specific power coefficients")
 
 
 def _solve(problem: Any) -> None:
@@ -401,7 +411,10 @@ def _solve_non_anticipative_capacity(
     required_success_count = scenario_count - allowed_failures
     horizon = reference.total_hours
     capacity = reference.capacity_gpu_h
-    dynamic_range_kw = reference.dynamic_kw_per_gpu_h * capacity
+    dynamic_power_by_class = dict(reference.dynamic_kw_per_gpu_h_by_class)
+    if not dynamic_power_by_class:
+        raise ValueError("non-anticipative snapshots have no class power coefficients")
+    dynamic_range_kw = max(dynamic_power_by_class.values()) * capacity
     _validate_information_nodes(
         information_nodes,
         scenario_count=scenario_count,
@@ -415,16 +428,19 @@ def _solve_non_anticipative_capacity(
         cp.sum(failures) <= allowed_failures,  # type: ignore[attr-defined]
     ]
     scenario_execution: list[Any] = []
+    scenario_execution_by_class: list[dict[str, Any]] = []
     for scenario_index, snapshot in enumerate(snapshots):
         groups = snapshot.work_groups
         if not groups:
             raise ValueError("non-anticipative scenario has no flexible work groups")
         edge_groups: list[int] = []
         edge_hours: list[int] = []
-        for group_index, (release, deadline, _) in enumerate(groups):
+        edge_classes: list[str] = []
+        for group_index, (release, deadline, job_class, _) in enumerate(groups):
             for hour in range(release, min(deadline, horizon - 1) + 1):
                 edge_groups.append(group_index)
                 edge_hours.append(hour)
+                edge_classes.append(job_class)
         if not edge_groups:
             raise ValueError("non-anticipative scenario has no schedulable work edges")
         edge_count = len(edge_groups)
@@ -442,17 +458,30 @@ def _solve_non_anticipative_capacity(
         remaining = cp.Variable(
             len(groups), nonneg=True, name=f"terminal_backlog_gpu_h_s{scenario_index}"
         )
-        execution = time_incidence @ served
+        execution_by_class = {
+            job_class: time_incidence
+            @ cp.multiply(  # type: ignore[attr-defined]
+                np.asarray(
+                    [value == job_class for value in edge_classes],
+                    dtype="float64",
+                ),
+                served,
+            )
+            for job_class in reference.workload_classes
+        }
+        execution = sum(execution_by_class.values())
         scenario_execution.append(execution)
+        scenario_execution_by_class.append(execution_by_class)
         failure = failures[scenario_index]
-        group_work = np.asarray([group[2] for group in groups], dtype="float64")
+        group_work = np.asarray([group[3] for group in groups], dtype="float64")
         due_within_episode = np.asarray(
             [group[1] < horizon for group in groups], dtype=bool
         )
         community = np.asarray(snapshot.community_power_kw, dtype="float64")
         baseline_pcc = np.asarray(snapshot.baseline_pcc_power_kw, dtype="float64")
-        pcc_power = (
-            community + snapshot.fixed_dc_power_kw + snapshot.dynamic_kw_per_gpu_h * execution
+        pcc_power = community + snapshot.fixed_dc_power_kw + sum(
+            dynamic_power_by_class[job_class] * execution_by_class[job_class]
+            for job_class in reference.workload_classes
         )
         max_pcc_kw = float(
             (community + snapshot.fixed_dc_power_kw + dynamic_range_kw).max()
@@ -538,10 +567,11 @@ def _solve_non_anticipative_capacity(
         for node in nodes:
             anchor = node[0]
             for scenario_index in node[1:]:
-                constraints.append(
-                    scenario_execution[anchor][hour]
-                    == scenario_execution[scenario_index][hour]
-                )
+                for job_class in reference.workload_classes:
+                    constraints.append(
+                        scenario_execution_by_class[anchor][job_class][hour]
+                        == scenario_execution_by_class[scenario_index][job_class][hour]
+                    )
 
     maximize = cp.Problem(cp.Maximize(firm_reduction), constraints)
     objective_start = time.monotonic()

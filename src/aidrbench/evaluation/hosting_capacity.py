@@ -206,7 +206,8 @@ def _assert_common_physics(snapshots: Sequence[HourlyPlanningSnapshot]) -> None:
     if not snapshots:
         raise ValueError("hosting-capacity optimization needs at least one scenario")
     reference = snapshots[0]
-    fields = ("total_hours", "capacity_gpu_h", "fixed_dc_power_kw", "dynamic_kw_per_gpu_h")
+    fields = ("total_hours", "capacity_gpu_h", "fixed_dc_power_kw")
+    reference_class_power = dict(reference.dynamic_kw_per_gpu_h_by_class)
     for snapshot in snapshots[1:]:
         for field in fields:
             if not math.isclose(
@@ -215,6 +216,17 @@ def _assert_common_physics(snapshots: Sequence[HourlyPlanningSnapshot]) -> None:
                 raise ValueError("hosting scenarios must share one data-centre physical model")
         if not math.isclose(snapshot.pcc_capacity_kw, reference.pcc_capacity_kw, abs_tol=1e-9):
             raise ValueError("hosting scenarios must share one PCC capacity")
+        candidate_class_power = dict(snapshot.dynamic_kw_per_gpu_h_by_class)
+        if set(candidate_class_power) != set(reference_class_power) or any(
+            not math.isclose(
+                candidate_class_power[job_class],
+                coefficient,
+                rel_tol=0.0,
+                abs_tol=1e-9,
+            )
+            for job_class, coefficient in reference_class_power.items()
+        ):
+            raise ValueError("hosting scenarios must share class-specific power coefficients")
 
 
 def _pv_profile_kw(artifact: FrozenHourlyScenario, *, rated_kw: float, horizon: int) -> np.ndarray:
@@ -263,8 +275,11 @@ def solve_frozen_hosting_capacity(
     reward = rewards[0]
     horizon = snapshot.total_hours
     timestep_h = 1.0
-    reference_dc_peak_kw = (
-        snapshot.fixed_dc_power_kw + snapshot.dynamic_kw_per_gpu_h * snapshot.capacity_gpu_h
+    dynamic_power_by_class = dict(snapshot.dynamic_kw_per_gpu_h_by_class)
+    if not dynamic_power_by_class:
+        raise ValueError("hosting snapshots have no class power coefficients")
+    reference_dc_peak_kw = snapshot.fixed_dc_power_kw + (
+        max(dynamic_power_by_class.values()) * snapshot.capacity_gpu_h
     )
     scale = cp.Variable(nonneg=True, name="dc_scale_of_reference")
     constraints: list[Any] = []
@@ -337,15 +352,25 @@ def solve_frozen_hosting_capacity(
         terminal_soc.append(soc[-1])
 
         if dc_operation == "rigid":
-            execution = scale * np.asarray(scenario.baseline_execution_gpu_h, dtype="float64")
+            baseline_execution_by_class = dict(
+                scenario.baseline_execution_gpu_h_by_class
+            )
+            execution_by_class = {
+                job_class: scale
+                * np.asarray(baseline_execution_by_class[job_class], dtype="float64")
+                for job_class in snapshot.workload_classes
+            }
+            execution = sum(execution_by_class.values())
         else:
             groups = scenario.work_groups
             edge_groups: list[int] = []
             edge_hours: list[int] = []
-            for group_index, (release, deadline, _) in enumerate(groups):
+            edge_classes: list[str] = []
+            for group_index, (release, deadline, job_class, _) in enumerate(groups):
                 for hour in range(release, min(deadline, horizon - 1) + 1):
                     edge_groups.append(group_index)
                     edge_hours.append(hour)
+                    edge_classes.append(job_class)
             if not edge_groups:
                 raise ValueError("hosting scenario has no schedulable flexible workload")
             edge_ids = np.arange(len(edge_groups), dtype="int64")
@@ -364,9 +389,20 @@ def solve_frozen_hosting_capacity(
             remaining = cp.Variable(
                 len(groups), nonneg=True, name=f"terminal_backlog_gpu_h_s{scenario_index}"
             )
-            group_work = np.asarray([group[2] for group in groups], dtype="float64")
+            group_work = np.asarray([group[3] for group in groups], dtype="float64")
             due = np.asarray([group[1] < horizon for group in groups], dtype=bool)
-            execution = time_incidence @ served
+            execution_by_class = {
+                job_class: time_incidence
+                @ cp.multiply(  # type: ignore[attr-defined]
+                    np.asarray(
+                        [value == job_class for value in edge_classes],
+                        dtype="float64",
+                    ),
+                    served,
+                )
+                for job_class in snapshot.workload_classes
+            }
+            execution = sum(execution_by_class.values())
             constraints.extend(
                 [
                     execution <= scenario.capacity_gpu_h * scale,
@@ -386,7 +422,10 @@ def solve_frozen_hosting_capacity(
             if bool(due.any()):
                 constraints.append(remaining[due] == 0.0)
 
-        dc_power = snapshot.fixed_dc_power_kw * scale + snapshot.dynamic_kw_per_gpu_h * execution
+        dc_power = snapshot.fixed_dc_power_kw * scale + sum(
+            dynamic_power_by_class[job_class] * execution_by_class[job_class]
+            for job_class in snapshot.workload_classes
+        )
         pcc_power = community_gross - pv_dispatch + dc_power + battery_charge - battery_discharge
         constraints.append(pcc_power <= snapshot.pcc_capacity_kw)
         if portfolio.prohibit_export:

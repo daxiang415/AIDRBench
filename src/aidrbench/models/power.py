@@ -120,6 +120,31 @@ class HourlyDataCenterPowerModel:
 
         return dict(self.flexible_active_power_w_per_gpu_by_class)
 
+    def flexible_dynamic_power_kw_per_gpu_h(
+        self,
+        job_class: str,
+        *,
+        timestep_hours: float = 1.0,
+    ) -> float:
+        """Return the class-specific power slope above the flexible idle pool.
+
+        ``predict_by_class`` treats idle GPU power as part of the fixed data-centre
+        draw.  Optimizers therefore need only this incremental coefficient for
+        each completed GPU-hour.  Keeping the calculation here ensures online
+        execution and offline planning use exactly the same physical model.
+        """
+
+        duration = _positive(timestep_hours, "timestep_hours")
+        active_power_w = self.flexible_active_power_by_class.get(
+            job_class,
+            self.flexible_active_power_w_per_gpu,
+        )
+        return (
+            self.pue
+            * (active_power_w - self.idle_power_w_per_gpu)
+            / (1_000.0 * duration)
+        )
+
     @property
     def rigid_it_power_kw(self) -> float:
         rigid_gpu_power_w = self.data_center.rigid_gpu_count * (
