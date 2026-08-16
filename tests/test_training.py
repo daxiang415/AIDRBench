@@ -99,6 +99,7 @@ def test_cmdp_dqn_training_persists_dual_state(tmp_path: Path) -> None:
     root = Path(__file__).resolve().parents[1]
     template = yaml.safe_load((root / "configs/algorithms/dqn_cmdp.yaml").read_text())
     assert isinstance(template, dict)
+    template["environment_config"] = "configs/env/hourly_discrete_train.yaml"
     template["total_timesteps"] = 16
     template["checkpoint_interval"] = 8
     hyperparameters = template["hyperparameters"]

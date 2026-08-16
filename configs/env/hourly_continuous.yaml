@@ -40,7 +40,6 @@ workload:
       online_inference: 0.00
 
 hardware:
-  calibration_file: data/processed/workload_energy.csv
   fallback_idle_power_w_per_gpu: 80
   active_power_w_per_gpu_by_class:
     training: 450

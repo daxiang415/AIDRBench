@@ -12,11 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL = ROOT / "data/manifests/hourly_experiment_protocol_v2.yaml"
 
 
-def test_repository_hourly_experiment_protocol_is_valid() -> None:
+def test_repository_protocol_reports_missing_formal_calibration_without_crashing() -> None:
     report = validate_hourly_experiment_protocol(PROTOCOL)
 
-    assert report["valid"] is True
-    assert all(report["checks"].values())
+    assert report["valid"] is False
+    assert report["checks"]["environment_configs"] is False
+    assert report["checks"]["test_locked"] is True
+    assert report["checks"]["environment_interface_frozen"] is True
+    assert "hardware calibration artifact does not exist" in str(report["details"])
 
 
 def test_protocol_detects_seed_leakage(tmp_path: Path) -> None:

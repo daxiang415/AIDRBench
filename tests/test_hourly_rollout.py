@@ -64,6 +64,8 @@ def test_causal_mpc_never_executes_an_estimated_future_release_immediately() -> 
 
     assert arrivals[0] == 0.0
     assert arrivals[1] == 12.0
+    controller.reset()
+    assert controller._previous_fraction == 1.0
 
 
 def test_hourly_robust_mpc_rollout_declares_its_arrival_envelope() -> None:

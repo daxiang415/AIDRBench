@@ -123,13 +123,13 @@ class HourlyMPCController:
         self.backlog_penalty = backlog_penalty
         self.switching_penalty = switching_penalty
         self._arrival_history_gpu_h: list[float] = []
-        self._previous_fraction = 0.0
+        self._previous_fraction = 1.0
 
     def reset(self) -> None:
         """Clear previous-arrival estimates between evaluation episodes."""
 
         self._arrival_history_gpu_h.clear()
-        self._previous_fraction = 0.0
+        self._previous_fraction = 1.0
 
     def _forecast_arrivals(self, env: Any, horizon: int) -> np.ndarray:
         """Forecast arrivals strictly after the already released current hour."""

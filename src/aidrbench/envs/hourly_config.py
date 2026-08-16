@@ -357,6 +357,17 @@ def load_hourly_environment_config(
     virtual_dc = _mapping(root.get("virtual_datacenter"), "virtual_datacenter")
     workload = _mapping(root.get("workload"), "workload")
     hardware = _mapping(root.get("hardware"), "hardware")
+    allowed_hardware_keys = {
+        "active_power_w_per_gpu_by_class",
+        "calibration_artifact",
+        "calibration_power_case",
+        "fallback_idle_power_w_per_gpu",
+        "fallback_node_overhead_w",
+        "require_calibration_artifact",
+    }
+    unknown_hardware_keys = sorted(set(hardware) - allowed_hardware_keys)
+    if unknown_hardware_keys:
+        raise ValueError(f"hardware contains unknown fields: {unknown_hardware_keys}")
     dr = _mapping(root.get("dr"), "dr")
     reward = _mapping(root.get("reward"), "reward")
     configured_mode = str(env.get("action_mode", "continuous"))
@@ -386,6 +397,17 @@ def load_hourly_environment_config(
         raise ValueError("hardware.calibration_artifact must be a non-empty path when supplied")
     if calibration_artifact is None and calibration_power_case != "nominal":
         raise ValueError("hardware.calibration_power_case requires calibration_artifact")
+    fallback_hardware_keys = {
+        "active_power_w_per_gpu_by_class",
+        "fallback_idle_power_w_per_gpu",
+        "fallback_node_overhead_w",
+    }
+    ambiguous_hardware_keys = sorted(set(hardware) & fallback_hardware_keys)
+    if calibration_artifact is not None and ambiguous_hardware_keys:
+        raise ValueError(
+            "hardware calibration_artifact cannot be combined with fallback fields: "
+            f"{ambiguous_hardware_keys}"
+        )
     power_by_class: Mapping[str, object]
     if calibration_artifact is not None:
         if calibration_power_case == "nominal":
@@ -586,10 +608,13 @@ def load_hourly_environment_config(
                 "hardware calibration artifact has no active-power estimate for flexible "
                 f"workload classes: {missing_classes}"
             )
+    timestep_hours = _positive_float(env.get("timestep_hours", 1.0), "env.timestep_hours")
+    if not math.isclose(timestep_hours, 1.0, rel_tol=0.0, abs_tol=1e-12):
+        raise ValueError("current hourly environment requires env.timestep_hours == 1.0")
     return HourlyEnvironmentConfig(
         seed=int(root.get("seed", 2026)),
         action_mode=action_mode,
-        timestep_hours=_positive_float(env.get("timestep_hours", 1.0), "env.timestep_hours"),
+        timestep_hours=timestep_hours,
         episode_days=_positive_int(env.get("episode_days", 7), "env.episode_days"),
         clearance_tail_hours=_positive_int(
             env.get("clearance_tail_hours", 24), "env.clearance_tail_hours"

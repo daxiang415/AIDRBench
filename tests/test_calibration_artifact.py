@@ -121,3 +121,34 @@ def test_hourly_config_requires_an_artifact_when_declared_formal() -> None:
 
     with pytest.raises(ValueError, match="requires calibration_artifact"):
         load_hourly_environment_config(document)
+
+
+def test_hourly_config_rejects_unknown_and_ambiguous_hardware_fields(
+    tmp_path: Path,
+) -> None:
+    document = yaml.safe_load((ROOT / "configs/env/hourly_continuous.yaml").read_text())
+    document["hardware"]["calibration_file"] = "obsolete.csv"
+    with pytest.raises(ValueError, match="unknown fields.*calibration_file"):
+        load_hourly_environment_config(document)
+
+    artifact_path = tmp_path / "calibration.yaml"
+    _write_artifact(artifact_path)
+    document["hardware"] = {
+        "calibration_artifact": str(artifact_path),
+        "fallback_idle_power_w_per_gpu": 80.0,
+    }
+    with pytest.raises(ValueError, match="cannot be combined with fallback"):
+        load_hourly_environment_config(document)
+
+
+def test_formal_config_fails_closed_until_measured_artifact_exists() -> None:
+    with pytest.raises(FileNotFoundError, match="rtx6000pro_4gpu_v1.yaml"):
+        load_hourly_environment_config(ROOT / "configs/env/hourly_formal_validation.yaml")
+
+
+def test_hourly_config_rejects_subhourly_timestep_until_queue_is_generalized() -> None:
+    document = yaml.safe_load((ROOT / "configs/env/hourly_continuous.yaml").read_text())
+    document["env"]["timestep_hours"] = 0.25
+
+    with pytest.raises(ValueError, match="timestep_hours == 1.0"):
+        load_hourly_environment_config(document)
