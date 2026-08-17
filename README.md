@@ -4,10 +4,10 @@
 
 **面向社区能源系统的 AI 数据中心可靠需求响应、接入容量与计算债务评估平台**
 
-> **Project thesis**<br>
+> **Project thesis**  
 > AI workload flexibility is not a fixed fraction of data-centre power. It is a state-, duration-, information- and history-dependent resource constrained by job deadlines, compute debt, recovery requirements and post-event rebound.
 
-> **项目中心命题**<br>
+> **项目中心命题**  
 > AI 数据中心的需求响应能力不是固定的“可移位负荷比例”，而是一种由任务队列、剩余期限、未来信息、历史调用和恢复需求共同决定、会被连续事件耗尽的有限资源。
 
 ---
@@ -442,20 +442,10 @@ which is a model-internal global optimum and a clairvoyant upper bound.
 A realistic commitment must be made before all future uncertainty is known. Scenario-tree or two-stage formulations impose non-anticipativity:
 
 \[
-x_{c,t,s}=x_{c,t,s'}
+x_{t,s}=x_{t,s'}
 \]
 
-for workload class \(c\) and scenarios that are indistinguishable at time
-\(t\). PI, non-anticipative and hosting models all use the same calibrated
-class-specific power coefficients as the online environment:
-
-\[
-P_t^{\mathrm{DC}}
-=
-P_{\mathrm{fixed}}
-+
-\sum_c e_c x_{c,t}.
-\]
+for scenarios that are indistinguishable at time \(t\).
 
 A chance-constrained formulation may introduce failure variables \(z_s\):
 
@@ -675,12 +665,7 @@ Random streams for community demand, workload and events must be separated so th
 
 ### Main firm-capacity certificate
 
-The primary certificate fixes a repeated-event program keyed by duration,
-notice, event anchors and the declared timing-jitter distribution. Each episode
-is one independent Bernoulli trial and passes only when **every event in that
-episode** satisfies delivery, minimum-interval delivery, deadline, rebound,
-window-relief and terminal-backlog criteria. Event rows remain auditable, but
-they are never counted as independent statistical trials.
+The primary certificate uses one independent event per episode. Each episode is one Bernoulli trial that passes only when all protocol criteria pass.
 
 ### Validation stage
 
@@ -701,9 +686,7 @@ A one-sided lower confidence bound is reported:
 \underline p_{0.95}(R)\geq0.95.
 \]
 
-An isolated-event certificate remains available only as an explicitly labelled
-diagnostic. Exhaustion products use the same episode-level joint-success rule,
-because events within one episode are dependent.
+Repeated-event products are evaluated separately using episode-level joint success, because events within one episode are dependent.
 
 ---
 
@@ -903,22 +886,6 @@ Formal configurations must fail when the requested calibration artifact is unava
 
 Hardware uncertainty is propagated through the flexibility and hosting-capacity results rather than hidden behind one deterministic parameter set.
 
-The executable artifact interface is:
-
-```yaml
-hardware:
-  calibration_artifact: data/calibration/rtx6000pro_4gpu_v1.yaml
-  require_calibration_artifact: true  # mandatory for a formal run
-  calibration_power_case: nominal     # lower_ci | nominal | upper_ci
-```
-
-`aidrbench calibrate validate-artifact --artifact <path>` verifies the strict
-schema and its self-contained SHA-256 before the environment consumes it.
-For each calibrated power case, freeze fresh scenarios before running the PI,
-non-anticipative, certification or hosting-capacity workflows: a frozen
-artifact stores both the resulting power-model fingerprint and calibration
-artifact SHA-256.
-
 ---
 
 ## 19. Proposed package structure
@@ -986,44 +953,22 @@ aidrbench optimize pi-frontier \
   --durations 1 2 3 4 6 8 \
   --output results/pi_frontier/
 
-# Compute a chance-constrained causal lower bound. The default is a declared
-# coarse observation-partition tree: current net load, a six-hour forecast,
-# current arrivals, and a DR event only after notice. Rare cells are merged.
-# It remains a restricted lower bound, not the unrestricted scenario-tree optimum.
-aidrbench optimize non-anticipative-firm \
-  --scenarios data/frozen/reference_validation/ \
-  --durations 1 2 3 4 6 8 \
-  --reliability-target 0.95 \
-  --output results/non_anticipative_frontier/
-
-# Optional stricter sensitivity: one common execution schedule across all
-# successful frozen scenarios at every hour.
-aidrbench optimize non-anticipative-firm \
-  --scenarios data/frozen/reference_validation/ \
-  --durations 1 2 3 4 6 8 \
-  --reliability-target 0.95 \
-  --information-structure common_open_loop \
-  --output results/non_anticipative_open_loop/
-
 # Compute portfolio-specific hosting capacity
 aidrbench optimize hosting-capacity \
-  --scenarios data/frozen/reference_validation/ \
   --portfolio configs/community/pv_bess.yaml \
-  --dc-operation matrix \
+  --dc-operation flexible \
   --output results/hosting_capacity/
 
 # Select capacity on validation data, then freeze it
 aidrbench certify select \
   --controller mpc \
-  --durations 1 2 3 4 6 8 \
-  --notices 0 2 4 6 \
-  --protocol-manifest data/manifests/hourly_experiment_protocol_v2.yaml \
+  --validation-manifest data/manifests/validation_v2.yaml \
   --output results/selected_capacity/
 
 # Evaluate the fixed capacity on locked OOD episodes
 aidrbench certify locked-test \
   --selection results/selected_capacity/selection.json \
-  --protocol-manifest data/manifests/hourly_experiment_protocol_v2.yaml \
+  --test-manifest data/manifests/locked_ood_v2.yaml \
   --output results/locked_certificate/
 
 # Evaluate repeated-event exhaustion
@@ -1038,36 +983,56 @@ aidrbench stress-test sustainable-capacity \
 
 ## 21. Current status and interpretation
 
-The current local development status is:
+The current local development status reported for protocol v2 is:
 
 - both mean-event and minimum-interval delivery criteria are implemented;
-- the formal base case now distinguishes a **800 kW background-community peak**, **1 MW PCC rating**, and **200 kW target DC peak**;
-- exact discrete sizing with the calibrated nominal power case selects 182 four-GPU nodes,
-  giving a 200.321 kW realised full-pool facility peak;
-- PCC capacity is enforced at every hourly interval and is present in observations, planning snapshots, oracle constraints and result metadata;
-- `aidrbench scenario freeze` writes hash-verified community, PV, arrivals, event anchors, baseline and power-model artifacts;
-- `aidrbench optimize pi-frontier` evaluates a single-event, frozen-scenario perfect-information duration frontier and checks physical and monotonicity invariants;
-- `aidrbench optimize non-anticipative-firm` implements two declared causal lower-bound policy classes over frozen scenarios: a strict common open-loop schedule and, by default, a coarse observation-partition tree using only current net load, limited forecast, released work and notified DR events. The latter merges rare observation cells, deliberately omits endogenous queue state, and is therefore not the unrestricted scenario-tree frontier;
-- `aidrbench optimize hosting-capacity` implements an absolute-PCC, perfect-information planning bound for the eight rigid/flexible × PV × BESS portfolios. It enforces PV use/curtailment, BESS SOC, power and terminal-SOC constraints, and scales workload release/deadline constraints with the candidate DC size; BESS is not yet part of the online DR environment;
-- the hourly EDF queue now retains training and offline-inference work classes and rollout Parquet files report their arrival, execution, expiry and backlog separately;
-- planning snapshots retain workload class, and PI, non-anticipative and hosting-capacity optimizers use class-indexed execution and calibrated class-specific power rather than an average affine slope;
-- class-aware PCC power and compute debt use the versioned, SHA-256-verified `data/calibration/rtx6000pro_4gpu_v1.yaml` artifact. Its GPU board-power terms are measured on 4× NVIDIA RTX PRO 6000 Blackwell Max-Q GPUs; `lower_ci`, `nominal` and `upper_ci` power cases are explicit scenario settings;
-- the current artifact is conservatively labelled `benchmark_anchored_synthetic`: GPU idle and active power are measured, but the 300 W node CPU/memory/fan overhead remains an explicit `[150, 450] W` assumption because no BMC, PDU or RAPL power interface was available. It must not be described as wall-power calibrated;
-- formal train, validation and locked-test configs require that artifact; unknown or ambiguous hardware keys are rejected, and the hourly environment rejects non-one-hour timesteps until queue aging is generalized;
-- controller certification uses repeated-event joint episode success and keys each selected capacity by duration, notice and event sequence. Validation searches all configured notice choices, while locked test only evaluates the frozen capacities;
-- all 100 validation seeds `20000..20099` have been frozen against calibration
-  artifact SHA `6f6c5aa776c90be6f8d1f1d41ee2457b321558257aed363ebe2cbd063433c996`;
-- calibrated reward diagnostics reject the penalty-only 50k DQN runs: all five
-  training seeds had `0/100` repeated-event joint validation successes because
-  they traded excessive deadline misses for delivery. The experimental
-  `firm_cmdp_v5` training adapter restores zero deadline and terminal-backlog
-  failures and reaches `31/100` joint successes at 10k steps, but remains far
-  below the 95% certificate threshold and is not a frozen formal reward;
-- deterministic MPC now obeys release-time causality for estimated future arrivals; a robust-MPC baseline uses an explicit historical-arrival uncertainty envelope. Benchmark outputs label every controller's information structure and action-time distribution, while the full-horizon oracle remains explicitly separate as a perfect-information bound;
-- GitHub Actions runs `pytest`, `ruff check .` and `mypy src`; a clean-install smoke test verifies HiGHS/CVXPY and Parquet availability;
-- the locked test set has not been used after this scenario-semantics revision.
+- the default certificate search covers \([0,1.0]\times P_{\mathrm{DC,peak}}\) with binary search;
+- 140 tests pass locally;
+- the protocol check passes;
+- the locked test set has not been used.
 
-The earlier 63.52 kW and 68.86 kW diagnostics used the previous 153.37 kW virtual-DC sizing and non-frozen duration comparisons. They are therefore retained only as historical development observations and must not be used as a current flexibility, community-DR or certificate result. Similarly, policies trained against the earlier `firm_v4` observation interface are incompatible with the current `firm_v5` PCC-normalized environment and are diagnostic only.
+For the three originally examined two-hour validation trajectories, the strict sample-min perfect-information result is:
+
+\[
+\boxed{
+\min_{s\in\{20000,20001,20002\}}
+F_s^{\mathrm{PI}}(2\ \mathrm{h})
+=
+63.52\ \mathrm{kW}
+}
+\]
+
+under a previous virtual data-centre peak of approximately 153.37 kW.
+
+This implies a minimum interval-level delivery of:
+
+\[
+0.95\times63.52
+=
+60.34\ \mathrm{kW},
+\]
+
+and at least:
+
+\[
+60.34\times2
+=
+120.69\ \mathrm{kWh}
+\]
+
+of shifted demand over the two-hour event.
+
+This value is:
+
+- a **perfect-future fluid-model upper bound**;
+- the minimum of only three validation trajectories;
+- not a non-anticipative firm capacity;
+- not a community commitment;
+- not a locked-test certificate.
+
+A separate preliminary duration diagnostic reached the 68.86 kW flexible dynamic-power ceiling for some shorter-duration cases and declined for a longer event. This pattern must be repeated using matched frozen scenarios before being interpreted as a duration-driven physical mechanism.
+
+The current online DQN diagnostic remains 7/9 event successes under the revised interval-level criterion. It is not a reliable-capacity certificate and must be accompanied by episode-level joint success and per-criterion failure labels.
 
 ---
 
@@ -1103,34 +1068,24 @@ The earlier 63.52 kW and 68.86 kW diagnostics used the previous 153.37 kW virtua
 
 ### Priority 5 — Repair statistical certification
 
-- [x] count independent episodes, not event rows, as Bernoulli trials;
-- [x] require all events in a repeated-event episode to succeed jointly;
-- [x] key capacities by duration, notice and event sequence;
-- [x] select capacity on validation data only and evaluate only the frozen value on locked test;
-- [x] report one-sided lower confidence bounds;
-- [ ] run the formal certificate only after measured calibration and scenario re-freezing.
+- use one independent event per episode for the main certificate;
+- select capacity on validation data only;
+- evaluate one fixed capacity on the locked test set;
+- report one-sided lower confidence bounds;
+- evaluate repeated-event products with episode-level joint success.
 
 ### Priority 6 — Connect workload class to measured power
 
-- [x] retain training and offline-inference classes in the deadline queue;
-- [x] output execution by class;
-- [x] consume a versioned, SHA-256-verified hardware-calibration artifact when configured;
-- [x] select `lower_ci`, `nominal` or `upper_ci` power cases from that artifact and record the selected case with every rollout;
-- [x] use class-indexed execution and class-specific power in PI, non-anticipative and hosting optimizers;
-- [x] collect 1/4-GPU training and offline-inference board-power measurements with a held-out repeat and publish the raw hashes;
-- [ ] measure node wall/BMC power, replace the assumed fixed overhead, upgrade the evidence class to `measured`, then re-freeze all final formal scenarios for the three power cases.
+- retain training and offline-inference classes in the deadline queue;
+- output execution by class;
+- consume a versioned hardware-calibration artifact;
+- propagate power-model uncertainty.
 
 ### Priority 7 — Benchmark online controllers
 
-- [x] validate deterministic causal MPC and a robust arrival-envelope MPC;
-- [x] use shared physical rollouts and matched seeds; record each controller's declared information structure and action time, rather than silently comparing a perfect-information oracle with causal controllers;
-- [ ] make the online controller observation interface strictly identical across rule, MPC and RL policies (the current causal MPC consumes the auditable `control_state`, while SB3 policies consume the normalized observation);
-- [x] run calibrated five-seed DQN and checkpoint diagnostics without touching
-  the locked OOD split; reject the penalty-only training signal after `0/100`
-  validation success for every final model;
-- [ ] freeze a service-safe recovery-aware training reward only after it passes
-  the full validation protocol, then retrain all declared RL seeds and
-  algorithms.
+- validate deterministic and stochastic MPC;
+- use the same observation, baseline and information structure for all controllers;
+- retrain RL only after the environment, reward and certification protocol are frozen.
 
 ---
 
