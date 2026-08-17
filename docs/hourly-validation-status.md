@@ -1,17 +1,23 @@
 # Hourly validation status
 
-Updated: 2026-08-14. This note follows the root README v0.3 firm-flexibility
+Updated: 2026-08-17. This note follows the root README v0.3 firm-flexibility
 protocol and its interval-delivery protocol-v2 correction. The locked OOD test
 seeds `30000..30499` have not been evaluated.
 
-> Interface warning (2026-08-13): the current environment interface is
-> `firm_v4` with 63 observations and `firm_threshold_v2` costs. Models under
-> historical `firm_v1`, `firm_v2`, or 41-dimensional result directories are
-> retained only as diagnostics and are incompatible with the current
-> environment. The bounded `firm_v4` sanity run documented below was trained
-> from scratch on the current interface.
+> Interface warning (2026-08-17): the current environment interface is
+> `firm_v5` with PCC-normalized observations and `firm_threshold_v2` costs.
+> Models under historical `firm_v1` through `firm_v4`, including the bounded
+> `firm_v4` sanity runs documented below, are retained only as diagnostics and
+> are incompatible with the current environment.
 
-## Current firm_v4 environment status
+## Current firm_v5 environment status
+
+Formal-run readiness is intentionally **blocked** until
+`data/calibration/rtx6000pro_4gpu_v1.yaml` is produced from the real four-GPU
+measurements. Formal configs require this SHA-256-verified artifact and no
+longer accept the old `calibration_file` spelling or fallback power parameters.
+`protocol-check` reports this as a failed readiness check instead of silently
+constructing a fallback model.
 
 - Current-hour released work enters both controlled and no-control queues
   before the observation is constructed.
@@ -28,6 +34,16 @@ seeds `30000..30499` have not been evaluated.
   feasibility, deadline, rebound, window-relief, and terminal-backlog
   violations. Formal reward thresholds are checked against the locked
   certification criteria by `protocol-check`.
+- PI, non-anticipative and hosting-capacity planning now retain workload class
+  and use `fixed + sum(class_power × class_execution)` consistently with the
+  online physical environment.
+- Capacity certification fixes duration, notice and a repeated-event program;
+  one episode is one Bernoulli trial and succeeds only if all of its events do.
+  Isolated-event tables below are historical diagnostics, not the primary
+  certificate definition.
+- Local CI equivalence currently passes 171 tests, `ruff check .`, `mypy src`,
+  and a HiGHS/CVXPY/Parquet clean-install smoke test. GitHub Actions is now
+  configured to run the same gates remotely.
 
 The rule-controller smoke output for the current interface is under
 `results/smoke/firm_v4_reward_v2_rules_seed20000/`. It is a semantic check of

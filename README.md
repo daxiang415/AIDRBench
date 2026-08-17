@@ -442,10 +442,20 @@ which is a model-internal global optimum and a clairvoyant upper bound.
 A realistic commitment must be made before all future uncertainty is known. Scenario-tree or two-stage formulations impose non-anticipativity:
 
 \[
-x_{t,s}=x_{t,s'}
+x_{c,t,s}=x_{c,t,s'}
 \]
 
-for scenarios that are indistinguishable at time \(t\).
+for workload class \(c\) and scenarios that are indistinguishable at time
+\(t\). PI, non-anticipative and hosting models all use the same calibrated
+class-specific power coefficients as the online environment:
+
+\[
+P_t^{\mathrm{DC}}
+=
+P_{\mathrm{fixed}}
++
+\sum_c e_c x_{c,t}.
+\]
 
 A chance-constrained formulation may introduce failure variables \(z_s\):
 
@@ -665,7 +675,12 @@ Random streams for community demand, workload and events must be separated so th
 
 ### Main firm-capacity certificate
 
-The primary certificate uses one independent event per episode. Each episode is one Bernoulli trial that passes only when all protocol criteria pass.
+The primary certificate fixes a repeated-event program keyed by duration,
+notice, event anchors and the declared timing-jitter distribution. Each episode
+is one independent Bernoulli trial and passes only when **every event in that
+episode** satisfies delivery, minimum-interval delivery, deadline, rebound,
+window-relief and terminal-backlog criteria. Event rows remain auditable, but
+they are never counted as independent statistical trials.
 
 ### Validation stage
 
@@ -686,7 +701,9 @@ A one-sided lower confidence bound is reported:
 \underline p_{0.95}(R)\geq0.95.
 \]
 
-Repeated-event products are evaluated separately using episode-level joint success, because events within one episode are dependent.
+An isolated-event certificate remains available only as an explicitly labelled
+diagnostic. Exhaustion products use the same episode-level joint-success rule,
+because events within one episode are dependent.
 
 ---
 
@@ -890,7 +907,7 @@ The executable artifact interface is:
 
 ```yaml
 hardware:
-  calibration_artifact: results/calibration/four_gpu_node_v1.yaml
+  calibration_artifact: data/calibration/rtx6000pro_4gpu_v1.yaml
   require_calibration_artifact: true  # mandatory for a formal run
   calibration_power_case: nominal     # lower_ci | nominal | upper_ci
 ```
@@ -999,6 +1016,7 @@ aidrbench optimize hosting-capacity \
 aidrbench certify select \
   --controller mpc \
   --durations 1 2 3 4 6 8 \
+  --notices 0 2 4 6 \
   --protocol-manifest data/manifests/hourly_experiment_protocol_v2.yaml \
   --output results/selected_capacity/
 
@@ -1031,8 +1049,12 @@ The current local development status is:
 - `aidrbench optimize non-anticipative-firm` implements two declared causal lower-bound policy classes over frozen scenarios: a strict common open-loop schedule and, by default, a coarse observation-partition tree using only current net load, limited forecast, released work and notified DR events. The latter merges rare observation cells, deliberately omits endogenous queue state, and is therefore not the unrestricted scenario-tree frontier;
 - `aidrbench optimize hosting-capacity` implements an absolute-PCC, perfect-information planning bound for the eight rigid/flexible × PV × BESS portfolios. It enforces PV use/curtailment, BESS SOC, power and terminal-SOC constraints, and scales workload release/deadline constraints with the candidate DC size; BESS is not yet part of the online DR environment;
 - the hourly EDF queue now retains training and offline-inference work classes and rollout Parquet files report their arrival, execution, expiry and backlog separately;
+- planning snapshots retain workload class, and PI, non-anticipative and hosting-capacity optimizers use class-indexed execution and calibrated class-specific power rather than an average affine slope;
 - class-aware PCC power and compute debt use a versioned, SHA-256-verified calibration artifact when configured. `lower_ci`, `nominal` and `upper_ci` power cases are explicit scenario settings. No measured four-GPU calibration artifact has yet been collected, so formal runs must set `hardware.require_calibration_artifact: true` and will correctly fail until one is supplied;
+- formal train, validation and locked-test configs now require `data/calibration/rtx6000pro_4gpu_v1.yaml`; unknown or ambiguous hardware keys are rejected, and the hourly environment rejects non-one-hour timesteps until queue aging is generalized;
+- controller certification uses repeated-event joint episode success and keys each selected capacity by duration, notice and event sequence. Validation searches all configured notice choices, while locked test only evaluates the frozen capacities;
 - deterministic MPC now obeys release-time causality for estimated future arrivals; a robust-MPC baseline uses an explicit historical-arrival uncertainty envelope. Benchmark outputs label every controller's information structure and action-time distribution, while the full-horizon oracle remains explicitly separate as a perfect-information bound;
+- GitHub Actions runs `pytest`, `ruff check .` and `mypy src`; a clean-install smoke test verifies HiGHS/CVXPY and Parquet availability;
 - the locked test set has not been used after this scenario-semantics revision.
 
 The earlier 63.52 kW and 68.86 kW diagnostics used the previous 153.37 kW virtual-DC sizing and non-frozen duration comparisons. They are therefore retained only as historical development observations and must not be used as a current flexibility, community-DR or certificate result. Similarly, policies trained against the earlier `firm_v4` observation interface are incompatible with the current `firm_v5` PCC-normalized environment and are diagnostic only.
@@ -1071,11 +1093,12 @@ The earlier 63.52 kW and 68.86 kW diagnostics used the previous 153.37 kW virtua
 
 ### Priority 5 — Repair statistical certification
 
-- use one independent event per episode for the main certificate;
-- select capacity on validation data only;
-- evaluate one fixed capacity on the locked test set;
-- report one-sided lower confidence bounds;
-- evaluate repeated-event products with episode-level joint success.
+- [x] count independent episodes, not event rows, as Bernoulli trials;
+- [x] require all events in a repeated-event episode to succeed jointly;
+- [x] key capacities by duration, notice and event sequence;
+- [x] select capacity on validation data only and evaluate only the frozen value on locked test;
+- [x] report one-sided lower confidence bounds;
+- [ ] run the formal certificate only after measured calibration and scenario re-freezing.
 
 ### Priority 6 — Connect workload class to measured power
 
@@ -1083,6 +1106,7 @@ The earlier 63.52 kW and 68.86 kW diagnostics used the previous 153.37 kW virtua
 - [x] output execution by class;
 - [x] consume a versioned, SHA-256-verified hardware-calibration artifact when configured;
 - [x] select `lower_ci`, `nominal` or `upper_ci` power cases from that artifact and record the selected case with every rollout;
+- [x] use class-indexed execution and class-specific power in PI, non-anticipative and hosting optimizers;
 - [ ] collect the real four-GPU measurements, fit and validate the first `measured` artifact, then re-freeze all formal scenarios for the three power cases.
 
 ### Priority 7 — Benchmark online controllers
