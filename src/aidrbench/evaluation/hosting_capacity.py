@@ -24,6 +24,7 @@ import yaml
 from aidrbench.data.frozen_scenarios import FrozenHourlyScenario
 from aidrbench.envs.community_ai_dr_env import HourlyPlanningSnapshot
 from aidrbench.evaluation.non_anticipative import _discover_artifacts, _snapshot_for
+from aidrbench.evaluation.provenance import optimization_provenance
 
 _TOLERANCE = 1e-6
 
@@ -86,9 +87,11 @@ class HostingCapacitySolution:
     bess_enabled: bool
     bess_dispatch_mode: str
     pcc_capacity_kw: float
-    reference_dc_peak_kw: float
+    reference_mix_operating_peak_kw: float
+    worst_class_peak_kw: float
     hosting_dc_peak_kw: float
-    hosting_scale_of_reference: float
+    hosting_worst_class_peak_kw: float
+    hosting_scale_of_reference_mix: float
     minimum_background_gross_headroom_kw: float
     objective_solve_seconds: float
     maximum_pcc_power_kw: float
@@ -110,9 +113,12 @@ class HostingCapacitySolution:
             "bess_enabled": self.bess_enabled,
             "bess_dispatch_mode": self.bess_dispatch_mode,
             "pcc_capacity_kw": self.pcc_capacity_kw,
-            "reference_dc_peak_kw": self.reference_dc_peak_kw,
+            "capacity_normalization": "reference_mix_operating_peak",
+            "reference_mix_operating_peak_kw": self.reference_mix_operating_peak_kw,
+            "worst_class_peak_kw": self.worst_class_peak_kw,
             "hosting_dc_peak_kw": self.hosting_dc_peak_kw,
-            "hosting_scale_of_reference": self.hosting_scale_of_reference,
+            "hosting_worst_class_peak_kw": self.hosting_worst_class_peak_kw,
+            "hosting_scale_of_reference_mix": self.hosting_scale_of_reference_mix,
             "minimum_background_gross_headroom_kw": self.minimum_background_gross_headroom_kw,
             "objective_solve_seconds": self.objective_solve_seconds,
             "maximum_pcc_power_kw": self.maximum_pcc_power_kw,
@@ -278,9 +284,8 @@ def solve_frozen_hosting_capacity(
     dynamic_power_by_class = dict(snapshot.dynamic_kw_per_gpu_h_by_class)
     if not dynamic_power_by_class:
         raise ValueError("hosting snapshots have no class power coefficients")
-    reference_dc_peak_kw = snapshot.fixed_dc_power_kw + (
-        max(dynamic_power_by_class.values()) * snapshot.capacity_gpu_h
-    )
+    reference_mix_operating_peak_kw = snapshot.reference_mix_operating_peak_kw
+    worst_class_peak_kw = snapshot.worst_class_peak_kw
     scale = cp.Variable(nonneg=True, name="dc_scale_of_reference")
     constraints: list[Any] = []
     pcc_expressions: list[Any] = []
@@ -432,7 +437,7 @@ def solve_frozen_hosting_capacity(
             constraints.append(pcc_power >= 0.0)
         pcc_expressions.append(pcc_power)
 
-    problem = cp.Problem(cp.Maximize(scale * reference_dc_peak_kw), constraints)
+    problem = cp.Problem(cp.Maximize(scale * reference_mix_operating_peak_kw), constraints)
     solve_start = time.monotonic()
     _solve(problem)
     solve_seconds = time.monotonic() - solve_start
@@ -490,9 +495,11 @@ def solve_frozen_hosting_capacity(
         bess_enabled=portfolio.bess_enabled,
         bess_dispatch_mode=portfolio.bess_dispatch_mode,
         pcc_capacity_kw=snapshot.pcc_capacity_kw,
-        reference_dc_peak_kw=reference_dc_peak_kw,
-        hosting_dc_peak_kw=scale_value * reference_dc_peak_kw,
-        hosting_scale_of_reference=scale_value,
+        reference_mix_operating_peak_kw=reference_mix_operating_peak_kw,
+        worst_class_peak_kw=worst_class_peak_kw,
+        hosting_dc_peak_kw=scale_value * reference_mix_operating_peak_kw,
+        hosting_worst_class_peak_kw=scale_value * worst_class_peak_kw,
+        hosting_scale_of_reference_mix=scale_value,
         minimum_background_gross_headroom_kw=max(
             snapshot.pcc_capacity_kw - background_minimum, 0.0
         ),
@@ -597,6 +604,7 @@ def compute_and_save_hosting_capacity(
                     "bess_dispatch_mode": portfolio.bess_dispatch_mode,
                 },
                 "result": str(result_path),
+                "provenance": optimization_provenance(artifacts),
             },
             ensure_ascii=False,
             indent=2,

@@ -104,7 +104,7 @@ class HourlyDataCenterPowerModel:
 
     @property
     def flexible_active_energy_per_gpu_h_kwh(self) -> float:
-        """Facility-equivalent energy needed to complete one flexible GPU-hour.
+        """Incremental facility energy needed to complete one flexible GPU-hour.
 
         This is the workload-energy coefficient used to express queued work as
         compute debt.  It deliberately excludes the always-on idle pool: that
@@ -112,7 +112,33 @@ class HourlyDataCenterPowerModel:
         deferred job.
         """
 
-        return self.pue * self.flexible_active_power_w_per_gpu / 1_000.0
+        return (
+            self.pue
+            * (self.flexible_active_power_w_per_gpu - self.idle_power_w_per_gpu)
+            / 1_000.0
+        )
+
+    @property
+    def reference_mix_operating_peak_kw(self) -> float:
+        """Full-pool facility power under the configured reference workload mix."""
+
+        return self.predict(self.flexible_capacity_gpu_h).dc_power_kw
+
+    @property
+    def worst_class_peak_kw(self) -> float:
+        """Facility peak with every schedulable GPU running the highest-power class."""
+
+        highest_active_power_w = max(
+            self.flexible_active_power_by_class.values(),
+            default=self.flexible_active_power_w_per_gpu,
+        )
+        dynamic_kw = (
+            self.pue
+            * (highest_active_power_w - self.idle_power_w_per_gpu)
+            * self.flexible_capacity_gpu_h
+            / 1_000.0
+        )
+        return self.predict(0.0).dc_power_kw + dynamic_kw
 
     @property
     def flexible_active_power_by_class(self) -> dict[str, float]:
@@ -232,7 +258,11 @@ class HourlyDataCenterPowerModel:
         )
 
     def queued_work_energy_kwh(self, backlog_gpu_h_by_class: Mapping[str, float]) -> float:
-        """Return facility-equivalent compute debt for labelled queued work."""
+        """Return incremental facility compute debt for labelled queued work.
+
+        The flexible GPU pool remains powered while idle, so deferred work
+        creates only the future active-minus-idle energy obligation.
+        """
 
         class_power = self.flexible_active_power_by_class
         energy_kwh = 0.0
@@ -241,5 +271,10 @@ class HourlyDataCenterPowerModel:
             if not math.isfinite(backlog) or backlog < 0.0:
                 raise ValueError("class backlog must be finite and non-negative")
             active_power_w = class_power.get(job_class, self.flexible_active_power_w_per_gpu)
-            energy_kwh += backlog * self.pue * active_power_w / 1_000.0
+            energy_kwh += (
+                backlog
+                * self.pue
+                * (active_power_w - self.idle_power_w_per_gpu)
+                / 1_000.0
+            )
         return energy_kwh

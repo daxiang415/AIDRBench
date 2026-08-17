@@ -27,7 +27,9 @@ def test_hourly_power_model_respects_capacity_and_pcc_power_identity() -> None:
     assert full.active_flexible_gpus == pytest.approx(model.data_center.flexible_gpu_count)
     assert full.dc_power_kw > idle.dc_power_kw > 0.0
     assert full.flexible_energy_kwh == pytest.approx(full.flexible_it_power_kw)
-    assert model.flexible_active_energy_per_gpu_h_kwh == pytest.approx(0.54)
+    assert model.flexible_active_energy_per_gpu_h_kwh == pytest.approx(0.444)
+    assert model.reference_mix_operating_peak_kw == pytest.approx(full.dc_power_kw)
+    assert model.worst_class_peak_kw == pytest.approx(full.dc_power_kw)
     with pytest.raises(ValueError, match="exceeds flexible pool capacity"):
         model.predict(model.flexible_capacity_gpu_h + 0.1)
 
@@ -58,5 +60,6 @@ def test_hourly_power_model_uses_execution_class_power_and_class_compute_debt() 
     assert all_training.dc_power_kw > balanced.dc_power_kw > all_offline.dc_power_kw
     assert balanced.dc_power_kw == pytest.approx(model.predict(2.0).dc_power_kw)
     assert model.queued_work_energy_kwh({"training": 1.0, "offline_inference": 1.0}) == (
-        pytest.approx(0.96)
+        pytest.approx(0.768)
     )
+    assert model.worst_class_peak_kw > model.reference_mix_operating_peak_kw

@@ -6,7 +6,11 @@ import pandas as pd
 import pytest
 
 from aidrbench.data.frozen_scenarios import freeze_hourly_scenario, load_frozen_hourly_scenario
-from aidrbench.evaluation.pi_frontier import solve_frozen_pi_frontier, validate_pi_frontier
+from aidrbench.evaluation.pi_frontier import (
+    solve_frozen_pi_frontier,
+    summarize_pi_firm_boundary,
+    validate_pi_frontier,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "configs/env/hourly_continuous.yaml"
@@ -43,3 +47,30 @@ def test_pi_frontier_validator_rejects_nonmonotone_capacity() -> None:
 
     with pytest.raises(ValueError, match="duration monotonicity"):
         validate_pi_frontier(frontier)
+
+
+def test_pi_scenario_optima_aggregate_to_confidence_bounded_firm_capacity() -> None:
+    frontier = pd.DataFrame(
+        {
+            "scenario_hash": [f"{index:064x}" for index in range(100)],
+            "event_id": [0] * 100,
+            "duration_h": [2] * 100,
+            "perfect_information_capacity_kw": [10.0] * 98 + [5.0] * 2,
+            "physical_dynamic_upper_bound_kw": [20.0] * 100,
+            "reference_mix_operating_peak_kw": [40.0] * 100,
+            "worst_class_peak_kw": [45.0] * 100,
+        }
+    )
+
+    boundary = summarize_pi_firm_boundary(
+        frontier,
+        reliability_targets=[0.95, 0.99],
+        confidence_level=0.95,
+        nominal_flexibility_fraction=0.50,
+    ).set_index("reliability_target")
+
+    assert boundary.loc[0.95, "perfect_information_firm_capacity_kw"] == pytest.approx(5.0)
+    assert boundary.loc[0.95, "sample_size_sufficient"]
+    assert boundary.loc[0.95, "physical_gap_kw"] == pytest.approx(15.0)
+    assert not boundary.loc[0.99, "sample_size_sufficient"]
+    assert boundary.loc[0.99, "perfect_information_firm_capacity_kw"] == 0.0

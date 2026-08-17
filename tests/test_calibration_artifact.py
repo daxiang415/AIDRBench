@@ -166,6 +166,20 @@ def test_repository_formal_config_uses_verified_gpu_measurement_anchor() -> None
     }
 
 
+def test_strict_power_coverage_rejects_uncalibrated_rigid_class(tmp_path: Path) -> None:
+    artifact_path = tmp_path / "calibration.yaml"
+    _write_artifact(artifact_path)
+    document = yaml.safe_load((ROOT / "configs/env/hourly_continuous.yaml").read_text())
+    document["hardware"] = {
+        "calibration_artifact": str(artifact_path),
+        "require_calibration_artifact": True,
+        "require_all_workload_class_power": True,
+    }
+
+    with pytest.raises(ValueError, match="all configured.*online_inference"):
+        load_hourly_environment_config(document)
+
+
 def test_hourly_config_rejects_subhourly_timestep_until_queue_is_generalized() -> None:
     document = yaml.safe_load((ROOT / "configs/env/hourly_continuous.yaml").read_text())
     document["env"]["timestep_hours"] = 0.25

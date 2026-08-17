@@ -291,6 +291,7 @@ def _config_document(config: str | Path | Mapping[str, Any]) -> dict[str, Any]:
         scenario = dict(raw_scenario)
         scenario.pop("frozen_path", None)
         scenario.pop("frozen_event_ids", None)
+        scenario.pop("frozen_event_notice_hours", None)
         if scenario:
             document["scenario"] = scenario
         else:
@@ -371,11 +372,17 @@ def freeze_hourly_scenario(
             "background_community_peak_kw": env.config.background_community_peak_kw,
             "pcc_capacity_kw": env.config.pcc_capacity_kw,
             "target_dc_peak_kw": env.config.target_dc_peak_kw,
+            "reference_mix_operating_peak_kw": (
+                env.power_model.reference_mix_operating_peak_kw
+            ),
+            "worst_class_peak_kw": env.power_model.worst_class_peak_kw,
+            # Historical alias retained for schema-v1 readers.
             "actual_dc_peak_kw": env._full_dc_power_kw,
         },
         "power_model": {
             "sha256": power_model_fingerprint(env.power_model),
             "parameters": asdict(env.power_model),
+            "calibration_power_case": env.config.calibration_power_case,
             "calibration_artifact_sha256": (
                 env.config.calibration_artifact.artifact_sha256
                 if env.config.calibration_artifact is not None
@@ -408,6 +415,10 @@ def freeze_hourly_scenario(
         "scenario_hash": str(metadata["scenario_hash"]),
         "output": str(target),
         "actual_dc_peak_kw": env._full_dc_power_kw,
+        "reference_mix_operating_peak_kw": (
+            env.power_model.reference_mix_operating_peak_kw
+        ),
+        "worst_class_peak_kw": env.power_model.worst_class_peak_kw,
     }
 
 

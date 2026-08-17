@@ -275,6 +275,11 @@ def _add_scenario_parsers(subparsers: Any) -> None:
     )
     freeze.add_argument("--config", required=True)
     freeze.add_argument("--seeds", nargs="+", type=int, required=True)
+    freeze.add_argument(
+        "--calibration-power-case",
+        choices=("lower_ci", "nominal", "upper_ci"),
+        help="override only the declared calibration uncertainty case before freezing",
+    )
     freeze.add_argument("--output", required=True)
     inspect = commands.add_parser(
         "inspect", help="verify one frozen scenario and display its provenance"
@@ -294,6 +299,9 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     frontier.add_argument("--scenarios", required=True)
     frontier.add_argument("--durations", nargs="+", type=int, required=True)
     frontier.add_argument("--event-id", type=int, default=0)
+    frontier.add_argument("--reliabilities", nargs="+", type=float, default=[])
+    frontier.add_argument("--confidence-level", type=float, default=0.95)
+    frontier.add_argument("--nominal-flexibility-fraction", type=float, default=0.50)
     frontier.add_argument("--output", required=True)
     non_anticipative = commands.add_parser(
         "non-anticipative-firm",
@@ -301,8 +309,14 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     )
     non_anticipative.add_argument("--scenarios", required=True)
     non_anticipative.add_argument("--durations", nargs="+", type=int, required=True)
+    non_anticipative.add_argument("--notice-hours", nargs="+", type=int, default=[0])
     non_anticipative.add_argument("--event-id", type=int, default=0)
     non_anticipative.add_argument("--reliability-target", type=float, default=1.0)
+    non_anticipative.add_argument(
+        "--confidence-level",
+        type=float,
+        help="one-sided Wilson confidence level; omit for the legacy empirical rule",
+    )
     non_anticipative.add_argument(
         "--information-structure",
         choices=("common_open_loop", "coarse_observation_partition_tree"),
@@ -334,9 +348,12 @@ def _add_optimization_parsers(subparsers: Any) -> None:
 
 def _add_training_parsers(subparsers: Any) -> None:
     protocol = subparsers.add_parser(
-        "protocol-check", help="validate the locked hourly experiment protocol"
+        "protocol-check", help="validate a declared experiment protocol"
     )
-    protocol.add_argument("--manifest", default="data/manifests/hourly_experiment_protocol_v2.yaml")
+    protocol.add_argument(
+        "--manifest",
+        default="data/manifests/nature_mainline_protocol_v1.yaml",
+    )
 
     train = subparsers.add_parser(
         "train", help="train a standard RL policy on the hourly environment"
@@ -1044,8 +1061,15 @@ def _run_scenario(args: argparse.Namespace) -> int:
     if args.scenario_command == "freeze":
         from aidrbench.data.frozen_scenarios import freeze_hourly_scenarios
 
+        config: str | dict[str, Any] = args.config
+        if args.calibration_power_case is not None:
+            loaded = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
+            if not isinstance(loaded, dict) or not isinstance(loaded.get("hardware"), dict):
+                raise ValueError("scenario config must contain a hardware mapping")
+            loaded["hardware"]["calibration_power_case"] = args.calibration_power_case
+            config = loaded
         scenarios = freeze_hourly_scenarios(
-            args.config,
+            config,
             seeds=args.seeds,
             output_directory=args.output,
         )
@@ -1081,6 +1105,9 @@ def _run_optimization(args: argparse.Namespace) -> int:
             durations_h=args.durations,
             output_directory=args.output,
             event_id=args.event_id,
+            reliability_targets=args.reliabilities,
+            confidence_level=args.confidence_level,
+            nominal_flexibility_fraction=args.nominal_flexibility_fraction,
         )
         _print_summary(summary)
         return 0
@@ -1103,9 +1130,11 @@ def _run_optimization(args: argparse.Namespace) -> int:
         summary = compute_and_save_non_anticipative_frontier(
             args.scenarios,
             durations_h=args.durations,
+            notice_hours=args.notice_hours,
             output_directory=args.output,
             event_id=args.event_id,
             reliability_target=args.reliability_target,
+            confidence_level=args.confidence_level,
             information_structure=args.information_structure,
             observation_specification=observation_specification,
         )
@@ -1145,9 +1174,19 @@ def _run_train(args: argparse.Namespace) -> int:
 
 
 def _run_protocol_check(args: argparse.Namespace) -> int:
-    from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+    manifest_path = Path(args.manifest)
+    document = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    if (
+        isinstance(document, dict)
+        and document.get("study_type") == "nature_communications_mechanism_mainline"
+    ):
+        from aidrbench.evaluation.nature_protocol import validate_nature_mainline_protocol
 
-    report = validate_hourly_experiment_protocol(args.manifest)
+        report = validate_nature_mainline_protocol(manifest_path)
+    else:
+        from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+
+        report = validate_hourly_experiment_protocol(manifest_path)
     _print_summary(report)
     return 0 if bool(report["valid"]) else 1
 

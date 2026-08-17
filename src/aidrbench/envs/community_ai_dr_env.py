@@ -60,6 +60,8 @@ class HourlyPlanningSnapshot:
     main_hours: int
     capacity_gpu_h: float
     fixed_dc_power_kw: float
+    reference_mix_operating_peak_kw: float
+    worst_class_peak_kw: float
     dynamic_kw_per_gpu_h: float
     workload_classes: tuple[str, ...]
     dynamic_kw_per_gpu_h_by_class: tuple[tuple[str, float], ...]
@@ -240,6 +242,12 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "background_community_peak_kw": self.config.background_community_peak_kw,
             "pcc_capacity_kw": self.config.pcc_capacity_kw,
             "target_dc_peak_kw": self.config.target_dc_peak_kw,
+            "reference_mix_operating_peak_kw": (
+                self.power_model.reference_mix_operating_peak_kw
+            ),
+            "worst_class_peak_kw": self.power_model.worst_class_peak_kw,
+            # Compatibility alias for historical controller outputs. New NC
+            # analysis must use one of the two explicit peak definitions.
             "actual_dc_peak_kw": self._full_dc_power_kw,
             "actual_dc_peak_fraction_of_pcc": (
                 self._full_dc_power_kw / self.config.pcc_capacity_kw
@@ -329,6 +337,10 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             main_hours=self.config.main_hours,
             capacity_gpu_h=self._capacity_gpu_h,
             fixed_dc_power_kw=self._fixed_dc_power_kw,
+            reference_mix_operating_peak_kw=(
+                self.power_model.reference_mix_operating_peak_kw
+            ),
+            worst_class_peak_kw=self.power_model.worst_class_peak_kw,
             dynamic_kw_per_gpu_h=self._flexible_power_range_kw / self._capacity_gpu_h,
             workload_classes=workload_classes,
             dynamic_kw_per_gpu_h_by_class=tuple(
@@ -566,7 +578,11 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                         if self.config.event_reduction_kw is not None
                         else float(event["requested_reduction_kw"])
                     ),
-                    float(event["notice_hours"]),
+                    (
+                        float(self.config.frozen_event_notice_hours)
+                        if self.config.frozen_event_notice_hours is not None
+                        else float(event["notice_hours"])
+                    ),
                 )
                 for event in anchored_events
                 if int(event["start_hour"]) < self.config.main_hours

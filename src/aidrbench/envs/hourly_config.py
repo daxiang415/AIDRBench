@@ -175,6 +175,7 @@ class HourlyEnvironmentConfig:
     community_episode_start: str | None
     frozen_scenario_path: Path | None
     frozen_event_ids: tuple[int, ...] | None
+    frozen_event_notice_hours: int | None
     background_community_peak_kw: float
     pcc_capacity_kw: float
     pv_enabled: bool
@@ -364,6 +365,7 @@ def load_hourly_environment_config(
         "fallback_idle_power_w_per_gpu",
         "fallback_node_overhead_w",
         "require_calibration_artifact",
+        "require_all_workload_class_power",
     }
     unknown_hardware_keys = sorted(set(hardware) - allowed_hardware_keys)
     if unknown_hardware_keys:
@@ -381,6 +383,11 @@ def load_hourly_environment_config(
     require_calibration_artifact = hardware.get("require_calibration_artifact", False)
     if not isinstance(require_calibration_artifact, bool):
         raise ValueError("hardware.require_calibration_artifact must be boolean")
+    require_all_workload_class_power = hardware.get(
+        "require_all_workload_class_power", False
+    )
+    if not isinstance(require_all_workload_class_power, bool):
+        raise ValueError("hardware.require_all_workload_class_power must be boolean")
     raw_calibration_artifact = hardware.get("calibration_artifact")
     calibration_power_case = str(hardware.get("calibration_power_case", "nominal")).strip()
     if calibration_power_case not in {"lower_ci", "nominal", "upper_ci"}:
@@ -527,6 +534,16 @@ def load_hourly_environment_config(
     )
     if frozen_event_ids is not None and frozen_scenario_path is None:
         raise ValueError("scenario.frozen_event_ids requires scenario.frozen_path")
+    frozen_event_notice_hours = (
+        _non_negative_int(
+            scenario["frozen_event_notice_hours"],
+            "scenario.frozen_event_notice_hours",
+        )
+        if scenario.get("frozen_event_notice_hours") is not None
+        else None
+    )
+    if frozen_event_notice_hours is not None and frozen_scenario_path is None:
+        raise ValueError("scenario.frozen_event_notice_hours requires scenario.frozen_path")
 
     # ``target_peak_kw`` and ``target_dc_peak_share_of_community`` were the
     # original V0 schema.  Keep them as strict aliases so external smoke
@@ -597,15 +614,20 @@ def load_hourly_environment_config(
         dr_manifest_path = None
     workload_mix = WorkloadMix.from_mapping(workload.get("workload_mix", {}))
     if calibration_artifact is not None:
-        flexible_classes = {
+        required_classes = {
             name
-            for name, fraction in workload_mix.flexible_fractions.items()
-            if fraction > 0.0
+            for name, share in workload_mix.shares.items()
+            if share > 0.0
+            and (
+                require_all_workload_class_power
+                or workload_mix.flexible_fractions[name] > 0.0
+            )
         }
-        missing_classes = sorted(flexible_classes - set(power_by_class))
+        missing_classes = sorted(required_classes - set(power_by_class))
         if missing_classes:
+            scope = "all configured" if require_all_workload_class_power else "flexible"
             raise ValueError(
-                "hardware calibration artifact has no active-power estimate for flexible "
+                f"hardware calibration artifact has no active-power estimate for {scope} "
                 f"workload classes: {missing_classes}"
             )
     timestep_hours = _positive_float(env.get("timestep_hours", 1.0), "env.timestep_hours")
@@ -638,6 +660,7 @@ def load_hourly_environment_config(
         ),
         frozen_scenario_path=frozen_scenario_path,
         frozen_event_ids=frozen_event_ids,
+        frozen_event_notice_hours=frozen_event_notice_hours,
         background_community_peak_kw=background_community_peak_kw,
         pcc_capacity_kw=pcc_capacity_kw,
         pv_enabled=bool(community.get("pv_enabled", False)),

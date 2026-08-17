@@ -19,6 +19,7 @@ from aidrbench.evaluation.certification import (
 from aidrbench.evaluation.firm_flexibility import (
     FirmFlexibilityCriteria,
     derive_event_outcomes,
+    minimum_successes_for_wilson,
     wilson_lower_bound,
 )
 from aidrbench.evaluation.hourly_rollout import rollout_hourly_episode
@@ -34,6 +35,12 @@ def test_wilson_lower_bound_is_conservative_and_monotone() -> None:
 
     assert 0.0 < lower_partial_success < lower_all_success < 1.0
     assert wilson_lower_bound(0, 10, 0.95) == 0.0
+
+
+def test_wilson_sample_size_gate_rejects_underpowered_q99_design() -> None:
+    assert minimum_successes_for_wilson(100, 0.95, 0.95) == 99
+    assert minimum_successes_for_wilson(100, 0.99, 0.95) is None
+    assert minimum_successes_for_wilson(500, 0.99, 0.95) == 499
 
 
 def test_rollout_exposes_compute_debt_and_rebound_aware_event_metrics() -> None:

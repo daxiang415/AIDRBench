@@ -49,6 +49,33 @@ def wilson_lower_bound(successes: int, trials: int, confidence_level: float) -> 
     return max(0.0, (centre - radius) / denominator)
 
 
+def minimum_successes_for_wilson(
+    trials: int,
+    reliability_target: float,
+    confidence_level: float,
+) -> int | None:
+    """Return the fewest successes whose one-sided Wilson bound reaches ``q``.
+
+    ``None`` means that even an all-success sample is too small to establish
+    the requested reliability at the declared confidence level.
+    """
+
+    if isinstance(trials, bool) or not isinstance(trials, int) or trials <= 0:
+        raise ValueError("trials must be a positive integer")
+    if not 0.0 < reliability_target < 1.0:
+        raise ValueError("reliability_target must be in (0, 1)")
+    if not 0.0 < confidence_level < 1.0:
+        raise ValueError("confidence_level must be in (0, 1)")
+    for successes in range(trials + 1):
+        if (
+            wilson_lower_bound(successes, trials, confidence_level)
+            + _EPSILON
+            >= reliability_target
+        ):
+            return successes
+    return None
+
+
 @dataclass(frozen=True, slots=True)
 class FirmFlexibilityCriteria:
     """Frozen joint success definition for one reliable-flexibility certificate."""

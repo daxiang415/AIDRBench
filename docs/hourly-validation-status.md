@@ -1,5 +1,10 @@
 # Hourly validation status
 
+> Historical control-extension record. The active Nature Communications
+> mechanism protocol is `data/manifests/nature_mainline_protocol_v1.yaml`; none
+> of the RL/CMDP results below is a mainline capacity result. Current executable
+> status and commands are in `docs/nature-communications-mainline.md`.
+
 Updated: 2026-08-17. This note follows the root README v0.3 firm-flexibility
 protocol and its interval-delivery protocol-v2 correction. The locked OOD test
 seeds `30000..30499` have not been evaluated.

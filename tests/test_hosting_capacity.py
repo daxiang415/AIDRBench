@@ -66,6 +66,7 @@ def test_flexible_hosting_is_at_least_rigid_with_explicit_pv_and_bess(tmp_path: 
     assert 0.0 <= rigid.maximum_pcc_power_kw <= rigid.pcc_capacity_kw + 1e-6
     assert 0.0 <= flexible.maximum_pcc_power_kw <= flexible.pcc_capacity_kw + 1e-6
     assert flexible.hosting_dc_peak_kw + 1e-6 >= rigid.hosting_dc_peak_kw
+    assert flexible.worst_class_peak_kw >= flexible.reference_mix_operating_peak_kw
     assert flexible.total_pv_used_kwh <= flexible.total_pv_available_kwh + 1e-6
     assert flexible.terminal_soc_deviation_kwh <= 1e-6
 

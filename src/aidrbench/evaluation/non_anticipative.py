@@ -27,6 +27,11 @@ from aidrbench.envs.community_ai_dr_env import (
     HourlyPlanningSnapshot,
 )
 from aidrbench.envs.hourly_config import RewardSpecification
+from aidrbench.evaluation.firm_flexibility import (
+    minimum_successes_for_wilson,
+    wilson_lower_bound,
+)
+from aidrbench.evaluation.provenance import optimization_provenance
 
 _TOLERANCE = 1e-6
 
@@ -42,11 +47,15 @@ class NonAnticipativeFirmSolution:
 
     status: str
     duration_h: int
+    notice_h: int
     event_id: int
     reliability_target: float
+    confidence_level: float | None
+    statistical_rule: str
     scenario_count: int
     required_success_count: int
     selected_success_count: int
+    success_rate_lower_ci: float | None
     non_anticipative_policy_class: str
     information_node_count: int
     information_specification: str
@@ -60,7 +69,7 @@ class NonAnticipativeFirmSolution:
     common_execution_gpu_h: tuple[float, ...]
     scenario_execution_gpu_h: tuple[tuple[float, ...], ...]
 
-    def summary(self) -> dict[str, float | int | str]:
+    def summary(self) -> dict[str, float | int | str | None]:
         return {
             "capacity_layer": "non_anticipative_lower_bound",
             "non_anticipative_policy_class": self.non_anticipative_policy_class,
@@ -68,11 +77,15 @@ class NonAnticipativeFirmSolution:
             "information_specification": self.information_specification,
             "non_anticipative_status": self.status,
             "duration_h": self.duration_h,
+            "notice_h": self.notice_h,
             "event_id": self.event_id,
             "reliability_target": self.reliability_target,
+            "confidence_level": self.confidence_level,
+            "statistical_rule": self.statistical_rule,
             "scenario_count": self.scenario_count,
             "required_success_count": self.required_success_count,
             "selected_success_count": self.selected_success_count,
+            "success_rate_lower_ci": self.success_rate_lower_ci,
             "non_anticipative_capacity_kw": self.non_anticipative_capacity_kw,
             "non_anticipative_capacity_fraction_of_dynamic_range": (
                 self.non_anticipative_capacity_fraction_of_dynamic_range
@@ -135,11 +148,24 @@ def _positive_durations(durations: Sequence[int]) -> tuple[int, ...]:
     return tuple(sorted(durations))
 
 
+def _non_negative_notices(notices: Sequence[int]) -> tuple[int, ...]:
+    if not notices:
+        raise ValueError("non-anticipative frontier needs at least one notice time")
+    if any(isinstance(notice, bool) or not isinstance(notice, int) for notice in notices):
+        raise ValueError("non-anticipative notice times must be non-negative integers")
+    if any(notice < 0 for notice in notices):
+        raise ValueError("non-anticipative notice times must be non-negative integers")
+    if len(set(notices)) != len(notices):
+        raise ValueError("non-anticipative notice times must be unique")
+    return tuple(sorted(notices))
+
+
 def _environment_document(
     artifact: FrozenHourlyScenario,
     *,
     duration_h: int,
     event_id: int,
+    notice_h: int | None = None,
 ) -> dict[str, Any]:
     document = copy.deepcopy(artifact.config_document)
     raw_scenario = document.get("scenario")
@@ -150,6 +176,10 @@ def _environment_document(
             "frozen_event_ids": [event_id],
         }
     )
+    if notice_h is not None:
+        if isinstance(notice_h, bool) or not isinstance(notice_h, int) or notice_h < 0:
+            raise ValueError("notice_h must be a non-negative integer")
+        scenario["frozen_event_notice_hours"] = notice_h
     document["scenario"] = scenario
     raw_dr = document.get("dr")
     if not isinstance(raw_dr, dict):
@@ -175,12 +205,18 @@ def _snapshot_for(
     *,
     duration_h: int,
     event_id: int,
+    notice_h: int | None = None,
 ) -> tuple[HourlyPlanningSnapshot, RewardSpecification]:
     available_event_ids = {int(event["event_id"]) for event in artifact.events}
     if event_id not in available_event_ids:
         raise ValueError(f"frozen scenario does not contain event ID {event_id}")
     env = HourlyCommunityAIDemandResponseEnv(
-        _environment_document(artifact, duration_h=duration_h, event_id=event_id)
+        _environment_document(
+            artifact,
+            duration_h=duration_h,
+            event_id=event_id,
+            notice_h=notice_h,
+        )
     )
     env.reset(seed=artifact.episode_seed)
     return env.full_horizon_planning_snapshot(), env.config.reward
@@ -291,6 +327,7 @@ def build_observation_information_nodes(
     *,
     duration_h: int,
     event_id: int = 0,
+    notice_h: int | None = None,
     specification: ObservationPartitionSpecification | None = None,
 ) -> dict[int, tuple[tuple[int, ...], ...]]:
     """Build a fixed causal information partition before optimization.
@@ -305,7 +342,12 @@ def build_observation_information_nodes(
         raise ValueError("observation-partition optimization needs at least two scenarios")
     spec = specification or ObservationPartitionSpecification()
     snapshots = [
-        _snapshot_for(artifact, duration_h=duration_h, event_id=event_id)[0]
+        _snapshot_for(
+            artifact,
+            duration_h=duration_h,
+            event_id=event_id,
+            notice_h=notice_h,
+        )[0]
         for artifact in artifacts
     ]
     _assert_common_physics(snapshots)
@@ -368,7 +410,9 @@ def _solve_non_anticipative_capacity(
     *,
     duration_h: int,
     event_id: int = 0,
+    notice_h: int | None = None,
     reliability_target: float = 1.0,
+    confidence_level: float | None = None,
     information_nodes: dict[int, tuple[tuple[int, ...], ...]],
     policy_class: str,
     information_specification: str,
@@ -388,7 +432,12 @@ def _solve_non_anticipative_capacity(
         raise ValueError("non-anticipative scenarios must have unique hashes")
     reliability = _validate_reliability(reliability_target)
     snapshots_with_peaks = [
-        _snapshot_for(artifact, duration_h=duration_h, event_id=event_id)
+        _snapshot_for(
+            artifact,
+            duration_h=duration_h,
+            event_id=event_id,
+            notice_h=notice_h,
+        )
         for artifact in artifacts
     ]
     snapshots = [item[0] for item in snapshots_with_peaks]
@@ -407,8 +456,28 @@ def _solve_non_anticipative_capacity(
         ) from exc
 
     scenario_count = len(snapshots)
-    allowed_failures = math.floor((1.0 - reliability) * scenario_count + 1e-12)
-    required_success_count = scenario_count - allowed_failures
+    if confidence_level is None:
+        allowed_failures = math.floor((1.0 - reliability) * scenario_count + 1e-12)
+        required_success_count = scenario_count - allowed_failures
+        statistical_rule = "empirical_success_fraction"
+    else:
+        if not 0.0 < confidence_level < 1.0:
+            raise ValueError("confidence_level must be in (0, 1)")
+        if reliability >= 1.0:
+            raise ValueError("a finite sample cannot statistically certify reliability 1.0")
+        required_successes = minimum_successes_for_wilson(
+            scenario_count,
+            reliability,
+            confidence_level,
+        )
+        if required_successes is None:
+            raise ValueError(
+                f"{scenario_count} scenarios are insufficient to certify reliability "
+                f"{reliability:g} at confidence {confidence_level:g} even with all successes"
+            )
+        required_success_count = required_successes
+        allowed_failures = scenario_count - required_success_count
+        statistical_rule = "one_sided_wilson_lower_bound"
     horizon = reference.total_hours
     capacity = reference.capacity_gpu_h
     dynamic_power_by_class = dict(reference.dynamic_kw_per_gpu_h_by_class)
@@ -632,6 +701,11 @@ def _solve_non_anticipative_capacity(
     )
     if len(successful) < required_success_count:
         raise RuntimeError("non-anticipative solution violates its chance constraint")
+    success_rate_lower_ci = (
+        None
+        if confidence_level is None
+        else wilson_lower_bound(len(successful), scenario_count, confidence_level)
+    )
     success_indices = [index for index, failure in enumerate(failure_values) if failure < 0.5]
     common_execution_values = (
         scenario_execution_values[success_indices[0]]
@@ -641,11 +715,15 @@ def _solve_non_anticipative_capacity(
     return NonAnticipativeFirmSolution(
         status=str(refinement.status),
         duration_h=duration_h,
+        notice_h=int(snapshots[0].events[0].notice_hours),
         event_id=event_id,
         reliability_target=reliability,
+        confidence_level=confidence_level,
+        statistical_rule=statistical_rule,
         scenario_count=scenario_count,
         required_success_count=required_success_count,
         selected_success_count=len(successful),
+        success_rate_lower_ci=success_rate_lower_ci,
         non_anticipative_policy_class=policy_class,
         information_node_count=sum(len(nodes) for nodes in information_nodes.values()),
         information_specification=information_specification,
@@ -666,7 +744,9 @@ def solve_frozen_non_anticipative_capacity(
     *,
     duration_h: int,
     event_id: int = 0,
+    notice_h: int | None = None,
     reliability_target: float = 1.0,
+    confidence_level: float | None = None,
 ) -> NonAnticipativeFirmSolution:
     """Solve the strict common-open-loop non-anticipative lower bound."""
 
@@ -677,7 +757,9 @@ def solve_frozen_non_anticipative_capacity(
         artifacts,
         duration_h=duration_h,
         event_id=event_id,
+        notice_h=notice_h,
         reliability_target=reliability_target,
+        confidence_level=confidence_level,
         information_nodes=_open_loop_information_nodes(
             scenario_count=len(artifacts),
             horizon=horizon,
@@ -692,7 +774,9 @@ def solve_frozen_observation_partition_capacity(
     *,
     duration_h: int,
     event_id: int = 0,
+    notice_h: int | None = None,
     reliability_target: float = 1.0,
+    confidence_level: float | None = None,
     specification: ObservationPartitionSpecification | None = None,
 ) -> NonAnticipativeFirmSolution:
     """Solve a causal, coarse-observation scenario-tree lower bound.
@@ -707,13 +791,16 @@ def solve_frozen_observation_partition_capacity(
         artifacts,
         duration_h=duration_h,
         event_id=event_id,
+        notice_h=notice_h,
         specification=spec,
     )
     return _solve_non_anticipative_capacity(
         artifacts,
         duration_h=duration_h,
         event_id=event_id,
+        notice_h=notice_h,
         reliability_target=reliability_target,
+        confidence_level=confidence_level,
         information_nodes=nodes,
         policy_class="coarse_observation_partition_tree",
         information_specification=json.dumps(
@@ -733,6 +820,7 @@ def validate_non_anticipative_frontier(frontier: pd.DataFrame) -> None:
 
     required = {
         "duration_h",
+        "notice_h",
         "non_anticipative_capacity_kw",
         "physical_dynamic_upper_bound_kw",
         "required_success_count",
@@ -752,6 +840,16 @@ def validate_non_anticipative_frontier(frontier: pd.DataFrame) -> None:
         raise ValueError("non-anticipative frontier exceeds the physical dynamic bound")
     if (frontier["selected_success_count"] < frontier["required_success_count"]).any():
         raise ValueError("non-anticipative frontier violates its chance constraint")
+    statistical = (
+        frontier[frontier["confidence_level"].notna()]
+        if "confidence_level" in frontier.columns
+        else frontier.iloc[0:0]
+    )
+    if not statistical.empty and (
+        statistical["success_rate_lower_ci"] + _TOLERANCE
+        < statistical["reliability_target"]
+    ).any():
+        raise ValueError("non-anticipative frontier violates its confidence requirement")
 
 
 def _discover_artifacts(path: str | Path) -> list[FrozenHourlyScenario]:
@@ -804,6 +902,7 @@ def _policy_rows(
                 artifacts,
                 duration_h=solution.duration_h,
                 event_id=event_id,
+                notice_h=solution.notice_h,
                 specification=observation_specification,
             )
         for hour, nodes in information_nodes.items():
@@ -820,6 +919,7 @@ def _policy_rows(
                     policy_rows.append(
                         {
                             "duration_h": solution.duration_h,
+                            "notice_h": solution.notice_h,
                             "event_id": event_id,
                             "policy_class": solution.non_anticipative_policy_class,
                             "scenario_hash": artifacts[scenario_index].scenario_hash,
@@ -835,9 +935,11 @@ def compute_and_save_non_anticipative_frontier(
     scenario_path: str | Path,
     *,
     durations_h: Sequence[int],
+    notice_hours: Sequence[int] = (0,),
     output_directory: str | Path,
     event_id: int = 0,
     reliability_target: float = 1.0,
+    confidence_level: float | None = None,
     information_structure: Literal[
         "common_open_loop", "coarse_observation_partition_tree"
     ] = "coarse_observation_partition_tree",
@@ -848,22 +950,26 @@ def compute_and_save_non_anticipative_frontier(
     artifacts = _discover_artifacts(scenario_path)
     if information_structure == "common_open_loop":
 
-        def solve_duration(duration_h: int) -> NonAnticipativeFirmSolution:
+        def solve_point(duration_h: int, notice_h: int) -> NonAnticipativeFirmSolution:
             return solve_frozen_non_anticipative_capacity(
                 artifacts,
                 duration_h=duration_h,
                 event_id=event_id,
+                notice_h=notice_h,
                 reliability_target=reliability_target,
+                confidence_level=confidence_level,
             )
 
     elif information_structure == "coarse_observation_partition_tree":
 
-        def solve_duration(duration_h: int) -> NonAnticipativeFirmSolution:
+        def solve_point(duration_h: int, notice_h: int) -> NonAnticipativeFirmSolution:
             return solve_frozen_observation_partition_capacity(
                 artifacts,
                 duration_h=duration_h,
                 event_id=event_id,
+                notice_h=notice_h,
                 reliability_target=reliability_target,
+                confidence_level=confidence_level,
                 specification=observation_specification,
             )
 
@@ -873,7 +979,8 @@ def compute_and_save_non_anticipative_frontier(
             f"{information_structure}"
         )
     solutions = [
-        solve_duration(duration_h)
+        solve_point(duration_h, notice_h)
+        for notice_h in _non_negative_notices(notice_hours)
         for duration_h in _positive_durations(durations_h)
     ]
     frontier = pd.DataFrame.from_records([solution.summary() for solution in solutions])
@@ -913,16 +1020,21 @@ def compute_and_save_non_anticipative_frontier(
                 ),
                 "event_id": event_id,
                 "durations_h": list(_positive_durations(durations_h)),
+                "notice_hours": list(_non_negative_notices(notice_hours)),
                 "reliability_target": _validate_reliability(reliability_target),
+                "confidence_level": confidence_level,
                 "scenario_count": len(artifacts),
                 "scenario_hashes": [artifact.scenario_hash for artifact in artifacts],
                 "frontier": str(frontier_path),
                 "policies": str(policies_path),
                 "policy_row_count": len(policy_rows),
                 "common_execution_gpu_h": {
-                    str(solution.duration_h): list(solution.common_execution_gpu_h)
+                    f"N{solution.notice_h}_H{solution.duration_h}": list(
+                        solution.common_execution_gpu_h
+                    )
                     for solution in solutions
                 },
+                "provenance": optimization_provenance(artifacts),
             },
             ensure_ascii=False,
             indent=2,

@@ -13,6 +13,11 @@ import pandas as pd
 from aidrbench.controllers.hourly_oracle import solve_full_horizon_oracle
 from aidrbench.data.frozen_scenarios import FrozenHourlyScenario, load_frozen_hourly_scenario
 from aidrbench.envs.community_ai_dr_env import HourlyCommunityAIDemandResponseEnv
+from aidrbench.evaluation.firm_flexibility import (
+    minimum_successes_for_wilson,
+    wilson_lower_bound,
+)
+from aidrbench.evaluation.provenance import optimization_provenance
 
 
 def _positive_durations(durations: Sequence[int]) -> tuple[int, ...]:
@@ -130,6 +135,10 @@ def solve_frozen_pi_frontier(
                 "deadline_miss_gpu_h": solution.total_deadline_miss_gpu_h,
                 "terminal_backlog_gpu_h": solution.terminal_backlog_gpu_h,
                 "pcc_capacity_kw": snapshot.pcc_capacity_kw,
+                "reference_mix_operating_peak_kw": (
+                    snapshot.reference_mix_operating_peak_kw
+                ),
+                "worst_class_peak_kw": snapshot.worst_class_peak_kw,
                 "actual_dc_peak_kw": env._full_dc_power_kw,
                 "perfect_information_status": solution.status,
                 "objective_solve_seconds": solution.objective_solve_seconds,
@@ -170,6 +179,92 @@ def validate_pi_frontier(frontier: pd.DataFrame) -> None:
             raise ValueError("PI frontier violates duration monotonicity")
 
 
+def summarize_pi_firm_boundary(
+    frontier: pd.DataFrame,
+    *,
+    reliability_targets: Sequence[float],
+    confidence_level: float,
+    nominal_flexibility_fraction: float,
+) -> pd.DataFrame:
+    """Aggregate scenario optima into statistically supported PI firm bounds."""
+
+    validate_pi_frontier(frontier)
+    targets = tuple(sorted({float(value) for value in reliability_targets}))
+    if not targets or any(not 0.0 < value < 1.0 for value in targets):
+        raise ValueError("reliability_targets must contain values in (0, 1)")
+    if not 0.0 < confidence_level < 1.0:
+        raise ValueError("confidence_level must be in (0, 1)")
+    nominal_fraction = float(nominal_flexibility_fraction)
+    if not 0.0 <= nominal_fraction <= 1.0:
+        raise ValueError("nominal_flexibility_fraction must be in [0, 1]")
+    required_columns = {
+        "reference_mix_operating_peak_kw",
+        "worst_class_peak_kw",
+    }
+    missing = sorted(required_columns - set(frontier.columns))
+    if missing:
+        raise ValueError(f"PI frontier is missing peak-definition columns: {missing}")
+
+    rows: list[dict[str, float | int | bool | str]] = []
+    for duration_h, group in frontier.groupby("duration_h", sort=True):
+        if group["scenario_hash"].duplicated().any():
+            raise ValueError("PI boundary needs one independent row per scenario and duration")
+        reference_peaks = group["reference_mix_operating_peak_kw"].unique()
+        worst_peaks = group["worst_class_peak_kw"].unique()
+        if len(reference_peaks) != 1 or len(worst_peaks) != 1:
+            raise ValueError("PI boundary scenarios must share stable peak definitions")
+        reference_peak_kw = float(reference_peaks[0])
+        worst_peak_kw = float(worst_peaks[0])
+        nominal_kw = nominal_fraction * reference_peak_kw
+        capacities = group["perfect_information_capacity_kw"].sort_values(
+            ascending=False, ignore_index=True
+        )
+        trial_count = len(capacities)
+        for reliability in targets:
+            required_successes = minimum_successes_for_wilson(
+                trial_count,
+                reliability,
+                confidence_level,
+            )
+            sample_size_sufficient = required_successes is not None
+            if required_successes is None:
+                capacity_kw = 0.0
+                success_count = trial_count
+            else:
+                capacity_kw = float(capacities.iloc[required_successes - 1])
+                success_count = int((capacities >= capacity_kw - 1e-9).sum())
+            lower_bound = wilson_lower_bound(
+                success_count,
+                trial_count,
+                confidence_level,
+            )
+            rows.append(
+                {
+                    "capacity_layer": "clairvoyant_firm_boundary",
+                    "duration_h": int(str(duration_h)),
+                    "reliability_target": reliability,
+                    "confidence_level": confidence_level,
+                    "scenario_count": trial_count,
+                    "required_success_count": (
+                        required_successes if required_successes is not None else trial_count + 1
+                    ),
+                    "success_count": success_count,
+                    "success_rate_lower_ci": lower_bound,
+                    "sample_size_sufficient": sample_size_sufficient,
+                    "perfect_information_firm_capacity_kw": capacity_kw,
+                    "reference_mix_operating_peak_kw": reference_peak_kw,
+                    "worst_class_peak_kw": worst_peak_kw,
+                    "nominal_flexibility_fraction": nominal_fraction,
+                    "nominal_flexibility_kw": nominal_kw,
+                    "physical_gap_kw": nominal_kw - capacity_kw,
+                    "physical_gap_fraction_of_reference_peak": (
+                        (nominal_kw - capacity_kw) / reference_peak_kw
+                    ),
+                }
+            )
+    return pd.DataFrame.from_records(rows)
+
+
 def _discover_artifacts(path: str | Path) -> list[FrozenHourlyScenario]:
     root = Path(path)
     if (root / "metadata.json").is_file():
@@ -192,6 +287,9 @@ def compute_and_save_pi_frontier(
     durations_h: Sequence[int],
     output_directory: str | Path,
     event_id: int = 0,
+    reliability_targets: Sequence[float] = (),
+    confidence_level: float = 0.95,
+    nominal_flexibility_fraction: float = 0.50,
 ) -> dict[str, str | int]:
     """Compute and persist a hash-linked PI frontier for every supplied artifact."""
 
@@ -209,8 +307,18 @@ def compute_and_save_pi_frontier(
     output = Path(output_directory)
     output.mkdir(parents=True, exist_ok=True)
     frontier_path = output / "pi_frontier.parquet"
+    boundary_path = output / "pi_firm_boundary.parquet"
     manifest_path = output / "pi_frontier.json"
     frontier.to_parquet(frontier_path, index=False)
+    boundary = None
+    if reliability_targets:
+        boundary = summarize_pi_firm_boundary(
+            frontier,
+            reliability_targets=reliability_targets,
+            confidence_level=confidence_level,
+            nominal_flexibility_fraction=nominal_flexibility_fraction,
+        )
+        boundary.to_parquet(boundary_path, index=False)
     manifest_path.write_text(
         json.dumps(
             {
@@ -220,6 +328,11 @@ def compute_and_save_pi_frontier(
                 "scenario_count": len(artifacts),
                 "scenario_hashes": [artifact.scenario_hash for artifact in artifacts],
                 "frontier": str(frontier_path),
+                "reliability_targets": [float(value) for value in reliability_targets],
+                "confidence_level": confidence_level,
+                "nominal_flexibility_fraction": nominal_flexibility_fraction,
+                "firm_boundary": str(boundary_path) if boundary is not None else None,
+                "provenance": optimization_provenance(artifacts),
             },
             ensure_ascii=False,
             indent=2,
@@ -227,9 +340,13 @@ def compute_and_save_pi_frontier(
         + "\n",
         encoding="utf-8",
     )
-    return {
+    result: dict[str, str | int] = {
         "scenario_count": len(artifacts),
         "row_count": len(frontier),
         "frontier": str(frontier_path),
         "manifest": str(manifest_path),
     }
+    if boundary is not None:
+        result["firm_boundary"] = str(boundary_path)
+        result["firm_boundary_row_count"] = len(boundary)
+    return result
