@@ -12,12 +12,14 @@ seeds `30000..30499` have not been evaluated.
 
 ## Current firm_v5 environment status
 
-Formal-run readiness is intentionally **blocked** until
-`data/calibration/rtx6000pro_4gpu_v1.yaml` is produced from the real four-GPU
-measurements. Formal configs require this SHA-256-verified artifact and no
-longer accept the old `calibration_file` spelling or fallback power parameters.
-`protocol-check` reports this as a failed readiness check instead of silently
-constructing a fallback model.
+The SHA-256-verified `data/calibration/rtx6000pro_4gpu_v1.yaml` artifact now
+anchors GPU board power to 4× NVIDIA RTX PRO 6000 Blackwell Max-Q measurements.
+Formal configs no longer accept the old `calibration_file` spelling or fallback
+GPU parameters. The artifact remains `benchmark_anchored_synthetic`, rather
+than fully `measured`, because the server exposes no BMC/PDU/RAPL power channel:
+its 300 W node fixed overhead and `[150, 450] W` interval are explicit
+assumptions. GPU flexibility conclusions may use the measured terms, while
+wall-power and absolute hosting claims must retain this limitation.
 
 - Current-hour released work enters both controlled and no-control queues
   before the observation is constructed.
@@ -41,7 +43,7 @@ constructing a fallback model.
   one episode is one Bernoulli trial and succeeds only if all of its events do.
   Isolated-event tables below are historical diagnostics, not the primary
   certificate definition.
-- Local CI equivalence currently passes 171 tests, `ruff check .`, `mypy src`,
+- Local CI equivalence currently passes 172 tests, `ruff check .`, `mypy src`,
   and a HiGHS/CVXPY/Parquet clean-install smoke test. GitHub Actions is now
   configured to run the same gates remotely.
 

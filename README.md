@@ -1050,8 +1050,9 @@ The current local development status is:
 - `aidrbench optimize hosting-capacity` implements an absolute-PCC, perfect-information planning bound for the eight rigid/flexible × PV × BESS portfolios. It enforces PV use/curtailment, BESS SOC, power and terminal-SOC constraints, and scales workload release/deadline constraints with the candidate DC size; BESS is not yet part of the online DR environment;
 - the hourly EDF queue now retains training and offline-inference work classes and rollout Parquet files report their arrival, execution, expiry and backlog separately;
 - planning snapshots retain workload class, and PI, non-anticipative and hosting-capacity optimizers use class-indexed execution and calibrated class-specific power rather than an average affine slope;
-- class-aware PCC power and compute debt use a versioned, SHA-256-verified calibration artifact when configured. `lower_ci`, `nominal` and `upper_ci` power cases are explicit scenario settings. No measured four-GPU calibration artifact has yet been collected, so formal runs must set `hardware.require_calibration_artifact: true` and will correctly fail until one is supplied;
-- formal train, validation and locked-test configs now require `data/calibration/rtx6000pro_4gpu_v1.yaml`; unknown or ambiguous hardware keys are rejected, and the hourly environment rejects non-one-hour timesteps until queue aging is generalized;
+- class-aware PCC power and compute debt use the versioned, SHA-256-verified `data/calibration/rtx6000pro_4gpu_v1.yaml` artifact. Its GPU board-power terms are measured on 4× NVIDIA RTX PRO 6000 Blackwell Max-Q GPUs; `lower_ci`, `nominal` and `upper_ci` power cases are explicit scenario settings;
+- the current artifact is conservatively labelled `benchmark_anchored_synthetic`: GPU idle and active power are measured, but the 300 W node CPU/memory/fan overhead remains an explicit `[150, 450] W` assumption because no BMC, PDU or RAPL power interface was available. It must not be described as wall-power calibrated;
+- formal train, validation and locked-test configs require that artifact; unknown or ambiguous hardware keys are rejected, and the hourly environment rejects non-one-hour timesteps until queue aging is generalized;
 - controller certification uses repeated-event joint episode success and keys each selected capacity by duration, notice and event sequence. Validation searches all configured notice choices, while locked test only evaluates the frozen capacities;
 - deterministic MPC now obeys release-time causality for estimated future arrivals; a robust-MPC baseline uses an explicit historical-arrival uncertainty envelope. Benchmark outputs label every controller's information structure and action-time distribution, while the full-horizon oracle remains explicitly separate as a perfect-information bound;
 - GitHub Actions runs `pytest`, `ruff check .` and `mypy src`; a clean-install smoke test verifies HiGHS/CVXPY and Parquet availability;
@@ -1107,7 +1108,8 @@ The earlier 63.52 kW and 68.86 kW diagnostics used the previous 153.37 kW virtua
 - [x] consume a versioned, SHA-256-verified hardware-calibration artifact when configured;
 - [x] select `lower_ci`, `nominal` or `upper_ci` power cases from that artifact and record the selected case with every rollout;
 - [x] use class-indexed execution and class-specific power in PI, non-anticipative and hosting optimizers;
-- [ ] collect the real four-GPU measurements, fit and validate the first `measured` artifact, then re-freeze all formal scenarios for the three power cases.
+- [x] collect 1/4-GPU training and offline-inference board-power measurements with a held-out repeat and publish the raw hashes;
+- [ ] measure node wall/BMC power, replace the assumed fixed overhead, upgrade the evidence class to `measured`, then re-freeze all final formal scenarios for the three power cases.
 
 ### Priority 7 — Benchmark online controllers
 

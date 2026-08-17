@@ -1,0 +1,78 @@
+{
+  "benchmark": "aidrbench_gpu_power_workload",
+  "cuda_version": "13.0",
+  "dtype": "bfloat16",
+  "evidence_class": "measured",
+  "hostname": "redacted",
+  "matrix_size": 8192,
+  "mode": "training",
+  "nccl_version": [
+    2,
+    29,
+    7
+  ],
+  "operation": "bf16_forward_backward_with_gradient_all_reduce",
+  "physical_gpu_ids": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "power_limit_changed": false,
+  "ranks": [
+    {
+      "device_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+      "elapsed_seconds": 20.00741644098889,
+      "ended_at_utc": "2026-08-17T05:35:23.287150+00:00",
+      "iterations": 1269,
+      "iterations_per_second": 63.42648006267411,
+      "local_rank": 0,
+      "peak_memory_allocated_bytes": 1811940352,
+      "physical_gpu_id": 0,
+      "rank": 0,
+      "started_at_utc": "2026-08-17T05:35:03.279712+00:00"
+    },
+    {
+      "device_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+      "elapsed_seconds": 20.007417120970786,
+      "ended_at_utc": "2026-08-17T05:35:23.287150+00:00",
+      "iterations": 1269,
+      "iterations_per_second": 63.42647790703064,
+      "local_rank": 1,
+      "peak_memory_allocated_bytes": 1811940352,
+      "physical_gpu_id": 1,
+      "rank": 1,
+      "started_at_utc": "2026-08-17T05:35:03.279714+00:00"
+    },
+    {
+      "device_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+      "elapsed_seconds": 20.007417551008984,
+      "ended_at_utc": "2026-08-17T05:35:23.287151+00:00",
+      "iterations": 1269,
+      "iterations_per_second": 63.42647654374583,
+      "local_rank": 2,
+      "peak_memory_allocated_bytes": 1811940352,
+      "physical_gpu_id": 2,
+      "rank": 2,
+      "started_at_utc": "2026-08-17T05:35:03.279716+00:00"
+    },
+    {
+      "device_name": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition",
+      "elapsed_seconds": 20.007419290952384,
+      "ended_at_utc": "2026-08-17T05:35:23.287153+00:00",
+      "iterations": 1269,
+      "iterations_per_second": 63.42647102786806,
+      "local_rank": 3,
+      "peak_memory_allocated_bytes": 1811940352,
+      "physical_gpu_id": 3,
+      "rank": 3,
+      "started_at_utc": "2026-08-17T05:35:03.279716+00:00"
+    }
+  ],
+  "requested_measurement_seconds": 20.0,
+  "schema_version": 1,
+  "seed": 2029,
+  "torch_version": "2.13.0+cu130",
+  "warmup_seconds": 5.0,
+  "world_size": 4
+}
