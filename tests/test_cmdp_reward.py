@@ -126,6 +126,33 @@ def test_v4_recovery_increments_sum_to_settled_physical_cost() -> None:
     )
 
 
+def test_v5_repeats_running_recovery_violation_while_window_is_active() -> None:
+    corrected = _wrapped_environment("firm_cmdp_v5")
+    corrected.reset(seed=12)
+    first_event = corrected.unwrapped.event_manifest[0]
+    observed_costs: list[float] = []
+
+    for hour in range(first_event.recovery_stop_hour):
+        action = 0.0 if first_event.start_hour <= hour < first_event.stop_hour else 1.0
+        info = corrected.step(np.asarray((action,), dtype=np.float32))[4]
+        running_cost = float(info["running_rebound_violation_cost"]) + float(
+            info["running_window_relief_violation_cost"]
+        )
+        training_cost = float(info["cmdp_rebound_cost"]) + float(
+            info["cmdp_window_relief_cost"]
+        )
+        if bool(info["event_window_active"]) and running_cost > 0.0:
+            assert training_cost == pytest.approx(running_cost)
+            observed_costs.append(training_cost)
+
+    assert len(observed_costs) >= 2
+
+    _, _, _, _, after_window = corrected.step(np.asarray((1.0,), dtype=np.float32))
+    assert not after_window["event_window_active"]
+    assert after_window["cmdp_rebound_cost"] == pytest.approx(0.0)
+    assert after_window["cmdp_window_relief_cost"] == pytest.approx(0.0)
+
+
 def test_dual_state_updates_only_observed_constraints_and_is_bounded() -> None:
     config = FirmCMDPRewardConfig(
         dual_learning_rate=0.5,
@@ -148,6 +175,6 @@ def test_dual_state_updates_only_observed_constraints_and_is_bounded() -> None:
 def test_cmdp_config_rejects_unknown_version() -> None:
     with pytest.raises(
         ValueError,
-        match="firm_cmdp_v1.*firm_cmdp_v2.*firm_cmdp_v3.*firm_cmdp_v4",
+        match="firm_cmdp_v1.*firm_cmdp_v2.*firm_cmdp_v3.*firm_cmdp_v4.*firm_cmdp_v5",
     ):
         FirmCMDPRewardConfig.from_mapping({"version": "unknown"})

@@ -43,7 +43,7 @@ wall-power and absolute hosting claims must retain this limitation.
   one episode is one Bernoulli trial and succeeds only if all of its events do.
   Isolated-event tables below are historical diagnostics, not the primary
   certificate definition.
-- Local CI equivalence currently passes 172 tests, `ruff check .`, `mypy src`,
+- Local CI equivalence currently passes 173 tests, `ruff check .`, `mypy src`,
   and a HiGHS/CVXPY/Parquet clean-install smoke test. GitHub Actions is now
   configured to run the same gates remotely.
 
@@ -307,17 +307,64 @@ only ten validation episodes, and does not reach the frozen 95% reliability
 target. The main observed DQN failures are window-wide relief and rebound, with
 some deadline failures.
 
+## Calibrated firm_v5 reward diagnostics
+
+The nominal calibration case was used to freeze all 100 validation seeds
+`20000..20099`. The resulting virtual facility has 182 four-GPU nodes, a
+200.321 kW modeled DC peak, and scenario artifacts bound to calibration SHA
+`6f6c5aa776c90be6f8d1f1d41ee2457b321558257aed363ebe2cbd063433c996`.
+No locked OOD seed was read.
+
+Five DQN policies were first trained for 50k steps with the environment's
+penalty-only `firm_threshold_v2` scalar reward. Every final model produced
+`0/100` repeated-event joint successes. A sweep over all 50 periodic
+checkpoints (5k through 50k for seeds 101 through 105) also produced zero event
+successes on validation seeds `20000..20009`: delivery was usually met, but
+every event failed the deadline criterion. No-control has zero deadline and
+terminal-backlog failures on all 100 validation episodes, so this is a reward
+and learned-policy failure rather than an infeasible workload distribution.
+
+The training-only CMDP adapter retains the same physical environment and
+independent certificate evaluator. Its bounded seed-101 comparison is:
+
+| Training reward | Steps | Validation episodes | Joint successes | Successful events | Main failures |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `firm_cmdp_v4` | 10k | 10 | 2 / 10 | 13 / 30 | rebound, window relief |
+| `firm_cmdp_v4` | 20k | 10 | 2 / 10 | 12 / 30 | rebound, window relief |
+| `firm_cmdp_v4` | 30k | 10 | 1 / 10 | 8 / 30 | rebound, window relief |
+| `firm_cmdp_v5` | 10k | 10 | 7 / 10 | 26 / 30 | rebound |
+| `firm_cmdp_v5` | 20k | 10 | 4 / 10 | 20 / 30 | rebound, window relief |
+| `firm_cmdp_v5` | 10k | 100 | 31 / 100 | 197 / 300 | rebound, delivery, window relief |
+
+`firm_cmdp_v5` differs only in its training signal: recovery-window rebound and
+window-relief violations are charged at every violating hour instead of only
+through their settled or incremental cost. On the full validation set it has
+zero deadline and terminal-backlog failures, but 83 rebound, 20 delivery, and
+17 window-relief event failures. Its one-sided 95% lower confidence bound for
+joint success is 23.4%, so it is a useful diagnostic improvement, not a formal
+reward or certificate candidate.
+
+Matched ten-episode controller diagnostics reinforce the separation between
+environment feasibility and controller quality. No-control, threshold,
+EDF/valley, deterministic MPC, and robust MPC all have `0/10` joint successes
+for different reasons. The full-horizon oracle meets every delivery, deadline,
+window-relief, and terminal criterion, but its aggregate replay has 16 rebound
+failures and only `1/10` joint successes. This replay gap is expected because
+the optimization bound controls class-indexed execution while the online
+environment exposes one aggregate execution fraction; the oracle remains a
+planning upper bound, not a deployable controller.
+
 ## Next controlled steps
 
-1. Treat the current 10k policies as diagnostics, not selected models. V4 is
-   the current reward candidate because it preserves service and improves the
-   small validation slice from 1/9 to 7/9 joint successes.
-2. Freeze the v1-v4 reward comparison and training budget before running seeds
-   `101..105`. V3 action projection or
-   constrained RL must remain an explicitly labelled extension, not a silent
-   change to the V0 action semantics.
-3. Use the implemented 5k periodic checkpoints and only validation seeds for
-   selection across preregistered RL seeds `101..105`.
-4. Freeze controller checkpoints and reward sensitivity choices before the
-   first locked OOD benchmark or certificate run.
-5. Run the 500-episode locked certificate only after the above freeze.
+1. Treat `firm_cmdp_v5` as a diagnostic, not a selected reward. Preserve its
+   service-safe useful-compute objective, but add a preregistered recovery
+   safety margin or an explicitly labelled safety layer before more long runs.
+2. Validate the revised candidate on all 100 validation episodes; do not use a
+   ten-episode slice as evidence for 95% reliability.
+3. Only after the reward and controller semantics are frozen, train seeds
+   `101..105` and select among their 5k periodic checkpoints using validation
+   data alone.
+4. Keep any action projection or class-specific actuator as an explicitly
+   labelled extension, because it changes the online controller's authority.
+5. Freeze controller checkpoints, capacity, and reward sensitivity choices
+   before the first 500-episode locked OOD certificate run.

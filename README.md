@@ -1042,7 +1042,8 @@ The current local development status is:
 
 - both mean-event and minimum-interval delivery criteria are implemented;
 - the formal base case now distinguishes a **800 kW background-community peak**, **1 MW PCC rating**, and **200 kW target DC peak**;
-- exact discrete sizing selects 111 four-GPU nodes, giving a 200.287 kW realised full-pool facility peak;
+- exact discrete sizing with the calibrated nominal power case selects 182 four-GPU nodes,
+  giving a 200.321 kW realised full-pool facility peak;
 - PCC capacity is enforced at every hourly interval and is present in observations, planning snapshots, oracle constraints and result metadata;
 - `aidrbench scenario freeze` writes hash-verified community, PV, arrivals, event anchors, baseline and power-model artifacts;
 - `aidrbench optimize pi-frontier` evaluates a single-event, frozen-scenario perfect-information duration frontier and checks physical and monotonicity invariants;
@@ -1054,6 +1055,14 @@ The current local development status is:
 - the current artifact is conservatively labelled `benchmark_anchored_synthetic`: GPU idle and active power are measured, but the 300 W node CPU/memory/fan overhead remains an explicit `[150, 450] W` assumption because no BMC, PDU or RAPL power interface was available. It must not be described as wall-power calibrated;
 - formal train, validation and locked-test configs require that artifact; unknown or ambiguous hardware keys are rejected, and the hourly environment rejects non-one-hour timesteps until queue aging is generalized;
 - controller certification uses repeated-event joint episode success and keys each selected capacity by duration, notice and event sequence. Validation searches all configured notice choices, while locked test only evaluates the frozen capacities;
+- all 100 validation seeds `20000..20099` have been frozen against calibration
+  artifact SHA `6f6c5aa776c90be6f8d1f1d41ee2457b321558257aed363ebe2cbd063433c996`;
+- calibrated reward diagnostics reject the penalty-only 50k DQN runs: all five
+  training seeds had `0/100` repeated-event joint validation successes because
+  they traded excessive deadline misses for delivery. The experimental
+  `firm_cmdp_v5` training adapter restores zero deadline and terminal-backlog
+  failures and reaches `31/100` joint successes at 10k steps, but remains far
+  below the 95% certificate threshold and is not a frozen formal reward;
 - deterministic MPC now obeys release-time causality for estimated future arrivals; a robust-MPC baseline uses an explicit historical-arrival uncertainty envelope. Benchmark outputs label every controller's information structure and action-time distribution, while the full-horizon oracle remains explicitly separate as a perfect-information bound;
 - GitHub Actions runs `pytest`, `ruff check .` and `mypy src`; a clean-install smoke test verifies HiGHS/CVXPY and Parquet availability;
 - the locked test set has not been used after this scenario-semantics revision.
@@ -1116,7 +1125,12 @@ The earlier 63.52 kW and 68.86 kW diagnostics used the previous 153.37 kW virtua
 - [x] validate deterministic causal MPC and a robust arrival-envelope MPC;
 - [x] use shared physical rollouts and matched seeds; record each controller's declared information structure and action time, rather than silently comparing a perfect-information oracle with causal controllers;
 - [ ] make the online controller observation interface strictly identical across rule, MPC and RL policies (the current causal MPC consumes the auditable `control_state`, while SB3 policies consume the normalized observation);
-- [ ] retrain RL only after the environment, reward, protocol and measured calibration artifact are frozen.
+- [x] run calibrated five-seed DQN and checkpoint diagnostics without touching
+  the locked OOD split; reject the penalty-only training signal after `0/100`
+  validation success for every final model;
+- [ ] freeze a service-safe recovery-aware training reward only after it passes
+  the full validation protocol, then retrain all declared RL seeds and
+  algorithms.
 
 ---
 

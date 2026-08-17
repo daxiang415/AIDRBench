@@ -60,10 +60,11 @@ class FirmCMDPRewardConfig:
             "firm_cmdp_v2",
             "firm_cmdp_v3",
             "firm_cmdp_v4",
+            "firm_cmdp_v5",
         }:
             raise ValueError(
                 "reward_adapter.version must be one of: firm_cmdp_v1, "
-                "firm_cmdp_v2, firm_cmdp_v3, firm_cmdp_v4"
+                "firm_cmdp_v2, firm_cmdp_v3, firm_cmdp_v4, firm_cmdp_v5"
             )
         for name in (
             "useful_compute_weight",
@@ -300,6 +301,21 @@ class FirmCMDPRewardWrapper(gym.Wrapper[Any, Any, Any, Any]):
         info: Mapping[str, Any],
     ) -> dict[str, float]:
         costs = dict(physical_costs)
+        if self.cmdp_config.version == "firm_cmdp_v5":
+            window_active = info.get("event_window_active")
+            if not isinstance(window_active, bool):
+                raise ValueError("CMDP reward requires boolean event_window_active in info")
+            costs["rebound"] = (
+                _float_info(info, "running_rebound_violation_cost")
+                if window_active
+                else 0.0
+            )
+            costs["window_relief"] = (
+                _float_info(info, "running_window_relief_violation_cost")
+                if window_active
+                else 0.0
+            )
+            return costs
         if self.cmdp_config.version != "firm_cmdp_v4":
             return costs
         window_active = info.get("event_window_active")
