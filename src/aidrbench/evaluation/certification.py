@@ -24,16 +24,30 @@ from aidrbench.evaluation.firm_flexibility import (
 )
 from aidrbench.evaluation.hourly_rollout import HourlyController, rollout_hourly_episode
 
-ControllerName = Literal["no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"]
+ControllerName = Literal[
+    "no_control",
+    "threshold",
+    "edf_valley",
+    "mpc",
+    "robust_mpc",
+    "dqn",
+    "ppo",
+    "sac",
+]
 _RL_NAMES = frozenset(("dqn", "ppo", "sac"))
 
 
 @dataclass(frozen=True, slots=True)
 class FlexibilityCertificate:
-    """One duration-specific capacity result under a frozen success protocol."""
+    """One event-program capacity result under a frozen success protocol."""
 
     controller: str
     duration_h: int
+    notice_h: int
+    event_start_hours: tuple[int, ...]
+    event_start_jitter_hours: int
+    event_count_per_episode: int
+    certificate_scope: str
     reliability_target: float
     confidence_level: float
     certified_reduction_kw: float
@@ -68,31 +82,53 @@ def make_certificate_scenario(
     *,
     duration_h: int,
     requested_reduction_kw: float,
-    event_start_hours: Sequence[int] = (17,),
+    notice_h: int = 0,
+    event_start_hours: Sequence[int] | None = None,
+    event_start_jitter_hours: int | None = None,
 ) -> dict[str, Any]:
-    """Make an isolated event scenario without mutating the source config."""
+    """Freeze one repeated-event certificate program without mutating its config."""
 
     if isinstance(duration_h, bool) or duration_h <= 0:
         raise ValueError("duration_h must be positive")
     if not math.isfinite(requested_reduction_kw) or requested_reduction_kw < 0.0:
         raise ValueError("requested_reduction_kw must be finite and non-negative")
-    invalid_start = any(isinstance(hour, bool) or hour < 0 for hour in event_start_hours)
-    if not event_start_hours or invalid_start:
-        raise ValueError("event_start_hours must contain non-negative integer hours")
+    if isinstance(notice_h, bool) or not isinstance(notice_h, int) or notice_h < 0:
+        raise ValueError("notice_h must be a non-negative integer")
     document = _read_mapping(config)
     raw_dr = document.get("dr")
     if not isinstance(raw_dr, Mapping):
         raise ValueError("hourly certificate config requires a dr mapping")
     dr = dict(raw_dr)
+    raw_starts = dr.get("event_start_hours") if event_start_hours is None else event_start_hours
+    if (
+        not isinstance(raw_starts, Sequence)
+        or isinstance(raw_starts, str | bytes)
+        or not raw_starts
+        or any(
+            isinstance(hour, bool) or not isinstance(hour, int) or hour < 0
+            for hour in raw_starts
+        )
+    ):
+        raise ValueError("event_start_hours must contain non-negative integer hours")
+    starts = tuple(int(hour) for hour in raw_starts)
+    if len(set(starts)) != len(starts) or tuple(sorted(starts)) != starts:
+        raise ValueError("event_start_hours must be unique and increasing")
+    raw_jitter = (
+        dr.get("event_start_jitter_hours", 0)
+        if event_start_jitter_hours is None
+        else event_start_jitter_hours
+    )
+    if isinstance(raw_jitter, bool) or not isinstance(raw_jitter, int) or raw_jitter < 0:
+        raise ValueError("event_start_jitter_hours must be a non-negative integer")
     dr.update(
         {
             "source": "configured",
             "events_path": None,
-            "event_start_hours": list(event_start_hours),
+            "event_start_hours": list(starts),
             "event_duration_hours": duration_h,
-            "event_notice_hours": 0,
+            "event_notice_hours": notice_h,
             "event_reduction_kw": float(requested_reduction_kw),
-            "event_start_jitter_hours": 0,
+            "event_start_jitter_hours": raw_jitter,
             "event_duration_choices": None,
             "event_notice_choices": None,
             "event_reduction_fraction_range": None,
@@ -100,6 +136,33 @@ def make_certificate_scenario(
     )
     document["dr"] = dr
     return document
+
+
+def _certificate_program(
+    config: str | Path | Mapping[str, Any],
+    *,
+    duration_h: int,
+    notice_h: int,
+    event_start_hours: Sequence[int] | None,
+    event_start_jitter_hours: int | None,
+) -> tuple[tuple[int, ...], int]:
+    scenario = make_certificate_scenario(
+        config,
+        duration_h=duration_h,
+        notice_h=notice_h,
+        requested_reduction_kw=0.0,
+        event_start_hours=event_start_hours,
+        event_start_jitter_hours=event_start_jitter_hours,
+    )
+    dr = cast(dict[str, Any], scenario["dr"])
+    return tuple(int(value) for value in dr["event_start_hours"]), int(
+        dr["event_start_jitter_hours"]
+    )
+
+
+def _certificate_key(duration_h: int, notice_h: int, event_start_hours: Sequence[int]) -> str:
+    sequence = "-".join(str(value) for value in event_start_hours)
+    return f"duration_{duration_h}h_notice_{notice_h}h_events_{sequence}"
 
 
 def _make_controller(name: ControllerName, model_path: str | Path | None) -> HourlyController:
@@ -129,9 +192,11 @@ def evaluate_flexibility_candidate(
     requested_reduction_kw: float,
     seeds: Sequence[int],
     criteria: FirmFlexibilityCriteria,
-    event_start_hours: Sequence[int] = (17,),
+    notice_h: int = 0,
+    event_start_hours: Sequence[int] | None = None,
+    event_start_jitter_hours: int | None = None,
 ) -> tuple[pd.DataFrame, float]:
-    """Run matched episodes for one candidate capacity and return event outcomes."""
+    """Run matched repeated-event episodes for one candidate capacity."""
 
     if not seeds:
         raise ValueError("candidate evaluation needs at least one seed")
@@ -140,8 +205,10 @@ def evaluate_flexibility_candidate(
     scenario = make_certificate_scenario(
         config,
         duration_h=duration_h,
+        notice_h=notice_h,
         requested_reduction_kw=requested_reduction_kw,
         event_start_hours=event_start_hours,
+        event_start_jitter_hours=event_start_jitter_hours,
     )
     first_env = _environment_for(scenario, controller)
     dc_peak_kw = first_env.power_model.predict(
@@ -164,6 +231,8 @@ def evaluate_flexibility_candidate(
         table.insert(0, "seed", seed)
         table.insert(1, "controller", controller)
         table.insert(2, "candidate_reduction_kw", requested_reduction_kw)
+        table.insert(3, "notice_h", notice_h)
+        table.insert(4, "event_count_in_episode", len(outcomes))
         rows.append(table)
     return pd.concat(rows, ignore_index=True), dc_peak_kw
 
@@ -179,9 +248,14 @@ def summarize_candidate_outcomes(
     criteria: FirmFlexibilityCriteria,
     dc_peak_kw: float,
 ) -> dict[str, float | int | bool]:
-    success = outcomes["success"].astype(bool)
-    count = int(success.sum())
-    episodes = int(len(success))
+    if "seed" not in outcomes:
+        raise ValueError("candidate outcomes must identify their episode seed")
+    event_counts = outcomes.groupby("seed", sort=False).size()
+    if event_counts.empty or event_counts.nunique() != 1:
+        raise ValueError("candidate outcomes must contain one complete event program per seed")
+    episode_success = outcomes.groupby("seed", sort=False)["success"].all().astype(bool)
+    count = int(episode_success.sum())
+    episodes = int(len(episode_success))
     lower_ci = wilson_lower_bound(count, episodes, criteria.confidence_level)
     candidate = float(outcomes["candidate_reduction_kw"].iloc[0])
     return {
@@ -189,6 +263,7 @@ def summarize_candidate_outcomes(
         "candidate_reduction_fraction_of_dc_peak": candidate / dc_peak_kw,
         "success_count": count,
         "episode_count": episodes,
+        "event_count_per_episode": int(event_counts.iloc[0]),
         "success_rate": count / episodes,
         "success_rate_lower_ci": lower_ci,
         "certified": lower_ci + 1e-12 >= criteria.reliability_target,
@@ -212,6 +287,9 @@ def certify_firm_flexibility(
     controller: ControllerName,
     model_path: str | Path | None,
     duration_h: int,
+    notice_h: int = 0,
+    event_start_hours: Sequence[int] | None = None,
+    event_start_jitter_hours: int | None = None,
     candidate_reduction_fractions: Sequence[float],
     seeds: Sequence[int],
     criteria: FirmFlexibilityCriteria,
@@ -234,6 +312,13 @@ def certify_firm_flexibility(
         )
     if binary_iterations <= 0:
         raise ValueError("binary_iterations must be positive")
+    program_starts, program_jitter = _certificate_program(
+        config,
+        duration_h=duration_h,
+        notice_h=notice_h,
+        event_start_hours=event_start_hours,
+        event_start_jitter_hours=event_start_jitter_hours,
+    )
     reference_env = _environment_for(_read_mapping(config), controller)
     dc_peak_kw = reference_env.power_model.predict(
         reference_env.power_model.flexible_capacity_gpu_h
@@ -250,9 +335,12 @@ def certify_firm_flexibility(
             controller=controller,
             model_path=model_path,
             duration_h=duration_h,
+            notice_h=notice_h,
             requested_reduction_kw=fraction * dc_peak_kw,
             seeds=seeds,
             criteria=criteria,
+            event_start_hours=program_starts,
+            event_start_jitter_hours=program_jitter,
         )
         if not math.isclose(candidate_dc_peak_kw, dc_peak_kw, rel_tol=1e-12):
             raise RuntimeError("certificate scenario unexpectedly changed the data-center peak")
@@ -284,6 +372,15 @@ def certify_firm_flexibility(
     certificate = FlexibilityCertificate(
         controller=controller,
         duration_h=duration_h,
+        notice_h=notice_h,
+        event_start_hours=program_starts,
+        event_start_jitter_hours=program_jitter,
+        event_count_per_episode=int(selected["event_count_per_episode"]),
+        certificate_scope=(
+            "repeated_event_joint_episode"
+            if len(program_starts) > 1
+            else "isolated_event_joint_episode"
+        ),
         reliability_target=criteria.reliability_target,
         confidence_level=criteria.confidence_level,
         certified_reduction_kw=(
@@ -400,6 +497,9 @@ def _certificate_from_candidate_summary(
     *,
     controller: str,
     duration_h: int,
+    notice_h: int,
+    event_start_hours: tuple[int, ...],
+    event_start_jitter_hours: int,
     criteria: FirmFlexibilityCriteria,
     summary: Mapping[str, float | int | bool],
     dc_peak_kw: float,
@@ -409,6 +509,15 @@ def _certificate_from_candidate_summary(
     return FlexibilityCertificate(
         controller=controller,
         duration_h=duration_h,
+        notice_h=notice_h,
+        event_start_hours=event_start_hours,
+        event_start_jitter_hours=event_start_jitter_hours,
+        event_count_per_episode=int(summary["event_count_per_episode"]),
+        certificate_scope=(
+            "repeated_event_joint_episode"
+            if len(event_start_hours) > 1
+            else "isolated_event_joint_episode"
+        ),
         reliability_target=criteria.reliability_target,
         confidence_level=criteria.confidence_level,
         certified_reduction_kw=float(summary["candidate_reduction_kw"]),
@@ -436,6 +545,7 @@ def select_firm_capacity_on_validation(
     controller: ControllerName,
     model_path: str | Path | None,
     durations_h: Sequence[int],
+    notices_h: Sequence[int] | None = None,
     candidate_reduction_fractions: Sequence[float],
     output_directory: str | Path,
     search_method: Literal["grid", "binary"] = "binary",
@@ -450,32 +560,58 @@ def select_firm_capacity_on_validation(
     config, seeds, criteria, protocol_id = _protocol_split(
         protocol_manifest, split_name="validation"
     )
+    config_document = _read_mapping(config)
+    raw_dr = config_document.get("dr")
+    if not isinstance(raw_dr, Mapping):
+        raise ValueError("validation config requires a dr mapping")
+    raw_notices = (
+        raw_dr.get("event_notice_choices") or (raw_dr.get("event_notice_hours", 0),)
+        if notices_h is None
+        else notices_h
+    )
+    if (
+        not isinstance(raw_notices, Sequence)
+        or isinstance(raw_notices, str | bytes)
+        or not raw_notices
+        or any(
+            isinstance(notice, bool) or not isinstance(notice, int) or notice < 0
+            for notice in raw_notices
+        )
+    ):
+        raise ValueError("validation selection notices must be non-negative integers")
+    notices = tuple(sorted(set(int(notice) for notice in raw_notices)))
     output = Path(output_directory)
     output.mkdir(parents=True, exist_ok=True)
     selected: list[dict[str, object]] = []
     saved: dict[str, dict[str, str]] = {}
     for duration_h in sorted(durations_h):
-        certificate, candidates, outcomes = certify_firm_flexibility(
-            config=config,
-            controller=controller,
-            model_path=model_path,
-            duration_h=duration_h,
-            candidate_reduction_fractions=candidate_reduction_fractions,
-            seeds=seeds,
-            criteria=criteria,
-            search_method=search_method,
-            binary_iterations=binary_iterations,
-        )
-        key = f"duration_{duration_h}h"
-        saved[key] = save_flexibility_certificate(
-            certificate, candidates, outcomes, criteria, output / key
-        )
-        selected.append(asdict(certificate))
+        for notice_h in notices:
+            certificate, candidates, outcomes = certify_firm_flexibility(
+                config=config,
+                controller=controller,
+                model_path=model_path,
+                duration_h=duration_h,
+                notice_h=notice_h,
+                candidate_reduction_fractions=candidate_reduction_fractions,
+                seeds=seeds,
+                criteria=criteria,
+                search_method=search_method,
+                binary_iterations=binary_iterations,
+            )
+            key = _certificate_key(
+                duration_h,
+                notice_h,
+                certificate.event_start_hours,
+            )
+            saved[key] = save_flexibility_certificate(
+                certificate, candidates, outcomes, criteria, output / key
+            )
+            selected.append(asdict(certificate))
     selection_path = output / "selection.json"
     selection_path.write_text(
         json.dumps(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "protocol_id": protocol_id,
                 "protocol_manifest": str(protocol_manifest),
                 "selection_split": "validation",
@@ -485,6 +621,7 @@ def select_firm_capacity_on_validation(
                 "validation_seed_count": len(seeds),
                 "search_method": search_method,
                 "candidate_reduction_fractions": list(candidate_reduction_fractions),
+                "notices_h": list(notices),
                 "selected_capacities": selected,
                 "artifacts": saved,
             },
@@ -494,7 +631,7 @@ def select_firm_capacity_on_validation(
         + "\n",
         encoding="utf-8",
     )
-    return {"selection": str(selection_path), "duration_count": len(selected)}
+    return {"selection": str(selection_path), "certificate_key_count": len(selected)}
 
 
 def evaluate_selected_capacity_on_locked_test(
@@ -513,7 +650,7 @@ def evaluate_selected_capacity_on_locked_test(
     if not isinstance(selection_raw, Mapping):
         raise ValueError("selection file must be a mapping")
     if (
-        selection_raw.get("schema_version") != 1
+        selection_raw.get("schema_version") != 2
         or selection_raw.get("selection_split") != "validation"
     ):
         raise ValueError("selection file is not a frozen validation selection")
@@ -533,7 +670,14 @@ def evaluate_selected_capacity_on_locked_test(
         raise ValueError(
             "selection protocol manifest does not match the requested locked-test protocol"
         )
-    if controller not in {*_RL_NAMES, "no_control", "threshold", "edf_valley", "mpc"}:
+    if controller not in {
+        *_RL_NAMES,
+        "no_control",
+        "threshold",
+        "edf_valley",
+        "mpc",
+        "robust_mpc",
+    }:
         raise ValueError("selection file has an unsupported controller")
     config, seeds, criteria, protocol_id = _protocol_split(manifest, split_name="test")
     if selection_raw.get("protocol_id") != protocol_id:
@@ -548,33 +692,57 @@ def evaluate_selected_capacity_on_locked_test(
         if not isinstance(entry, Mapping):
             raise ValueError("selection contains a malformed capacity entry")
         duration_h = entry.get("duration_h")
+        notice_h = entry.get("notice_h")
+        event_start_hours = entry.get("event_start_hours")
         reduction_kw = entry.get("certified_reduction_kw")
         if (
             isinstance(duration_h, bool)
             or not isinstance(duration_h, int)
             or duration_h <= 0
+            or isinstance(notice_h, bool)
+            or not isinstance(notice_h, int)
+            or notice_h < 0
+            or not isinstance(event_start_hours, list)
+            or not event_start_hours
+            or any(
+                isinstance(hour, bool) or not isinstance(hour, int) or hour < 0
+                for hour in event_start_hours
+            )
             or isinstance(reduction_kw, bool)
             or not isinstance(reduction_kw, int | float)
         ):
             raise ValueError("selection contains invalid duration or capacity")
+        program_starts, test_jitter = _certificate_program(
+            config,
+            duration_h=duration_h,
+            notice_h=notice_h,
+            event_start_hours=event_start_hours,
+            event_start_jitter_hours=None,
+        )
         outcomes, dc_peak_kw = evaluate_flexibility_candidate(
             config=config,
             controller=cast(ControllerName, controller),
             model_path=model_path,
             duration_h=duration_h,
+            notice_h=notice_h,
             requested_reduction_kw=float(reduction_kw),
             seeds=seeds,
             criteria=criteria,
+            event_start_hours=program_starts,
+            event_start_jitter_hours=test_jitter,
         )
         summary = summarize_candidate_outcomes(outcomes, criteria=criteria, dc_peak_kw=dc_peak_kw)
         certificate = _certificate_from_candidate_summary(
             controller=controller,
             duration_h=duration_h,
+            notice_h=notice_h,
+            event_start_hours=program_starts,
+            event_start_jitter_hours=test_jitter,
             criteria=criteria,
             summary=summary,
             dc_peak_kw=dc_peak_kw,
         )
-        key = f"duration_{duration_h}h"
+        key = _certificate_key(duration_h, notice_h, program_starts)
         candidate_table = pd.DataFrame.from_records([summary])
         saved[key] = save_flexibility_certificate(
             certificate, candidate_table, outcomes, criteria, output / key
@@ -586,7 +754,7 @@ def evaluate_selected_capacity_on_locked_test(
     manifest_path.write_text(
         json.dumps(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "protocol_id": protocol_id,
                 "selection": str(selection_path),
                 "evaluation_split": "locked_test",
@@ -604,5 +772,5 @@ def evaluate_selected_capacity_on_locked_test(
     return {
         "summary": str(summary_path),
         "manifest": str(manifest_path),
-        "duration_count": len(certificates),
+        "certificate_key_count": len(certificates),
     }

@@ -431,11 +431,26 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
     )
     certify.add_argument(
         "--controller",
-        choices=("no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"),
+        choices=(
+            "no_control",
+            "threshold",
+            "edf_valley",
+            "mpc",
+            "robust_mpc",
+            "dqn",
+            "ppo",
+            "sac",
+        ),
     )
     certify.add_argument("--model", help="required when controller is DQN, PPO, or SAC")
     certify.add_argument("--config", default="configs/env/hourly_continuous.yaml")
     certify.add_argument("--durations", type=int, nargs="+")
+    certify.add_argument(
+        "--notices",
+        type=int,
+        nargs="+",
+        help="notice-hour certificate keys; select defaults to the validation config choices",
+    )
     certify.add_argument("--episodes", type=int)
     certify.add_argument(
         "--candidate-fractions",
@@ -1212,6 +1227,7 @@ def _run_certify(args: argparse.Namespace) -> int:
             controller=args.controller,
             model_path=args.model,
             durations_h=args.durations,
+            notices_h=args.notices,
             candidate_reduction_fractions=args.candidate_fractions,
             output_directory=args.output,
             search_method=args.search,
@@ -1258,27 +1274,35 @@ def _run_certify(args: argparse.Namespace) -> int:
     output = Path(args.save)
     certificate_rows: list[dict[str, object]] = []
     saved_paths: dict[str, dict[str, str]] = {}
+    notices_h = args.notices or (0,)
     for duration_h in args.durations:
-        certificate, candidates, outcomes = certify_firm_flexibility(
-            config=args.config,
-            controller=args.controller,
-            model_path=args.model,
-            duration_h=duration_h,
-            candidate_reduction_fractions=args.candidate_fractions,
-            seeds=tuple(range(1, args.episodes + 1)),
-            criteria=criteria,
-            search_method=args.search,
-            binary_iterations=args.binary_iterations,
-        )
-        duration_key = f"duration_{duration_h}h"
-        saved_paths[duration_key] = save_flexibility_certificate(
-            certificate,
-            candidates,
-            outcomes,
-            criteria,
-            output / duration_key,
-        )
-        certificate_rows.append(asdict(certificate))
+        for notice_h in notices_h:
+            certificate, candidates, outcomes = certify_firm_flexibility(
+                config=args.config,
+                controller=args.controller,
+                model_path=args.model,
+                duration_h=duration_h,
+                notice_h=notice_h,
+                candidate_reduction_fractions=args.candidate_fractions,
+                seeds=tuple(range(1, args.episodes + 1)),
+                criteria=criteria,
+                search_method=args.search,
+                binary_iterations=args.binary_iterations,
+            )
+            event_sequence = "-".join(
+                str(value) for value in certificate.event_start_hours
+            )
+            certificate_key = (
+                f"duration_{duration_h}h_notice_{notice_h}h_events_{event_sequence}"
+            )
+            saved_paths[certificate_key] = save_flexibility_certificate(
+                certificate,
+                candidates,
+                outcomes,
+                criteria,
+                output / certificate_key,
+            )
+            certificate_rows.append(asdict(certificate))
     output.mkdir(parents=True, exist_ok=True)
     summary_path = output / "certificates.parquet"
     pd.DataFrame.from_records(certificate_rows).to_parquet(summary_path, index=False)

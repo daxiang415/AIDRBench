@@ -14,6 +14,7 @@ from aidrbench.envs.community_ai_dr_env import (
 from aidrbench.evaluation.certification import (
     certify_firm_flexibility,
     make_certificate_scenario,
+    summarize_candidate_outcomes,
 )
 from aidrbench.evaluation.firm_flexibility import (
     FirmFlexibilityCriteria,
@@ -132,8 +133,36 @@ def test_certificate_uses_joint_success_and_one_sided_lower_bound() -> None:
     assert certificate.certified_reduction_kw == pytest.approx(0.0)
     assert certificate.success_rate_lower_ci >= criteria.reliability_target
     assert candidates.loc[0, "certified"]
-    assert len(outcomes) == 2
+    assert certificate.episode_count == 2
+    assert certificate.event_count_per_episode == 3
+    assert certificate.event_start_hours == (17, 65, 113)
+    assert certificate.certificate_scope == "repeated_event_joint_episode"
+    assert len(outcomes) == 6
     assert outcomes["success"].all()
+
+
+def test_candidate_summary_counts_joint_episode_success_not_event_rows() -> None:
+    criteria = FirmFlexibilityCriteria(reliability_target=0.5, confidence_level=0.5)
+    outcomes = pd.DataFrame(
+        {
+            "seed": [1, 1, 2, 2],
+            "candidate_reduction_kw": [10.0] * 4,
+            "success": [True, False, True, True],
+            "delivery_ratio": [1.0] * 4,
+            "minimum_interval_delivery_ratio": [1.0] * 4,
+            "deadline_miss_rate": [0.0] * 4,
+            "rebound_ratio": [0.0] * 4,
+            "window_peak_relief_kw": [10.0] * 4,
+            "window_peak_relief_fraction": [1.0] * 4,
+            "recovery_time_h": [0.0] * 4,
+        }
+    )
+
+    summary = summarize_candidate_outcomes(outcomes, criteria=criteria, dc_peak_kw=100.0)
+
+    assert summary["success_count"] == 1
+    assert summary["episode_count"] == 2
+    assert summary["event_count_per_episode"] == 2
 
 
 def test_certificate_scenario_disables_training_randomization() -> None:
@@ -145,7 +174,8 @@ def test_certificate_scenario_disables_training_randomization() -> None:
     dr = scenario["dr"]
 
     assert isinstance(dr, dict)
-    assert dr["event_start_jitter_hours"] == 0
+    assert dr["event_start_hours"] == [17, 65, 113]
+    assert dr["event_start_jitter_hours"] == 4
     assert dr["event_duration_choices"] is None
     assert dr["event_notice_choices"] is None
     assert dr["event_notice_hours"] == 0

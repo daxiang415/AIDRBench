@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pandas as pd
 import pytest
 import yaml
 
@@ -25,9 +26,10 @@ def _write_temporary_protocol(tmp_path: Path) -> Path:
     environment["episode_days"] = 1
     environment["clearance_tail_hours"] = 12
     environment["episode_seed_range"] = [20, 21]
-    dr["event_start_hours"] = [8]
+    dr["event_start_hours"] = [8, 20]
     dr["event_duration_hours"] = 2
     dr["recovery_window_hours"] = 8
+    dr["event_notice_choices"] = [0, 2]
     config_path = tmp_path / "validation.yaml"
     config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
     protocol = {
@@ -75,9 +77,41 @@ def test_validation_selection_freezes_capacity_without_touching_test_split(tmp_p
 
     selection = json.loads(Path(result["selection"]).read_text(encoding="utf-8"))
     assert selection["selection_split"] == "validation"
+    assert selection["schema_version"] == 2
     assert selection["validation_seed_count"] == 2
+    assert selection["notices_h"] == [0, 2]
+    assert len(selection["selected_capacities"]) == 2
     assert selection["selected_capacities"][0]["certified_reduction_kw"] == 0.0
+    assert selection["selected_capacities"][0]["event_count_per_episode"] == 2
+    assert selection["selected_capacities"][0]["certificate_scope"] == (
+        "repeated_event_joint_episode"
+    )
     assert "test_seed_count" not in selection
+
+
+def test_locked_evaluation_uses_frozen_repeated_event_keys(tmp_path: Path) -> None:
+    protocol_path = _write_temporary_protocol(tmp_path)
+    selection_result = select_firm_capacity_on_validation(
+        protocol_manifest=protocol_path,
+        controller="no_control",
+        model_path=None,
+        durations_h=[2],
+        candidate_reduction_fractions=[0.0],
+        output_directory=tmp_path / "selection",
+        search_method="grid",
+    )
+
+    result = evaluate_selected_capacity_on_locked_test(
+        selection_path=selection_result["selection"],
+        output_directory=tmp_path / "locked",
+        expected_protocol_manifest=protocol_path,
+    )
+
+    certificates = pd.read_parquet(result["summary"])
+    assert result["certificate_key_count"] == 2
+    assert set(certificates["notice_h"]) == {0, 2}
+    assert (certificates["event_count_per_episode"] == 2).all()
+    assert set(certificates["certificate_scope"]) == {"repeated_event_joint_episode"}
 
 
 def test_locked_evaluation_refuses_non_validation_selection(tmp_path: Path) -> None:
@@ -101,7 +135,7 @@ def test_locked_evaluation_requires_the_selected_protocol_manifest(tmp_path: Pat
     selection_path.write_text(
         json.dumps(
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "selection_split": "validation",
                 "protocol_manifest": str(selected_manifest),
                 "controller": "no_control",
