@@ -483,8 +483,8 @@ def solve_frozen_hosting_capacity(
         else 0.0
         for value in terminal_soc
     )
-    background_minimum = min(
-        float(artifact.community["community_load_kw"].iloc[:horizon].min())
+    background_peak = max(
+        float(artifact.community["community_load_kw"].iloc[:horizon].max())
         for artifact in artifacts
     )
     return HostingCapacitySolution(
@@ -501,7 +501,7 @@ def solve_frozen_hosting_capacity(
         hosting_worst_class_peak_kw=scale_value * worst_class_peak_kw,
         hosting_scale_of_reference_mix=scale_value,
         minimum_background_gross_headroom_kw=max(
-            snapshot.pcc_capacity_kw - background_minimum, 0.0
+            snapshot.pcc_capacity_kw - background_peak, 0.0
         ),
         objective_solve_seconds=solve_seconds,
         maximum_pcc_power_kw=max(float(values.max()) for values in pcc_values),

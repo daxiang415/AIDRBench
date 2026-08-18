@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
+import pytest
 import yaml
 
 from aidrbench.data.frozen_scenarios import freeze_hourly_scenario, load_frozen_hourly_scenario
@@ -69,6 +70,13 @@ def test_flexible_hosting_is_at_least_rigid_with_explicit_pv_and_bess(tmp_path: 
     assert flexible.worst_class_peak_kw >= flexible.reference_mix_operating_peak_kw
     assert flexible.total_pv_used_kwh <= flexible.total_pv_available_kwh + 1e-6
     assert flexible.terminal_soc_deviation_kwh <= 1e-6
+    background_peak = max(
+        float(artifact.community["community_load_kw"].iloc[:36].max())
+        for artifact in artifacts
+    )
+    assert flexible.minimum_background_gross_headroom_kw == pytest.approx(
+        max(flexible.pcc_capacity_kw - background_peak, 0.0)
+    )
 
 
 def test_exclusive_bess_sensitivity_prohibits_simultaneous_dispatch(tmp_path: Path) -> None:

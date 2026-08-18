@@ -173,6 +173,11 @@ F_q^{\mathrm{PI}}(H)
 \max\left\{R:\Pr_s\left[F_s^{\mathrm{PI}}(H)\geq R\right]\geq q\right\}.
 \]
 
+实现时不能先在样本上选择 (R)，再把同一批样本套入 Bernoulli
+置信区间。PI 分布边界使用 exact-binomial nonparametric lower tolerance
+order statistic；样本量不足时报告 `estimable=false` 和 `NaN`，而不是把
+容量写成 0 kW。
+
 ### 5.3 非前视可靠边界
 
 现实决策不能看到完整未来。非前视优化要求在当时不可区分的场景中采取相同决策：
@@ -183,11 +188,21 @@ x_{t,s}=x_{t,s'},
 \text{if }s\text{ and }s'\text{ are indistinguishable at time }t.
 \]
 
-由此得到：
+理论目标是：
 
 \[
 F_q^{\mathrm{NA}}(H,N).
 \]
+
+当前优化器在有限场景集合 (S) 和预声明策略类 \(\mathcal P\) 上实际计算：
+
+\[
+F_{q,S}^{\mathrm{NA},\mathcal P}(H,N).
+\]
+
+它应表述为 **restricted scenario-based causal bound**，不能把在同一集合
+上同时选择容量和失败场景所得的数值称为独立的可靠性认证，也不能把其
+审计用 policy export 描述成可直接部署到 unseen locked scenario 的控制器。
 
 这是主论文最重要的“可靠可承诺灵活性”。它回答：
 
@@ -362,7 +377,9 @@ F_q(H,N)
 \max\left\{R:\underline p_{0.95}(R)\geq q\right\},
 \]
 
-其中 \(\underline p_{0.95}\) 是预先指定的一侧置信下界。
+其中 \(\underline p_{0.95}\) 是针对**预先固定候选容量**的一侧 Wilson
+置信下界。若容量本身由同一批 PI 样本选择，则改用精确非参数 tolerance
+bound；NA ensemble optimization 单独报告为受限场景边界。
 
 ### 7.2 重复事件：单独的耗尽机制实验
 
@@ -746,7 +763,7 @@ evaluation seed range
 event duration and notice
 reliability target
 portfolio definition
-success count and confidence bound
+fixed-candidate success count and confidence bound, or PI tolerance rank
 failure reasons
 solver and tolerances
 ```

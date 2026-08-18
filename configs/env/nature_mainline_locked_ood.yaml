@@ -1,5 +1,8 @@
 # LOCKED OOD Nature Communications scenarios. Do not generate or inspect before freeze.
 seed: 2026
+scenario:
+  locked_ood: true
+  preregistration_manifest: data/manifests/nature_mainline_protocol_v1.yaml
 env:
   timestep_hours: 1.0
   episode_days: 7

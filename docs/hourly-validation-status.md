@@ -48,9 +48,10 @@ wall-power and absolute hosting claims must retain this limitation.
   one episode is one Bernoulli trial and succeeds only if all of its events do.
   Isolated-event tables below are historical diagnostics, not the primary
   certificate definition.
-- Local CI equivalence currently passes 173 tests, `ruff check .`, `mypy src`,
-  and a HiGHS/CVXPY/Parquet clean-install smoke test. GitHub Actions is now
-  configured to run the same gates remotely.
+- The current repository passes 179 mechanism-core tests without RL
+  dependencies and 186 tests in the full local environment, plus
+  `ruff check .` and `mypy src`. Historical counts below refer to the older
+  control-extension snapshot.
 
 The rule-controller smoke output for the current interface is under
 `results/smoke/firm_v4_reward_v2_rules_seed20000/`. It is a semantic check of

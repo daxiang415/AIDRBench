@@ -62,7 +62,9 @@ def test_common_schedule_non_anticipative_capacity_respects_chance_constraint(
         solution.physical_dynamic_upper_bound_kw + 1e-6
     )
     summary = solution.summary()
-    assert summary["capacity_layer"] == "non_anticipative_lower_bound"
+    assert summary["capacity_layer"] == "restricted_scenario_based_causal_bound"
+    assert summary["statistical_interpretation"] == "restricted_scenario_ensemble_bound"
+    assert summary["empirical_success_fraction"] == pytest.approx(1.0)
     assert summary["non_anticipative_policy_class"] == "common_open_loop_schedule"
 
 
@@ -71,6 +73,7 @@ def test_non_anticipative_validator_rejects_insufficient_successes() -> None:
         {
             "duration_h": [2],
             "notice_h": [0],
+            "ensemble_success_fraction_target": [1.0],
             "non_anticipative_capacity_kw": [10.0],
             "physical_dynamic_upper_bound_kw": [20.0],
             "required_success_count": [2],
@@ -167,23 +170,3 @@ def test_notice_override_is_recorded_in_causal_solution(tmp_path: Path) -> None:
     )
 
     assert solution.notice_h == 6
-
-
-def test_wilson_rule_rejects_underpowered_non_anticipative_sample(
-    tmp_path: Path,
-) -> None:
-    config = _short_scenario_config()
-    artifacts = [
-        load_frozen_hourly_scenario(
-            str(freeze_hourly_scenario(config, seed=seed, output_directory=tmp_path)["output"])
-        )
-        for seed in (91, 92)
-    ]
-
-    with pytest.raises(ValueError, match="insufficient to certify"):
-        solve_frozen_non_anticipative_capacity(
-            artifacts,
-            duration_h=2,
-            reliability_target=0.95,
-            confidence_level=0.95,
-        )

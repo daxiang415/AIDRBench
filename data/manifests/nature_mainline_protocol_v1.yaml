@@ -3,6 +3,8 @@ protocol_id: aidrbench_nature_communications_mainline_v1
 study_type: nature_communications_mechanism_mainline
 status: preregistration_draft
 locked_ood_status: not_run
+analysis_plan_status: draft
+community_profile_split: data/manifests/community_profile_split_v1.yaml
 
 scientific_estimand:
   primary: duration_notice_reliability_firm_flexibility_surface
@@ -50,7 +52,9 @@ primary_single_event:
   notice_hours: [0, 2, 6]
   reliability_targets: [0.90, 0.95, 0.99]
   confidence_level: 0.95
-  confidence_method: one_sided_wilson_lower_bound
+  pi_confidence_method: exact_binomial_nonparametric_lower_tolerance_bound
+  fixed_candidate_confidence_method: one_sided_wilson_lower_bound
+  non_anticipative_interpretation: restricted_scenario_based_causal_bound
   nominal_flexibility_fraction_of_reference_mix_peak: 0.50
   success_criteria:
     min_delivery_ratio: 0.95

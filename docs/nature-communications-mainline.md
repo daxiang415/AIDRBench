@@ -24,7 +24,8 @@ development.
 
 ```bash
 python -m aidrbench protocol-check \
-  --manifest data/manifests/nature_mainline_protocol_v1.yaml
+  --manifest data/manifests/nature_mainline_protocol_v1.yaml \
+  --require-execution-ready
 
 python -m aidrbench scenario freeze \
   --config configs/env/nature_mainline_development.yaml \
@@ -40,11 +41,18 @@ python -m aidrbench optimize pi-frontier \
   --output results/nature_mainline/development_pi
 ```
 
+Without `--require-execution-ready`, `protocol-check` validates only the
+committed preregistration structure and is therefore suitable for a clean CI
+checkout. Formal data-server runs must use the flag so missing/hash-mismatched
+inputs or solver dependencies fail closed.
+
 The one-scenario commands above are code-path smoke tests, not statistical
-results. A 100-episode set can support the 0.90 and 0.95 rows under the declared
-one-sided Wilson rule, but cannot establish 0.99 at 95% confidence. The locked
-500-episode set is sized to support the final 0.99 claim if at least 499 trials
-succeed.
+results. PI uses an exact-binomial nonparametric lower tolerance order
+statistic. Fixed, independently selected candidates may use the declared
+one-sided Wilson rule. A 100-episode set supports the 0.90 and 0.95 designs but
+cannot establish 0.99 at 95% confidence; insufficient rows are `NaN` with
+`estimable=false`, never zero-capacity claims. The locked 500-episode set is
+sized for the final 0.99 design.
 
 For the hardware uncertainty smoke, write each power case to a separate
 directory:
@@ -66,9 +74,18 @@ until the experiment design and result schemas are frozen.
 2. Compute the PI surface and use development results to diagnose numerical or
    model defects only.
 3. Complete the scalable NA solver route before attempting the full grid; the
-   current joint MILP is correct but too expensive for a blind full run.
+   current joint MILP is a restricted scenario-based causal bound, not an
+   out-of-sample controller certificate, and is too expensive for a blind full
+   run.
 4. Add the separate repeated-event exhaustion generator and residual
    flexibility summaries.
 5. Run and aggregate the 2 × 2 × 2 hosting matrix and PV/BESS response surface.
 6. Freeze all choices, then run validation and finally the locked OOD set once.
 
+The locked config is technically guarded. Before its one permitted generation,
+the protocol must be committed with `analysis_plan_status: frozen` and
+`locked_ood_status: approved_for_one_time_run`. The CLI additionally requires
+`--preregistration-manifest`, `--unlock-locked-ood`, and
+`--acknowledge-one-time-locked-use`, a clean Git tree, and a new output path.
+After success it records the protocol SHA/Git commit and marks the authorization
+`consumed`.

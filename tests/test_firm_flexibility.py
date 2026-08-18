@@ -19,6 +19,7 @@ from aidrbench.evaluation.certification import (
 from aidrbench.evaluation.firm_flexibility import (
     FirmFlexibilityCriteria,
     derive_event_outcomes,
+    lower_tolerance_order_statistic_rank,
     minimum_successes_for_wilson,
     wilson_lower_bound,
 )
@@ -41,6 +42,17 @@ def test_wilson_sample_size_gate_rejects_underpowered_q99_design() -> None:
     assert minimum_successes_for_wilson(100, 0.95, 0.95) == 99
     assert minimum_successes_for_wilson(100, 0.99, 0.95) is None
     assert minimum_successes_for_wilson(500, 0.99, 0.95) == 499
+
+
+def test_exact_lower_tolerance_rank_accounts_for_selected_capacity() -> None:
+    rank_95 = lower_tolerance_order_statistic_rank(100, 0.95, 0.95)
+    rank_99_small = lower_tolerance_order_statistic_rank(100, 0.99, 0.95)
+    rank_99_large = lower_tolerance_order_statistic_rank(500, 0.99, 0.95)
+
+    assert rank_95 is not None and rank_95[0] == 2
+    assert rank_95[1] >= 0.95
+    assert rank_99_small is None
+    assert rank_99_large is not None and rank_99_large[0] == 2
 
 
 def test_rollout_exposes_compute_debt_and_rebound_aware_event_metrics() -> None:

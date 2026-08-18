@@ -76,6 +76,46 @@ def minimum_successes_for_wilson(
     return None
 
 
+def lower_tolerance_order_statistic_rank(
+    trials: int,
+    coverage_target: float,
+    confidence_level: float,
+) -> tuple[int, float] | None:
+    """Return a distribution-free one-sided lower tolerance-limit rank.
+
+    For ascending order statistics ``X_(1), ..., X_(n)``, the returned
+    one-based rank ``r`` is the largest rank for which ``X_(r)`` covers at
+    least ``coverage_target`` of the population with at least
+    ``confidence_level`` confidence. The confidence is the exact binomial
+    probability ``P[Binomial(n, 1-coverage_target) >= r]``. ``None`` means the
+    requested coverage/confidence pair is not estimable with ``trials``.
+
+    Unlike applying a Bernoulli interval after choosing a threshold from the
+    same sample, this order-statistic construction accounts for threshold
+    selection directly.
+    """
+
+    if isinstance(trials, bool) or not isinstance(trials, int) or trials <= 0:
+        raise ValueError("trials must be a positive integer")
+    if not 0.0 < coverage_target < 1.0:
+        raise ValueError("coverage_target must be in (0, 1)")
+    if not 0.0 < confidence_level < 1.0:
+        raise ValueError("confidence_level must be in (0, 1)")
+    lower_tail_probability = 1.0 - coverage_target
+    selected: tuple[int, float] | None = None
+    for rank in range(1, trials + 1):
+        achieved_confidence = sum(
+            math.comb(trials, count)
+            * lower_tail_probability**count
+            * coverage_target ** (trials - count)
+            for count in range(rank, trials + 1)
+        )
+        if achieved_confidence + _EPSILON < confidence_level:
+            break
+        selected = (rank, achieved_confidence)
+    return selected
+
+
 @dataclass(frozen=True, slots=True)
 class FirmFlexibilityCriteria:
     """Frozen joint success definition for one reliable-flexibility certificate."""

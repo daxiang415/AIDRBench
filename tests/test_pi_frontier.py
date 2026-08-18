@@ -70,7 +70,12 @@ def test_pi_scenario_optima_aggregate_to_confidence_bounded_firm_capacity() -> N
     ).set_index("reliability_target")
 
     assert boundary.loc[0.95, "perfect_information_firm_capacity_kw"] == pytest.approx(5.0)
+    assert boundary.loc[0.95, "tolerance_order_statistic_rank"] == 2
+    assert boundary.loc[0.95, "statistical_method"] == (
+        "exact_binomial_nonparametric_lower_tolerance_bound"
+    )
     assert boundary.loc[0.95, "sample_size_sufficient"]
     assert boundary.loc[0.95, "physical_gap_kw"] == pytest.approx(15.0)
     assert not boundary.loc[0.99, "sample_size_sufficient"]
-    assert boundary.loc[0.99, "perfect_information_firm_capacity_kw"] == 0.0
+    assert not boundary.loc[0.99, "estimable"]
+    assert pd.isna(boundary.loc[0.99, "perfect_information_firm_capacity_kw"])

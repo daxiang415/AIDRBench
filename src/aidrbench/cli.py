@@ -280,6 +280,9 @@ def _add_scenario_parsers(subparsers: Any) -> None:
         choices=("lower_ci", "nominal", "upper_ci"),
         help="override only the declared calibration uncertainty case before freezing",
     )
+    freeze.add_argument("--preregistration-manifest")
+    freeze.add_argument("--unlock-locked-ood", action="store_true")
+    freeze.add_argument("--acknowledge-one-time-locked-use", action="store_true")
     freeze.add_argument("--output", required=True)
     inspect = commands.add_parser(
         "inspect", help="verify one frozen scenario and display its provenance"
@@ -305,17 +308,19 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     frontier.add_argument("--output", required=True)
     non_anticipative = commands.add_parser(
         "non-anticipative-firm",
-        help="compute a chance-constrained causal non-anticipative lower bound",
+        help="compute a restricted finite-scenario causal non-anticipative bound",
     )
     non_anticipative.add_argument("--scenarios", required=True)
     non_anticipative.add_argument("--durations", nargs="+", type=int, required=True)
     non_anticipative.add_argument("--notice-hours", nargs="+", type=int, default=[0])
     non_anticipative.add_argument("--event-id", type=int, default=0)
-    non_anticipative.add_argument("--reliability-target", type=float, default=1.0)
     non_anticipative.add_argument(
-        "--confidence-level",
+        "--ensemble-success-fraction-target",
+        "--reliability-target",
+        dest="reliability_target",
         type=float,
-        help="one-sided Wilson confidence level; omit for the legacy empirical rule",
+        default=1.0,
+        help="finite optimization-ensemble success fraction; not an OOD certificate",
     )
     non_anticipative.add_argument(
         "--information-structure",
@@ -353,6 +358,11 @@ def _add_training_parsers(subparsers: Any) -> None:
     protocol.add_argument(
         "--manifest",
         default="data/manifests/nature_mainline_protocol_v1.yaml",
+    )
+    protocol.add_argument(
+        "--require-execution-ready",
+        action="store_true",
+        help="also require external datasets, hashes, and optimization dependencies",
     )
 
     train = subparsers.add_parser(
@@ -1060,7 +1070,18 @@ def _run_rollout(args: argparse.Namespace) -> int:
 def _run_scenario(args: argparse.Namespace) -> int:
     if args.scenario_command == "freeze":
         from aidrbench.data.frozen_scenarios import freeze_hourly_scenarios
+        from aidrbench.evaluation.locked_ood import (
+            consume_locked_ood_authorization,
+            prepare_locked_ood_freeze,
+        )
 
+        authorization = prepare_locked_ood_freeze(
+            args.config,
+            output_directory=args.output,
+            preregistration_manifest=args.preregistration_manifest,
+            unlock_locked_ood=args.unlock_locked_ood,
+            acknowledge_one_time_locked_use=args.acknowledge_one_time_locked_use,
+        )
         config: str | dict[str, Any] = args.config
         if args.calibration_power_case is not None:
             loaded = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
@@ -1073,7 +1094,22 @@ def _run_scenario(args: argparse.Namespace) -> int:
             seeds=args.seeds,
             output_directory=args.output,
         )
-        _print_summary({"scenario_count": len(scenarios), "scenarios": scenarios})
+        receipt = (
+            consume_locked_ood_authorization(
+                authorization,
+                output_directory=args.output,
+                scenario_hashes=[str(scenario["scenario_hash"]) for scenario in scenarios],
+            )
+            if authorization is not None
+            else None
+        )
+        _print_summary(
+            {
+                "scenario_count": len(scenarios),
+                "scenarios": scenarios,
+                "locked_ood_receipt": str(receipt) if receipt is not None else None,
+            }
+        )
         return 0
     if args.scenario_command == "inspect":
         from aidrbench.data.frozen_scenarios import load_frozen_hourly_scenario
@@ -1134,7 +1170,6 @@ def _run_optimization(args: argparse.Namespace) -> int:
             output_directory=args.output,
             event_id=args.event_id,
             reliability_target=args.reliability_target,
-            confidence_level=args.confidence_level,
             information_structure=args.information_structure,
             observation_specification=observation_specification,
         )
@@ -1188,7 +1223,12 @@ def _run_protocol_check(args: argparse.Namespace) -> int:
 
         report = validate_hourly_experiment_protocol(manifest_path)
     _print_summary(report)
-    return 0 if bool(report["valid"]) else 1
+    readiness_key = (
+        "execution_ready"
+        if args.require_execution_ready and "execution_ready" in report
+        else "valid"
+    )
+    return 0 if bool(report[readiness_key]) else 1
 
 
 def _run_evaluate(args: argparse.Namespace) -> int:

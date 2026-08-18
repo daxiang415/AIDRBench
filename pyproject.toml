@@ -62,3 +62,7 @@ python_version = "3.12"
 strict = true
 packages = ["aidrbench"]
 mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = ["stable_baselines3", "stable_baselines3.*", "sb3_contrib", "sb3_contrib.*"]
+ignore_missing_imports = true

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+import math
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
@@ -14,8 +15,7 @@ from aidrbench.controllers.hourly_oracle import solve_full_horizon_oracle
 from aidrbench.data.frozen_scenarios import FrozenHourlyScenario, load_frozen_hourly_scenario
 from aidrbench.envs.community_ai_dr_env import HourlyCommunityAIDemandResponseEnv
 from aidrbench.evaluation.firm_flexibility import (
-    minimum_successes_for_wilson,
-    wilson_lower_bound,
+    lower_tolerance_order_statistic_rank,
 )
 from aidrbench.evaluation.provenance import optimization_provenance
 
@@ -186,7 +186,12 @@ def summarize_pi_firm_boundary(
     confidence_level: float,
     nominal_flexibility_fraction: float,
 ) -> pd.DataFrame:
-    """Aggregate scenario optima into statistically supported PI firm bounds."""
+    """Aggregate scenario optima using exact nonparametric tolerance bounds.
+
+    The capacity is selected as a one-sided order statistic whose population
+    coverage and confidence are controlled by an exact binomial probability.
+    This avoids reusing a data-selected candidate in a Wilson interval.
+    """
 
     validate_pi_frontier(frontier)
     targets = tuple(sorted({float(value) for value in reliability_targets}))
@@ -205,7 +210,7 @@ def summarize_pi_firm_boundary(
     if missing:
         raise ValueError(f"PI frontier is missing peak-definition columns: {missing}")
 
-    rows: list[dict[str, float | int | bool | str]] = []
+    rows: list[dict[str, float | int | bool | str | None]] = []
     for duration_h, group in frontier.groupby("duration_h", sort=True):
         if group["scenario_hash"].duplicated().any():
             raise ValueError("PI boundary needs one independent row per scenario and duration")
@@ -217,40 +222,37 @@ def summarize_pi_firm_boundary(
         worst_peak_kw = float(worst_peaks[0])
         nominal_kw = nominal_fraction * reference_peak_kw
         capacities = group["perfect_information_capacity_kw"].sort_values(
-            ascending=False, ignore_index=True
+            ascending=True, ignore_index=True
         )
         trial_count = len(capacities)
         for reliability in targets:
-            required_successes = minimum_successes_for_wilson(
+            tolerance_rank = lower_tolerance_order_statistic_rank(
                 trial_count,
                 reliability,
                 confidence_level,
             )
-            sample_size_sufficient = required_successes is not None
-            if required_successes is None:
-                capacity_kw = 0.0
-                success_count = trial_count
+            estimable = tolerance_rank is not None
+            if tolerance_rank is None:
+                rank = None
+                achieved_confidence = None
+                capacity_kw = math.nan
             else:
-                capacity_kw = float(capacities.iloc[required_successes - 1])
-                success_count = int((capacities >= capacity_kw - 1e-9).sum())
-            lower_bound = wilson_lower_bound(
-                success_count,
-                trial_count,
-                confidence_level,
-            )
+                rank, achieved_confidence = tolerance_rank
+                capacity_kw = float(capacities.iloc[rank - 1])
             rows.append(
                 {
-                    "capacity_layer": "clairvoyant_firm_boundary",
+                    "capacity_layer": "perfect_information_tolerance_bound",
+                    "statistical_method": (
+                        "exact_binomial_nonparametric_lower_tolerance_bound"
+                    ),
                     "duration_h": int(str(duration_h)),
                     "reliability_target": reliability,
                     "confidence_level": confidence_level,
                     "scenario_count": trial_count,
-                    "required_success_count": (
-                        required_successes if required_successes is not None else trial_count + 1
-                    ),
-                    "success_count": success_count,
-                    "success_rate_lower_ci": lower_bound,
-                    "sample_size_sufficient": sample_size_sufficient,
+                    "tolerance_order_statistic_rank": rank,
+                    "achieved_tolerance_confidence": achieved_confidence,
+                    "estimable": estimable,
+                    "sample_size_sufficient": estimable,
                     "perfect_information_firm_capacity_kw": capacity_kw,
                     "reference_mix_operating_peak_kw": reference_peak_kw,
                     "worst_class_peak_kw": worst_peak_kw,
@@ -330,6 +332,9 @@ def compute_and_save_pi_frontier(
                 "frontier": str(frontier_path),
                 "reliability_targets": [float(value) for value in reliability_targets],
                 "confidence_level": confidence_level,
+                "firm_boundary_statistical_method": (
+                    "exact_binomial_nonparametric_lower_tolerance_bound"
+                ),
                 "nominal_flexibility_fraction": nominal_flexibility_fraction,
                 "firm_boundary": str(boundary_path) if boundary is not None else None,
                 "provenance": optimization_provenance(artifacts),
