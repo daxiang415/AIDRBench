@@ -36,5 +36,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[control,rl,analysis,dev]"
+      - name: Type check RL extension
+        run: mypy src/aidrbench/training.py src/aidrbench/controllers/hourly_sb3.py
       - name: Test RL extension
         run: pytest tests/test_training.py tests/test_cmdp_reward.py
