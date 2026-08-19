@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from pathlib import Path
 
 import pandas as pd
@@ -7,6 +8,7 @@ import pytest
 
 from aidrbench.data.frozen_scenarios import freeze_hourly_scenario, load_frozen_hourly_scenario
 from aidrbench.evaluation.pi_frontier import (
+    compute_and_save_pi_frontier,
     solve_frozen_pi_frontier,
     summarize_pi_firm_boundary,
     validate_pi_frontier,
@@ -16,11 +18,27 @@ ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "configs/env/hourly_continuous.yaml"
 
 
+def test_pi_frontier_rejects_nonpositive_worker_count(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="workers must be a positive integer"):
+        compute_and_save_pi_frontier(
+            tmp_path / "missing",
+            durations_h=[1],
+            output_directory=tmp_path / "output",
+            workers=0,
+        )
+
+
 def test_frozen_pi_frontier_is_physical_and_duration_monotone(tmp_path: Path) -> None:
     frozen = freeze_hourly_scenario(CONFIG, seed=21, output_directory=tmp_path)
     artifact = load_frozen_hourly_scenario(str(frozen["output"]))
 
-    frontier = solve_frozen_pi_frontier(artifact, durations_h=[1, 2, 3])
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "error",
+            message="invalid value encountered in reduce",
+            category=RuntimeWarning,
+        )
+        frontier = solve_frozen_pi_frontier(artifact, durations_h=[1, 2, 3])
 
     assert list(frontier["capacity_layer"].unique()) == ["perfect_information"]
     assert list(frontier["duration_h"]) == [1, 2, 3]

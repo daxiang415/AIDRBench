@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Mapping
+from copy import deepcopy
 from dataclasses import dataclass
 from datetime import timedelta
 from pathlib import Path
@@ -95,9 +96,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         self.power_model: HourlyDataCenterPowerModel = self.config.make_power_model()
         self._frozen_scenario: FrozenHourlyScenario | None = None
         if self.config.frozen_scenario_path is not None:
-            self._frozen_scenario = load_frozen_hourly_scenario(
-                self.config.frozen_scenario_path
-            )
+            self._frozen_scenario = load_frozen_hourly_scenario(self.config.frozen_scenario_path)
             self._frozen_scenario.assert_compatible(
                 total_hours=self.config.total_hours,
                 forecast_horizon_hours=self.config.forecast_horizon_hours,
@@ -242,9 +241,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "background_community_peak_kw": self.config.background_community_peak_kw,
             "pcc_capacity_kw": self.config.pcc_capacity_kw,
             "target_dc_peak_kw": self.config.target_dc_peak_kw,
-            "reference_mix_operating_peak_kw": (
-                self.power_model.reference_mix_operating_peak_kw
-            ),
+            "reference_mix_operating_peak_kw": (self.power_model.reference_mix_operating_peak_kw),
             "worst_class_peak_kw": self.power_model.worst_class_peak_kw,
             # Compatibility alias for historical controller outputs. New NC
             # analysis must use one of the two explicit peak definitions.
@@ -252,9 +249,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "actual_dc_peak_fraction_of_pcc": (
                 self._full_dc_power_kw / self.config.pcc_capacity_kw
             ),
-            "dc_peak_sizing_error_kw": (
-                self._full_dc_power_kw - self.config.target_dc_peak_kw
-            ),
+            "dc_peak_sizing_error_kw": (self._full_dc_power_kw - self.config.target_dc_peak_kw),
         }
 
     def _hardware_provenance(self) -> dict[str, str]:
@@ -308,12 +303,11 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         )
         baseline_execution = np.zeros(total_hours, dtype="float64")
         baseline_execution_by_class = {
-            job_class: np.zeros(total_hours, dtype="float64")
-            for job_class in workload_classes
+            job_class: np.zeros(total_hours, dtype="float64") for job_class in workload_classes
         }
         baseline_pcc = np.zeros(total_hours, dtype="float64")
-        community = self._community["net_community_load_kw"].iloc[:total_hours].to_numpy(
-            dtype="float64"
+        community = (
+            self._community["net_community_load_kw"].iloc[:total_hours].to_numpy(dtype="float64")
         )
         for index in range(total_hours):
             step = baseline_queue.advance(
@@ -326,10 +320,13 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                 baseline_execution_by_class.setdefault(
                     job_class, np.zeros(total_hours, dtype="float64")
                 )[index] = executed_gpu_h
-            baseline_pcc[index] = community[index] + self.power_model.predict_by_class(
-                dict(step.executed_gpu_h_by_class),
-                timestep_hours=self.config.timestep_hours,
-            ).dc_power_kw
+            baseline_pcc[index] = (
+                community[index]
+                + self.power_model.predict_by_class(
+                    dict(step.executed_gpu_h_by_class),
+                    timestep_hours=self.config.timestep_hours,
+                ).dc_power_kw
+            )
 
         return HourlyPlanningSnapshot(
             episode_seed=self._episode_seed,
@@ -337,9 +334,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             main_hours=self.config.main_hours,
             capacity_gpu_h=self._capacity_gpu_h,
             fixed_dc_power_kw=self._fixed_dc_power_kw,
-            reference_mix_operating_peak_kw=(
-                self.power_model.reference_mix_operating_peak_kw
-            ),
+            reference_mix_operating_peak_kw=(self.power_model.reference_mix_operating_peak_kw),
             worst_class_peak_kw=self.power_model.worst_class_peak_kw,
             dynamic_kw_per_gpu_h=self._flexible_power_range_kw / self._capacity_gpu_h,
             workload_classes=workload_classes,
@@ -457,8 +452,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         total = self.config.total_hours + self.config.forecast_horizon_hours
         seed_sequences = np.random.SeedSequence(seed).spawn(3)
         community_seed, workload_seed, event_seed = (
-            int(sequence.generate_state(1, dtype=np.uint64)[0])
-            for sequence in seed_sequences
+            int(sequence.generate_state(1, dtype=np.uint64)[0]) for sequence in seed_sequences
         )
         self._random_stream_seeds = {
             "community": community_seed,
@@ -492,6 +486,8 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                     hours=total,
                     seed=community_seed,
                     episode_start=episode_start,
+                    window_start=self.config.community_window_start,
+                    window_end=self.config.community_window_end,
                 )
             # The clearance tail drains work from the seven-day main horizon;
             # it must not introduce fresh workload, independent of source.
@@ -603,20 +599,24 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                 if self.config.event_reduction_kw is not None
                 else dynamic_flexible_kw * event_reduction_fraction
             )
-            sampled_starts = tuple(
-                int(
-                    np.clip(
-                        start
-                        + scenario_rng.integers(
-                            -self.config.event_start_jitter_hours,
-                            self.config.event_start_jitter_hours + 1,
-                        ),
-                        0,
-                        max(self.config.main_hours - event_duration_h, 0),
+            sampled_starts: tuple[int, ...]
+            if self.config.event_start_hour_choices is not None:
+                sampled_starts = (int(scenario_rng.choice(self.config.event_start_hour_choices)),)
+            else:
+                sampled_starts = tuple(
+                    int(
+                        np.clip(
+                            start
+                            + scenario_rng.integers(
+                                -self.config.event_start_jitter_hours,
+                                self.config.event_start_jitter_hours + 1,
+                            ),
+                            0,
+                            max(self.config.main_hours - event_duration_h, 0),
+                        )
                     )
+                    for start in self.config.event_start_hours
                 )
-                for start in self.config.event_start_hours
-            )
             event_specs.extend(
                 (
                     f"configured_{event_id}",
@@ -667,9 +667,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             event_specs
         ):
             recovery_stop = min(stop + self.config.recovery_window_hours, self.config.total_hours)
-            event_limits = (
-                net_community[start:stop] + full_flexible - requested_reduction_kw
-            )
+            event_limits = net_community[start:stop] + full_flexible - requested_reduction_kw
             limits[start:stop] = np.minimum(limits[start:stop], event_limits)
             active[start:stop] = True
             remaining[start:stop] = np.arange(stop - start, 0, -1, dtype="float64")
@@ -873,7 +871,11 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             .iloc[index + 1 : forecast_stop]
             .to_numpy(dtype="float64")
         )
-        limit_forecast = self._pcc_limit_kw[index + 1 : forecast_stop]
+        limit_forecast = self._visible_pcc_limit_forecast(
+            decision_hour=index,
+            first_hour=index + 1,
+            stop_hour=forecast_stop,
+        )
         if len(community_forecast) < self.config.forecast_horizon_hours:
             community_forecast = np.pad(
                 community_forecast,
@@ -1018,7 +1020,11 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             .iloc[index:forecast_stop]
             .to_numpy(dtype="float64")
         )
-        limit_forecast = self._pcc_limit_kw[index:forecast_stop]
+        limit_forecast = self._visible_pcc_limit_forecast(
+            decision_hour=index,
+            first_hour=index,
+            stop_hour=forecast_stop,
+        )
         if len(community_forecast) < self.config.forecast_horizon_hours + 1:
             padding = self.config.forecast_horizon_hours + 1 - len(community_forecast)
             community_forecast = np.pad(
@@ -1038,6 +1044,7 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "backlog_gpu_h": self._queue.backlog_gpu_h,
             "backlog_gpu_h_by_class": self._queue.backlog_gpu_h_by_class,
             "baseline_backlog_gpu_h": self._baseline_queue.backlog_gpu_h,
+            "baseline_pcc_power_current_kw": self._current_baseline_pcc_power_kw(index),
             "backlog_excess_gpu_h": max(
                 self._queue.backlog_gpu_h - self._baseline_queue.backlog_gpu_h,
                 0.0,
@@ -1080,6 +1087,55 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
             "dr_source": self.config.dr_source,
             "observation_version": self.observation_version,
         }
+
+    def _current_baseline_pcc_power_kw(self, index: int) -> float:
+        """Return the causal no-control counterfactual for the current interval."""
+
+        baseline_queue = deepcopy(self._baseline_queue)
+        step = baseline_queue.advance(
+            (),
+            requested_gpu_h=self._capacity_gpu_h,
+            capacity_gpu_h=self._capacity_gpu_h,
+        )
+        prediction = self.power_model.predict_by_class(
+            dict(step.executed_gpu_h_by_class),
+            timestep_hours=self.config.timestep_hours,
+        )
+        community_kw = float(self._community["net_community_load_kw"].iloc[index])
+        return community_kw + prediction.dc_power_kw
+
+    def _visible_pcc_limit_forecast(
+        self,
+        *,
+        decision_hour: int,
+        first_hour: int,
+        stop_hour: int,
+    ) -> np.ndarray:
+        """Expose an event limit only after that event's declared notice time.
+
+        The physical PCC rating is public at all times. A tighter DR request is
+        private until its notice window opens; returning the precomputed full
+        limit trajectory here would let a nominally zero-notice controller see
+        the event through the ordinary six-hour forecast.
+        """
+
+        visible = np.full(
+            max(stop_hour - first_hour, 0),
+            self.config.pcc_capacity_kw,
+            dtype="float64",
+        )
+        for event in self._events:
+            notice_start = max(0, event.start_hour - math.ceil(event.notice_hours))
+            if decision_hour < notice_start:
+                continue
+            overlap_start = max(first_hour, event.start_hour)
+            overlap_stop = min(stop_hour, event.stop_hour)
+            if overlap_start >= overlap_stop:
+                continue
+            visible[overlap_start - first_hour : overlap_stop - first_hour] = self._pcc_limit_kw[
+                overlap_start:overlap_stop
+            ]
+        return visible
 
     def reset(
         self,

@@ -25,6 +25,50 @@ DISCRETE_CONFIG = ROOT / "configs/env/hourly_discrete.yaml"
 TRAIN_CONFIG = ROOT / "configs/env/hourly_continuous_train.yaml"
 
 
+def test_random_event_start_choices_create_one_event_without_forecast_leakage() -> None:
+    document = yaml.safe_load(CONTINUOUS_CONFIG.read_text(encoding="utf-8"))
+    document["dr"].pop("event_start_hours")
+    document["dr"]["event_start_hour_choices"] = [40, 41, 42]
+    document["dr"]["event_duration_hours"] = 2
+    document["dr"]["event_notice_hours"] = 0
+    starts: set[int] = set()
+    for seed in range(8):
+        env = ContinuousCommunityAIDemandResponseEnv(document)
+        env.reset(seed=seed)
+        assert len(env.event_manifest) == 1
+        start = env.event_manifest[0].start_hour
+        starts.add(start)
+        assert start in {40, 41, 42}
+        hidden = env._visible_pcc_limit_forecast(
+            decision_hour=start - 1,
+            first_hour=start,
+            stop_hour=start + 2,
+        )
+        visible = env._visible_pcc_limit_forecast(
+            decision_hour=start,
+            first_hour=start,
+            stop_hour=start + 2,
+        )
+        assert np.allclose(hidden, env.config.pcc_capacity_kw)
+        assert np.all(visible < env.config.pcc_capacity_kw)
+    assert len(starts) > 1
+
+
+def test_event_limit_forecast_opens_at_declared_notice_time() -> None:
+    document = yaml.safe_load(CONTINUOUS_CONFIG.read_text(encoding="utf-8"))
+    document["dr"]["event_start_hours"] = [40]
+    document["dr"]["event_duration_hours"] = 2
+    document["dr"]["event_notice_hours"] = 2
+    env = ContinuousCommunityAIDemandResponseEnv(document)
+    env.reset(seed=3)
+
+    hidden = env._visible_pcc_limit_forecast(decision_hour=37, first_hour=40, stop_hour=42)
+    visible = env._visible_pcc_limit_forecast(decision_hour=38, first_hour=40, stop_hour=42)
+
+    assert np.allclose(hidden, env.config.pcc_capacity_kw)
+    assert np.all(visible < env.config.pcc_capacity_kw)
+
+
 @pytest.mark.parametrize(
     ("environment_id", "config_path"),
     (
@@ -179,9 +223,7 @@ def test_auto_node_sizing_uses_actual_full_pool_power_and_records_bases() -> Non
     assert info["pcc_capacity_kw"] == pytest.approx(1_000.0)
     assert info["target_dc_peak_kw"] == pytest.approx(200.0)
     assert info["actual_dc_peak_kw"] == pytest.approx(actual_dc_peak_kw)
-    assert info["actual_dc_peak_fraction_of_pcc"] == pytest.approx(
-        actual_dc_peak_kw / 1_000.0
-    )
+    assert info["actual_dc_peak_fraction_of_pcc"] == pytest.approx(actual_dc_peak_kw / 1_000.0)
 
 
 def test_pcc_capacity_is_an_always_active_limit_and_observation_base() -> None:

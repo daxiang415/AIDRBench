@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 import numpy as np
@@ -278,6 +279,46 @@ class HourlyRobustMPCController(HourlyMPCController):
         if horizon > 1:
             forecast[1:] += safety_margin
         return forecast
+
+    def act(self, env: Any, info: dict[str, Any]) -> np.ndarray | int:
+        """Solve the MPC, then enforce the preregistered DR/recovery envelope."""
+
+        action = super().act(env, info)
+        state = info["control_state"]
+        if isinstance(action, np.ndarray):
+            proposed_fraction = float(action[0])
+        else:
+            proposed_fraction = float(DISCRETE_ACTION_FRACTIONS[action])
+        request_kw = float(state["event_request_reference_kw"])
+        if request_kw <= 0.0:
+            return action
+        baseline_pcc_kw = float(state["baseline_pcc_power_current_kw"])
+        target_pcc_kw = math.inf
+        reward = env.config.reward
+        if bool(state["event_active"]):
+            target_pcc_kw = baseline_pcc_kw - reward.min_delivery_ratio * request_kw
+        elif bool(state["recovery_active"]):
+            baseline_peak_kw = max(
+                baseline_pcc_kw,
+                float(state["running_window_baseline_peak_kw"]),
+            )
+            target_pcc_kw = min(
+                baseline_pcc_kw + reward.max_rebound_ratio * request_kw,
+                baseline_peak_kw - reward.min_window_peak_relief_fraction * request_kw,
+            )
+        if not math.isfinite(target_pcc_kw):
+            return action
+        fixed_pcc_kw = float(state["community_power_kw"]) + float(state["rigid_dc_power_kw"])
+        worst_dynamic_kw = max(
+            float(state["worst_class_peak_kw"]) - float(state["rigid_dc_power_kw"]),
+            1e-9,
+        )
+        envelope_fraction = float(
+            np.clip((target_pcc_kw - fixed_pcc_kw) / worst_dynamic_kw, 0.0, 1.0)
+        )
+        fraction = min(proposed_fraction, envelope_fraction)
+        self._previous_fraction = fraction
+        return fraction_to_action(env, fraction)
 
 
 def make_hourly_controller(

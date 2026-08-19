@@ -1,4 +1,4 @@
-schema_version: aidrbench.hardware_calibration.v1
+schema_version: aidrbench.hardware_calibration.v2
 artifact_id: rtx6000pro_4gpu_v1
 hardware:
   identifier: NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition
@@ -38,26 +38,40 @@ measurement:
 parameters:
   idle_power_w_per_gpu:
     estimate_w: 13.935625
-    confidence_interval_w:
-    - 5.857224577495288
-    - 22.014025422504712
+    uncertainty_interval_w:
+    - 6.739
+    - 18.68
+    uncertainty_method: between_gpu_range_within_single_idle_run
+    statistical_unit: single_node_idle_run
+    independent_unit_count: 1
   node_fixed_overhead_w:
     estimate_w: 300.0
-    confidence_interval_w:
+    uncertainty_interval_w:
     - 150.0
     - 450.0
+    uncertainty_method: engineering_assumption_range_no_node_meter
+    statistical_unit: engineering_assumption
+    independent_unit_count: 0
   active_power_w_per_gpu_by_class:
     training:
       estimate_w: 259.0824724264706
-      confidence_interval_w:
-      - 249.221678619153
-      - 268.94326623378817
+      uncertainty_interval_w:
+      - 225.81241981750333
+      - 292.35252503543785
+      uncertainty_method: student_t_95_confidence_interval_over_run_means
+      statistical_unit: independent_four_gpu_workload_run_mean
+      independent_unit_count: 2
+      confidence_level: 0.95
     offline_inference:
-      estimate_w: 300.02217371323536
-      confidence_interval_w:
-      - 299.95564691499993
-      - 300.0887005114708
+      estimate_w: 300.0221737132353
+      uncertainty_interval_w:
+      - 299.6947670498358
+      - 300.34958037663483
+      uncertainty_method: student_t_95_confidence_interval_over_run_means
+      statistical_unit: independent_four_gpu_workload_run_mean
+      independent_unit_count: 2
+      confidence_level: 0.95
 validation:
-  held_out_power_mae_w: 4.467734375000042
+  held_out_power_mae_w: 3.795553768382348
 evidence_class: benchmark_anchored_synthetic
-artifact_sha256: 6f6c5aa776c90be6f8d1f1d41ee2457b321558257aed363ebe2cbd063433c996
+artifact_sha256: ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193

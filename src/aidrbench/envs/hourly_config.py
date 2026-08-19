@@ -173,6 +173,8 @@ class HourlyEnvironmentConfig:
     community_path: Path | None
     community_profile_id: str | None
     community_episode_start: str | None
+    community_window_start: str | None
+    community_window_end: str | None
     frozen_scenario_path: Path | None
     frozen_event_ids: tuple[int, ...] | None
     frozen_event_notice_hours: int | None
@@ -195,11 +197,12 @@ class HourlyEnvironmentConfig:
     active_power_w_by_class: dict[str, float]
     node_fixed_overhead_w: float
     calibration_artifact: HardwareCalibrationArtifact | None
-    calibration_power_case: Literal["lower_ci", "nominal", "upper_ci"]
+    calibration_power_case: Literal["lower_bound", "nominal", "upper_bound"]
     pue: float
     dr_source: Literal["configured", "manifest"]
     dr_manifest_path: Path | None
     event_start_hours: tuple[int, ...]
+    event_start_hour_choices: tuple[int, ...] | None
     event_duration_hours: int
     event_notice_hours: int
     event_reduction_fraction: float
@@ -270,9 +273,7 @@ class HourlyEnvironmentConfig:
         if rigid_physical_share <= 0.0:
             return 0.0
         return min(
-            self.target_total_utilization
-            * self.workload_mix.rigid_share
-            / rigid_physical_share,
+            self.target_total_utilization * self.workload_mix.rigid_share / rigid_physical_share,
             1.0,
         )
 
@@ -383,16 +384,18 @@ def load_hourly_environment_config(
     require_calibration_artifact = hardware.get("require_calibration_artifact", False)
     if not isinstance(require_calibration_artifact, bool):
         raise ValueError("hardware.require_calibration_artifact must be boolean")
-    require_all_workload_class_power = hardware.get(
-        "require_all_workload_class_power", False
-    )
+    require_all_workload_class_power = hardware.get("require_all_workload_class_power", False)
     if not isinstance(require_all_workload_class_power, bool):
         raise ValueError("hardware.require_all_workload_class_power must be boolean")
     raw_calibration_artifact = hardware.get("calibration_artifact")
-    calibration_power_case = str(hardware.get("calibration_power_case", "nominal")).strip()
-    if calibration_power_case not in {"lower_ci", "nominal", "upper_ci"}:
+    raw_calibration_power_case = str(hardware.get("calibration_power_case", "nominal")).strip()
+    calibration_power_case = {
+        "lower_ci": "lower_bound",
+        "upper_ci": "upper_bound",
+    }.get(raw_calibration_power_case, raw_calibration_power_case)
+    if calibration_power_case not in {"lower_bound", "nominal", "upper_bound"}:
         raise ValueError(
-            "hardware.calibration_power_case must be 'lower_ci', 'nominal', or 'upper_ci'"
+            "hardware.calibration_power_case must be 'lower_bound', 'nominal', or 'upper_bound'"
         )
     if raw_calibration_artifact is None:
         calibration_artifact = None
@@ -422,17 +425,17 @@ def load_hourly_environment_config(
             idle_power_w_per_gpu = calibration_artifact.idle_power_w_per_gpu
             node_fixed_overhead_w = calibration_artifact.node_fixed_overhead_w
         else:
-            interval_index = 0 if calibration_power_case == "lower_ci" else 1
+            interval_index = 0 if calibration_power_case == "lower_bound" else 1
             power_by_class = {
                 name: interval[interval_index]
                 for name, interval in calibration_artifact.active_power_intervals_by_class.items()
             }
-            idle_power_w_per_gpu = calibration_artifact.idle_power_confidence_interval_w[
+            idle_power_w_per_gpu = calibration_artifact.idle_power_uncertainty_interval_w[
                 interval_index
             ]
-            node_fixed_overhead_w = (
-                calibration_artifact.node_fixed_overhead_confidence_interval_w[interval_index]
-            )
+            node_fixed_overhead_w = calibration_artifact.node_fixed_overhead_uncertainty_interval_w[
+                interval_index
+            ]
     else:
         power_by_class = _mapping(
             hardware.get(
@@ -520,6 +523,18 @@ def load_hourly_environment_config(
         not isinstance(raw_episode_start, str) or not raw_episode_start.strip()
     ):
         raise ValueError("community.episode_start must be a timestamp string when supplied")
+    raw_window_start = community.get("window_start")
+    raw_window_end = community.get("window_end")
+    for value, name in (
+        (raw_window_start, "community.window_start"),
+        (raw_window_end, "community.window_end"),
+    ):
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            raise ValueError(f"{name} must be a timestamp string when supplied")
+    if (raw_window_start is None) != (raw_window_end is None):
+        raise ValueError(
+            "community.window_start and community.window_end must be supplied together"
+        )
     raw_frozen_scenario_path = scenario.get("frozen_path")
     if raw_frozen_scenario_path is None:
         frozen_scenario_path = None
@@ -562,9 +577,7 @@ def load_hourly_environment_config(
             rel_tol=0.0,
             abs_tol=1e-9,
         ):
-            raise ValueError(
-                "community.background_peak_kw and community.target_peak_kw disagree"
-            )
+            raise ValueError("community.background_peak_kw and community.target_peak_kw disagree")
     background_community_peak_kw = _positive_float(
         community.get("background_peak_kw", community.get("target_peak_kw", 1_000.0)),
         "community.background_peak_kw",
@@ -618,10 +631,7 @@ def load_hourly_environment_config(
             name
             for name, share in workload_mix.shares.items()
             if share > 0.0
-            and (
-                require_all_workload_class_power
-                or workload_mix.flexible_fractions[name] > 0.0
-            )
+            and (require_all_workload_class_power or workload_mix.flexible_fractions[name] > 0.0)
         }
         missing_classes = sorted(required_classes - set(power_by_class))
         if missing_classes:
@@ -633,6 +643,26 @@ def load_hourly_environment_config(
     timestep_hours = _positive_float(env.get("timestep_hours", 1.0), "env.timestep_hours")
     if not math.isclose(timestep_hours, 1.0, rel_tol=0.0, abs_tol=1e-12):
         raise ValueError("current hourly environment requires env.timestep_hours == 1.0")
+    event_start_jitter_hours = _non_negative_int(
+        dr.get("event_start_jitter_hours", 0), "dr.event_start_jitter_hours"
+    )
+    raw_event_start_choices = dr.get("event_start_hour_choices")
+    if raw_event_start_choices is None:
+        event_start_hour_choices = None
+        event_start_hours = _int_list(
+            dr.get("event_start_hours", [17, 65, 113]), "dr.event_start_hours"
+        )
+    else:
+        if "event_start_hours" in dr:
+            raise ValueError(
+                "dr.event_start_hour_choices cannot be combined with dr.event_start_hours"
+            )
+        if event_start_jitter_hours != 0:
+            raise ValueError(
+                "dr.event_start_hour_choices cannot be combined with event_start_jitter_hours"
+            )
+        event_start_hour_choices = _int_list(raw_event_start_choices, "dr.event_start_hour_choices")
+        event_start_hours = ()
     return HourlyEnvironmentConfig(
         seed=int(root.get("seed", 2026)),
         action_mode=action_mode,
@@ -658,6 +688,10 @@ def load_hourly_environment_config(
         community_episode_start=(
             raw_episode_start.strip() if isinstance(raw_episode_start, str) else None
         ),
+        community_window_start=(
+            raw_window_start.strip() if isinstance(raw_window_start, str) else None
+        ),
+        community_window_end=(raw_window_end.strip() if isinstance(raw_window_end, str) else None),
         frozen_scenario_path=frozen_scenario_path,
         frozen_event_ids=frozen_event_ids,
         frozen_event_notice_hours=frozen_event_notice_hours,
@@ -702,14 +736,13 @@ def load_hourly_environment_config(
         node_fixed_overhead_w=node_fixed_overhead_w,
         calibration_artifact=calibration_artifact,
         calibration_power_case=cast(
-            Literal["lower_ci", "nominal", "upper_ci"], calibration_power_case
+            Literal["lower_bound", "nominal", "upper_bound"], calibration_power_case
         ),
         pue=_positive_float(virtual_dc.get("pue", 1.20), "virtual_datacenter.pue"),
         dr_source=cast(Literal["configured", "manifest"], configured_dr_source),
         dr_manifest_path=dr_manifest_path,
-        event_start_hours=_int_list(
-            dr.get("event_start_hours", [17, 65, 113]), "dr.event_start_hours"
-        ),
+        event_start_hours=event_start_hours,
+        event_start_hour_choices=event_start_hour_choices,
         event_duration_hours=_positive_int(
             dr.get("event_duration_hours", 3), "dr.event_duration_hours"
         ),
@@ -734,9 +767,7 @@ def load_hourly_environment_config(
             dr.get("recovery_backlog_tolerance_fraction", 0.02),
             "dr.recovery_backlog_tolerance_fraction",
         ),
-        event_start_jitter_hours=_non_negative_int(
-            dr.get("event_start_jitter_hours", 0), "dr.event_start_jitter_hours"
-        ),
+        event_start_jitter_hours=event_start_jitter_hours,
         event_duration_choices=(
             _int_list(dr["event_duration_choices"], "dr.event_duration_choices")
             if dr.get("event_duration_choices") is not None

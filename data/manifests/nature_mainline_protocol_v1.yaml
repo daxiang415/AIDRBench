@@ -3,26 +3,32 @@ protocol_id: aidrbench_nature_communications_mainline_v1
 study_type: nature_communications_mechanism_mainline
 status: preregistration_draft
 locked_ood_status: not_run
+locked_id_status: not_run
 analysis_plan_status: draft
 community_profile_split: data/manifests/community_profile_split_v1.yaml
+community_temporal_split: data/manifests/split_v1.yaml
 
 scientific_estimand:
   primary: duration_notice_reliability_firm_flexibility_surface
-  capacity_layers: [nominal, perfect_information, non_anticipative]
+  capacity_layers: [nominal, perfect_information, restricted_non_anticipative, causal_certificate]
   controller_training_required: false
+  controller_comparison_required: false
 
 data:
   community:
     path: data/processed/community_load.parquet
     sha256: daa513e8a6597232c47c5c0554fcf6723e59e785c3fe3c85c058ae54c6f235f0
+    interpretation: nlr_nrel_eulp_modeled_profile_not_project_meter_data
   workload_sampler:
     path: data/processed/jobs_summary_sampler.parquet
     sha256: 67e5cc0878e246e9de547cc838c6b0e3df5a25fcd52f043624235873ca2a0d66
+    interpretation: alibaba_2026_trace_calibrated_synthetic_arrivals_and_policy_deadlines
   hardware_calibration:
     path: data/calibration/rtx6000pro_4gpu_v1.yaml
-    sha256: 7d4756057f539a242c513d8e83c32c86cd3b83b2b561709f3fa8090820c37de0
-    artifact_sha256: 6f6c5aa776c90be6f8d1f1d41ee2457b321558257aed363ebe2cbd063433c996
+    sha256: 92eae659e628ed3bd76e07f9667235de96a3672bd9dd2a931b9617932ac1d856
+    artifact_sha256: ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193
     evidence_class: benchmark_anchored_synthetic
+    interpretation: measured_gpu_board_power_with_unmeasured_node_overhead_assumption
 
 scenario_sets:
   development:
@@ -37,17 +43,28 @@ scenario_sets:
     episode_seed_range: [20000, 20099]
     independent_episode_count: 100
     locked: false
+  locked_id:
+    role: final_in_distribution_reliability_certificate
+    config: configs/env/nature_mainline_locked_id.yaml
+    episode_seed_range: [30000, 30499]
+    independent_episode_count: 500
+    locked: true
   locked_ood:
     role: final_robustness_and_extrapolation
     config: configs/env/nature_mainline_locked_ood.yaml
-    episode_seed_range: [30000, 30499]
+    episode_seed_range: [40000, 40499]
     independent_episode_count: 500
     locked: true
 
 primary_single_event:
   statistical_unit: independent_episode
   events_per_episode: 1
-  event_start_hour: 72
+  event_start_policy:
+    type: random_from_declared_peak_window
+    candidate_hours: [63, 64, 65, 66, 67, 68, 87, 88, 89, 90, 91, 92, 111, 112, 113, 114, 115, 116, 135, 136, 137, 138, 139, 140]
+    local_clock_hours: [15, 16, 17, 18, 19, 20]
+    episode_days: [3, 4, 5, 6]
+    sampling: uniform_one_start_per_episode_from_independent_event_rng
   duration_hours: [1, 2, 3, 4, 6, 8]
   notice_hours: [0, 2, 6]
   reliability_targets: [0.90, 0.95, 0.99]
@@ -55,6 +72,9 @@ primary_single_event:
   pi_confidence_method: exact_binomial_nonparametric_lower_tolerance_bound
   fixed_candidate_confidence_method: one_sided_wilson_lower_bound
   non_anticipative_interpretation: restricted_scenario_based_causal_bound
+  non_anticipative_statistical_unit: independent_frozen_episode
+  non_anticipative_confidence_bound: none_same_ensemble_selection
+  non_anticipative_information_gap_reference: matched_same_ensemble_empirical_pi_order_statistic
   nominal_flexibility_fraction_of_reference_mix_peak: 0.50
   success_criteria:
     min_delivery_ratio: 0.95
@@ -63,6 +83,21 @@ primary_single_event:
     max_rebound_ratio: 0.25
     min_window_peak_relief_fraction: 0.50
     max_terminal_backlog_fraction: 0.02
+  criteria_interpretation: preregistered_operational_definition_not_fitted_reward
+  criteria_sensitivity:
+    min_delivery_ratio: [0.90, 0.95, 0.98]
+    max_rebound_ratio: [0.10, 0.25, 0.50]
+    min_window_peak_relief_fraction: [0.25, 0.50, 0.75]
+    max_deadline_miss_rate: [0.00, 0.01, 0.02]
+
+causal_certificate:
+  role: independently_tested_operational_realization
+  policy: robust_mpc
+  policy_frozen_before_locked_id: true
+  capacity_selected_on: validation
+  capacity_evaluated_once_on: locked_id
+  confidence_method: one_sided_wilson_lower_bound
+  interpretation: deployable_reference_not_controller_comparison
 
 repeated_event_exhaustion:
   separate_from_primary_surface: true
@@ -81,7 +116,7 @@ hosting_capacity:
   also_report: [worst_class_peak, absolute_kw, hosting_gain_kw, hosting_multiplier]
 
 uncertainty:
-  calibration_power_cases: [lower_ci, nominal, upper_ci]
+  calibration_power_cases: [lower_bound, nominal, upper_bound]
   workload_sensitivities: [utilization, deadline, training_offline_mix, burstiness]
   infrastructure_sensitivities: [pue, node_overhead]
 

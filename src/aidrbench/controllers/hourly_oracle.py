@@ -12,6 +12,9 @@ from aidrbench.envs.community_ai_dr_env import (
     HourlyCommunityAIDemandResponseEnv,
     HourlyPlanningSnapshot,
 )
+from aidrbench.fluid_planning import build_fluid_workload_decision
+
+HIGHS_THREADS_PER_SOLVE = 1
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,7 +68,15 @@ class FullHorizonOracleSolution:
 
 def _solve(problem: Any) -> None:
     try:
-        problem.solve(solver="HIGHS")
+        import highspy
+
+        # Scenario-level parallelism is controlled by the caller. Keeping each
+        # HiGHS instance single-threaded prevents nested oversubscription and
+        # makes parallel frontier runs reproducible across machines. HiGHS has
+        # a process-global thread scheduler, so reset a scheduler that another
+        # optimization path may have initialized with its default thread count.
+        highspy.Highs.resetGlobalScheduler(True)
+        problem.solve(solver="HIGHS", threads=HIGHS_THREADS_PER_SOLVE)
     except ImportError as exc:
         raise RuntimeError(
             "full-horizon oracle requires the project 'control' dependencies"
@@ -93,7 +104,6 @@ def solve_full_horizon_oracle(
 
     try:
         import cvxpy as cp
-        from scipy import sparse  # type: ignore[import-untyped]
     except ImportError as exc:
         raise RuntimeError(
             "full-horizon oracle requires the project 'control' dependencies"
@@ -112,70 +122,27 @@ def solve_full_horizon_oracle(
     big_m_kw = max(2.0 * dynamic_range_kw, 1.0)
     ratio_margin = 1e-6
 
-    groups = snapshot.work_groups
-    group_count = len(groups)
-    if group_count == 0:
-        raise ValueError("full-horizon oracle needs at least one flexible work group")
-    edge_groups: list[int] = []
-    edge_hours: list[int] = []
-    edge_classes: list[str] = []
-    for group_index, (release, deadline, job_class, _) in enumerate(groups):
-        for hour in range(release, min(deadline, horizon - 1) + 1):
-            edge_groups.append(group_index)
-            edge_hours.append(hour)
-            edge_classes.append(job_class)
-    edge_count = len(edge_groups)
-    if edge_count == 0:
-        raise ValueError("full-horizon oracle has no schedulable work edges")
-    edge_ids = np.arange(edge_count, dtype="int64")
-    group_incidence = sparse.coo_matrix(
-        (np.ones(edge_count), (edge_groups, edge_ids)),
-        shape=(group_count, edge_count),
-    ).tocsr()
-    time_incidence = sparse.coo_matrix(
-        (np.ones(edge_count), (edge_hours, edge_ids)),
-        shape=(horizon, edge_count),
-    ).tocsr()
-    group_work = np.asarray([group[3] for group in groups], dtype="float64")
-    due_within_episode = np.asarray(
-        [group[1] < horizon for group in groups], dtype=bool
-    )
-
-    served = cp.Variable(edge_count, nonneg=True, name="served_gpu_h")
-    missed = cp.Variable(group_count, nonneg=True, name="missed_gpu_h")
-    remaining = cp.Variable(group_count, nonneg=True, name="terminal_backlog_gpu_h")
-    execution_by_class = {
-        job_class: time_incidence
-        @ cp.multiply(  # type: ignore[attr-defined]
-            np.asarray([value == job_class for value in edge_classes], dtype="float64"),
-            served,
-        )
-        for job_class in snapshot.workload_classes
-    }
-    execution = sum(execution_by_class.values())
+    workload = build_fluid_workload_decision(snapshot, cp=cp, name_suffix="pi")
+    execution_by_class = workload.execution_by_class
+    execution = workload.execution_gpu_h
     dynamic_dc_power = sum(
         dynamic_power_by_class[job_class] * execution_by_class[job_class]
         for job_class in snapshot.workload_classes
     )
     firm_reduction = cp.Variable(nonneg=True, name="firm_reduction_kw")
-    terminal_backlog = cp.sum(remaining)  # type: ignore[attr-defined]
+    missed_total = workload.missed_gpu_h
+    terminal_backlog = workload.terminal_backlog_gpu_h
     pcc_power = community + snapshot.fixed_dc_power_kw + dynamic_dc_power
     constraints: list[Any] = [
-        execution <= capacity,
+        *workload.constraints,
         pcc_power <= snapshot.pcc_capacity_kw,
-        group_incidence @ served + missed + remaining == group_work,
-        cp.sum(missed)  # type: ignore[attr-defined]
-        <= max_deadline_miss_rate * snapshot.total_arrival_gpu_h,
+        missed_total <= max_deadline_miss_rate * snapshot.total_arrival_gpu_h,
         terminal_backlog >= 0.0,
         terminal_backlog
         <= snapshot.baseline_terminal_backlog_gpu_h
         + max_terminal_backlog_fraction * snapshot.total_arrival_gpu_h,
         firm_reduction <= dynamic_range_kw,
     ]
-    if bool((~due_within_episode).any()):
-        constraints.append(missed[~due_within_episode] == 0.0)
-    if bool(due_within_episode.any()):
-        constraints.append(remaining[due_within_episode] == 0.0)
 
     for event in snapshot.events:
         event_indices = np.arange(event.start_hour, event.stop_hour, dtype="int64")
@@ -189,11 +156,12 @@ def solve_full_horizon_oracle(
         delivered = cp.Variable(len(event_indices), nonneg=True)
         peak_selector = cp.Variable(len(event_indices), boolean=True)
         peak_delivery = cp.Variable(nonneg=True)
+        event_ones = np.ones(len(event_indices), dtype="float64")
         constraints.extend(
             [
                 delivered <= firm_reduction,
                 delivered <= reduction,
-                cp.sum(delivered)  # type: ignore[attr-defined]
+                event_ones @ delivered
                 >= (min_delivery_ratio + ratio_margin)
                 * len(event_indices)
                 * firm_reduction,
@@ -201,7 +169,7 @@ def solve_full_horizon_oracle(
                 >= (min_interval_delivery_ratio + ratio_margin) * firm_reduction,
                 peak_delivery >= reduction,
                 peak_delivery <= reduction + big_m_kw * (1.0 - peak_selector),
-                cp.sum(peak_selector) == 1.0,  # type: ignore[attr-defined]
+                event_ones @ peak_selector == 1.0,
             ]
         )
         baseline_window_peak = float(baseline_pcc[window_indices].max())
@@ -238,13 +206,13 @@ def solve_full_horizon_oracle(
     refinement = cp.Problem(
         cp.Minimize(
             1_000.0
-            * cp.sum(missed)  # type: ignore[attr-defined]
+            * missed_total
             / max(snapshot.total_arrival_gpu_h, 1.0)
             + 1_000.0 * terminal_backlog / max(snapshot.total_arrival_gpu_h, 1.0)
-            + np.asarray(edge_hours, dtype="float64") @ served
+            + np.arange(horizon, dtype="float64") @ execution
             / max(snapshot.total_arrival_gpu_h * horizon, 1.0)
             + 0.001
-            * cp.sum(switching)  # type: ignore[attr-defined]
+            * (np.ones(horizon, dtype="float64") @ switching)
             / capacity
         ),
         constraints,
@@ -252,7 +220,11 @@ def solve_full_horizon_oracle(
     refinement_start = time.monotonic()
     _solve(refinement)
     refinement_seconds = time.monotonic() - refinement_start
-    if execution.value is None or missed.value is None or remaining.value is None:
+    if (
+        execution.value is None
+        or missed_total.value is None
+        or terminal_backlog.value is None
+    ):
         raise RuntimeError("full-horizon oracle returned no primal schedule")
     execution_values = np.clip(np.asarray(execution.value), 0.0, capacity)
     execution_values_by_class = {
@@ -263,8 +235,8 @@ def solve_full_horizon_oracle(
         )
         for job_class in snapshot.workload_classes
     }
-    missed_gpu_h = max(float(np.asarray(missed.value).sum()), 0.0)
-    terminal_gpu_h = max(float(np.asarray(remaining.value).sum()), 0.0)
+    missed_gpu_h = max(float(np.asarray(missed_total.value).item()), 0.0)
+    terminal_gpu_h = max(float(np.asarray(terminal_backlog.value).item()), 0.0)
     configured_requests = [event.requested_reduction_kw for event in snapshot.events]
     optimized_pcc = community + snapshot.fixed_dc_power_kw + sum(
         dynamic_power_by_class[job_class] * execution_values_by_class[job_class]

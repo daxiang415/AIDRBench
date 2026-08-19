@@ -232,9 +232,7 @@ def load_hourly_community_profile(
     normalized["community_load_kw"] = pd.to_numeric(
         normalized["community_load_kw"], errors="coerce"
     )
-    normalized["pv_generation_kw"] = pd.to_numeric(
-        normalized["pv_generation_kw"], errors="coerce"
-    )
+    normalized["pv_generation_kw"] = pd.to_numeric(normalized["pv_generation_kw"], errors="coerce")
     if normalized.isna().any().any():
         raise ValueError("community profile contains invalid timestamps or power values")
     if (normalized["community_load_kw"] <= 0.0).any():
@@ -259,9 +257,9 @@ def load_hourly_community_profile(
         samples_per_hour = hour_ns // resolution_ns
         indexed = normalized.set_index("timestamp")
         hourly_power = indexed.resample("1h", closed="right", label="right").mean()
-        hourly_counts = indexed["community_load_kw"].resample(
-            "1h", closed="right", label="right"
-        ).count()
+        hourly_counts = (
+            indexed["community_load_kw"].resample("1h", closed="right", label="right").count()
+        )
         hourly_power = hourly_power.loc[hourly_counts == samples_per_hour]
         # EULP timestamps are interval-ending.  Expose conventional hourly
         # interval starts to the environment and DR event manifests.
@@ -300,6 +298,8 @@ def select_hourly_community_window(
     hours: int,
     seed: int,
     episode_start: str | None = None,
+    window_start: str | None = None,
+    window_end: str | None = None,
 ) -> pd.DataFrame:
     """Select one contiguous, reproducible episode from an hourly profile."""
 
@@ -326,12 +326,26 @@ def select_hourly_community_window(
     ]
     # Calendar-aligned weeks keep relative DR hour 17 at local 17:00 rather
     # than silently shifting event clock time with an arbitrary window offset.
+    eligible_starts = all_candidate_starts
+    if (window_start is None) != (window_end is None):
+        raise ValueError("window_start and window_end must be supplied together")
+    if window_start is not None and window_end is not None:
+        lower = pd.to_datetime(window_start, utc=True).tz_localize(None)
+        upper = pd.to_datetime(window_end, utc=True).tz_localize(None)
+        if lower >= upper:
+            raise ValueError("community window_start must be earlier than window_end")
+        eligible_starts = [
+            start
+            for start in eligible_starts
+            if pd.Timestamp(timestamps.iloc[start]) >= lower
+            and pd.Timestamp(timestamps.iloc[start + hours - 1]) + timedelta(hours=1) <= upper
+        ]
     candidate_starts = [
-        start for start in all_candidate_starts if pd.Timestamp(timestamps.iloc[start]).hour == 0
+        start for start in eligible_starts if pd.Timestamp(timestamps.iloc[start]).hour == 0
     ]
     if not candidate_starts:
         raise ValueError(
-            f"community profile has no midnight-aligned contiguous {hours}-hour episode"
+            f"community profile has no eligible midnight-aligned contiguous {hours}-hour episode"
         )
 
     if episode_start is None:
@@ -343,10 +357,8 @@ def select_hourly_community_window(
         if not matches:
             raise ValueError(f"community.episode_start is not in the profile: {episode_start}")
         start_index = int(matches[0])
-        if start_index not in all_candidate_starts:
-            raise ValueError(
-                "community.episode_start does not begin a sufficiently long contiguous window"
-            )
+        if start_index not in eligible_starts:
+            raise ValueError("community.episode_start is outside the eligible contiguous window")
     return ordered.iloc[start_index : start_index + hours].reset_index(drop=True).copy()
 
 
@@ -365,9 +377,7 @@ def load_hourly_dr_manifest(
     if missing:
         raise ValueError(f"DR event manifest is missing required columns: {missing}")
     if "community_profile_id" in frame.columns and profile_id is not None:
-        available = sorted(
-            frame["community_profile_id"].dropna().astype(str).unique().tolist()
-        )
+        available = sorted(frame["community_profile_id"].dropna().astype(str).unique().tolist())
         if profile_id not in available:
             raise ValueError(
                 f"DR manifest has no events for community profile {profile_id!r}; "
@@ -386,8 +396,8 @@ def load_hourly_dr_manifest(
     if normalized.empty:
         raise ValueError("DR event manifest contains no events for the selected profile")
     actual_duration_minutes = (
-        (normalized["end_time"] - normalized["start_time"]).dt.total_seconds() / 60.0
-    )
+        normalized["end_time"] - normalized["start_time"]
+    ).dt.total_seconds() / 60.0
     if not np.allclose(actual_duration_minutes, normalized["duration_minutes"]):
         raise ValueError("DR event duration_minutes disagrees with start_time/end_time")
     aligned_start = (

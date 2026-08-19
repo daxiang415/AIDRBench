@@ -134,6 +134,28 @@ def test_real_community_requires_profile_selection_and_has_reproducible_windows(
     assert first["community_load_kw"].equals(first["net_community_load_kw"])
 
 
+def test_real_community_window_selection_respects_temporal_partition(tmp_path: Path) -> None:
+    source = tmp_path / "community.parquet"
+    _write_subhourly_community(source, hours=72)
+    hourly = load_hourly_community_profile(
+        source,
+        profile_id="commercial",
+        target_peak_kw=1_000.0,
+        pv_enabled=False,
+    )
+
+    selected = select_hourly_community_window(
+        hourly,
+        hours=12,
+        seed=7,
+        window_start="2018-01-02T00:00:00",
+        window_end="2018-01-03T00:00:00",
+    )
+
+    assert selected["timestamp"].iloc[0] == pd.Timestamp("2018-01-02T00:00:00")
+    assert selected["timestamp"].iloc[-1] < pd.Timestamp("2018-01-03T00:00:00")
+
+
 def test_hourly_dr_manifest_is_validated_and_selects_an_event_window(tmp_path: Path) -> None:
     community_source = tmp_path / "community.parquet"
     _write_subhourly_community(community_source, hours=72)

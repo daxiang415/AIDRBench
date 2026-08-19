@@ -42,7 +42,7 @@ def _positive(value: str) -> float:
 
 
 def _confidence_interval(values: np.ndarray, confidence: float = 0.95) -> tuple[float, float]:
-    """Student-t confidence interval for repeat-by-GPU mean observations."""
+    """Student-t confidence interval over independent run means."""
 
     cleaned = values[np.isfinite(values)]
     if len(cleaned) < 2:
@@ -110,9 +110,7 @@ def _measurement_rows(raw_directory: Path) -> tuple[pd.DataFrame, dict[str, str]
         for gpu_count in (1, 4)
         for repeat in (1, 2, 3)
     }
-    observed = set(
-        zip(frame["mode"], frame["gpu_count"], frame["repeat"], strict=False)
-    )
+    observed = set(zip(frame["mode"], frame["gpu_count"], frame["repeat"], strict=False))
     if observed != expected:
         raise ValueError(f"calibration matrix mismatch; missing={sorted(expected - observed)}")
     return frame, hashes
@@ -125,7 +123,10 @@ def _idle_parameter(raw_directory: Path) -> tuple[float, tuple[float, float], fl
     held_out = idle.loc[idle["sample_index"] >= 20]
     gpu_means = calibration.groupby("gpu_index")["power_draw_w"].mean().to_numpy()
     estimate = float(gpu_means.mean())
-    interval = _confidence_interval(gpu_means)
+    # This file contains one node-level idle run. GPUs characterize device
+    # heterogeneity within that run; they are not independent experimental
+    # repeats and therefore do not support a confidence interval.
+    interval = (float(gpu_means.min()), float(gpu_means.max()))
     held_out_means = held_out.groupby("gpu_index")["power_draw_w"].mean().to_numpy()
     held_out_mae = float(np.abs(held_out_means - estimate).mean())
     return estimate, interval, held_out_mae, _sha256(idle_path)
@@ -146,23 +147,25 @@ def fit(args: argparse.Namespace) -> None:
     class_diagnostics: dict[str, object] = {}
     for job_class in ("training", "offline_inference"):
         class_rows = rows.loc[(rows["mode"] == job_class) & (rows["gpu_count"] == 4)]
-        calibration_values = class_rows.loc[
-            class_rows["repeat"].isin((1, 2)), "mean_power_w"
-        ].to_numpy(dtype="float64")
-        held_out_values = class_rows.loc[
-            class_rows["repeat"] == 3, "mean_power_w"
-        ].to_numpy(dtype="float64")
+        run_means = class_rows.groupby("repeat", sort=True)["mean_power_w"].mean()
+        calibration_values = run_means.loc[[1, 2]].to_numpy(dtype="float64")
+        held_out_values = run_means.loc[[3]].to_numpy(dtype="float64")
         estimate = float(calibration_values.mean())
         interval = _confidence_interval(calibration_values)
         errors = np.abs(held_out_values - estimate)
         held_out_errors.extend(float(value) for value in errors)
         active_parameters[job_class] = {
             "estimate_w": estimate,
-            "confidence_interval_w": [float(interval[0]), float(interval[1])],
+            "uncertainty_interval_w": [float(interval[0]), float(interval[1])],
+            "uncertainty_method": "student_t_95_confidence_interval_over_run_means",
+            "statistical_unit": "independent_four_gpu_workload_run_mean",
+            "independent_unit_count": len(calibration_values),
+            "confidence_level": 0.95,
         }
         class_diagnostics[job_class] = {
-            "calibration_repeat_gpu_observations": len(calibration_values),
-            "held_out_repeat_gpu_observations": len(held_out_values),
+            "calibration_independent_runs": len(calibration_values),
+            "held_out_independent_runs": len(held_out_values),
+            "gpus_observed_per_run": 4,
             "held_out_mae_w": float(errors.mean()),
             "single_gpu_mean_w": float(
                 rows.loc[
@@ -194,14 +197,20 @@ def fit(args: argparse.Namespace) -> None:
         "parameters": {
             "idle_power_w_per_gpu": {
                 "estimate_w": idle_estimate,
-                "confidence_interval_w": [idle_interval[0], idle_interval[1]],
+                "uncertainty_interval_w": [idle_interval[0], idle_interval[1]],
+                "uncertainty_method": "between_gpu_range_within_single_idle_run",
+                "statistical_unit": "single_node_idle_run",
+                "independent_unit_count": 1,
             },
             "node_fixed_overhead_w": {
                 "estimate_w": args.node_fixed_overhead_w,
-                "confidence_interval_w": [
+                "uncertainty_interval_w": [
                     args.node_fixed_overhead_lower_w,
                     args.node_fixed_overhead_upper_w,
                 ],
+                "uncertainty_method": "engineering_assumption_range_no_node_meter",
+                "statistical_unit": "engineering_assumption",
+                "independent_unit_count": 0,
             },
             "active_power_w_per_gpu_by_class": active_parameters,
         },

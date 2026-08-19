@@ -1,28 +1,28 @@
-# Nature Communications mechanism-development scenarios. No controller training.
+# LOCKED in-distribution Nature Communications scenarios. Do not generate before freeze.
 seed: 2026
+scenario:
+  locked_set: locked_id
+  preregistration_manifest: data/manifests/nature_mainline_protocol_v1.yaml
 env:
   timestep_hours: 1.0
   episode_days: 7
   clearance_tail_hours: 48
   forecast_horizon_hours: 6
   action_mode: continuous
-  episode_seed_range: [10000, 10099]
+  episode_seed_range: [30000, 30499]
 community:
   source: nrel_eulp
   path: data/processed/community_load.parquet
   profile_id: eulp_mixed_3a
-  # Temporal development partition from data/manifests/split_v1.yaml.
-  window_start: '2018-01-01T00:00:00'
-  window_end: '2018-08-08T00:00:00'
+  window_start: '2018-10-20T00:00:00'
+  window_end: '2019-01-01T00:00:00'
   background_peak_kw: 800
   pcc_capacity_kw: 1000
   pv_enabled: true
 virtual_datacenter:
   gpus_per_node: 4
-  # Fixed from the nominal reference sizing; never resize across power cases.
   node_count: 144
   target_dc_peak_share_of_pcc: 0.20
-  # A declared reference-pool assumption, varied in workload sensitivity analyses.
   flexible_gpu_fraction: 0.60
   pue: 1.20
 workload:
@@ -53,8 +53,6 @@ hardware:
 dr:
   mode: capacity_limit
   source: configured
-  # One start is sampled independently from declared 15:00--20:00 peak-window
-  # candidates on episode days 3--6. H and N are replay overrides.
   event_start_hour_choices: [63, 64, 65, 66, 67, 68, 87, 88, 89, 90, 91, 92, 111, 112, 113, 114, 115, 116, 135, 136, 137, 138, 139, 140]
   event_duration_hours: 1
   event_notice_hours: 0

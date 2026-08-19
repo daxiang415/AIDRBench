@@ -1,7 +1,7 @@
 # AIDRBench：Nature Communications 主线研究方案
 
 > **文档定位**：本文件定义 AIDRBench 面向 *Nature Communications* 的主论文科学主线。它是系统与机制研究方案，不是控制算法论文，也不是强化学习 benchmark 论文。
-> **核心原则**：先建立物理与统计意义上的可靠灵活性边界，再解释计算债务、恢复反弹和社区接入价值；在线控制器只作为可选的补充验证。
+> **核心原则**：先建立物理与统计意义上的灵活性边界，再解释计算债务、恢复反弹和社区接入价值；PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
 
 ---
 
@@ -143,7 +143,7 @@ F_q(H,N).
 
 ## 5. 统一理论框架
 
-主论文只需要三层灵活性，不需要把在线控制器作为第四层核心结果。
+主论文区分四层证据：名义假设、完美信息上界、受限场景 NA 边界，以及独立检验的因果容量证书。只固定一个因果实现用于验证，不进行控制器排名。
 
 ### 5.1 名义灵活性
 
@@ -204,11 +204,37 @@ F_{q,S}^{\mathrm{NA},\mathcal P}(H,N).
 上同时选择容量和失败场景所得的数值称为独立的可靠性认证，也不能把其
 审计用 policy export 描述成可直接部署到 unseen locked scenario 的控制器。
 
-这是主论文最重要的“可靠可承诺灵活性”。它回答：
+它是有限场景与预声明策略类下的信息约束规划边界，而不是独立可靠性证书。它回答：
 
-> 在仅使用事件发生前和运行时可获得的信息时，能够以可靠性 \(q\) 承诺多少容量？
+> 在给定场景集合和受限信息结构中，非前视约束会把 PI 上界压低多少？
 
-### 5.4 两个核心差距
+为使这个差值具有同一统计口径，同时从集合 \(S\) 的逐场景 PI 容量定义
+经验 order statistic：
+
+\[
+F_{q,S}^{\mathrm{PI,emp}}(H)
+=
+F_{(\lfloor(1-q)|S|\rfloor+1),S}^{\mathrm{PI}},
+\]
+
+其中右侧按容量升序排列。该值与 NA 使用相同场景、相同允许失败数，且
+同样不带独立置信下界。正式 PI tolerance bound
+\(F_q^{\mathrm{PI}}\) 仍单独报告，不能与经验 NA 数值直接相减后声称统计
+置信度。
+
+### 5.4 独立因果容量证书
+
+固定一个不训练的因果 reference implementation（当前为 robust MPC），只使用当时已释放任务、当前队列、短时社区负荷预测以及已经进入 notice window 的 DR 请求。容量仅在 validation 集选择，然后在不重叠的 500 个 locked-ID episode 上一次性检验：
+
+\[
+F_q^{\mathrm{causal}}(H,N)
+=
+\max\{R:\underline p_{0.95}^{\mathrm{locked-ID}}(R)\ge q\}.
+\]
+
+这里的 Wilson 下界只用于预先冻结的候选容量。`locked_ood` 另行检验气候 profile 和 arrival process 外推，不用于定义主分布上的 q。
+
+### 5.5 三个证据差距
 
 #### 物理可行性差距
 
@@ -223,18 +249,28 @@ F^{\mathrm{nominal}}-F_q^{\mathrm{PI}}.
 #### 信息与可靠性差距
 
 \[
-\Delta_{\mathrm{information}}
+\Delta_{\mathrm{information},S}
 =
-F_q^{\mathrm{PI}}-F_q^{\mathrm{NA}}.
+F_{q,S}^{\mathrm{PI,emp}}-F_{q,S}^{\mathrm{NA},\mathcal P}.
 \]
 
-它反映无法预知未来任务、负荷和事件信息所带来的损失。
+它是在同一有限场景集合和相同经验成功比例下，由预声明信息/策略限制
+产生的描述性差距；独立统计单位是一个 frozen episode，不附带置信区间。
+它不能用正式 PI tolerance bound 与同集合 NA 数值混算。
 
-主论文到这里已经形成完整闭环，不需要再引入 controller gap。
+#### 实现与泛化差距
 
-### 5.5 在线实现仅作为可选扩展
+\[
+\Delta_{\mathrm{implementation}}
+=
+F_{q,S}^{\mathrm{NA},\mathcal P}-F_q^{\mathrm{causal}}.
+\]
 
-如有必要，可在 Supplementary 中报告一个简单因果 MPC 实现：
+该差距不用于比较算法优劣，而用于防止把同一场景集合上求得的 NA 数值误写成 unseen scenarios 上的可靠承诺。
+
+### 5.6 控制算法扩展仍为可选
+
+主线必须报告一个冻结的因果实现及其独立证书；额外的 threshold、MPC 或 RL 横向比较仍只属于 Supplementary/后续控制论文：
 
 \[
 \eta_{\mathrm{online}}
@@ -242,7 +278,7 @@ F_q^{\mathrm{PI}}-F_q^{\mathrm{NA}}.
 \frac{F_q^{\mathrm{MPC}}}{F_q^{\mathrm{NA}}}.
 \]
 
-它只用于说明理论边界具有一定在线可实现性。无需比较 DQN、PPO、SAC，更无需把在线控制器作为主创新。
+它只用于说明理论边界具有一定在线可实现性。无需比较 DQN、PPO、SAC，更不能把在线控制器作为主创新。
 
 ---
 
@@ -286,7 +322,9 @@ P_{\mathrm{fixed}}
 \sum_c e_c X_{c,t},
 \]
 
-其中 \(e_c\) 来自四 GPU 服务器的硬件测量和校准。
+其中 \(e_c\) 来自四 GPU 服务器的硬件测量和校准。硬件 repeat 的统计单位是一次独立 workload run；同一次四卡运行中的四张卡只用于形成该 run 的均值，不能当作四个独立重复。当前 active-power 拟合只有两个独立 fit runs 和一个 held-out run，因此区间应被视为小样本不确定性，而不是高精度硬件定律；idle 仅有一个 node-level run，node fixed overhead 仍是工程假设范围。
+
+数据来源也必须准确表述：社区负荷为 NLR/NREL EULP 建模并经实测校验的 profile，不是本项目采集的社区电表数据；任务到达为 Alibaba GPU 2026 trace-calibrated synthetic process，deadline 由预声明 policy 生成；DR 事件来自配置的峰时窗口随机抽样，不是真实 utility dispatch 记录。
 
 应同时区分：
 
@@ -450,7 +488,9 @@ bound；NA ensemble optimization 单独报告为受限场景边界。
 \[
 F_q^{\mathrm{PI}}(H),
 \qquad
-F_q^{\mathrm{NA}}(H,N).
+F_{q,S}^{\mathrm{NA},\mathcal P}(H,N),
+\qquad
+F_q^{\mathrm{causal}}(H,N).
 \]
 
 核心网格：
@@ -472,7 +512,7 @@ F_q^{\mathrm{NA}}(H,N).
 
 **Figure 2：Nominal-to-firm flexibility surface**
 
-- a：不同 duration 下的 \(F^{\mathrm{nominal}}\)、\(F_q^{\mathrm{PI}}\)、\(F_q^{\mathrm{NA}}\)；
+- a：不同 duration 下的 \(F^{\mathrm{nominal}}\)、\(F_q^{\mathrm{PI}}\)、\(F_{q,S}^{\mathrm{NA},\mathcal P}\) 与 \(F_q^{\mathrm{causal}}\)；
 - b：duration–notice heatmap；
 - c：不同 reliability 水平的 capacity curves；
 - d：physical gap 与 information gap 分解。
@@ -608,7 +648,7 @@ I_{\mathrm{AI,BESS}}
 
 ### 分析内容
 
-- calibration lower / nominal / upper cases；
+- calibration lower / nominal / upper uncertainty bounds；
 - node fixed overhead sensitivity；
 - PUE sensitivity；
 - workload mix sensitivity；
@@ -640,16 +680,16 @@ I_{\mathrm{AI,BESS}}
 | Frozen scenario | scenario freeze、hash/provenance | 是 |
 | PI frontier | perfect-information optimizer | 是 |
 | 非前视 firm frontier | non-anticipative optimization | 是 |
-| 单事件可靠容量 | statistical certification | 是 |
+| 单事件可靠容量 | frozen robust-MPC selection + locked-ID certification | 是 |
 | 重复事件耗尽 | repeated-event stress test | 是 |
 | Hosting capacity | PV/BESS/PCC optimization | 是 |
-| 参数不确定性 | lower/nominal/upper cases | 是 |
+| 参数不确定性 | lower/nominal/upper uncertainty bounds | 是 |
 | Rule/MPC smoke test | software validation | 否，最多补充材料 |
 | DQN/PPO/SAC benchmark | online-control extension | 否 |
 | CMDP v1–v5 reward | control-algorithm development | 否 |
 | Hardware-in-the-loop | future extension | 否 |
 
-**重要区分**：非前视优化是用来定义可靠边界的数学工具，不等于把论文变成控制论文。
+**重要区分**：非前视优化给出受限场景规划边界；只有独立 locked-ID 上的固定因果候选才能称为容量证书。这一验证不等于控制器竞赛。
 
 ---
 
@@ -738,8 +778,9 @@ NC 主线的数据划分应围绕模型校准和最终评估，而不是围绕 c
 1. **Calibration fit set**：拟合功率参数；
 2. **Calibration held-out set**：检验功率模型；
 3. **Scenario development set**：确定模型和实验设计；
-4. **Validation scenario set**：检查数值稳定性和预注册分析；
-5. **Locked OOD scenario set**：最终稳健性与外推评估。
+4. **Validation scenario set**：检查数值稳定性、冻结因果策略与候选容量；
+5. **Locked-ID scenario set**：同一目标生成分布的最终可靠性证书，500 个 episode 支持 q=0.99 的预声明检验；
+6. **Locked-OOD scenario set**：气候 profile 与 arrival process 改变后的稳健性和外推评估，不能替代 locked-ID 主证书。
 
 ### 11.2 统计单位
 
@@ -770,15 +811,15 @@ solver and tolerances
 
 ---
 
-## 12. 控制器在这篇论文中的正确位置
+## 12. 因果实现与控制器在这篇论文中的正确位置
 
 ### 12.1 主文
 
-主文不需要完整控制器 benchmark。
+主文不需要完整控制器 benchmark，但需要一个冻结、可部署的因果 reference implementation 在独立 locked-ID 场景上验证可交付容量。当前预声明为 robust MPC；不训练、不调 reward、不参与算法排名。
 
 ### 12.2 Supplementary 可选内容
 
-可以增加一个简短的在线可实现性验证：
+可以额外增加简短的在线实现对照：
 
 - 一个 threshold rule；
 - 一个因果 MPC；
@@ -918,15 +959,18 @@ solver and tolerances
 
 ### Phase 5 — 稳健性和外推
 
-- 硬件 lower/nominal/upper；
+- 硬件 lower/nominal/upper uncertainty bounds；
 - PUE 和 node overhead；
 - workload mix；
 - deadline distribution；
 - locked OOD communities。
 
-### Phase 6 — 可选在线实现
+### Phase 6 — 独立因果容量认证
 
-仅在主结果完成后，补充一个简单 MPC 或 rule-based 实现。即使不做这一阶段，NC 主论文的科学逻辑仍然完整。
+- 在 validation frozen scenarios 上冻结 robust-MPC 参数与各 H、N、q 的候选容量；
+- 在 500 个 locked-ID episodes 上一次性计算 Wilson 下界；
+- 将 locked-OOD 作为单独的外推压力测试；
+- 额外 controller/RL 比较保持可选，且不得改变主证书。
 
 ---
 
@@ -935,14 +979,15 @@ solver and tolerances
 当以下条件满足时，主论文已经形成完整闭环，无需等待 RL 结果：
 
 - [ ] 硬件校准和 workload-class 功率定义冻结；
-- [ ] 名义、PI 和 NA 三层边界可重复计算；
+- [ ] 名义、PI 和受限 NA 三层规划边界可重复计算；
+- [ ] 固定因果策略在独立 locked-ID 上完成容量认证；
 - [ ] duration–notice–reliability surface 完成；
 - [ ] compute-debt exhaustion 机制得到量化；
 - [ ] 2 × 2 × 2 hosting-capacity 分析完成；
 - [ ] PV/BESS 互补与替代区域得到识别；
 - [ ] 硬件和场景不确定性分析完成；
 - [ ] 所有正式结果具有完整 provenance 和 hash；
-- [ ] locked OOD 只在模型和分析方案冻结后运行；
+- [ ] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
 - [ ] 控制器结果未被误写成文章的核心创新。
 
 ---
@@ -957,6 +1002,8 @@ AI task traces and hardware measurements
 job-level feasible execution schedules
                 ↓
 nominal → perfect-information → non-anticipative firm flexibility
+                ↓
+fixed causal realization → independent locked-ID certificate
                 ↓
 duration–notice–reliability surface
                 ↓

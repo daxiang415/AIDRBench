@@ -5,9 +5,9 @@
 > of the RL/CMDP results below is a mainline capacity result. Current executable
 > status and commands are in `docs/nature-communications-mainline.md`.
 
-Updated: 2026-08-17. This note follows the root README v0.3 firm-flexibility
-protocol and its interval-delivery protocol-v2 correction. The locked OOD test
-seeds `30000..30499` have not been evaluated.
+Updated: 2026-08-18. The Nature design audit separates locked-ID seeds
+`30000..30499` from locked-OOD seeds `40000..40499`; neither set has been
+generated or evaluated.
 
 > Interface warning (2026-08-17): the current environment interface is
 > `firm_v5` with PCC-normalized observations and `firm_threshold_v2` costs.
@@ -17,7 +17,7 @@ seeds `30000..30499` have not been evaluated.
 
 ## Current firm_v5 environment status
 
-The SHA-256-verified `data/calibration/rtx6000pro_4gpu_v1.yaml` artifact now
+The SHA-256-verified `data/calibration/rtx6000pro_4gpu_v1.yaml` v2 artifact now
 anchors GPU board power to 4× NVIDIA RTX PRO 6000 Blackwell Max-Q measurements.
 Formal configs no longer accept the old `calibration_file` spelling or fallback
 GPU parameters. The artifact remains `benchmark_anchored_synthetic`, rather
@@ -25,6 +25,13 @@ than fully `measured`, because the server exposes no BMC/PDU/RAPL power channel:
 its 300 W node fixed overhead and `[150, 450] W` interval are explicit
 assumptions. GPU flexibility conclusions may use the measured terms, while
 wall-power and absolute hosting claims must retain this limitation.
+
+The active-power fit now uses independent workload-run means (two fit runs and
+one held-out run), rather than treating four GPUs inside one run as four
+independent repeats. Idle has one node-level run and reports a within-run
+between-GPU range; the unmetered node overhead reports an engineering
+assumption range. These three uncertainty sources are not all confidence
+intervals.
 
 - Current-hour released work enters both controlled and no-control queues
   before the observation is constructed.
@@ -35,6 +42,9 @@ wall-power and absolute hosting claims must retain this limitation.
   one.
 - Recovery activity, remaining recovery time, event request, controlled and
   baseline backlog, running window peaks, relief, and rebound are observable.
+- Primary event starts are sampled from predeclared evening-peak candidates.
+  The six-hour limit forecast masks a future DR limit until its notice window,
+  preventing zero-notice anticipation.
 - A proportional 2-node/1000 kW versus 4-node/2000 kW test produces identical
   63-dimensional trajectories and rewards for identical normalized actions.
 - The scalar reward is an adapter over separately reported delivery,
@@ -44,14 +54,40 @@ wall-power and absolute hosting claims must retain this limitation.
 - PI, non-anticipative and hosting-capacity planning now retain workload class
   and use `fixed + sum(class_power × class_execution)` consistently with the
   online physical environment.
-- Capacity certification fixes duration, notice and a repeated-event program;
-  one episode is one Bernoulli trial and succeeds only if all of its events do.
-  Isolated-event tables below are historical diagnostics, not the primary
-  certificate definition.
-- The current repository passes 179 mechanism-core tests without RL
-  dependencies and 186 tests in the full local environment, plus
-  `ruff check .` and `mypy src`. Historical counts below refer to the older
-  control-extension snapshot.
+- PI and restricted NA remain planning bounds. The new frozen causal route
+  selects one robust-MPC capacity on validation and evaluates it once on
+  disjoint locked-ID scenarios with a one-sided Wilson bound.
+- The current repository passes 189 mechanism-core tests without RL
+  dependencies, plus `ruff check .` and strict type checks on all changed
+  modules. RL-only tests were not run in this environment because the optional
+  Stable-Baselines3 dependency is not installed.
+
+The corrected one-scenario smoke uses a 2018-05-06 community window and an
+event at relative hour 65 (17:00). PI capacity decreases from `111.87 kW` at
+one hour to `50.36 kW` at eight hours. A 10%-of-reference-peak (`20.10 kW`)
+robust-MPC candidate meets delivery, deadline, rebound and window-relief checks
+in that smoke. These are code-path diagnostics, not statistical results.
+
+The corrected lower-bound, nominal and upper-bound development runs now each
+contain 100 matched frozen scenarios and 600 optimal PI solves. Their exact
+nonparametric lower tolerance capacities at 95% reliability and 95% confidence
+are respectively `[49.91, 41.87, 38.79, 37.81, 37.81, 35.56]`, `[53.01,
+44.46, 41.19, 40.15, 40.15, 37.76]`, and `[56.60, 47.48, 43.98, 42.87,
+42.87, 40.32] kW` at `[1, 2, 3, 4, 6, 8] h`. The 99% reliability rows are
+explicitly non-estimable with only 100 scenarios. These remain development
+diagnostics and were not produced from locked-ID or locked-OOD data.
+
+The PI and restricted-NA optimizers use the same class-aware fluid
+release/deadline physics. A direct sparse cumulative-state NA formulation now
+avoids the earlier monolithic CVXPY bottleneck. On the full 100-scenario nominal
+development ensemble, all 18 empirical-95% duration × notice points are
+optimal. Capacities at `[1, 2, 3, 4, 6, 8] h` are `[56.42, 53.49, 45.17,
+44.00, 43.01, 41.19] kW` for each of 0 h, 2 h and 6 h notice. Every point equals
+its matched same-ensemble empirical PI order statistic, so the descriptive
+information gap is zero. The result has no confidence bound and is not an
+independent certificate. The zero notice effect is specific to the current
+fluid/preemptible, no-checkpoint-delay model and is now a target for explicit
+deadline, utilization and scheduling-overhead sensitivities.
 
 The rule-controller smoke output for the current interface is under
 `results/smoke/firm_v4_reward_v2_rules_seed20000/`. It is a semantic check of

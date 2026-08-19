@@ -277,7 +277,7 @@ def _add_scenario_parsers(subparsers: Any) -> None:
     freeze.add_argument("--seeds", nargs="+", type=int, required=True)
     freeze.add_argument(
         "--calibration-power-case",
-        choices=("lower_ci", "nominal", "upper_ci"),
+        choices=("lower_bound", "nominal", "upper_bound"),
         help="override only the declared calibration uncertainty case before freezing",
     )
     freeze.add_argument("--preregistration-manifest")
@@ -305,6 +305,12 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     frontier.add_argument("--reliabilities", nargs="+", type=float, default=[])
     frontier.add_argument("--confidence-level", type=float, default=0.95)
     frontier.add_argument("--nominal-flexibility-fraction", type=float, default=0.50)
+    frontier.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to solve concurrently (default: 1)",
+    )
     frontier.add_argument("--output", required=True)
     non_anticipative = commands.add_parser(
         "non-anticipative-firm",
@@ -335,7 +341,20 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     non_anticipative.add_argument("--power-bin-width-pu", type=float, default=0.10)
     non_anticipative.add_argument("--arrival-bin-width-fraction", type=float, default=0.10)
     non_anticipative.add_argument("--minimum-shared-node-size", type=int, default=2)
+    non_anticipative.add_argument(
+        "--matched-pi-frontier",
+        help=(
+            "optional matched PI frontier parquet used only for the same-ensemble "
+            "empirical information-restriction gap"
+        ),
+    )
     non_anticipative.add_argument("--output", required=True)
+    merge_non_anticipative = commands.add_parser(
+        "merge-non-anticipative",
+        help="merge independently solved non-anticipative grid partitions",
+    )
+    merge_non_anticipative.add_argument("--inputs", nargs="+", required=True)
+    merge_non_anticipative.add_argument("--output", required=True)
     hosting = commands.add_parser(
         "hosting-capacity",
         help="compute frozen-scenario absolute-PCC hosting-capacity planning bounds",
@@ -418,9 +437,7 @@ def _add_training_parsers(subparsers: Any) -> None:
     )
     benchmark.add_argument("--save", required=True)
 
-    plot = subparsers.add_parser(
-        "plot", help="plot representative hourly benchmark episodes"
-    )
+    plot = subparsers.add_parser("plot", help="plot representative hourly benchmark episodes")
     plot.add_argument("--input", required=True)
     plot.add_argument("--output", required=True)
     plot.add_argument(
@@ -450,10 +467,9 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
     certify.add_argument(
         "certification_command",
         nargs="?",
-        choices=("select", "locked-test"),
+        choices=("select", "locked-test", "frozen-select", "frozen-test"),
         help=(
-            "select on validation or evaluate an already frozen selection on the "
-            "locked test split"
+            "select on validation or evaluate an already frozen selection on the locked test split"
         ),
     )
     certify.add_argument(
@@ -501,6 +517,10 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
         "--protocol-manifest", default="data/manifests/hourly_experiment_protocol_v2.yaml"
     )
     certify.add_argument("--selection", help="frozen validation selection for certify locked-test")
+    certify.add_argument(
+        "--scenarios",
+        help="frozen validation or locked-ID scenario directory for frozen certification",
+    )
     certify.add_argument("--output", help="output directory for certify select or locked-test")
 
     compare_envelopes = subparsers.add_parser(
@@ -1144,6 +1164,7 @@ def _run_optimization(args: argparse.Namespace) -> int:
             reliability_targets=args.reliabilities,
             confidence_level=args.confidence_level,
             nominal_flexibility_fraction=args.nominal_flexibility_fraction,
+            workers=args.workers,
         )
         _print_summary(summary)
         return 0
@@ -1172,6 +1193,18 @@ def _run_optimization(args: argparse.Namespace) -> int:
             reliability_target=args.reliability_target,
             information_structure=args.information_structure,
             observation_specification=observation_specification,
+            matched_pi_frontier_path=args.matched_pi_frontier,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "merge-non-anticipative":
+        from aidrbench.evaluation.non_anticipative import (
+            merge_non_anticipative_frontier_partitions,
+        )
+
+        summary = merge_non_anticipative_frontier_partitions(
+            args.inputs,
+            output_directory=args.output,
         )
         _print_summary(summary)
         return 0
@@ -1292,6 +1325,40 @@ def _run_plot(args: argparse.Namespace) -> int:
 
 
 def _run_certify(args: argparse.Namespace) -> int:
+    if args.certification_command == "frozen-select":
+        if args.scenarios is None or not args.durations or args.output is None:
+            raise ValueError(
+                "certify frozen-select requires --scenarios, --durations, and --output"
+            )
+        from aidrbench.evaluation.frozen_causal_certificate import (
+            select_frozen_causal_capacities,
+        )
+
+        criteria = _firm_criteria_from_args(args)
+        summary = select_frozen_causal_capacities(
+            args.scenarios,
+            durations_h=args.durations,
+            notices_h=args.notices or (0,),
+            candidate_fractions=args.candidate_fractions,
+            criteria=criteria,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.certification_command == "frozen-test":
+        if args.scenarios is None or args.selection is None or args.output is None:
+            raise ValueError("certify frozen-test requires --scenarios, --selection, and --output")
+        from aidrbench.evaluation.frozen_causal_certificate import (
+            certify_selected_frozen_causal_capacities,
+        )
+
+        summary = certify_selected_frozen_causal_capacities(
+            args.scenarios,
+            selection_path=args.selection,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
     if args.certification_command == "select":
         if args.controller is None or not args.durations or args.output is None:
             raise ValueError("certify select requires --controller, --durations, and --output")
@@ -1368,12 +1435,8 @@ def _run_certify(args: argparse.Namespace) -> int:
                 search_method=args.search,
                 binary_iterations=args.binary_iterations,
             )
-            event_sequence = "-".join(
-                str(value) for value in certificate.event_start_hours
-            )
-            certificate_key = (
-                f"duration_{duration_h}h_notice_{notice_h}h_events_{event_sequence}"
-            )
+            event_sequence = "-".join(str(value) for value in certificate.event_start_hours)
+            certificate_key = f"duration_{duration_h}h_notice_{notice_h}h_events_{event_sequence}"
             saved_paths[certificate_key] = save_flexibility_certificate(
                 certificate,
                 candidates,

@@ -26,7 +26,7 @@ def test_nature_mainline_protocol_structure_is_valid_without_opening_locked_scen
         for row in rows
     )
     assert any(
-        row["scenario_set"] == "locked_ood"
+        row["scenario_set"] == "locked_id"
         and row["reliability_target"] == 0.99
         and row["sample_size_sufficient"] is True
         for row in rows
@@ -39,6 +39,7 @@ def test_nature_protocol_rejects_randomized_multi_event_primary_config(
     document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
     config_path = ROOT / "configs/env/nature_mainline_development.yaml"
     config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    config["dr"].pop("event_start_hour_choices")
     config["dr"]["event_start_hours"] = [17, 65]
     bad_config = tmp_path / "bad.yaml"
     bad_config.write_text(yaml.safe_dump(config, sort_keys=False), encoding="utf-8")
@@ -57,9 +58,7 @@ def test_nature_protocol_structure_does_not_require_external_parquet(
 ) -> None:
     document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
     document["data"]["community"]["path"] = str(tmp_path / "missing-community.parquet")
-    document["data"]["workload_sampler"]["path"] = str(
-        tmp_path / "missing-workload.parquet"
-    )
+    document["data"]["workload_sampler"]["path"] = str(tmp_path / "missing-workload.parquet")
     candidate = tmp_path / "protocol.yaml"
     candidate.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
 
@@ -101,6 +100,6 @@ def test_nature_protocol_checks_profile_arrival_and_service_contracts(
     report = validate_nature_mainline_protocol(candidate)
 
     assert report["structure_valid"] is False
-    assert report["checks"]["profiles_match_disjoint_split"] is False
+    assert report["checks"]["profiles_match_declared_id_ood_design"] is False
     assert report["checks"]["arrival_processes_match_protocol"] is False
     assert report["checks"]["success_criteria_match_configs"] is False

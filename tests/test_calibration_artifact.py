@@ -22,6 +22,17 @@ def _write_artifact(
     classes: dict[str, float] | None = None,
 ) -> None:
     classes = classes or {"training": 450.0, "offline_inference": 350.0}
+
+    def estimate(power_w: float, lower_w: float, upper_w: float) -> dict[str, object]:
+        return {
+            "estimate_w": power_w,
+            "uncertainty_interval_w": [lower_w, upper_w],
+            "uncertainty_method": "student_t_95_confidence_interval_over_run_means",
+            "statistical_unit": "independent_test_run",
+            "independent_unit_count": 3,
+            "confidence_level": 0.95,
+        }
+
     document: dict[str, object] = {
         "schema_version": HARDWARE_CALIBRATION_SCHEMA_VERSION,
         "artifact_id": "test-four-gpu-node-v1",
@@ -31,19 +42,10 @@ def _write_artifact(
         },
         "measurement": {"method": "pdu_plus_nvidia_smi"},
         "parameters": {
-            "idle_power_w_per_gpu": {
-                "estimate_w": 80.0,
-                "confidence_interval_w": [70.0, 90.0],
-            },
-            "node_fixed_overhead_w": {
-                "estimate_w": 300.0,
-                "confidence_interval_w": [260.0, 340.0],
-            },
+            "idle_power_w_per_gpu": estimate(80.0, 70.0, 90.0),
+            "node_fixed_overhead_w": estimate(300.0, 260.0, 340.0),
             "active_power_w_per_gpu_by_class": {
-                job_class: {
-                    "estimate_w": power_w,
-                    "confidence_interval_w": [power_w - 20.0, power_w + 20.0],
-                }
+                job_class: estimate(power_w, power_w - 20.0, power_w + 20.0)
                 for job_class, power_w in classes.items()
             },
         },
@@ -104,11 +106,11 @@ def test_hourly_config_consumes_calibration_artifact_and_rejects_missing_flexibl
         pytest.approx(350.0)
     )
 
-    document["hardware"]["calibration_power_case"] = "upper_ci"
+    document["hardware"]["calibration_power_case"] = "upper_bound"
     upper_case = load_hourly_environment_config(document)
     assert upper_case.idle_power_w_per_gpu == pytest.approx(90.0)
     assert upper_case.active_power_w_by_class["training"] == pytest.approx(470.0)
-    assert upper_case.calibration_power_case == "upper_ci"
+    assert upper_case.calibration_power_case == "upper_bound"
 
     _write_artifact(artifact_path, classes={"offline_inference": 350.0})
     with pytest.raises(ValueError, match="no active-power estimate"):
@@ -142,28 +144,27 @@ def test_hourly_config_rejects_unknown_and_ambiguous_hardware_fields(
 
 
 def test_formal_config_fails_closed_when_declared_artifact_is_missing(tmp_path: Path) -> None:
-    document = yaml.safe_load(
-        (ROOT / "configs/env/hourly_formal_validation.yaml").read_text()
-    )
+    document = yaml.safe_load((ROOT / "configs/env/hourly_formal_validation.yaml").read_text())
     document["hardware"]["calibration_artifact"] = str(tmp_path / "missing.yaml")
     with pytest.raises(FileNotFoundError, match="missing.yaml"):
         load_hourly_environment_config(document)
 
 
 def test_repository_formal_config_uses_verified_gpu_measurement_anchor() -> None:
-    config = load_hourly_environment_config(
-        ROOT / "configs/env/hourly_formal_validation.yaml"
-    )
+    config = load_hourly_environment_config(ROOT / "configs/env/hourly_formal_validation.yaml")
 
     assert config.calibration_artifact is not None
     assert config.calibration_artifact.artifact_id == "rtx6000pro_4gpu_v1"
-    assert config.calibration_artifact.evidence_class.value == (
-        "benchmark_anchored_synthetic"
-    )
+    assert config.calibration_artifact.evidence_class.value == ("benchmark_anchored_synthetic")
     assert set(config.calibration_artifact.active_power_by_class) == {
         "training",
         "offline_inference",
     }
+    assert config.calibration_artifact.idle_power.statistical_unit == "single_node_idle_run"
+    assert config.calibration_artifact.node_fixed_overhead.independent_unit_count == 0
+    for _, parameter in config.calibration_artifact.active_power_parameters_by_class:
+        assert parameter.statistical_unit == "independent_four_gpu_workload_run_mean"
+        assert parameter.independent_unit_count == 2
 
 
 def test_strict_power_coverage_rejects_uncalibrated_rigid_class(tmp_path: Path) -> None:

@@ -5,13 +5,19 @@ from __future__ import annotations
 import copy
 import json
 import math
+import sys
+import time
 from collections.abc import Sequence
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
-from aidrbench.controllers.hourly_oracle import solve_full_horizon_oracle
+from aidrbench.controllers.hourly_oracle import (
+    HIGHS_THREADS_PER_SOLVE,
+    solve_full_horizon_oracle,
+)
 from aidrbench.data.frozen_scenarios import FrozenHourlyScenario, load_frozen_hourly_scenario
 from aidrbench.envs.community_ai_dr_env import HourlyCommunityAIDemandResponseEnv
 from aidrbench.evaluation.firm_flexibility import (
@@ -31,6 +37,46 @@ def _positive_durations(durations: Sequence[int]) -> tuple[int, ...]:
     if len(set(normalized)) != len(normalized):
         raise ValueError("PI frontier durations must be unique")
     return tuple(sorted(normalized))
+
+
+def _positive_worker_count(workers: int) -> int:
+    if isinstance(workers, bool) or not isinstance(workers, int) or workers <= 0:
+        raise ValueError("PI frontier workers must be a positive integer")
+    return workers
+
+
+def _solve_frozen_pi_frontier_worker(
+    payload: tuple[str, tuple[int, ...], int],
+) -> pd.DataFrame:
+    """Load and solve one artifact in an isolated process.
+
+    Passing the artifact path avoids serializing its large arrival table from
+    the parent process. The parent records each future's original index so
+    completion order cannot change the persisted row ordering.
+    """
+
+    artifact_path, durations_h, event_id = payload
+    artifact = load_frozen_hourly_scenario(artifact_path)
+    return solve_frozen_pi_frontier(
+        artifact,
+        durations_h=durations_h,
+        event_id=event_id,
+    )
+
+
+def _report_progress(*, completed: int, total: int, started_at: float) -> None:
+    """Emit bounded progress updates without mixing them into CLI JSON output."""
+
+    interval = max(1, math.ceil(total / 20))
+    if completed != total and completed % interval != 0:
+        return
+    elapsed_seconds = time.monotonic() - started_at
+    print(
+        f"PI frontier: {completed}/{total} scenarios complete "
+        f"({100.0 * completed / total:.0f}%, {elapsed_seconds:.1f}s elapsed)",
+        file=sys.stderr,
+        flush=True,
+    )
 
 
 def _environment_document(
@@ -292,18 +338,49 @@ def compute_and_save_pi_frontier(
     reliability_targets: Sequence[float] = (),
     confidence_level: float = 0.95,
     nominal_flexibility_fraction: float = 0.50,
+    workers: int = 1,
 ) -> dict[str, str | int]:
     """Compute and persist a hash-linked PI frontier for every supplied artifact."""
 
+    requested_workers = _positive_worker_count(workers)
+    durations = _positive_durations(durations_h)
     artifacts = _discover_artifacts(scenario_path)
-    frames = [
-        solve_frozen_pi_frontier(
-            artifact,
-            durations_h=durations_h,
-            event_id=event_id,
-        )
-        for artifact in artifacts
-    ]
+    worker_count = min(requested_workers, len(artifacts))
+    started_at = time.monotonic()
+    if worker_count == 1:
+        frames = []
+        for completed, artifact in enumerate(artifacts, start=1):
+            frames.append(
+                solve_frozen_pi_frontier(
+                artifact,
+                durations_h=durations,
+                event_id=event_id,
+            )
+            )
+            _report_progress(
+                completed=completed,
+                total=len(artifacts),
+                started_at=started_at,
+            )
+    else:
+        payloads = [
+            (str(artifact.directory), durations, event_id)
+            for artifact in artifacts
+        ]
+        completed_frames: list[pd.DataFrame | None] = [None] * len(payloads)
+        with ProcessPoolExecutor(max_workers=worker_count) as executor:
+            futures = {
+                executor.submit(_solve_frozen_pi_frontier_worker, payload): index
+                for index, payload in enumerate(payloads)
+            }
+            for completed, future in enumerate(as_completed(futures), start=1):
+                completed_frames[futures[future]] = future.result()
+                _report_progress(
+                    completed=completed,
+                    total=len(artifacts),
+                    started_at=started_at,
+                )
+        frames = [frame for frame in completed_frames if frame is not None]
     frontier = pd.concat(frames, ignore_index=True)
     validate_pi_frontier(frontier)
     output = Path(output_directory)
@@ -326,7 +403,12 @@ def compute_and_save_pi_frontier(
             {
                 "capacity_layer": "perfect_information",
                 "event_id": event_id,
-                "durations_h": list(_positive_durations(durations_h)),
+                "durations_h": list(durations),
+                "worker_count": worker_count,
+                "solver": {
+                    "name": "HIGHS",
+                    "threads_per_worker": HIGHS_THREADS_PER_SOLVE,
+                },
                 "scenario_count": len(artifacts),
                 "scenario_hashes": [artifact.scenario_hash for artifact in artifacts],
                 "frontier": str(frontier_path),

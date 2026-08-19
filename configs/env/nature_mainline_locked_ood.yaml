@@ -1,7 +1,7 @@
 # LOCKED OOD Nature Communications scenarios. Do not generate or inspect before freeze.
 seed: 2026
 scenario:
-  locked_ood: true
+  locked_set: locked_ood
   preregistration_manifest: data/manifests/nature_mainline_protocol_v1.yaml
 env:
   timestep_hours: 1.0
@@ -9,11 +9,13 @@ env:
   clearance_tail_hours: 48
   forecast_horizon_hours: 6
   action_mode: continuous
-  episode_seed_range: [30000, 30499]
+  episode_seed_range: [40000, 40499]
 community:
   source: nrel_eulp
   path: data/processed/community_load.parquet
   profile_id: eulp_mixed_3c
+  window_start: '2018-10-20T00:00:00'
+  window_end: '2019-01-01T00:00:00'
   background_peak_kw: 800
   pcc_capacity_kw: 1000
   pv_enabled: true
@@ -52,7 +54,7 @@ hardware:
 dr:
   mode: capacity_limit
   source: configured
-  event_start_hours: [72]
+  event_start_hour_choices: [63, 64, 65, 66, 67, 68, 87, 88, 89, 90, 91, 92, 111, 112, 113, 114, 115, 116, 135, 136, 137, 138, 139, 140]
   event_duration_hours: 1
   event_notice_hours: 0
   reduction_fraction: 0.20
