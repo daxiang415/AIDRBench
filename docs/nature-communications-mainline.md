@@ -300,6 +300,16 @@ python -m aidrbench optimize hosting-ensemble \
 `--workers` only parallelizes independent frozen scenarios. It does not alter
 the optimization model, scenario order, statistical unit, or result schema.
 
+The full nominal development run is complete: 100 frozen scenarios produced
+800 optimal portfolio rows. Simultaneous ensemble-feasible capacity (rigid →
+flexible) is 202.15 → 429.72 kW without PV/BESS, 278.60 → 592.93 kW with BESS
+only, 212.44 → 451.60 kW with PV only, and 313.51 → 658.16 kW with both. Across
+scenarios, all four paired AI hosting gains have Bonferroni 95% simultaneous
+intervals above zero. With the preregistered 10.05 kW equivalence margin, the
+AI–BESS interactions are substitution and the AI–PV interactions are
+complementarity in both conditioning strata. This is a development-set
+planning result and does not open or substitute for locked evaluation.
+
 Without `--require-execution-ready`, `protocol-check` validates only the
 committed preregistration structure and is therefore suitable for a clean CI
 checkout. Formal data-server runs must use the flag so missing/hash-mismatched
@@ -340,7 +350,8 @@ until the experiment design and result schemas are frozen.
    its three-seed smoke to the declared development/validation ensembles.
 4. Run the implemented 100-scenario 2 × 2 × 2 hosting ensemble. Its paired
    uncertainty, eight-contrast family and equivalence margin are now
-   preregistered; the full development output remains to be generated.
+   preregistered. **Completed on 100 nominal development scenarios; locked data
+   remain closed.**
 5. Run success-criterion sensitivities, freeze all choices, then run validation,
    locked ID once, and locked OOD separately once.
 

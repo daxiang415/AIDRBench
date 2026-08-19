@@ -599,6 +599,23 @@ flexible–rigid 差值和 AI–DER difference-in-differences 使用 10,000 次�
 bootstrap，并对 8 个预声明 contrasts 构造 Bonferroni 95% family-wise
 simultaneous intervals。
 
+### 当前 development 结果
+
+100 个 frozen scenarios（而非 800 个 portfolio 行）构成独立样本。共同可行
+容量和同场景配对结果如下；这些是 development planning bounds，不是 locked
+certificate 或现实因果效应：
+
+| PV | BESS | rigid / kW | flexible / kW | simultaneous gain / kW |
+|---|---:|---:|---:|---:|
+| 无 | 无 | 202.15 | 429.72 | 227.57 |
+| 无 | 有 | 278.60 | 592.93 | 314.34 |
+| 有 | 无 | 212.44 | 451.60 | 239.16 |
+| 有 | 有 | 313.51 | 658.16 | 344.65 |
+
+四个场景内平均 AI hosting gains 的 Bonferroni 95% simultaneous intervals
+均完全高于零。按预注册的 10.05 kW practical-equivalence margin，AI–BESS 在
+有/无 PV 条件下均表现为替代，AI–PV 在有/无 BESS 条件下均表现为互补。
+
 ### 预期结论
 
 AI 柔性可以转化为真实接入容量，但价值高度依赖社区峰值时刻、光伏富余和储能时长。
@@ -1006,8 +1023,8 @@ solver and tolerances
 - [ ] 固定因果策略在独立 locked-ID 上完成容量认证；
 - [ ] duration–notice–reliability surface 完成；
 - [ ] compute-debt exhaustion 机制得到量化；
-- [ ] 2 × 2 × 2 hosting-capacity 分析完成；
-- [ ] PV/BESS 互补与替代区域得到识别；
+- [x] development 2 × 2 × 2 hosting-capacity 分析完成；
+- [x] development PV/BESS 互补与替代区域得到识别；
 - [ ] 硬件和场景不确定性分析完成；
 - [ ] 所有正式结果具有完整 provenance 和 hash；
 - [ ] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；

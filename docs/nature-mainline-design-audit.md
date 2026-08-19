@@ -49,6 +49,11 @@ multi-review and it is not a journal acceptance prediction.
    separated from the primary surface and use a same-scenario, same-clock fresh
    event counterfactual, so recovery-gap comparisons do not attribute temporal
    load differences to exhaustion.
+9. The preregistered 100-scenario hosting ensemble is complete. All 800
+   portfolio programs are optimal; paired scenario-level inference uses the
+   declared eight-contrast family and equivalence margin. A checkpoint-only
+   rerun reproduced every aggregate artifact byte-for-byte. These remain
+   development planning bounds, not locked or causal estimates.
 
 ## Remaining blockers before formal locked runs
 
@@ -63,10 +68,9 @@ multi-review and it is not a journal acceptance prediction.
   generality across residential/commercial community types.
 - H100/H200 conversion and gang/non-preemptive/checkpoint models are outside
   the current mainline and are not blockers for freezing Model A.
-- Run the now-preregistered 100-scenario hosting ensemble. The implementation
-  treats frozen scenarios as paired independent units, applies Bonferroni
-  simultaneous bootstrap intervals to eight planned contrasts, and fixes the
-  equivalence margin at 5% of reference-mix operating peak before the run.
+- Repeat the hosting analysis only for predeclared validation/profile
+  sensitivities before claiming community-wide generality. The nominal
+  100-scenario development ensemble is complete; locked data remain closed.
 
 ## Run gate
 

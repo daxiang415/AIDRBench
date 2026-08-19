@@ -125,16 +125,20 @@ delivery remains within roughly 0.7% of the fresh counterfactual. Joint success
 varies from 0/3 to 3/3 across H/gap programs, so this run validates the mechanism
 and output schema but is far too small for a headline result.
 
-The 2 × 2 × 2 hosting planner has also run on one full seven-day development
-scenario. All eight portfolios solved, and the output now includes raw AI–BESS
-and AI–PV interaction contrasts. These single-scenario point values are smoke
-diagnostics only. A resumable scenario-decomposed ensemble path is now
-implemented and tested: the frozen scenario is the independent unit, the
-headline simultaneous capacity is the exact minimum of scenario-specific
-optima, and four hosting gains plus four interaction contrasts use 10,000
-paired bootstrap resamples with Bonferroni family-wise intervals. The practical
-equivalence margin is preregistered as 5% of the reference-mix operating peak.
-The 100-scenario development ensemble has not yet been run.
+The preregistered 2 × 2 × 2 hosting ensemble has now run on all 100 nominal
+development scenarios (800 optimal portfolio solves). The frozen scenario,
+not the portfolio row, is the independent unit. The simultaneous
+ensemble-feasible capacities range from 202.15 kW for rigid/no-PV/no-BESS to
+658.16 kW for flexible/PV/BESS. Mean within-scenario flexible-minus-rigid gains
+are positive for all four DER portfolios: 282.90, 235.25, 346.50 and 270.47 kW,
+with all Bonferroni 95% simultaneous lower limits above zero. Under the
+preregistered 10.05 kW practical-equivalence margin, both AI–BESS interactions
+are classified as substitution (-47.64 and -76.03 kW), while both AI–PV
+interactions are classified as complementarity (+63.60 and +35.22 kW). These
+are development planning-bound results, not locked certificates or causal
+real-world estimates. A checkpoint-only rerun recovered 100/100 scenarios,
+solved zero new programs, and reproduced all four aggregate artifacts
+byte-for-byte.
 
 The rule-controller smoke output for the current interface is under
 `results/smoke/firm_v4_reward_v2_rules_seed20000/`. It is a semantic check of
