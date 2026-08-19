@@ -14,6 +14,24 @@ scientific_estimand:
   controller_training_required: false
   controller_comparison_required: false
 
+model_a_freeze:
+  status: frozen_after_preregistered_notice_diagnostic
+  git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+  environment_config:
+    path: configs/env/nature_mainline_development.yaml
+    sha256: c48e70b46f82da4eed80e58b040aa95091dbc03497456745b1c370817bd032e5
+  controller_specification:
+    path: configs/controller/nature_robust_mpc_v1.yaml
+    sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
+  notice_diagnostic:
+    path: results/nature_mainline/development_notice_diagnostics_v2/notice_mechanism_diagnostics.parquet
+    sha256: 60195054f5dddc0d6c35ea0b281d585b1f9d041d1f26f58686581ca187722218
+    result: zero_notice_gain_at_H4_and_H8
+    interpretation: potentially_structural_not_a_failure_to_repair
+  permitted_downstream_layers:
+    - repeated_event_exhaustion
+    - hosting_capacity_2x2x2
+
 data:
   community:
     path: data/processed/community_load.parquet

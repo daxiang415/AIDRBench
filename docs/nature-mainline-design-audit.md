@@ -45,6 +45,10 @@ multi-review and it is not a journal acceptance prediction.
    notice gain. Notice nevertheless exposes additional information nodes and
    changes the causal schedule; interval delivery remains binding. The null is
    retained as a structural result and no scheduling friction was added.
+8. Model A is frozen at commit `d03b440`. Repeated-event diagnostics are now
+   separated from the primary surface and use a same-scenario, same-clock fresh
+   event counterfactual, so recovery-gap comparisons do not attribute temporal
+   load differences to exhaustion.
 
 ## Remaining blockers before formal locked runs
 

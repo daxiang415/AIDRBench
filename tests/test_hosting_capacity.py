@@ -122,6 +122,7 @@ def test_hosting_matrix_exports_all_eight_portfolios(tmp_path: Path) -> None:
     )
 
     frame = pd.read_parquet(result["result"])
+    interactions = pd.read_parquet(result["interactions"])
     assert len(frame) == 8
     assert set(
         zip(frame["pv_enabled"], frame["bess_enabled"], frame["dc_operation"], strict=True)
@@ -133,3 +134,6 @@ def test_hosting_matrix_exports_all_eight_portfolios(tmp_path: Path) -> None:
     }
     assert (frame["hosting_capacity_gain_vs_rigid_kw"] >= -1e-6).all()
     assert (frame["hosting_capacity_multiplier_vs_rigid"] >= 1.0 - 1e-6).all()
+    assert len(interactions) == 4
+    assert set(interactions["interaction"]) == {"AI_BESS", "AI_PV"}
+    assert interactions["interaction_kw"].notna().all()

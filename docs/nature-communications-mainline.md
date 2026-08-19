@@ -235,6 +235,48 @@ python -m aidrbench scenario check-sensitivities \
   --output results/nature_mainline/sensitivity_service_gate_v1
 ```
 
+Model A is frozen at Git commit `d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`.
+The separate repeated-event layer references that commit and the exact SHA-256
+of the completed N=0 development capacity table. A bounded three-seed code-path
+check is generated and evaluated with:
+
+```bash
+python -m aidrbench scenario freeze-exhaustion \
+  --specification configs/experiment/nature_exhaustion_v1.yaml \
+  --seeds 10000 10001 10002 \
+  --output results/nature_mainline/development_exhaustion_smoke_v1
+
+python -m aidrbench optimize exhaustion-diagnostics \
+  --scenarios results/nature_mainline/development_exhaustion_smoke_v1 \
+  --specification configs/experiment/nature_exhaustion_v1.yaml \
+  --workers 4 \
+  --output results/nature_mainline/development_exhaustion_diagnostics_smoke_v3
+```
+
+For every repeated event, the diagnostic also runs a fresh single-event
+counterfactual at the same scenario and clock hour. This pairing prevents the
+recovery-gap comparison from confusing history-dependent exhaustion with a
+different community-load period. Delivery, rebound and window relief are
+event-local; deadline misses and terminal backlog enter only joint-episode
+service feasibility. The current three-seed output is a smoke diagnostic, not
+an exhaustion-capacity certificate.
+
+The existing hosting planner now exports both the declared eight portfolios
+and unclassified AI–BESS/AI–PV point interactions. One full-horizon development
+scenario takes about 42 seconds for all eight solves:
+
+```bash
+python -m aidrbench optimize hosting-capacity \
+  --scenarios results/nature_mainline/development_v2_nominal/hourly_seed_10000 \
+  --portfolio configs/community/pv_bess.yaml \
+  --dc-operation matrix \
+  --output results/nature_mainline/development_hosting_smoke_seed10000_v2
+```
+
+The point interactions must not be labelled complementarity, substitution or
+equivalence until scenario-level uncertainty and an equivalence margin are
+predeclared.
+
 `--workers` only parallelizes independent frozen scenarios. It does not alter
 the optimization model, scenario order, statistical unit, or result schema.
 
@@ -272,10 +314,12 @@ until the experiment design and result schemas are frozen.
    gain remains a valid structural result; do not add mechanisms to force a
    positive result. **Completed on development data.**
 2. Freeze Model A after the diagnostic and retain the hash-locked robust-MPC
-   route for the later independent operational certificate.
-3. Add the separate repeated-event exhaustion generator and residual
-   flexibility summaries.
-4. Run and aggregate the 2 × 2 × 2 hosting matrix and PV/BESS response surface.
+   route for the later independent operational certificate. **Frozen at
+   `d03b440`.**
+3. Scale the now-implemented paired repeated-event exhaustion pipeline from
+   its three-seed smoke to the declared development/validation ensembles.
+4. Scale the verified 2 × 2 × 2 hosting matrix beyond its one-scenario smoke,
+   then add scenario-level uncertainty and the predeclared equivalence margin.
 5. Run success-criterion sensitivities, freeze all choices, then run validation,
    locked ID once, and locked OOD separately once.
 

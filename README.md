@@ -531,9 +531,16 @@ F_q^{\mathrm{causal}}(H,N).
 
 - 单次事件前后 backlog、deadline slack 和 compute debt；
 - 不同事件间隔下的第二、第三、第四次可持续容量；
+- 每次重复事件与同一 frozen scenario、同一时刻的 fresh single-event
+  counterfactual 配对，避免把社区时段差异误判为历史耗尽；
 - 恢复过程中的 PCC rebound；
 - 计算债务与剩余灵活性的关联；
 - event duration 与 recovery gap 的交互作用。
+
+事件局部的 delivery、interval delivery、rebound 和 window relief 与联合
+episode 的 deadline miss、terminal backlog 分开报告。joint-episode success
+是重复事件主统计单位；固定容量下的配对交付比只是机制诊断，不得写成
+event-wise firm-capacity certificate。
 
 ### 预期结论
 
@@ -619,6 +626,9 @@ I_{\mathrm{AI,BESS}}
 - \(I>0\)：互补；
 - \(I<0\)：替代；
 - \(I\approx0\)：近似独立。
+
+上述标签只在场景级不确定性区间和预声明 equivalence margin 完成后使用；
+单个 development scenario 的点估计只用于验证 2 × 2 × 2 求解路径。
 
 对 PV 可定义相同交互项。
 

@@ -1,0 +1,32 @@
+schema_version: 1
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+dataset_role: development_repeated_event_exhaustion
+base_environment_config: configs/env/nature_mainline_development.yaml
+controller_config: configs/controller/nature_robust_mpc_v1.yaml
+
+# Separate stress scenarios start at the first declared mainline peak-window
+# hour. Four H=8 events with a 24 h recovery gap still fit the seven-day main
+# horizon exactly; no event is truncated into the clearance tail.
+first_event_start_hour: 63
+max_event_count: 4
+duration_hours: [4, 8]
+recovery_gaps_hours: [2, 4, 8, 12, 24]
+notice_hours: 0
+reliability_target: 0.95
+confidence_level: 0.95
+
+# This is the already-computed Model A development reference, not a new
+# capacity selection. The exact file hash prevents later silent substitution.
+capacity_source:
+  path: results/nature_mainline/development_notice_diagnostics_v2/notice_mechanism_diagnostics.parquet
+  sha256: 60195054f5dddc0d6c35ea0b281d585b1f9d041d1f26f58686581ca187722218
+  column: na_capacity_kw
+  notice_hours: 0
+
+criteria:
+  min_delivery_ratio: 0.95
+  min_interval_delivery_ratio: 0.95
+  max_deadline_miss_rate: 0.01
+  max_rebound_ratio: 0.25
+  min_window_peak_relief_fraction: 0.50
+  max_terminal_backlog_fraction: 0.02

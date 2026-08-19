@@ -577,11 +577,54 @@ def compute_and_save_hosting_capacity(
         result.loc[index, "hosting_capacity_multiplier_vs_rigid"] = (
             result.loc[index, "hosting_dc_peak_kw"] / max(rigid_capacity_kw, _TOLERANCE)
         )
+    interaction_rows: list[dict[str, object]] = []
+    if dc_operation == "matrix":
+        for pv_enabled in (False, True):
+            selected = result.loc[result["pv_enabled"] == pv_enabled]
+            ai_gain_by_bess: dict[bool, float] = {}
+            for bess_enabled in (False, True):
+                portfolio_rows = selected.loc[selected["bess_enabled"] == bess_enabled]
+                capacities = portfolio_rows.set_index("dc_operation")["hosting_dc_peak_kw"]
+                ai_gain_by_bess[bess_enabled] = float(
+                    capacities.loc["flexible"] - capacities.loc["rigid"]
+                )
+            interaction_rows.append(
+                {
+                    "interaction": "AI_BESS",
+                    "conditioning_axis": "pv_enabled",
+                    "conditioning_level": pv_enabled,
+                    "base_ai_hosting_gain_kw": ai_gain_by_bess[False],
+                    "augmented_ai_hosting_gain_kw": ai_gain_by_bess[True],
+                    "interaction_kw": ai_gain_by_bess[True] - ai_gain_by_bess[False],
+                }
+            )
+        for bess_enabled in (False, True):
+            selected = result.loc[result["bess_enabled"] == bess_enabled]
+            ai_gain_by_pv: dict[bool, float] = {}
+            for pv_enabled in (False, True):
+                portfolio_rows = selected.loc[selected["pv_enabled"] == pv_enabled]
+                capacities = portfolio_rows.set_index("dc_operation")["hosting_dc_peak_kw"]
+                ai_gain_by_pv[pv_enabled] = float(
+                    capacities.loc["flexible"] - capacities.loc["rigid"]
+                )
+            interaction_rows.append(
+                {
+                    "interaction": "AI_PV",
+                    "conditioning_axis": "bess_enabled",
+                    "conditioning_level": bess_enabled,
+                    "base_ai_hosting_gain_kw": ai_gain_by_pv[False],
+                    "augmented_ai_hosting_gain_kw": ai_gain_by_pv[True],
+                    "interaction_kw": ai_gain_by_pv[True] - ai_gain_by_pv[False],
+                }
+            )
+    interactions = pd.DataFrame.from_records(interaction_rows)
     output = Path(output_directory)
     output.mkdir(parents=True, exist_ok=True)
     result_path = output / "hosting_capacity.parquet"
+    interactions_path = output / "hosting_interactions.parquet"
     manifest_path = output / "hosting_capacity.json"
     result.to_parquet(result_path, index=False)
+    interactions.to_parquet(interactions_path, index=False)
     manifest_path.write_text(
         json.dumps(
             {
@@ -604,6 +647,11 @@ def compute_and_save_hosting_capacity(
                     "bess_dispatch_mode": portfolio.bess_dispatch_mode,
                 },
                 "result": str(result_path),
+                "interactions": str(interactions_path),
+                "interaction_interpretation": (
+                    "planning-bound point contrasts; confidence intervals and an "
+                    "equivalence margin are required before complementarity claims"
+                ),
                 "provenance": optimization_provenance(artifacts),
             },
             ensure_ascii=False,
@@ -616,5 +664,6 @@ def compute_and_save_hosting_capacity(
         "scenario_count": len(artifacts),
         "row_count": len(result),
         "result": str(result_path),
+        "interactions": str(interactions_path),
         "manifest": str(manifest_path),
     }

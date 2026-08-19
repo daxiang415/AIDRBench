@@ -284,6 +284,13 @@ def _add_scenario_parsers(subparsers: Any) -> None:
     freeze.add_argument("--unlock-locked-ood", action="store_true")
     freeze.add_argument("--acknowledge-one-time-locked-use", action="store_true")
     freeze.add_argument("--output", required=True)
+    freeze_exhaustion = commands.add_parser(
+        "freeze-exhaustion",
+        help="freeze the separate development repeated-event scenario programs",
+    )
+    freeze_exhaustion.add_argument("--specification", required=True)
+    freeze_exhaustion.add_argument("--seeds", nargs="+", type=int, required=True)
+    freeze_exhaustion.add_argument("--output", required=True)
     inspect = commands.add_parser(
         "inspect", help="verify one frozen scenario and display its provenance"
     )
@@ -376,6 +383,14 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     notice_diagnostics.add_argument("--reliability", type=float, default=0.95)
     notice_diagnostics.add_argument("--workers", type=int, default=1)
     notice_diagnostics.add_argument("--output", required=True)
+    exhaustion = commands.add_parser(
+        "exhaustion-diagnostics",
+        help="evaluate frozen Model A over development repeated-event chains",
+    )
+    exhaustion.add_argument("--scenarios", required=True)
+    exhaustion.add_argument("--specification", required=True)
+    exhaustion.add_argument("--workers", type=int, default=1)
+    exhaustion.add_argument("--output", required=True)
     hosting = commands.add_parser(
         "hosting-capacity",
         help="compute frozen-scenario absolute-PCC hosting-capacity planning bounds",
@@ -1158,6 +1173,16 @@ def _run_scenario(args: argparse.Namespace) -> int:
             }
         )
         return 0
+    if args.scenario_command == "freeze-exhaustion":
+        from aidrbench.evaluation.exhaustion import freeze_repeated_event_scenarios
+
+        summary = freeze_repeated_event_scenarios(
+            args.specification,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
     if args.scenario_command == "inspect":
         from aidrbench.data.frozen_scenarios import load_frozen_hourly_scenario
 
@@ -1262,6 +1287,19 @@ def _run_optimization(args: argparse.Namespace) -> int:
             durations_h=args.durations,
             notices_h=args.notices,
             reliability_target=args.reliability,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "exhaustion-diagnostics":
+        from aidrbench.evaluation.exhaustion import (
+            compute_repeated_event_exhaustion_diagnostics,
+        )
+
+        summary = compute_repeated_event_exhaustion_diagnostics(
+            args.scenarios,
+            specification_path=args.specification,
+            output_directory=args.output,
             workers=args.workers,
         )
         _print_summary(summary)

@@ -62,7 +62,7 @@ intervals.
   raw-config hashes, the Git commit, and controller/evaluator source hashes;
   frozen test recomputes them and fails closed. Candidate selection supports a
   declared fine grid or binary search rather than a fixed 0.1 fraction grid.
-- The current repository passes 199 mechanism-core tests without RL
+- The current repository passes 201 mechanism-core tests without RL
   dependencies, plus `ruff check .` and strict type checks on all changed
   modules. RL-only tests were not run in this environment because the optional
   Stable-Baselines3 dependency is not installed.
@@ -113,6 +113,23 @@ sensitivity scenario execution. No checkpoint, non-preemptive or gang model
 has been added. The declared nine-case sparse design passed the gate on seeds
 10000--10002: all 27 checks had zero baseline deadline misses and zero terminal
 backlog. No sensitivity frontier or Cartesian product has been run.
+
+Model A is frozen at commit `d03b440`. A separate repeated-event generator and
+paired exhaustion diagnostic now cover H={4,8}, four events and recovery gaps
+{2,4,8,12,24} h without changing Model A. Each repeated event is compared with
+a fresh single-event counterfactual at the identical scenario and clock hour;
+event-local criteria are separated from joint-episode deadline and terminal
+service feasibility. The three-seed development smoke shows event-start
+compute-debt increments up to about 1.33 MWh by event four, while paired p05
+delivery remains within roughly 0.7% of the fresh counterfactual. Joint success
+varies from 0/3 to 3/3 across H/gap programs, so this run validates the mechanism
+and output schema but is far too small for a headline result.
+
+The 2 × 2 × 2 hosting planner has also run on one full seven-day development
+scenario. All eight portfolios solved, and the output now includes raw AI–BESS
+and AI–PV interaction contrasts. These single-scenario point values are smoke
+diagnostics only; no complementarity/substitution label is assigned before
+scenario-level uncertainty and an equivalence margin are added.
 
 The rule-controller smoke output for the current interface is under
 `results/smoke/firm_v4_reward_v2_rules_seed20000/`. It is a semantic check of
