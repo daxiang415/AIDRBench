@@ -1,6 +1,6 @@
 # Nature mainline design audit
 
-Date: 2026-08-18
+Date: 2026-08-19
 
 Scope: bounded, single-context design and statistics review of the active README,
 protocol, calibration artifact, scenario generator, PI/NA optimizers, causal
@@ -40,28 +40,25 @@ multi-review and it is not a journal acceptance prediction.
    reuses immutable scenario snapshots. The complete 100-scenario nominal
    duration × notice development grid is solved and hash-merged from three
    independently written notice partitions.
+7. The preregistered H={4,8}, N={0,6}, q=0.95 development diagnostic is
+   complete. PI, restricted NA and the frozen-spec robust MPC all have zero
+   notice gain. Notice nevertheless exposes additional information nodes and
+   changes the causal schedule; interval delivery remains binding. The null is
+   retained as a structural result and no scheduling friction was added.
 
 ## Remaining blockers before formal locked runs
 
 - Corrected matched development scenarios and PI frontiers are complete for all
   three calibration power cases. Pre-audit `development_*` artifacts remain
   historical and cannot be reused as formal evidence.
-- The complete nominal NA development grid has a zero same-ensemble empirical
-  information gap and no notice effect. This is not a confidence-bound result.
-  Before claiming a notice mechanism, add preregistered tighter-deadline,
-  higher-utilization, checkpoint/gang or non-preemptive sensitivities; do not
-  hide the nominal null result.
 - Run success-criterion sensitivities. The 0.95 delivery, 0.25 rebound, 0.50
   window-relief, 0.01 miss, and 0.02 terminal-backlog values are operational
   definitions, not fitted reward weights; all headline surfaces need the
   predeclared threshold sensitivity table.
 - Expand community sensitivities beyond the mixed profile before claiming
   generality across residential/commercial community types.
-- Add compute-throughput conversion by workload class before interpreting
-  H100/H200 power profiles as equivalent compute capacity. Current external GPU
-  profiles remain assumption-based sensitivity cases.
-- Quantify the fluid scheduling approximation with gang/non-preemptive and
-  checkpoint-overhead sensitivities.
+- H100/H200 conversion and gang/non-preemptive/checkpoint models are outside
+  the current mainline and are not blockers for freezing Model A.
 - Add confidence intervals or resampling uncertainty for PV/BESS interaction
   terms and predeclare an equivalence margin for “approximately zero”.
 

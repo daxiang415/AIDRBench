@@ -18,6 +18,7 @@ from aidrbench.evaluation.non_anticipative import (
     solve_frozen_non_anticipative_capacity,
     solve_frozen_observation_partition_capacity,
     validate_non_anticipative_frontier,
+    validate_non_anticipative_notice_monotonicity,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -234,6 +235,22 @@ def test_notice_override_is_recorded_in_causal_solution(tmp_path: Path) -> None:
     )
 
     assert solution.notice_h == 6
+
+
+def test_non_anticipative_notice_capacity_is_weakly_monotone() -> None:
+    frontier = pd.DataFrame(
+        {
+            "duration_h": [4, 4, 4],
+            "notice_h": [0, 2, 6],
+            "ensemble_success_fraction_target": [0.95] * 3,
+            "non_anticipative_capacity_kw": [40.0, 40.0, 41.0],
+        }
+    )
+
+    validate_non_anticipative_notice_monotonicity(frontier)
+    frontier.loc[2, "non_anticipative_capacity_kw"] = 39.0
+    with pytest.raises(ValueError, match="notice weak monotonicity"):
+        validate_non_anticipative_notice_monotonicity(frontier)
 
 
 def test_observation_partition_rejects_forecast_information_leakage(

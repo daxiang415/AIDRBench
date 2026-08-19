@@ -71,6 +71,23 @@ def rollout_hourly_episode(
     truncated = False
     hour = 0
     while not (terminated or truncated):
+        control_state = info.get("control_state")
+        if not isinstance(control_state, Mapping):
+            raise RuntimeError("hourly rollout is missing the causal control state")
+        decision_metrics = {
+            "decision_backlog_gpu_h": float(control_state["backlog_gpu_h"]),
+            "decision_compute_debt_kwh": float(control_state["compute_debt_kwh"]),
+            "decision_remaining_by_deadline_gpu_h": tuple(
+                float(value)
+                for value in control_state["remaining_by_deadline_gpu_h"]
+            ),
+            "decision_event_request_reference_kw": float(
+                control_state["event_request_reference_kw"]
+            ),
+            "decision_event_notice_remaining_hours": float(
+                control_state["event_notice_remaining_hours"]
+            ),
+        }
         action_start = time.perf_counter()
         action = controller.act(env, info)
         action_time_ms = (time.perf_counter() - action_start) * 1_000.0
@@ -81,6 +98,7 @@ def rollout_hourly_episode(
                 "reward": reward,
                 "controller": controller.name,
                 "controller_action_time_ms": action_time_ms,
+                **decision_metrics,
                 **{
                     key: value
                     for key, value in info.items()

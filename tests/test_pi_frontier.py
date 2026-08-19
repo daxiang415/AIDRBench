@@ -12,6 +12,7 @@ from aidrbench.evaluation.pi_frontier import (
     solve_frozen_pi_frontier,
     summarize_pi_firm_boundary,
     validate_pi_frontier,
+    validate_pi_notice_invariance,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -65,6 +66,26 @@ def test_pi_frontier_validator_rejects_nonmonotone_capacity() -> None:
 
     with pytest.raises(ValueError, match="duration monotonicity"):
         validate_pi_frontier(frontier)
+
+
+def test_pi_capacity_is_invariant_to_notice_time(tmp_path: Path) -> None:
+    frozen = freeze_hourly_scenario(CONFIG, seed=22, output_directory=tmp_path)
+    artifact = load_frozen_hourly_scenario(str(frozen["output"]))
+
+    frontier = pd.concat(
+        [
+            solve_frozen_pi_frontier(
+                artifact,
+                durations_h=[1],
+                notice_h=notice_h,
+            )
+            for notice_h in (0, 6)
+        ],
+        ignore_index=True,
+    )
+
+    validate_pi_notice_invariance(frontier)
+    assert frontier["perfect_information_capacity_kw"].nunique() == 1
 
 
 def test_pi_scenario_optima_aggregate_to_confidence_bounded_firm_capacity() -> None:

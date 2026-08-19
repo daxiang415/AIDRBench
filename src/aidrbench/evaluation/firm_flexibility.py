@@ -264,7 +264,11 @@ def derive_event_outcomes(
             else 0.0
         )
         peak_delivered_kw = float(event_rows["delivered_reduction_kw"].clip(lower=0.0).max())
-        rebound_ratio = rebound_peak_kw / peak_delivered_kw if peak_delivered_kw > _EPSILON else 0.0
+        rebound_ratio = (
+            rebound_peak_kw / peak_delivered_kw
+            if event.requested_reduction_kw > _EPSILON and peak_delivered_kw > _EPSILON
+            else 0.0
+        )
         window_peak_relief_kw = float(
             window_rows["baseline_pcc_power_kw"].max() - window_rows["pcc_power_kw"].max()
         )

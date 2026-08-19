@@ -34,14 +34,14 @@ def test_training_share_changes_flexible_gpu_hour_supply() -> None:
     low_training = make_synthetic_hourly_arrivals(
         hours=48,
         total_gpu_count=16,
-        target_total_utilization=0.60,
+        flexible_arrival_utilization=0.60,
         workload_mix=_mix(0.20),
         seed=17,
     )
     high_training = make_synthetic_hourly_arrivals(
         hours=48,
         total_gpu_count=16,
-        target_total_utilization=0.60,
+        flexible_arrival_utilization=0.60,
         workload_mix=_mix(0.80),
         seed=17,
     )
@@ -57,7 +57,7 @@ def test_hourly_arrivals_are_reproducible_from_seed() -> None:
     kwargs = {
         "hours": 24,
         "total_gpu_count": 8,
-        "target_total_utilization": 0.5,
+        "flexible_arrival_utilization": 0.5,
         "workload_mix": _mix(0.50),
         "seed": 99,
     }
@@ -66,6 +66,24 @@ def test_hourly_arrivals_are_reproducible_from_seed() -> None:
     second = make_synthetic_hourly_arrivals(**kwargs)
 
     assert first.equals(second)
+
+
+def test_deadline_slack_scale_changes_deadlines_without_changing_arrival_volume() -> None:
+    kwargs = {
+        "hours": 24,
+        "total_gpu_count": 8,
+        "flexible_arrival_utilization": 0.5,
+        "workload_mix": _mix(0.50),
+        "seed": 101,
+    }
+
+    reference = make_synthetic_hourly_arrivals(**kwargs, deadline_slack_scale=1.0)
+    tighter = make_synthetic_hourly_arrivals(**kwargs, deadline_slack_scale=0.5)
+
+    assert tighter["arrival_gpu_h"].sum() == pytest.approx(
+        reference["arrival_gpu_h"].sum()
+    )
+    assert (tighter["slack_hours"] <= reference["slack_hours"]).all()
 
 
 def _write_subhourly_community(path: Path, *, hours: int = 12) -> None:

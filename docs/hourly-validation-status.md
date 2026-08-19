@@ -5,7 +5,7 @@
 > of the RL/CMDP results below is a mainline capacity result. Current executable
 > status and commands are in `docs/nature-communications-mainline.md`.
 
-Updated: 2026-08-18. The Nature design audit separates locked-ID seeds
+Updated: 2026-08-19. The Nature design audit separates locked-ID seeds
 `30000..30499` from locked-OOD seeds `40000..40499`; neither set has been
 generated or evaluated.
 
@@ -57,7 +57,12 @@ intervals.
 - PI and restricted NA remain planning bounds. The new frozen causal route
   selects one robust-MPC capacity on validation and evaluates it once on
   disjoint locked-ID scenarios with a one-sided Wilson bound.
-- The current repository passes 189 mechanism-core tests without RL
+- The formal robust-MPC route now requires the complete
+  `nature_robust_mpc_v1.yaml` specification. Selection records normalized and
+  raw-config hashes, the Git commit, and controller/evaluator source hashes;
+  frozen test recomputes them and fails closed. Candidate selection supports a
+  declared fine grid or binary search rather than a fixed 0.1 fraction grid.
+- The current repository passes 199 mechanism-core tests without RL
   dependencies, plus `ruff check .` and strict type checks on all changed
   modules. RL-only tests were not run in this environment because the optional
   Stable-Baselines3 dependency is not installed.
@@ -85,9 +90,29 @@ optimal. Capacities at `[1, 2, 3, 4, 6, 8] h` are `[56.42, 53.49, 45.17,
 44.00, 43.01, 41.19] kW` for each of 0 h, 2 h and 6 h notice. Every point equals
 its matched same-ensemble empirical PI order statistic, so the descriptive
 information gap is zero. The result has no confidence bound and is not an
-independent certificate. The zero notice effect is specific to the current
-fluid/preemptible, no-checkpoint-delay model and is now a target for explicit
-deadline, utilization and scheduling-overhead sensitivities.
+independent certificate. Zero notice gain is retained as a potentially
+structural result, not a defect to repair. A development-only H={4,8}, N={0,6}
+diagnostic now combines the existing PI/NA artifacts with the frozen robust-MPC
+specification and reports pre-execution eligibility, spare capacity, event-start
+debt, schedule divergence, information-node splits, binding constraints and
+fixed-capacity service margins. It has now been executed on the 100 matched
+development scenarios without reading locked data. PI, NA and fixed-capacity
+robust-MPC notice gains are zero at H=4 and H=8. For N=6, however, the diagnostic
+finds a mean 1,829 GPU-hour causal upper bound on pre-executable work, 133
+GPU-hours of pre-event no-control spare capacity, 34 additional information
+nodes, and about 1.3 GPU-hours of paired robust-MPC schedule divergence per
+pre-event interval. Interval delivery remains binding, so the changed dispatch
+does not increase capacity or the fifth-percentile service margin. The robust
+controller is evaluated at the common NA capacity and is not selected on
+development; its 0.92 success fraction is diagnostic, not a certificate.
+
+The sensitivity schema now separates flexible arrival utilization from rigid
+GPU utilization and adds `deadline_slack_scale`. The preregistered design is a
+sparse factorial, and its no-DR service-feasibility gate must pass before any
+sensitivity scenario execution. No checkpoint, non-preemptive or gang model
+has been added. The declared nine-case sparse design passed the gate on seeds
+10000--10002: all 27 checks had zero baseline deadline misses and zero terminal
+backlog. No sensitivity frontier or Cartesian product has been run.
 
 The rule-controller smoke output for the current interface is under
 `results/smoke/firm_v4_reward_v2_rules_seed20000/`. It is a semantic check of

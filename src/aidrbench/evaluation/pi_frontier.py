@@ -84,6 +84,7 @@ def _environment_document(
     *,
     duration_h: int,
     event_id: int,
+    notice_h: int | None = None,
 ) -> dict[str, Any]:
     document = copy.deepcopy(artifact.config_document)
     raw_scenario = document.get("scenario")
@@ -94,6 +95,10 @@ def _environment_document(
             "frozen_event_ids": [event_id],
         }
     )
+    if notice_h is not None:
+        if isinstance(notice_h, bool) or not isinstance(notice_h, int) or notice_h < 0:
+            raise ValueError("notice_h must be a non-negative integer")
+        scenario["frozen_event_notice_hours"] = notice_h
     document["scenario"] = scenario
     raw_dr = document.get("dr")
     if not isinstance(raw_dr, dict):
@@ -121,6 +126,7 @@ def solve_frozen_pi_frontier(
     *,
     durations_h: Sequence[int],
     event_id: int = 0,
+    notice_h: int | None = None,
 ) -> pd.DataFrame:
     """Solve a fresh, single-event perfect-information duration frontier.
 
@@ -139,6 +145,7 @@ def solve_frozen_pi_frontier(
             artifact,
             duration_h=duration_h,
             event_id=event_id,
+            notice_h=notice_h,
         )
         env = HourlyCommunityAIDemandResponseEnv(document)
         env.reset(seed=artifact.episode_seed)
@@ -166,6 +173,7 @@ def solve_frozen_pi_frontier(
                 "episode_seed": artifact.episode_seed,
                 "event_id": event_id,
                 "duration_h": duration_h,
+                "notice_h": int(snapshot.events[0].notice_hours),
                 "capacity_layer": "perfect_information",
                 "perfect_information_capacity_kw": solution.perfect_information_capacity_kw,
                 "perfect_information_capacity_fraction_of_dynamic_range": (
@@ -218,11 +226,31 @@ def validate_pi_frontier(frontier: pd.DataFrame) -> None:
         > frontier["physical_dynamic_upper_bound_kw"] + 1e-6
     ).any():
         raise ValueError("PI frontier exceeds the physical dynamic-power bound")
-    for _, group in frontier.groupby(["scenario_hash", "event_id"], sort=False):
+    grouping = ["scenario_hash", "event_id"]
+    if "notice_h" in frontier.columns:
+        grouping.append("notice_h")
+    for _, group in frontier.groupby(grouping, sort=False):
         ordered = group.sort_values("duration_h")
         capacity = ordered["perfect_information_capacity_kw"].to_numpy()
         if len(capacity) > 1 and (capacity[1:] > capacity[:-1] + 1e-6).any():
             raise ValueError("PI frontier violates duration monotonicity")
+
+
+def validate_pi_notice_invariance(frontier: pd.DataFrame, *, tolerance_kw: float = 1e-6) -> None:
+    """Verify that perfect information is invariant to notification time."""
+
+    validate_pi_frontier(frontier)
+    if "notice_h" not in frontier.columns:
+        raise ValueError("PI notice-invariance audit requires a notice_h column")
+    for _, group in frontier.groupby(
+        ["scenario_hash", "event_id", "duration_h"],
+        sort=False,
+    ):
+        if group["notice_h"].nunique() < 2:
+            continue
+        capacities = group["perfect_information_capacity_kw"].astype(float)
+        if float(capacities.max() - capacities.min()) > tolerance_kw:
+            raise ValueError("perfect-information capacity depends on notice time")
 
 
 def summarize_pi_firm_boundary(

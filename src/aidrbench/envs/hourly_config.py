@@ -185,7 +185,9 @@ class HourlyEnvironmentConfig:
     node_count: int | Literal["auto"]
     target_dc_peak_share_of_pcc: float
     flexible_gpu_fraction: float
-    target_total_utilization: float
+    flexible_arrival_utilization: float
+    rigid_gpu_utilization: float
+    deadline_slack_scale: float
     workload_mix: WorkloadMix
     workload_source: Literal["synthetic", "alibaba2026_lite"]
     alibaba_summary_path: Path | None
@@ -269,13 +271,7 @@ class HourlyEnvironmentConfig:
     def _rigid_utilization(self) -> float:
         """Return the fixed rigid-pool utilization used in every node candidate."""
 
-        rigid_physical_share = 1.0 - self.flexible_gpu_fraction
-        if rigid_physical_share <= 0.0:
-            return 0.0
-        return min(
-            self.target_total_utilization * self.workload_mix.rigid_share / rigid_physical_share,
-            1.0,
-        )
+        return self.rigid_gpu_utilization
 
     def _power_model_for_node_count(self, node_count: int) -> HourlyDataCenterPowerModel:
         """Build the final model used to evaluate a particular node count."""
@@ -613,6 +609,11 @@ def load_hourly_environment_config(
         "virtual_datacenter.target_dc_peak_share_of_pcc",
         allow_zero=False,
     )
+    flexible_gpu_fraction = _fraction(
+        virtual_dc.get("flexible_gpu_fraction", 0.50),
+        "virtual_datacenter.flexible_gpu_fraction",
+        allow_zero=False,
+    )
     configured_dr_source = str(dr.get("source", "configured")).strip().lower()
     if configured_dr_source not in {"configured", "manifest"}:
         raise ValueError("dr.source must be 'configured' or 'manifest'")
@@ -626,6 +627,59 @@ def load_hourly_environment_config(
     else:
         dr_manifest_path = None
     workload_mix = WorkloadMix.from_mapping(workload.get("workload_mix", {}))
+    explicit_flexible_utilization = workload.get("flexible_arrival_utilization")
+    explicit_rigid_utilization = virtual_dc.get("rigid_gpu_utilization")
+    has_legacy_utilization = "target_total_utilization" in workload or any(
+        key in virtual_dc
+        for key in ("target_total_utilization", "target_flexible_utilization")
+    )
+    if (explicit_flexible_utilization is None) != (explicit_rigid_utilization is None):
+        raise ValueError(
+            "workload.flexible_arrival_utilization and "
+            "virtual_datacenter.rigid_gpu_utilization must be supplied together"
+        )
+    if explicit_flexible_utilization is not None:
+        if has_legacy_utilization:
+            raise ValueError(
+                "split utilization fields cannot be combined with target_total_utilization"
+            )
+        flexible_arrival_utilization = _fraction(
+            explicit_flexible_utilization,
+            "workload.flexible_arrival_utilization",
+            allow_zero=False,
+        )
+        rigid_gpu_utilization = _fraction(
+            explicit_rigid_utilization,
+            "virtual_datacenter.rigid_gpu_utilization",
+        )
+    else:
+        legacy_total_utilization = _fraction(
+            workload.get(
+                "target_total_utilization",
+                virtual_dc.get(
+                    "target_total_utilization",
+                    virtual_dc.get("target_flexible_utilization", 0.65),
+                ),
+            ),
+            "workload.target_total_utilization",
+            allow_zero=False,
+        )
+        flexible_arrival_utilization = legacy_total_utilization
+        rigid_physical_share = 1.0 - flexible_gpu_fraction
+        rigid_gpu_utilization = (
+            min(
+                legacy_total_utilization
+                * workload_mix.rigid_share
+                / rigid_physical_share,
+                1.0,
+            )
+            if rigid_physical_share > 0.0
+            else 0.0
+        )
+    deadline_slack_scale = _positive_float(
+        workload.get("deadline_slack_scale", 1.0),
+        "workload.deadline_slack_scale",
+    )
     if calibration_artifact is not None:
         required_classes = {
             name
@@ -703,22 +757,10 @@ def load_hourly_environment_config(
         ),
         node_count=raw_node_count,
         target_dc_peak_share_of_pcc=target_dc_peak_share_of_pcc,
-        flexible_gpu_fraction=_fraction(
-            virtual_dc.get("flexible_gpu_fraction", 0.50),
-            "virtual_datacenter.flexible_gpu_fraction",
-            allow_zero=False,
-        ),
-        target_total_utilization=_fraction(
-            workload.get(
-                "target_total_utilization",
-                virtual_dc.get(
-                    "target_total_utilization",
-                    virtual_dc.get("target_flexible_utilization", 0.65),
-                ),
-            ),
-            "workload.target_total_utilization",
-            allow_zero=False,
-        ),
+        flexible_gpu_fraction=flexible_gpu_fraction,
+        flexible_arrival_utilization=flexible_arrival_utilization,
+        rigid_gpu_utilization=rigid_gpu_utilization,
+        deadline_slack_scale=deadline_slack_scale,
         workload_mix=workload_mix,
         workload_source=cast(Literal["synthetic", "alibaba2026_lite"], workload_source),
         alibaba_summary_path=summary_path,

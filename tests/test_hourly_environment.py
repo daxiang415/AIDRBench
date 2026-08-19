@@ -67,6 +67,10 @@ def test_event_limit_forecast_opens_at_declared_notice_time() -> None:
 
     assert np.allclose(hidden, env.config.pcc_capacity_kw)
     assert np.all(visible < env.config.pcc_capacity_kw)
+    assert env._event_request_reference_kw[37] == pytest.approx(0.0)
+    assert env._event_notice_remaining_h[37] == pytest.approx(0.0)
+    assert env._event_request_reference_kw[38] > 0.0
+    assert env._event_notice_remaining_h[38] == pytest.approx(2.0)
 
 
 @pytest.mark.parametrize(

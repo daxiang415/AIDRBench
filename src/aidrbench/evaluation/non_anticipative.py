@@ -1068,6 +1068,23 @@ def validate_non_anticipative_frontier(frontier: pd.DataFrame) -> None:
         raise ValueError("non-anticipative frontier exceeds the physical dynamic bound")
     if (frontier["selected_success_count"] < frontier["required_success_count"]).any():
         raise ValueError("non-anticipative frontier violates its chance constraint")
+    validate_non_anticipative_notice_monotonicity(frontier)
+
+
+def validate_non_anticipative_notice_monotonicity(frontier: pd.DataFrame) -> None:
+    """Enforce the weak value-of-information inequality dF/dN >= 0."""
+
+    grouping = ["duration_h", "ensemble_success_fraction_target"]
+    for optional in ("event_id", "non_anticipative_policy_class"):
+        if optional in frontier.columns:
+            grouping.append(optional)
+    for _, group in frontier.groupby(grouping, sort=False, dropna=False):
+        if group["notice_h"].nunique() < 2:
+            continue
+        ordered = group.sort_values("notice_h")
+        capacities = ordered["non_anticipative_capacity_kw"].to_numpy(dtype="float64")
+        if (capacities[1:] < capacities[:-1] - _TOLERANCE).any():
+            raise ValueError("non-anticipative frontier violates notice weak monotonicity")
 
 
 def _discover_artifacts(path: str | Path) -> list[FrozenHourlyScenario]:

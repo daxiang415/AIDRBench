@@ -72,14 +72,14 @@ empirical PI/NA value is `56.42 kW`, whereas the separately reported 95%-reliabl
 95%-confidence PI tolerance bound is `53.01 kW`. These statistics answer
 different questions and must not be subtracted or interchanged.
 
-The absence of a notice effect is a result under the current fluid, preemptible
-workload model: the policy can curtail at event start without checkpoint,
-startup or gang-scheduling delay, and existing deadline slack is sufficient.
-It does not establish that notice is generally irrelevant. A manuscript claim
-that notice changes firm flexibility now requires a preregistered development
-sensitivity with tighter deadlines/utilization or explicit checkpoint and
-non-preemptive constraints; the nominal result must remain visible even if
-those sensitivities produce a non-zero effect.
+The absence of a notice effect is a potentially structural result under the
+current fluid, preemptible workload model and is not a failure to repair.
+Advance notice weakly expands the information set, so the preregistered claim
+is `dF/dN >= 0`, not a strictly positive derivative. A positive notice gain is
+conditional on eligible pre-execution work, pre-event spare capacity, binding
+future service constraints, and an induced schedule change. Development-only
+diagnostics measure those conditions without changing the locked scenarios or
+adding model complexity to manufacture a positive result.
 
 The scalable route first fixes the matched PI upper bound and deterministic
 low-PI failure set, then builds a direct sparse cumulative-state model. For
@@ -161,14 +161,19 @@ python -m aidrbench optimize merge-non-anticipative \
   --output results/nature_mainline/development_v2_na_nominal_q95_full
 ```
 
-After validation scenarios are frozen, select one fixed causal candidate grid:
+After validation scenarios are frozen, select one fixed causal candidate with
+the complete, hash-locked robust-MPC specification. The formal route never
+uses Python controller defaults:
 
 ```bash
 python -m aidrbench certify frozen-select \
   --scenarios results/nature_mainline/validation_nominal \
+  --controller-config configs/controller/nature_robust_mpc_v1.yaml \
   --durations 1 2 3 4 6 8 \
   --notices 0 2 6 \
-  --candidate-fractions 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 \
+  --search binary \
+  --candidate-fractions 0.0 1.0 \
+  --binary-iterations 10 \
   --reliability 0.95 \
   --confidence 0.95 \
   --output results/nature_mainline/causal_selection_q95
@@ -181,7 +186,53 @@ that fixed selection without another search:
 python -m aidrbench certify frozen-test \
   --scenarios results/nature_mainline/locked_id_nominal \
   --selection results/nature_mainline/causal_selection_q95/causal_selection.json \
+  --controller-config configs/controller/nature_robust_mpc_v1.yaml \
   --output results/nature_mainline/causal_locked_id_q95
+```
+
+`causal_selection.json` records the normalized controller specification, its
+SHA-256, the raw YAML SHA-256, the Git commit, and the hashes of every source
+file on the formal controller/evaluator path. `frozen-test` recomputes all of
+them and fails closed on any mismatch.
+
+The preregistered notice-mechanism diagnostic reuses the completed nominal PI
+and NA artifacts; it does not rerun the nominal NA grid and cannot read a
+locked path:
+
+```bash
+python -m aidrbench optimize notice-diagnostics \
+  --scenarios results/nature_mainline/development_v2_nominal \
+  --pi-frontier results/nature_mainline/development_v2_pi_nominal/pi_frontier.parquet \
+  --na-frontier results/nature_mainline/development_v2_na_nominal_q95_full/non_anticipative_frontier.parquet \
+  --na-policies results/nature_mainline/development_v2_na_nominal_q95_full/non_anticipative_policies.parquet \
+  --controller-config configs/controller/nature_robust_mpc_v1.yaml \
+  --durations 4 8 --notices 0 6 --reliability 0.95 \
+  --workers 4 \
+  --output results/nature_mainline/development_notice_diagnostics_v2
+```
+
+This diagnostic does not select an MPC capacity on development. For each
+duration it evaluates the frozen controller specification at the smaller of
+the already-computed N=0 and N=6 restricted-NA capacities. On the 100 matched
+development scenarios, PI and NA notice gains are both zero at H=4 and H=8.
+The fixed-capacity robust-MPC success fraction is 0.92 at 44.00 kW and 41.19
+kW, respectively, with interval delivery binding. At N=6 the scenarios still
+contain a mean 1,829 GPU-hour causal upper bound on pre-executable work and 133
+GPU-hours of no-control spare capacity, and the paired robust-MPC schedule
+changes by about 1.3 GPU-hours per pre-event interval. Thus notice changes the
+information nodes and dispatch but does not relax the binding delivery limit
+in this development diagnostic. This is a mechanism result, not a locked-data
+certificate.
+
+The sparse sensitivity schema separates flexible arrival utilization, rigid
+GPU utilization, and deadline slack. Every case must pass the no-DR service
+gate before any sensitivity frontier is permitted:
+
+```bash
+python -m aidrbench scenario check-sensitivities \
+  --specification configs/sensitivity/nature_sparse_factorial_v1.yaml \
+  --seeds 10000 10001 10002 \
+  --output results/nature_mainline/sensitivity_service_gate_v1
 ```
 
 `--workers` only parallelizes independent frozen scenarios. It does not alter
@@ -217,13 +268,15 @@ until the experiment design and result schemas are frozen.
 
 ## Remaining mainline work
 
-1. Run preregistered development sensitivities that can expose or bound the
-   observed zero notice/information effect, then use the frozen robust-MPC route
-   for the independent operational certificate.
-2. Add the separate repeated-event exhaustion generator and residual
+1. Run the fixed H={4,8}, N={0,6}, q=0.95 development diagnostic. Zero notice
+   gain remains a valid structural result; do not add mechanisms to force a
+   positive result. **Completed on development data.**
+2. Freeze Model A after the diagnostic and retain the hash-locked robust-MPC
+   route for the later independent operational certificate.
+3. Add the separate repeated-event exhaustion generator and residual
    flexibility summaries.
-3. Run and aggregate the 2 × 2 × 2 hosting matrix and PV/BESS response surface.
-4. Run success-criterion sensitivities, freeze all choices, then run validation,
+4. Run and aggregate the 2 × 2 × 2 hosting matrix and PV/BESS response surface.
+5. Run success-criterion sensitivities, freeze all choices, then run validation,
    locked ID once, and locked OOD separately once.
 
 Each locked config is technically guarded. Before its one permitted generation,

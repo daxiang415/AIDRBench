@@ -288,6 +288,13 @@ def _add_scenario_parsers(subparsers: Any) -> None:
         "inspect", help="verify one frozen scenario and display its provenance"
     )
     inspect.add_argument("--input", required=True)
+    sensitivity_check = commands.add_parser(
+        "check-sensitivities",
+        help="gate a sparse sensitivity design on no-DR service feasibility",
+    )
+    sensitivity_check.add_argument("--specification", required=True)
+    sensitivity_check.add_argument("--seeds", nargs="+", type=int, required=True)
+    sensitivity_check.add_argument("--output", required=True)
 
 
 def _add_optimization_parsers(subparsers: Any) -> None:
@@ -355,6 +362,20 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     )
     merge_non_anticipative.add_argument("--inputs", nargs="+", required=True)
     merge_non_anticipative.add_argument("--output", required=True)
+    notice_diagnostics = commands.add_parser(
+        "notice-diagnostics",
+        help="combine existing PI/NA bounds with development-only frozen-spec robust MPC",
+    )
+    notice_diagnostics.add_argument("--scenarios", required=True)
+    notice_diagnostics.add_argument("--pi-frontier", required=True)
+    notice_diagnostics.add_argument("--na-frontier", required=True)
+    notice_diagnostics.add_argument("--na-policies", required=True)
+    notice_diagnostics.add_argument("--controller-config", required=True)
+    notice_diagnostics.add_argument("--durations", nargs="+", type=int, default=[4, 8])
+    notice_diagnostics.add_argument("--notices", nargs="+", type=int, default=[0, 6])
+    notice_diagnostics.add_argument("--reliability", type=float, default=0.95)
+    notice_diagnostics.add_argument("--workers", type=int, default=1)
+    notice_diagnostics.add_argument("--output", required=True)
     hosting = commands.add_parser(
         "hosting-capacity",
         help="compute frozen-scenario absolute-PCC hosting-capacity planning bounds",
@@ -487,6 +508,10 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
     )
     certify.add_argument("--model", help="required when controller is DQN, PPO, or SAC")
     certify.add_argument("--config", default="configs/env/hourly_continuous.yaml")
+    certify.add_argument(
+        "--controller-config",
+        help="complete validated controller specification required by frozen-select/test",
+    )
     certify.add_argument("--durations", type=int, nargs="+")
     certify.add_argument(
         "--notices",
@@ -743,11 +768,13 @@ def _run_data(args: argparse.Namespace) -> int:
             args.output,
             hours=args.hours or config.main_hours,
             total_gpu_count=config.make_power_model().data_center.total_gpu_count,
-            target_total_utilization=config.target_total_utilization,
+            flexible_arrival_utilization=config.flexible_arrival_utilization,
             workload_shares=config.workload_mix.shares,
             flexible_fractions=config.workload_mix.flexible_fractions,
             flexible_priorities=config.flexible_priorities,
             deadline_policy=config.deadline_policy,
+            deadline_slack_scale=config.deadline_slack_scale,
+            max_deadline_hours=config.max_deadline_hours,
             arrival_process=config.alibaba_arrival_process,
             seed=args.seed,
         )
@@ -1149,6 +1176,18 @@ def _run_scenario(args: argparse.Namespace) -> int:
             }
         )
         return 0
+    if args.scenario_command == "check-sensitivities":
+        from aidrbench.evaluation.sensitivity import (
+            check_sparse_sensitivity_no_dr_feasibility,
+        )
+
+        summary = check_sparse_sensitivity_no_dr_feasibility(
+            args.specification,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
     raise ValueError("a scenario subcommand is required")
 
 
@@ -1205,6 +1244,25 @@ def _run_optimization(args: argparse.Namespace) -> int:
         summary = merge_non_anticipative_frontier_partitions(
             args.inputs,
             output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "notice-diagnostics":
+        from aidrbench.evaluation.notice_diagnostics import (
+            compute_notice_mechanism_diagnostics,
+        )
+
+        summary = compute_notice_mechanism_diagnostics(
+            args.scenarios,
+            pi_frontier_path=args.pi_frontier,
+            na_frontier_path=args.na_frontier,
+            na_policies_path=args.na_policies,
+            controller_config=args.controller_config,
+            output_directory=args.output,
+            durations_h=args.durations,
+            notices_h=args.notices,
+            reliability_target=args.reliability,
+            workers=args.workers,
         )
         _print_summary(summary)
         return 0
@@ -1326,9 +1384,15 @@ def _run_plot(args: argparse.Namespace) -> int:
 
 def _run_certify(args: argparse.Namespace) -> int:
     if args.certification_command == "frozen-select":
-        if args.scenarios is None or not args.durations or args.output is None:
+        if (
+            args.scenarios is None
+            or args.controller_config is None
+            or not args.durations
+            or args.output is None
+        ):
             raise ValueError(
-                "certify frozen-select requires --scenarios, --durations, and --output"
+                "certify frozen-select requires --scenarios, --controller-config, "
+                "--durations, and --output"
             )
         from aidrbench.evaluation.frozen_causal_certificate import (
             select_frozen_causal_capacities,
@@ -1337,17 +1401,28 @@ def _run_certify(args: argparse.Namespace) -> int:
         criteria = _firm_criteria_from_args(args)
         summary = select_frozen_causal_capacities(
             args.scenarios,
+            controller_config=args.controller_config,
             durations_h=args.durations,
             notices_h=args.notices or (0,),
             candidate_fractions=args.candidate_fractions,
+            search=args.search,
+            binary_iterations=args.binary_iterations,
             criteria=criteria,
             output_directory=args.output,
         )
         _print_summary(summary)
         return 0
     if args.certification_command == "frozen-test":
-        if args.scenarios is None or args.selection is None or args.output is None:
-            raise ValueError("certify frozen-test requires --scenarios, --selection, and --output")
+        if (
+            args.scenarios is None
+            or args.selection is None
+            or args.controller_config is None
+            or args.output is None
+        ):
+            raise ValueError(
+                "certify frozen-test requires --scenarios, --selection, "
+                "--controller-config, and --output"
+            )
         from aidrbench.evaluation.frozen_causal_certificate import (
             certify_selected_frozen_causal_capacities,
         )
@@ -1355,6 +1430,7 @@ def _run_certify(args: argparse.Namespace) -> int:
         summary = certify_selected_frozen_causal_capacities(
             args.scenarios,
             selection_path=args.selection,
+            controller_config=args.controller_config,
             output_directory=args.output,
         )
         _print_summary(summary)

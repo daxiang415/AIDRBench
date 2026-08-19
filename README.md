@@ -97,15 +97,17 @@ AIDRBench 的贡献应围绕这些缺口展开，而不是围绕算法排名展�
 F_q(H,N).
 \]
 
-通常有：
+预声明的弱单调关系为：
 
 \[
 \frac{\partial F_q}{\partial H}<0,
 \qquad
-\frac{\partial F_q}{\partial N}>0,
+\frac{\partial F_q}{\partial N}\ge 0,
 \qquad
 \frac{\partial F_q}{\partial q}<0.
 \]
+
+其中零 notice gain 是允许成立的结构性结果。严格正增益只是一项条件性假设：仅当通知窗口内同时存在可提前执行任务、可用空闲算力、后续服务约束具有约束力，并且因果调度确实改变执行轨迹时，才预期 \(F_q(H,N_2)>F_q(H,N_1)\)。不得通过不断增加模型复杂度来制造正结果。
 
 ### Q3. 为什么连续需求响应会耗尽 AI 灵活性？
 
@@ -505,7 +507,7 @@ F_q^{\mathrm{causal}}(H,N).
 
 - 短事件受动态功率上限约束；
 - 长事件逐渐转为 deadline 和总计算量约束；
-- 提前通知通过预执行任务增加 slack；
+- 提前通知的容量价值允许为零；只有在可提前执行工作、空闲算力和约束条件同时满足时，才可能通过预执行增加 slack；
 - 更高可靠性要求显著压低可承诺容量。
 
 ### 对应主图
@@ -816,6 +818,8 @@ solver and tolerances
 ### 12.1 主文
 
 主文不需要完整控制器 benchmark，但需要一个冻结、可部署的因果 reference implementation 在独立 locked-ID 场景上验证可交付容量。当前预声明为 robust MPC；不训练、不调 reward、不参与算法排名。
+
+正式控制器必须由 `configs/controller/nature_robust_mpc_v1.yaml` 完整定义。validation selection 固化规范化配置及其 SHA-256、原始 YAML SHA-256、Git commit 和控制/评估路径源码 hash；locked-ID replay 必须逐项重新验证，任意不一致均 fail closed。容量搜索使用预声明细网格或 binary search，不使用 0.1 fraction 粗网格作为容量结论。
 
 ### 12.2 Supplementary 可选内容
 

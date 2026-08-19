@@ -169,9 +169,11 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
         self._arrivals = make_synthetic_hourly_arrivals(
             hours=1,
             total_gpu_count=self.power_model.data_center.total_gpu_count,
-            target_total_utilization=self.config.target_total_utilization,
+            flexible_arrival_utilization=self.config.flexible_arrival_utilization,
             workload_mix=self.config.workload_mix,
             seed=self.config.seed,
+            deadline_slack_scale=self.config.deadline_slack_scale,
+            max_deadline_hours=self.config.max_deadline_hours,
         )
         self._pcc_limit_kw = np.zeros(1, dtype="float64")
         self._event_active = np.zeros(1, dtype=bool)
@@ -495,9 +497,13 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                 self._arrivals = make_synthetic_hourly_arrivals(
                     hours=self.config.main_hours,
                     total_gpu_count=self.power_model.data_center.total_gpu_count,
-                    target_total_utilization=self.config.target_total_utilization,
+                    flexible_arrival_utilization=(
+                        self.config.flexible_arrival_utilization
+                    ),
                     workload_mix=self.config.workload_mix,
                     seed=workload_seed,
+                    deadline_slack_scale=self.config.deadline_slack_scale,
+                    max_deadline_hours=self.config.max_deadline_hours,
                 )
             else:
                 if self.config.alibaba_arrivals_path is not None:
@@ -509,11 +515,15 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                         self.config.alibaba_summary_path,
                         hours=self.config.main_hours,
                         total_gpu_count=self.power_model.data_center.total_gpu_count,
-                        target_total_utilization=self.config.target_total_utilization,
+                        flexible_arrival_utilization=(
+                            self.config.flexible_arrival_utilization
+                        ),
                         workload_shares=self.config.workload_mix.shares,
                         flexible_fractions=self.config.workload_mix.flexible_fractions,
                         flexible_priorities=self.config.flexible_priorities,
                         deadline_policy=self.config.deadline_policy,
+                        deadline_slack_scale=self.config.deadline_slack_scale,
+                        max_deadline_hours=self.config.max_deadline_hours,
                         arrival_process=self.config.alibaba_arrival_process,
                         seed=workload_seed,
                     )

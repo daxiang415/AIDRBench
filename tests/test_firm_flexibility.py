@@ -128,6 +128,38 @@ def test_interval_delivery_prevents_average_only_success() -> None:
     assert "interval_delivery" in failures
 
 
+def test_zero_capacity_candidate_has_no_rebound_settlement_ratio() -> None:
+    frame = pd.DataFrame(
+        {
+            "hour": [0, 1],
+            "event_active": [True, False],
+            "pcc_power_kw": [99.0, 110.0],
+            "baseline_pcc_power_kw": [100.0, 100.0],
+            "delivered_reduction_kw": [1.0, 0.0],
+            "requested_reduction_kw": [0.0, 0.0],
+            "backlog_gpu_h": [0.0, 0.0],
+            "baseline_backlog_gpu_h": [0.0, 0.0],
+            "missed_gpu_h": [0.0, 0.0],
+            "arrival_gpu_h": [1.0, 0.0],
+            "terminal_backlog_excess_gpu_h": [0.0, 0.0],
+        }
+    )
+    event = HourlyDREvent(
+        event_id=0,
+        source_event_id="zero-capacity",
+        start_hour=0,
+        stop_hour=1,
+        recovery_stop_hour=2,
+        requested_reduction_kw=0.0,
+        notice_hours=0.0,
+    )
+
+    outcome = derive_event_outcomes(frame, (event,), recovery_tolerance_gpu_h=0.0)[0]
+
+    assert outcome.rebound_peak_kw == pytest.approx(10.0)
+    assert outcome.rebound_ratio == pytest.approx(0.0)
+
+
 def test_certificate_uses_joint_success_and_one_sided_lower_bound() -> None:
     criteria = FirmFlexibilityCriteria(
         reliability_target=0.5,

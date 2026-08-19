@@ -482,17 +482,19 @@ def make_synthetic_hourly_arrivals(
     *,
     hours: int,
     total_gpu_count: int,
-    target_total_utilization: float,
+    flexible_arrival_utilization: float,
     workload_mix: WorkloadMix,
     seed: int,
     deadline_ranges_h: Mapping[str, tuple[int, int]] = DEFAULT_DEADLINE_RANGES_H,
+    deadline_slack_scale: float = 1.0,
+    max_deadline_hours: int = 48,
 ) -> pd.DataFrame:
     """Generate reproducible flexible GPU-hour arrivals at hourly resolution.
 
-    ``target_total_utilization`` applies to all AI GPU-hour demand. The mix
-    then determines which part is flexible; increasing the training share can
-    therefore increase schedulable work when training has a larger flexible
-    fraction than the displaced workload.
+    ``flexible_arrival_utilization`` scales the total potential AI arrival
+    volume, after which the workload mix determines the schedulable share.
+    Unlike the legacy total-utilization field, it does not also set rigid GPU
+    power; rigid utilization is configured independently in the power model.
     """
 
     if isinstance(hours, bool) or not isinstance(hours, int) or hours <= 0:
@@ -501,7 +503,16 @@ def make_synthetic_hourly_arrivals(
         raise TypeError("total_gpu_count must be an integer")
     if total_gpu_count <= 0:
         raise ValueError("total_gpu_count must be positive")
-    utilization = _fraction(target_total_utilization, "target_total_utilization", allow_zero=False)
+    utilization = _fraction(
+        flexible_arrival_utilization,
+        "flexible_arrival_utilization",
+        allow_zero=False,
+    )
+    slack_scale = _positive_float(deadline_slack_scale, "deadline_slack_scale")
+    if isinstance(max_deadline_hours, bool) or not isinstance(max_deadline_hours, int):
+        raise TypeError("max_deadline_hours must be an integer")
+    if max_deadline_hours <= 0:
+        raise ValueError("max_deadline_hours must be positive")
     rng = np.random.default_rng(seed)
     hour_of_day = np.arange(hours, dtype="float64") % 24.0
     daily_shape = 0.82 + 0.18 * np.sin(2.0 * np.pi * (hour_of_day - 4.0) / 24.0)
@@ -529,7 +540,15 @@ def make_synthetic_hourly_arrivals(
                     "priority_class": "LP",
                     "model_type": "synthetic",
                     "arrival_gpu_h": float(total * flexible_weight),
-                    "slack_hours": int(rng.integers(minimum, maximum + 1)),
+                    "slack_hours": max(
+                        1,
+                        min(
+                            max_deadline_hours,
+                            math.ceil(
+                                int(rng.integers(minimum, maximum + 1)) * slack_scale
+                            ),
+                        ),
+                    ),
                     "source_mode": "synthetic",
                 }
             )
