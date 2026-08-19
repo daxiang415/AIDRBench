@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pandas as pd
@@ -102,6 +103,15 @@ def test_repeated_event_development_pipeline(tmp_path: Path) -> None:
 
     assert frozen["program_count"] == 1
     assert frozen["scenario_count"] == 1
+    assert frozen["frozen_scenario_count"] == 1
+    assert frozen["resumed_scenario_count"] == 0
+    frozen_again = freeze_repeated_event_scenarios(
+        specification_path,
+        seeds=[101],
+        output_directory=scenario_root,
+    )
+    assert frozen_again["frozen_scenario_count"] == 0
+    assert frozen_again["resumed_scenario_count"] == 1
     result = compute_repeated_event_exhaustion_diagnostics(
         scenario_root,
         specification_path=specification_path,
@@ -115,3 +125,50 @@ def test_repeated_event_development_pipeline(tmp_path: Path) -> None:
     assert list(summary["event_ordinal"]) == [1, 2]
     assert len(joint) == 1
     assert summary["fixed_commitment_residual_flexibility_ratio"].notna().all()
+    output_hashes = {
+        key: sha256_file(Path(result[key]))
+        for key in (
+            "event_outcomes",
+            "episode_outcomes",
+            "exhaustion_summary",
+            "joint_episode_summary",
+            "manifest",
+        )
+    }
+    resumed = compute_repeated_event_exhaustion_diagnostics(
+        scenario_root,
+        specification_path=specification_path,
+        output_directory=tmp_path / "result",
+    )
+    assert resumed["resumed_checkpoint_count"] == 1
+    assert resumed["evaluated_checkpoint_count"] == 0
+    assert output_hashes == {
+        key: sha256_file(Path(resumed[key])) for key in output_hashes
+    }
+
+
+def test_exhaustion_checkpoint_mismatch_fails_closed(tmp_path: Path) -> None:
+    specification_path = _write_specification(tmp_path)
+    scenario_root = tmp_path / "scenarios"
+    freeze_repeated_event_scenarios(
+        specification_path,
+        seeds=[101],
+        output_directory=scenario_root,
+    )
+    output = tmp_path / "result"
+    compute_repeated_event_exhaustion_diagnostics(
+        scenario_root,
+        specification_path=specification_path,
+        output_directory=output,
+    )
+    checkpoint = next((output / "scenario_checkpoints").rglob("*.json"))
+    document = json.loads(checkpoint.read_text(encoding="utf-8"))
+    document["scenario_hash"] = "0" * 64
+    checkpoint.write_text(json.dumps(document), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="checkpoint payload SHA-256 mismatch"):
+        compute_repeated_event_exhaustion_diagnostics(
+            scenario_root,
+            specification_path=specification_path,
+            output_directory=output,
+        )

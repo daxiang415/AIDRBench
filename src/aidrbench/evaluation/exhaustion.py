@@ -9,7 +9,7 @@ import math
 import multiprocessing
 from collections import Counter
 from collections.abc import Mapping, Sequence
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Literal, cast
@@ -21,7 +21,7 @@ from aidrbench.controllers.hourly import make_hourly_controller
 from aidrbench.controllers.robust_mpc_spec import load_robust_mpc_specification
 from aidrbench.data.frozen_scenarios import (
     FrozenHourlyScenario,
-    freeze_hourly_scenarios,
+    freeze_hourly_scenario,
     load_frozen_hourly_scenario,
 )
 from aidrbench.data.splits import sha256_file
@@ -31,10 +31,20 @@ from aidrbench.evaluation.firm_flexibility import (
     FirmFlexibilityCriteria,
     derive_event_outcomes,
 )
-from aidrbench.evaluation.frozen_causal_certificate import _controller_provenance
+from aidrbench.evaluation.frozen_causal_certificate import (
+    _controller_provenance,
+    _git_commit,
+)
 from aidrbench.evaluation.hourly_rollout import rollout_hourly_episode
 
 _INDEX_NAME = "repeated_scenario_index.json"
+_FREEZE_STATE_NAME = "repeated_scenario_freeze_state.json"
+_RUN_STATE_NAME = "exhaustion_diagnostics_run.json"
+_SOURCE_PATHS = (
+    "src/aidrbench/evaluation/exhaustion.py",
+    "src/aidrbench/evaluation/firm_flexibility.py",
+    "src/aidrbench/evaluation/hourly_rollout.py",
+)
 
 
 def _canonical_sha256(value: object) -> str:
@@ -261,7 +271,7 @@ def freeze_repeated_event_scenarios(
     seeds: Sequence[int],
     output_directory: str | Path,
 ) -> dict[str, Any]:
-    """Freeze separate development scenarios for every H/gap program."""
+    """Freeze or resume separate development scenarios for every H/gap program."""
 
     specification = load_repeated_event_exhaustion_specification(specification_path)
     if not seeds or len(set(seeds)) != len(seeds):
@@ -273,10 +283,66 @@ def freeze_repeated_event_scenarios(
     main_hours = int(env["episode_days"]) * 24
     capacity_by_duration = _capacity_by_duration(specification)
     output = Path(output_directory)
-    if output.exists() and any(output.iterdir()):
-        raise FileExistsError("refusing to overwrite repeated-event scenario output")
     output.mkdir(parents=True, exist_ok=True)
+    expected_program_names = {
+        f"duration_{duration_h}h_gap_{recovery_gap_h}h"
+        for duration_h in specification.duration_hours
+        for recovery_gap_h in specification.recovery_gaps_hours
+    }
+    allowed_top_level = expected_program_names | {_INDEX_NAME, _FREEZE_STATE_NAME}
+    unexpected_top_level = sorted(
+        child.name for child in output.iterdir() if child.name not in allowed_top_level
+    )
+    if unexpected_top_level:
+        raise ValueError(
+            "repeated-event scenario output contains unexpected entries: "
+            f"{unexpected_top_level}"
+        )
+    freeze_state_path = output / _FREEZE_STATE_NAME
+    freeze_identity = {
+        "schema_version": 1,
+        "dataset_role": specification.dataset_role,
+        "locked_data_read": False,
+        "model_a_git_commit": specification.model_a_git_commit,
+        "specification_sha256": specification.sha256,
+        "specification_file_sha256": sha256_file(Path(specification_path)),
+        "seeds": list(seeds),
+    }
+    completed_by_program: dict[str, dict[str, Any]]
+    if freeze_state_path.is_file():
+        freeze_state = json.loads(freeze_state_path.read_text(encoding="utf-8"))
+        if not isinstance(freeze_state, Mapping):
+            raise ValueError("repeated-event freeze state must be a mapping")
+        if {key: freeze_state.get(key) for key in freeze_identity} != freeze_identity:
+            raise ValueError("repeated-event scenario freeze state mismatch")
+        completed = freeze_state.get("completed")
+        if not isinstance(completed, Mapping):
+            raise ValueError("repeated-event freeze state has no completed mapping")
+        completed_by_program = {
+            str(key): dict(value)
+            for key, value in completed.items()
+            if isinstance(value, Mapping)
+        }
+        if len(completed_by_program) != len(completed):
+            raise ValueError("repeated-event freeze state completed entry is invalid")
+    else:
+        if (output / _INDEX_NAME).is_file():
+            raise ValueError(
+                "legacy repeated-event output has no resumable freeze state"
+            )
+        completed_by_program = {}
+        freeze_state_path.write_text(
+            json.dumps(
+                {**freeze_identity, "completed": completed_by_program},
+                ensure_ascii=False,
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
     programs: list[dict[str, Any]] = []
+    resumed_scenario_count = 0
+    frozen_scenario_count = 0
     for duration_h in specification.duration_hours:
         for recovery_gap_h in specification.recovery_gaps_hours:
             starts = repeated_event_start_hours(
@@ -310,12 +376,90 @@ def freeze_repeated_event_scenarios(
                 }
             )
             document["dr"] = dr
-            program_directory = output / f"duration_{duration_h}h_gap_{recovery_gap_h}h"
-            frozen = freeze_hourly_scenarios(
-                document,
-                seeds=seeds,
-                output_directory=program_directory,
+            program_name = f"duration_{duration_h}h_gap_{recovery_gap_h}h"
+            program_directory = output / program_name
+            program_directory.mkdir(exist_ok=True)
+            completed_program = completed_by_program.setdefault(program_name, {})
+            expected_scenario_names = {
+                str(record["scenario_id"])
+                for record in completed_program.values()
+                if isinstance(record, Mapping) and "scenario_id" in record
+            }
+            unexpected_program_entries = sorted(
+                child.name
+                for child in program_directory.iterdir()
+                if child.name not in expected_scenario_names
             )
+            if unexpected_program_entries:
+                raise ValueError(
+                    "repeated-event program contains unexpected entries: "
+                    f"{unexpected_program_entries}"
+                )
+            frozen: list[dict[str, Any]] = []
+            expected_document_sha256 = _canonical_sha256(document)
+            for seed in seeds:
+                seed_key = str(seed)
+                raw_record = completed_program.get(seed_key)
+                if raw_record is not None:
+                    record = _mapping(raw_record, "completed exhaustion scenario")
+                    _exact_fields(
+                        record,
+                        {"scenario_id", "scenario_hash", "directory"},
+                        "completed exhaustion scenario",
+                    )
+                    scenario_directory = Path(str(record["directory"]))
+                    if scenario_directory != program_directory / str(
+                        record["scenario_id"]
+                    ):
+                        raise ValueError("resumed exhaustion scenario directory mismatch")
+                    artifact = load_frozen_hourly_scenario(scenario_directory)
+                    if artifact.scenario_hash != record["scenario_hash"]:
+                        raise ValueError("resumed exhaustion scenario hash mismatch")
+                    if (
+                        _canonical_sha256(artifact.config_document)
+                        != expected_document_sha256
+                    ):
+                        raise ValueError("resumed exhaustion scenario config mismatch")
+                    frozen.append(
+                        {
+                            "scenario_id": artifact.scenario_id,
+                            "episode_seed": artifact.episode_seed,
+                            "scenario_hash": artifact.scenario_hash,
+                            "output": str(artifact.directory),
+                        }
+                    )
+                    resumed_scenario_count += 1
+                else:
+                    result = freeze_hourly_scenario(
+                        document,
+                        seed=seed,
+                        output_directory=program_directory,
+                    )
+                    frozen.append(result)
+                    completed_program[seed_key] = {
+                        "scenario_id": result["scenario_id"],
+                        "scenario_hash": result["scenario_hash"],
+                        "directory": result["output"],
+                    }
+                    temporary_state_path = freeze_state_path.with_name(
+                        f".{freeze_state_path.name}.incomplete"
+                    )
+                    if temporary_state_path.exists():
+                        raise FileExistsError(
+                            "incomplete repeated-event freeze state exists: "
+                            f"{temporary_state_path}"
+                        )
+                    temporary_state_path.write_text(
+                        json.dumps(
+                            {**freeze_identity, "completed": completed_by_program},
+                            ensure_ascii=False,
+                            indent=2,
+                        )
+                        + "\n",
+                        encoding="utf-8",
+                    )
+                    temporary_state_path.replace(freeze_state_path)
+                    frozen_scenario_count += 1
             programs.append(
                 {
                     "duration_h": duration_h,
@@ -327,29 +471,32 @@ def freeze_repeated_event_scenarios(
                 }
             )
     index_path = output / _INDEX_NAME
-    index_path.write_text(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "dataset_role": specification.dataset_role,
-                "locked_data_read": False,
-                "model_a_git_commit": specification.model_a_git_commit,
-                "specification": specification.as_dict(),
-                "specification_sha256": specification.sha256,
-                "specification_file_sha256": sha256_file(Path(specification_path)),
-                "seeds": list(seeds),
-                "programs": programs,
-            },
-            ensure_ascii=False,
-            indent=2,
+    index_document = {
+        "schema_version": 1,
+        "dataset_role": specification.dataset_role,
+        "locked_data_read": False,
+        "model_a_git_commit": specification.model_a_git_commit,
+        "specification": specification.as_dict(),
+        "specification_sha256": specification.sha256,
+        "specification_file_sha256": sha256_file(Path(specification_path)),
+        "seeds": list(seeds),
+        "programs": programs,
+    }
+    if index_path.is_file():
+        observed_index = json.loads(index_path.read_text(encoding="utf-8"))
+        if observed_index != index_document:
+            raise ValueError("repeated-event scenario resume index mismatch")
+    else:
+        index_path.write_text(
+            json.dumps(index_document, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
         )
-        + "\n",
-        encoding="utf-8",
-    )
     return {
         "index": str(index_path),
         "program_count": len(programs),
         "scenario_count": len(programs) * len(seeds),
+        "resumed_scenario_count": resumed_scenario_count,
+        "frozen_scenario_count": frozen_scenario_count,
     }
 
 
@@ -579,6 +726,95 @@ def _evaluate_exhaustion_artifact(
     return rows, episode
 
 
+@dataclass(frozen=True, slots=True)
+class _ExhaustionTask:
+    payload: tuple[str, int, int, float, dict[str, float], str]
+    scenario_id: str
+    scenario_hash: str
+    checkpoint_path: Path
+
+
+def _write_exhaustion_checkpoint(
+    task: _ExhaustionTask,
+    result: tuple[list[dict[str, Any]], dict[str, Any]],
+    *,
+    analysis_identity_sha256: str,
+) -> None:
+    event_rows, episode = result
+    body: dict[str, Any] = {
+        "schema_version": 1,
+        "analysis_identity_sha256": analysis_identity_sha256,
+        "scenario_id": task.scenario_id,
+        "scenario_hash": task.scenario_hash,
+        "duration_h": task.payload[1],
+        "recovery_gap_h": task.payload[2],
+        "fixed_capacity_kw": task.payload[3],
+        "event_rows": event_rows,
+        "episode": episode,
+    }
+    document = {**body, "checkpoint_sha256": _canonical_sha256(body)}
+    task.checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = task.checkpoint_path.with_name(
+        f".{task.checkpoint_path.name}.incomplete"
+    )
+    if temporary.exists():
+        raise FileExistsError(f"incomplete exhaustion checkpoint exists: {temporary}")
+    temporary.write_text(
+        json.dumps(document, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(task.checkpoint_path)
+
+
+def _load_exhaustion_checkpoint(
+    task: _ExhaustionTask,
+    *,
+    analysis_identity_sha256: str,
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    raw = json.loads(task.checkpoint_path.read_text(encoding="utf-8"))
+    document = _mapping(raw, "exhaustion checkpoint")
+    expected_fields = {
+        "schema_version",
+        "analysis_identity_sha256",
+        "scenario_id",
+        "scenario_hash",
+        "duration_h",
+        "recovery_gap_h",
+        "fixed_capacity_kw",
+        "event_rows",
+        "episode",
+        "checkpoint_sha256",
+    }
+    _exact_fields(document, expected_fields, "exhaustion checkpoint")
+    body = {key: value for key, value in document.items() if key != "checkpoint_sha256"}
+    if document["checkpoint_sha256"] != _canonical_sha256(body):
+        raise ValueError("exhaustion checkpoint payload SHA-256 mismatch")
+    expected_identity = {
+        "schema_version": 1,
+        "analysis_identity_sha256": analysis_identity_sha256,
+        "scenario_id": task.scenario_id,
+        "scenario_hash": task.scenario_hash,
+        "duration_h": task.payload[1],
+        "recovery_gap_h": task.payload[2],
+        "fixed_capacity_kw": task.payload[3],
+    }
+    for key, expected in expected_identity.items():
+        if document[key] != expected:
+            raise ValueError(f"exhaustion checkpoint identity mismatch: {key}")
+    event_rows = document["event_rows"]
+    episode = document["episode"]
+    if not isinstance(event_rows, list) or not all(
+        isinstance(row, Mapping) for row in event_rows
+    ):
+        raise ValueError("exhaustion checkpoint event_rows must be a list of mappings")
+    if not isinstance(episode, Mapping):
+        raise ValueError("exhaustion checkpoint episode must be a mapping")
+    return (
+        [{str(key): value for key, value in row.items()} for row in event_rows],
+        {str(key): value for key, value in episode.items()},
+    )
+
+
 def compute_repeated_event_exhaustion_diagnostics(
     scenario_root: str | Path,
     *,
@@ -608,7 +844,18 @@ def compute_repeated_event_exhaustion_diagnostics(
         specification.controller_config,
         controller_specification,
     )
-    payloads: list[tuple[str, int, int, float, dict[str, float], str]] = []
+    repository_root = Path(__file__).resolve().parents[3]
+    analysis_provenance = {
+        "git_commit": _git_commit(),
+        "source_sha256": {
+            path: sha256_file(repository_root / path) for path in _SOURCE_PATHS
+        },
+    }
+    output = Path(output_directory)
+    output.mkdir(parents=True, exist_ok=True)
+    checkpoints = output / "scenario_checkpoints"
+    checkpoints.mkdir(exist_ok=True)
+    tasks: list[_ExhaustionTask] = []
     scenario_hashes: list[str] = []
     programs = index.get("programs")
     if not isinstance(programs, list):
@@ -629,31 +876,107 @@ def compute_repeated_event_exhaustion_diagnostics(
         if [artifact.scenario_hash for artifact in artifacts] != expected_hashes:
             raise ValueError("exhaustion scenario hashes mismatch")
         scenario_hashes.extend(expected_hashes)
-        payloads.extend(
-            (
-                str(artifact.directory),
-                duration_h,
-                gap_h,
-                capacity_by_duration[duration_h],
-                specification.criteria.as_dict(),
-                specification.controller_config,
+        program_checkpoints = checkpoints / f"duration_{duration_h}h_gap_{gap_h}h"
+        tasks.extend(
+            _ExhaustionTask(
+                payload=(
+                    str(artifact.directory),
+                    duration_h,
+                    gap_h,
+                    capacity_by_duration[duration_h],
+                    specification.criteria.as_dict(),
+                    specification.controller_config,
+                ),
+                scenario_id=artifact.scenario_id,
+                scenario_hash=artifact.scenario_hash,
+                checkpoint_path=(
+                    program_checkpoints / f"{artifact.scenario_hash}.json"
+                ),
             )
             for artifact in artifacts
         )
     if workers <= 0:
         raise ValueError("workers must be positive")
-    if workers == 1:
-        evaluated = [_evaluate_exhaustion_artifact(payload) for payload in payloads]
+    run_state = {
+        "schema_version": 1,
+        "dataset_role": specification.dataset_role,
+        "locked_data_read": False,
+        "model_a_git_commit": specification.model_a_git_commit,
+        "specification": specification.as_dict(),
+        "specification_sha256": specification.sha256,
+        "specification_file_sha256": sha256_file(Path(specification_path)),
+        "scenario_index_sha256": sha256_file(index_path),
+        "scenario_hashes": scenario_hashes,
+        "controller_provenance": controller_provenance,
+        "analysis_provenance": analysis_provenance,
+    }
+    run_state_path = output / _RUN_STATE_NAME
+    if run_state_path.is_file():
+        observed_run_state = json.loads(run_state_path.read_text(encoding="utf-8"))
+        if observed_run_state != run_state:
+            raise ValueError("exhaustion diagnostics resume state mismatch")
     else:
+        run_state_path.write_text(
+            json.dumps(run_state, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+    analysis_identity_sha256 = _canonical_sha256(run_state)
+    evaluated_by_checkpoint: dict[
+        Path, tuple[list[dict[str, Any]], dict[str, Any]]
+    ] = {}
+    missing: list[_ExhaustionTask] = []
+    for task in tasks:
+        if task.checkpoint_path.is_file():
+            evaluated_by_checkpoint[task.checkpoint_path] = (
+                _load_exhaustion_checkpoint(
+                    task,
+                    analysis_identity_sha256=analysis_identity_sha256,
+                )
+            )
+        else:
+            missing.append(task)
+    if workers == 1:
+        for task in missing:
+            result = _evaluate_exhaustion_artifact(task.payload)
+            _write_exhaustion_checkpoint(
+                task,
+                result,
+                analysis_identity_sha256=analysis_identity_sha256,
+            )
+            evaluated_by_checkpoint[task.checkpoint_path] = result
+    elif missing:
         with ProcessPoolExecutor(
-            max_workers=min(workers, len(payloads)),
+            max_workers=min(workers, len(missing)),
             mp_context=multiprocessing.get_context("spawn"),
         ) as executor:
-            evaluated = list(executor.map(_evaluate_exhaustion_artifact, payloads))
+            future_by_task = {
+                executor.submit(_evaluate_exhaustion_artifact, task.payload): task
+                for task in missing
+            }
+            for future in as_completed(future_by_task):
+                task = future_by_task[future]
+                result = future.result()
+                _write_exhaustion_checkpoint(
+                    task,
+                    result,
+                    analysis_identity_sha256=analysis_identity_sha256,
+                )
+                evaluated_by_checkpoint[task.checkpoint_path] = result
+    evaluated = [evaluated_by_checkpoint[task.checkpoint_path] for task in tasks]
     events = pd.DataFrame.from_records(
         [row for event_rows, _ in evaluated for row in event_rows]
     )
-    episodes = pd.DataFrame.from_records([episode for _, episode in evaluated])
+    events = events.reindex(sorted(events.columns), axis=1).sort_values(
+        ["duration_h", "recovery_gap_h", "episode_seed", "event_ordinal"],
+        ignore_index=True,
+    )
+    episodes = pd.DataFrame.from_records(
+        [episode for _, episode in evaluated]
+    )
+    episodes = episodes.reindex(sorted(episodes.columns), axis=1).sort_values(
+        ["duration_h", "recovery_gap_h", "episode_seed"],
+        ignore_index=True,
+    )
     summary_rows: list[dict[str, Any]] = []
     for raw_key, program_frame in events.groupby(
         ["duration_h", "recovery_gap_h"], sort=True
@@ -732,8 +1055,6 @@ def compute_repeated_event_exhaustion_diagnostics(
         )
         .sort_values(["duration_h", "recovery_gap_h"], ignore_index=True)
     )
-    output = Path(output_directory)
-    output.mkdir(parents=True, exist_ok=True)
     events_path = output / "repeated_event_outcomes.parquet"
     episodes_path = output / "repeated_episode_outcomes.parquet"
     summary_path = output / "exhaustion_summary.parquet"
@@ -746,18 +1067,13 @@ def compute_repeated_event_exhaustion_diagnostics(
     manifest_path.write_text(
         json.dumps(
             {
-                "schema_version": 1,
-                "dataset_role": specification.dataset_role,
-                "locked_data_read": False,
+                **run_state,
                 "capacity_interpretation": (
                     "paired_fresh_event_fixed_Model_A_commitment_mechanism_diagnostic_"
                     "not_eventwise_certificate"
                 ),
-                "model_a_git_commit": specification.model_a_git_commit,
-                "specification_sha256": specification.sha256,
-                "scenario_index_sha256": sha256_file(index_path),
-                "scenario_hashes": scenario_hashes,
-                "controller_provenance": controller_provenance,
+                "workers": workers,
+                "checkpoint_count": len(tasks),
                 "outputs": {
                     "event_outcomes": str(events_path),
                     "episode_outcomes": str(episodes_path),
@@ -778,4 +1094,7 @@ def compute_repeated_event_exhaustion_diagnostics(
         "exhaustion_summary": str(summary_path),
         "joint_episode_summary": str(joint_path),
         "program_count": len(joint),
+        "scenario_program_count": len(tasks),
+        "resumed_checkpoint_count": len(tasks) - len(missing),
+        "evaluated_checkpoint_count": len(missing),
     }
