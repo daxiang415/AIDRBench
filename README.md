@@ -630,6 +630,9 @@ certificate 或现实因果效应：
 四个场景内平均 AI hosting gains 的 Bonferroni 95% simultaneous intervals
 均完全高于零。按预注册的 10.05 kW practical-equivalence margin，AI–BESS 在
 有/无 PV 条件下均表现为替代，AI–PV 在有/无 BESS 条件下均表现为互补。
+两组 development 主实验的精确数值、输入/输出 SHA-256 和复跑状态统一记录在
+[`data/manifests/nature_mainline_development_results_v1.yaml`](data/manifests/nature_mainline_development_results_v1.yaml)；
+该文件是 post-run receipt，不会反向修改预注册协议。
 
 ### 预期结论
 
