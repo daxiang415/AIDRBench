@@ -62,7 +62,7 @@ intervals.
   raw-config hashes, the Git commit, and controller/evaluator source hashes;
   frozen test recomputes them and fails closed. Candidate selection supports a
   declared fine grid or binary search rather than a fixed 0.1 fraction grid.
-- The current repository passes 201 mechanism-core tests without RL
+- The current repository passes 203 mechanism-core tests without RL
   dependencies, plus `ruff check .` and strict type checks on all changed
   modules. RL-only tests were not run in this environment because the optional
   Stable-Baselines3 dependency is not installed.
@@ -128,8 +128,13 @@ and output schema but is far too small for a headline result.
 The 2 × 2 × 2 hosting planner has also run on one full seven-day development
 scenario. All eight portfolios solved, and the output now includes raw AI–BESS
 and AI–PV interaction contrasts. These single-scenario point values are smoke
-diagnostics only; no complementarity/substitution label is assigned before
-scenario-level uncertainty and an equivalence margin are added.
+diagnostics only. A resumable scenario-decomposed ensemble path is now
+implemented and tested: the frozen scenario is the independent unit, the
+headline simultaneous capacity is the exact minimum of scenario-specific
+optima, and four hosting gains plus four interaction contrasts use 10,000
+paired bootstrap resamples with Bonferroni family-wise intervals. The practical
+equivalence margin is preregistered as 5% of the reference-mix operating peak.
+The 100-scenario development ensemble has not yet been run.
 
 The rule-controller smoke output for the current interface is under
 `results/smoke/firm_v4_reward_v2_rules_seed20000/`. It is a semantic check of

@@ -201,7 +201,10 @@ def load_community_portfolio(path: str | Path) -> CommunityPortfolio:
 
 def _solve(problem: Any) -> None:
     try:
-        problem.solve(solver="HIGHS")
+        problem.solve(
+            solver="HIGHS",
+            highs_options={"threads": 1},
+        )
     except ImportError as exc:
         raise RuntimeError("hosting-capacity optimization requires control dependencies") from exc
     if problem.status not in {"optimal", "optimal_inaccurate"}:

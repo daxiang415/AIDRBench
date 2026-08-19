@@ -63,8 +63,10 @@ multi-review and it is not a journal acceptance prediction.
   generality across residential/commercial community types.
 - H100/H200 conversion and gang/non-preemptive/checkpoint models are outside
   the current mainline and are not blockers for freezing Model A.
-- Add confidence intervals or resampling uncertainty for PV/BESS interaction
-  terms and predeclare an equivalence margin for “approximately zero”.
+- Run the now-preregistered 100-scenario hosting ensemble. The implementation
+  treats frozen scenarios as paired independent units, applies Bonferroni
+  simultaneous bootstrap intervals to eight planned contrasts, and fixes the
+  equivalence margin at 5% of reference-mix operating peak before the run.
 
 ## Run gate
 

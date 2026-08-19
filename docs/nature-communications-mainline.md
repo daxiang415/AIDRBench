@@ -277,6 +277,26 @@ The point interactions must not be labelled complementarity, substitution or
 equivalence until scenario-level uncertainty and an equivalence margin are
 predeclared.
 
+The ensemble route is preregistered in
+`configs/experiment/nature_hosting_ensemble_v1.yaml`. It treats each frozen
+scenario as the independent unit, checkpoints one eight-portfolio matrix per
+scenario, and can resume without recomputing completed scenarios. Because
+scenario schedules are separable conditional on a shared capacity scale, the
+minimum of the 100 scenario-specific optima is exactly the simultaneous
+ensemble-feasible capacity. The four flexible-minus-rigid gains and four
+AI–DER interactions form one family of eight planned contrasts. Their mean
+within-scenario effects use 10,000 deterministic bootstrap resamples and
+Bonferroni-adjusted simultaneous intervals. The equivalence margin is fixed
+before the ensemble run at 5% of the reference-mix operating peak.
+
+```bash
+python -m aidrbench optimize hosting-ensemble \
+  --scenarios results/nature_mainline/development_v2_nominal \
+  --specification configs/experiment/nature_hosting_ensemble_v1.yaml \
+  --workers 8 \
+  --output results/nature_mainline/development_hosting_ensemble_v1
+```
+
 `--workers` only parallelizes independent frozen scenarios. It does not alter
 the optimization model, scenario order, statistical unit, or result schema.
 
@@ -318,8 +338,9 @@ until the experiment design and result schemas are frozen.
    `d03b440`.**
 3. Scale the now-implemented paired repeated-event exhaustion pipeline from
    its three-seed smoke to the declared development/validation ensembles.
-4. Scale the verified 2 × 2 × 2 hosting matrix beyond its one-scenario smoke,
-   then add scenario-level uncertainty and the predeclared equivalence margin.
+4. Run the implemented 100-scenario 2 × 2 × 2 hosting ensemble. Its paired
+   uncertainty, eight-contrast family and equivalence margin are now
+   preregistered; the full development output remains to be generated.
 5. Run success-criterion sensitivities, freeze all choices, then run validation,
    locked ID once, and locked OOD separately once.
 

@@ -592,6 +592,13 @@ M_{\mathrm{hosting}}
 \frac{C_{\mathrm{flex}}}{C_{\mathrm{rigid}}}.
 \]
 
+独立统计单位是 frozen scenario，8 个 portfolio 是同一场景内的配对条件。
+每个场景分别求解后，共同可行的 headline hosting capacity 取场景最优值的
+最小值；该分解与共享一个 capacity scale 的联合优化完全等价。场景内的
+flexible–rigid 差值和 AI–DER difference-in-differences 使用 10,000 次确定性
+bootstrap，并对 8 个预声明 contrasts 构造 Bonferroni 95% family-wise
+simultaneous intervals。
+
 ### 预期结论
 
 AI 柔性可以转化为真实接入容量，但价值高度依赖社区峰值时刻、光伏富余和储能时长。
@@ -629,6 +636,8 @@ I_{\mathrm{AI,BESS}}
 
 上述标签只在场景级不确定性区间和预声明 equivalence margin 完成后使用；
 单个 development scenario 的点估计只用于验证 2 × 2 × 2 求解路径。
+主分析的 practical-equivalence margin 在全量场景运行前固定为 reference-mix
+operating peak 的 5%，不得根据结果调整。
 
 对 PV 可定义相同交互项。
 

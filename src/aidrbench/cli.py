@@ -404,6 +404,14 @@ def _add_optimization_parsers(subparsers: Any) -> None:
         help="matrix evaluates the 2 x 2 x 2 rigid/flexible x PV x BESS comparison",
     )
     hosting.add_argument("--output", required=True)
+    hosting_ensemble = commands.add_parser(
+        "hosting-ensemble",
+        help="solve the preregistered scenario-level 2 x 2 x 2 hosting ensemble",
+    )
+    hosting_ensemble.add_argument("--scenarios", required=True)
+    hosting_ensemble.add_argument("--specification", required=True)
+    hosting_ensemble.add_argument("--workers", type=int, default=1)
+    hosting_ensemble.add_argument("--output", required=True)
 
 
 def _add_training_parsers(subparsers: Any) -> None:
@@ -1315,6 +1323,17 @@ def _run_optimization(args: argparse.Namespace) -> int:
             portfolio=load_community_portfolio(args.portfolio),
             output_directory=args.output,
             dc_operation=args.dc_operation,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "hosting-ensemble":
+        from aidrbench.evaluation.hosting_ensemble import compute_hosting_ensemble
+
+        summary = compute_hosting_ensemble(
+            args.scenarios,
+            specification_path=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
         )
         _print_summary(summary)
         return 0
