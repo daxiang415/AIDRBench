@@ -114,16 +114,22 @@ has been added. The declared nine-case sparse design passed the gate on seeds
 10000--10002: all 27 checks had zero baseline deadline misses and zero terminal
 backlog. No sensitivity frontier or Cartesian product has been run.
 
-Model A is frozen at commit `d03b440`. A separate repeated-event generator and
-paired exhaustion diagnostic now cover H={4,8}, four events and recovery gaps
-{2,4,8,12,24} h without changing Model A. Each repeated event is compared with
-a fresh single-event counterfactual at the identical scenario and clock hour;
-event-local criteria are separated from joint-episode deadline and terminal
-service feasibility. The three-seed development smoke shows event-start
-compute-debt increments up to about 1.33 MWh by event four, while paired p05
-delivery remains within roughly 0.7% of the fresh counterfactual. Joint success
-varies from 0/3 to 3/3 across H/gap programs, so this run validates the mechanism
-and output schema but is far too small for a headline result.
+Model A is frozen at commit `d03b440`. The complete repeated-event development
+experiment now covers H={4,8}, four events and recovery gaps {2,4,8,12,24} h on
+the same 100 nominal frozen scenarios. All 1,000 scenario-program checkpoints
+and 4,000 event-level paired outcomes are finite and hash-verified. Each event
+is compared with a fresh single-event counterfactual at the identical scenario
+and clock hour; event-local criteria are separated from joint-episode deadline
+and terminal service feasibility. By event four, mean paired compute-debt
+increments span 0.58--1.37 MWh, while p05 residual delivery remains
+0.9897--1.0000 of the fresh event. Joint success spans 0.00--0.94. The H=8,
+24-h-gap chain fails joint service in 100/100 episodes because it nearly fills
+the seven-day main horizon, even though event-four paired delivery remains
+98.97% at p05. Hence Model A exhibits debt accumulation and service exhaustion,
+not a monotone "longer gap always recovers" law. The output remains a
+fixed-capacity development mechanism diagnostic, not a repeated-event
+firm-capacity certificate. A checkpoint-only rerun resumed all 1,000 programs,
+evaluated zero new rollouts and reproduced all five aggregates byte-for-byte.
 
 The preregistered 2 × 2 × 2 hosting ensemble has now run on all 100 nominal
 development scenarios (800 optimal portfolio solves). The frozen scenario,

@@ -54,6 +54,13 @@ multi-review and it is not a journal acceptance prediction.
    declared eight-contrast family and equivalence margin. A checkpoint-only
    rerun reproduced every aggregate artifact byte-for-byte. These remain
    development planning bounds, not locked or causal estimates.
+10. The repeated-event development ensemble is complete: 1,000 scenario
+    programs, 4,000 event-level paired outcomes and 100 scenarios per H/gap
+    condition. Compute debt grows materially while paired delivery decays only
+    slightly; joint deadline service is the earlier failure mode. The result
+    does not support a monotone gap-only recovery law because recovery also
+    requires spare compute headroom. A zero-evaluation checkpoint rerun is
+    byte-for-byte reproducible.
 
 ## Remaining blockers before formal locked runs
 

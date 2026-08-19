@@ -542,6 +542,21 @@ episode 的 deadline miss、terminal backlog 分开报告。joint-episode succes
 是重复事件主统计单位；固定容量下的配对交付比只是机制诊断，不得写成
 event-wise firm-capacity certificate。
 
+### 当前 development 结果
+
+100 个 nominal development scenarios 上的完整 H × recovery-gap 配对实验已
+完成。到第 4 次事件，平均配对 compute-debt increment 为 0.58–1.37 MWh，
+但相对同场景、同钟点 fresh event 的 p05 residual flexibility ratio 仍为
+0.9897–1.0000。也就是说，当前 Model A 中首先积累的是计算债务和服务风险，
+不是瞬时削峰功率的大幅消失。
+
+joint-episode success 随 H/gap 在 0.00–0.94 之间变化。H=8、gap=24 h 时
+四次事件几乎铺满 7 天主时域，100/100 episodes 都违反联合 deadline 服务
+阈值，尽管第 4 次事件的 p05 配对交付仍为 fresh event 的 98.97%。因此结果
+不能写成“恢复间隔越长必然恢复越好”：只有空档内存在可用计算余量时，时间
+间隔才能偿还 compute debt。当前结果是 fixed-capacity mechanism diagnostic，
+不是 repeated-event firm-capacity certificate，也尚未经过 locked evaluation。
+
 ### 预期结论
 
 需求响应不是无成本地“删除”电量，而是将计算义务转移到未来；连续调用造成可量化的资源耗尽。
@@ -1022,7 +1037,7 @@ solver and tolerances
 - [ ] 名义、PI 和受限 NA 三层规划边界可重复计算；
 - [ ] 固定因果策略在独立 locked-ID 上完成容量认证；
 - [ ] duration–notice–reliability surface 完成；
-- [ ] compute-debt exhaustion 机制得到量化；
+- [x] development compute-debt exhaustion 机制得到量化；
 - [x] development 2 × 2 × 2 hosting-capacity 分析完成；
 - [x] development PV/BESS 互补与替代区域得到识别；
 - [ ] 硬件和场景不确定性分析完成；

@@ -237,20 +237,20 @@ python -m aidrbench scenario check-sensitivities \
 
 Model A is frozen at Git commit `d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`.
 The separate repeated-event layer references that commit and the exact SHA-256
-of the completed N=0 development capacity table. A bounded three-seed code-path
-check is generated and evaluated with:
+of the completed N=0 development capacity table. The complete 100-scenario
+development experiment is generated and evaluated with:
 
 ```bash
 python -m aidrbench scenario freeze-exhaustion \
   --specification configs/experiment/nature_exhaustion_v1.yaml \
-  --seeds 10000 10001 10002 \
-  --output results/nature_mainline/development_exhaustion_smoke_v1
+  --seeds {10000..10099} \
+  --output results/nature_mainline/development_exhaustion_v1
 
 python -m aidrbench optimize exhaustion-diagnostics \
-  --scenarios results/nature_mainline/development_exhaustion_smoke_v1 \
+  --scenarios results/nature_mainline/development_exhaustion_v1 \
   --specification configs/experiment/nature_exhaustion_v1.yaml \
-  --workers 4 \
-  --output results/nature_mainline/development_exhaustion_diagnostics_smoke_v3
+  --workers 32 \
+  --output results/nature_mainline/development_exhaustion_diagnostics_v1
 ```
 
 For every repeated event, the diagnostic also runs a fresh single-event
@@ -258,8 +258,16 @@ counterfactual at the same scenario and clock hour. This pairing prevents the
 recovery-gap comparison from confusing history-dependent exhaustion with a
 different community-load period. Delivery, rebound and window relief are
 event-local; deadline misses and terminal backlog enter only joint-episode
-service feasibility. The current three-seed output is a smoke diagnostic, not
-an exhaustion-capacity certificate.
+service feasibility. The full development output contains 1,000 joint programs
+and 4,000 paired event outcomes. Event-four mean paired compute-debt increments
+are 0.58--1.37 MWh, while p05 residual delivery is 0.9897--1.0000. Joint success
+ranges from 0.00 to 0.94. In particular, H=8/gap=24 h fails joint deadline
+service in all 100 scenarios even though event-four p05 paired delivery remains
+98.97%. Longer wall-clock gaps therefore do not guarantee recovery when the
+gap contains insufficient spare compute headroom. This is a fixed-capacity
+development mechanism diagnostic, not an exhaustion-capacity certificate.
+All numeric outputs are finite, and a checkpoint-only rerun reproduced the five
+aggregate artifacts byte-for-byte.
 
 The existing hosting planner now exports both the declared eight portfolios
 and unclassified AI–BESS/AI–PV point interactions. One full-horizon development
@@ -348,6 +356,8 @@ until the experiment design and result schemas are frozen.
    `d03b440`.**
 3. Scale the now-implemented paired repeated-event exhaustion pipeline from
    its three-seed smoke to the declared development/validation ensembles.
+   **Completed on 100 nominal development scenarios; validation remains
+   pending.**
 4. Run the implemented 100-scenario 2 × 2 × 2 hosting ensemble. Its paired
    uncertainty, eight-contrast family and equivalence margin are now
    preregistered. **Completed on 100 nominal development scenarios; locked data
