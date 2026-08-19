@@ -1,0 +1,80 @@
+schema_version: 1
+design: one_factor_at_a_time
+service_gate_manifest: results/nature_mainline/sensitivity_service_gate_v2/no_dr_service_feasibility.json
+durations_h: [4, 8]
+reliability_target: 0.95
+confidence_level: 0.95
+nominal_flexibility_fraction: 0.50
+cases:
+  - name: reference
+    factor: reference
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+  - name: delivery_090
+    factor: delivery
+    min_delivery_ratio: 0.90
+    min_interval_delivery_ratio: 0.90
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+  - name: delivery_098
+    factor: delivery
+    min_delivery_ratio: 0.98
+    min_interval_delivery_ratio: 0.98
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+  - name: deadline_000
+    factor: deadline
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.00
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+  - name: deadline_002
+    factor: deadline
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.02
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+  - name: rebound_010
+    factor: rebound
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.10
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+  - name: rebound_050
+    factor: rebound
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.50
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+  - name: window_relief_025
+    factor: window_relief
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.25
+    max_terminal_backlog_fraction: 0.02
+  - name: window_relief_075
+    factor: window_relief
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.75
+    max_terminal_backlog_fraction: 0.02

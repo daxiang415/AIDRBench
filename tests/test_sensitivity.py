@@ -4,6 +4,7 @@ from pathlib import Path
 
 import yaml
 
+from aidrbench.data.splits import sha256_file
 from aidrbench.envs.hourly_config import load_hourly_environment_config
 from aidrbench.evaluation.sensitivity import (
     SensitivityCaseSpecification,
@@ -74,3 +75,5 @@ def test_sparse_sensitivity_requires_no_dr_service_gate(tmp_path: Path) -> None:
     assert parsed.design == "sparse_factorial"
     assert parsed.require_no_dr_service_feasibility
     assert result["all_cases_service_feasible"] is True
+    manifest = yaml.safe_load(Path(str(result["manifest"])).read_text(encoding="utf-8"))
+    assert manifest["table_sha256"] == sha256_file(Path(str(result["table"])))

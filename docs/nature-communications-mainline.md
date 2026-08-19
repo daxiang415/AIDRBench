@@ -232,7 +232,21 @@ gate before any sensitivity frontier is permitted:
 python -m aidrbench scenario check-sensitivities \
   --specification configs/sensitivity/nature_sparse_factorial_v1.yaml \
   --seeds 10000 10001 10002 \
-  --output results/nature_mainline/sensitivity_service_gate_v1
+  --output results/nature_mainline/sensitivity_service_gate_v2
+```
+
+The success-definition sensitivity is a separate, predeclared
+one-factor-at-a-time design rather than a Cartesian product. Mean and
+minimum-interval delivery thresholds move together; deadline, rebound and
+window-relief thresholds change one at a time. The command refuses to start
+unless the hashed no-DR service gate above passed:
+
+```bash
+python -m aidrbench optimize criteria-sensitivity \
+  --scenarios results/nature_mainline/development_v2_nominal \
+  --specification configs/sensitivity/nature_success_criteria_oat_v1.yaml \
+  --workers 16 \
+  --output results/nature_mainline/development_criteria_sensitivity_v2
 ```
 
 Model A is frozen at Git commit `d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`.

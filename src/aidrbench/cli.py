@@ -326,6 +326,19 @@ def _add_optimization_parsers(subparsers: Any) -> None:
         help="independent frozen scenarios to solve concurrently (default: 1)",
     )
     frontier.add_argument("--output", required=True)
+    criteria_sensitivity = commands.add_parser(
+        "criteria-sensitivity",
+        help="solve a predeclared one-factor-at-a-time PI success-criteria sensitivity",
+    )
+    criteria_sensitivity.add_argument("--scenarios", required=True)
+    criteria_sensitivity.add_argument("--specification", required=True)
+    criteria_sensitivity.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to solve concurrently (default: 1)",
+    )
+    criteria_sensitivity.add_argument("--output", required=True)
     non_anticipative = commands.add_parser(
         "non-anticipative-firm",
         help="compute a restricted finite-scenario causal non-anticipative bound",
@@ -1236,6 +1249,19 @@ def _run_optimization(args: argparse.Namespace) -> int:
             reliability_targets=args.reliabilities,
             confidence_level=args.confidence_level,
             nominal_flexibility_fraction=args.nominal_flexibility_fraction,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "criteria-sensitivity":
+        from aidrbench.evaluation.criteria_sensitivity import (
+            compute_and_save_criteria_sensitivity,
+        )
+
+        summary = compute_and_save_criteria_sensitivity(
+            args.scenarios,
+            specification=args.specification,
+            output_directory=args.output,
             workers=args.workers,
         )
         _print_summary(summary)

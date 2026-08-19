@@ -203,11 +203,20 @@ def check_sparse_sensitivity_no_dr_feasibility(
     manifest_path = output / "no_dr_service_feasibility.json"
     table.to_parquet(table_path, index=False)
     all_feasible = bool(table["service_feasible"].all())
+    specification_path = Path(specification) if isinstance(specification, str | Path) else None
     manifest_path.write_text(
         json.dumps(
             {
                 "schema_version": 1,
                 "design": spec.design,
+                "specification": (
+                    str(specification_path) if specification_path is not None else None
+                ),
+                "specification_sha256": (
+                    sha256_file(specification_path)
+                    if specification_path is not None
+                    else None
+                ),
                 "base_config": str(spec.base_config),
                 "base_config_sha256": sha256_file(spec.base_config),
                 "case_count": len(spec.cases),
@@ -215,6 +224,7 @@ def check_sparse_sensitivity_no_dr_feasibility(
                 "all_cases_service_feasible": all_feasible,
                 "downstream_sensitivity_execution_allowed": all_feasible,
                 "table": str(table_path),
+                "table_sha256": sha256_file(table_path),
             },
             ensure_ascii=False,
             indent=2,
