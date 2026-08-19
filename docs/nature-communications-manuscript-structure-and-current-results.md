@@ -6,7 +6,7 @@
 >
 > 当前代码分支：`codex/firm-flexibility-environment`
 >
-> 当前仓库提交：`3495618`
+> 当前 sensitivity 分析代码提交：`9924ea8`
 >
 > Model A 冻结提交：`d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`
 
@@ -223,9 +223,9 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 4. 将 locked-OOD 作为外推边界，而非替代 locked-ID；
 5. 明确四卡 measurement anchor、fluid/preemptible workload 和 1 h resolution 的局限。
 
-**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。
+**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过。H={4,8} 的 1,800 个 one-factor-at-a-time success-criteria PI programs 也已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。
 
-**仍缺**：sensitivity service gate 的正式结果、validation causal selection、locked-ID 和 locked-OOD。该 Result 在这些证据完成前只能保留结构，不能写成结论段。
+**仍缺**：完整 sparse workload sensitivity frontiers、validation causal selection、locked-ID 和 locked-OOD。该 Result 在这些证据完成前只能保留部分 development 结论，不能写成独立泛化结论。
 
 **Figure 5**：hardware/workload sensitivity、validation-to-locked workflow、locked-ID certificate 和 locked-OOD generalization boundary。
 
@@ -406,6 +406,23 @@ joint success 对 gap 并不单调，说明“墙上时钟经过了多久”不�
 | AI × PV, with BESS | +35.22 kW | [26.78, 43.71] | complementarity |
 
 这些标签只对当前预声明 10.05 kW equivalence margin 和 development ensemble 成立。
+
+### 11.6 Success-criteria sensitivity
+
+9 个预声明 workload cases × 3 个 development seeds 的 no-DR service gate 共 27 行，全部为零 baseline deadline miss、零 terminal backlog，因此允许后续 sensitivity 分析。
+
+对 H={4,8}、q=0.95、confidence=0.95，使用 100 个 frozen scenarios 运行 9 个 one-factor-at-a-time criteria cases，共得到 1,800 个 `optimal` PI solves：
+
+| Criteria case | H=4 h | H=8 h | 相对 reference 的解释 |
+|---|---:|---:|---|
+| reference | 40.15 kW | 37.76 kW | delivery 0.95、deadline miss 0.01、rebound 0.25、window relief 0.50 |
+| delivery 0.90 | 42.38 kW | 39.86 kW | 放宽 linked mean/interval delivery 后分别增加 2.23、2.10 kW |
+| delivery 0.98 | 38.92 kW | 36.60 kW | 收紧 linked mean/interval delivery 后分别降低 1.23、1.16 kW |
+| deadline miss 0.00 / 0.02 | 40.15 kW | 37.76 kW | 容量不变 |
+| rebound 0.10 / 0.50 | 40.15 kW | 37.76 kW | 容量不变 |
+| window relief 0.25 / 0.75 | 40.15 kW | 37.76 kW | 容量不变 |
+
+结果说明，在这两个 development PI 点上，linked interval-delivery definition 决定容量；其他阈值仍约束可行调度，但不是容量设置约束。它不能外推为 causal controller 或 locked scenarios 的 binding-constraint 结论。
 
 ## 12. Supplementary Information 总体结构
 
@@ -599,7 +616,8 @@ Supplementary 应列出：
 | Model A freeze | 已完成 | downstream development design fixed at `d03b440` |
 | repeated-event exhaustion | development 已完成 | fixed-capacity mechanism diagnostic |
 | 2 × 2 × 2 hosting | development 已完成 | planning bounds and paired development contrasts |
-| sparse sensitivity service gate | 尚待正式完成 | `[Evidence needed]` |
+| sparse sensitivity service gate | 已完成 | 27/27 no-DR evaluations feasible，baseline miss/backlog 均为 0 |
+| success-criteria PI sensitivity | 已完成 | 1,800/1,800 optimal；H={4,8} 仅 delivery threshold 改变容量 |
 | validation causal selection | 尚未完成 | `[Evidence needed]` |
 | locked-ID | 未打开 | 不能声称 causal certificate |
 | locked-OOD | 未打开 | 不能声称 generalization |

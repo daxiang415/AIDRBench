@@ -712,6 +712,22 @@ operating peak 的 5%，不得根据结果调整。
 - reference-mix peak 与 worst-class peak；
 - fluid scheduling 与更严格任务约束的敏感性。
 
+### 当前 development 结果
+
+Sparse workload schema 的 no-DR service gate 已在 9 个 cases × 3 个 seeds 上
+完成，27/27 baseline evaluations 均为零 deadline miss 和零 terminal backlog。
+Success-criteria sensitivity 使用 one-factor-at-a-time 设计，而不是 3⁴ 笛卡尔
+积；100 个 frozen scenarios、H={4,8} 和 9 个 criteria cases 共形成 1,800 个
+`optimal` PI solves。
+
+在 q=0.95、confidence=0.95 下，reference capacities 为 H=4 的 40.15 kW
+和 H=8 的 37.76 kW。将 linked mean/minimum-interval delivery threshold 放宽到
+0.90 后分别变为 42.38 和 39.86 kW，收紧到 0.98 后分别变为 38.92 和
+36.60 kW。预声明的 deadline-miss、rebound 和 window-relief threshold 变化在
+这两个点上不改变容量。这说明 delivery definition 是当前 development PI
+容量的设置约束；结果不是 causal 或 locked certificate。精确数值和 SHA-256
+记录在 `data/manifests/nature_mainline_development_results_v1.yaml`。
+
 ### 预期结论
 
 绝对 kW 和 hosting-capacity 数字存在区间，但名义高估、duration effect 和 compute-debt exhaustion 在合理参数范围内保持稳定。
@@ -1022,6 +1038,9 @@ solver and tolerances
 - workload mix；
 - deadline distribution；
 - locked OOD communities。
+
+当前状态：power-case PI 与 success-criteria PI sensitivity 已完成；sparse
+workload frontiers 和 locked-OOD 仍未运行。
 
 ### Phase 6 — 独立因果容量认证
 

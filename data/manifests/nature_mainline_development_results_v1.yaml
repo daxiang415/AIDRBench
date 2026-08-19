@@ -10,6 +10,65 @@ interpretation_guardrails:
 
 model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
 
+sensitivity_service_gate:
+  analysis_git_commit: 9924ea88e0f63a4b38c41107b0a5f36cfc31f9b5
+  design: sparse_factorial
+  case_count: 9
+  seed_count: 3
+  evaluation_row_count: 27
+  all_cases_service_feasible: true
+  maximum_baseline_deadline_miss_rate: 0.0
+  maximum_baseline_terminal_backlog_fraction: 0.0
+  outputs:
+    no_dr_service_feasibility.json: af8aa1366f7192710d69f4c4357846d51e286938b96f7b3d5b606cc584920c72
+    no_dr_service_feasibility.parquet: db7915eda4eff317eb81b19483255f81fda18c6a8c61d1a42c9da6e8c0821ee5
+
+success_criteria_sensitivity:
+  analysis_git_commit: 9924ea88e0f63a4b38c41107b0a5f36cfc31f9b5
+  independent_unit: frozen_scenario
+  independent_scenario_count: 100
+  design: one_factor_at_a_time
+  durations_h: [4, 8]
+  criteria_case_count: 9
+  optimization_row_count: 1800
+  reliability_target: 0.95
+  confidence_level: 0.95
+  reference_capacity_kw:
+    H4: 40.14687819300373
+    H8: 37.75975404867362
+  capacity_kw_by_case:
+    delivery_090_H4: 42.37725783663766
+    delivery_090_H8: 39.857515831642395
+    delivery_098_H4: 38.91789337993709
+    delivery_098_H8: 36.60384438994857
+    deadline_000_H4: 40.14687819300373
+    deadline_000_H8: 37.75975404867362
+    deadline_002_H4: 40.14687819300373
+    deadline_002_H8: 37.75975404867362
+    rebound_010_H4: 40.14687819300373
+    rebound_010_H8: 37.75975404867362
+    rebound_050_H4: 40.14687819300373
+    rebound_050_H8: 37.75975404867362
+    window_relief_025_H4: 40.14687819300373
+    window_relief_025_H8: 37.75975404867362
+    window_relief_075_H4: 40.14687819300373
+    window_relief_075_H8: 37.75975404867362
+  interpretation:
+    delivery_threshold_changes_capacity: true
+    deadline_threshold_changes_capacity: false
+    rebound_threshold_changes_capacity: false
+    window_relief_threshold_changes_capacity: false
+    scope: development_PI_only_not_causal_certificate
+  outputs:
+    criteria_sensitivity.json: 00092eb02b0eeee0f02002232f8950cfaa8a979f8a3a6ab9ecfd26d5f8caaf7c
+    criteria_pi_frontier.parquet: 14949faca6e1949c55e43605021269cd9d58c48ab1035f527af6fe303ca2fc07
+    criteria_pi_firm_boundary.parquet: dcac37a451553ddc9815e9e40343f4b70f2767ab21d5b7eef74eda29b2b7f5c4
+  reproducibility_check:
+    repeated_capacity_and_status_columns_identical: true
+    boundary_artifact_byte_identical: true
+    raw_frontier_byte_identical: false
+    raw_frontier_difference: solver_timing_columns_only
+
 repeated_event_exhaustion:
   analysis_git_commit: 532702a21a8d760dd3dd56d9b7cdfd4289080e98
   independent_unit: frozen_scenario

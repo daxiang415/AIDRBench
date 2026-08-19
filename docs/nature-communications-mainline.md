@@ -249,6 +249,21 @@ python -m aidrbench optimize criteria-sensitivity \
   --output results/nature_mainline/development_criteria_sensitivity_v2
 ```
 
+The hashed gate passed all 27 no-DR evaluations (nine sparse workload cases
+and three development seeds) with zero baseline deadline misses and zero
+terminal backlog. The complete criteria sensitivity then solved 1,800 optimal
+PI programs (100 scenarios × two durations × nine cases). At q=0.95 and 95%
+confidence, the reference capacities are 40.15 kW for H=4 h and 37.76 kW for
+H=8 h. Relaxing the linked mean/interval delivery threshold from 0.95 to 0.90
+raises them to 42.38 and 39.86 kW; tightening it to 0.98 lowers them to 38.92
+and 36.60 kW. The predeclared deadline-miss, rebound and window-relief
+variations do not change either capacity, although the optimizer changes the
+schedule to satisfy the altered constraint. This identifies interval delivery
+as the capacity-setting operational definition at these development points;
+it is not a causal or locked certificate. A clean-tree repeat at commit
+`9924ea8` reproduced every capacity/status value and the boundary artifact
+byte-for-byte; raw frontier bytes differ only in solver timing columns.
+
 Model A is frozen at Git commit `d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`.
 The separate repeated-event layer references that commit and the exact SHA-256
 of the completed N=0 development capacity table. The complete 100-scenario
@@ -377,7 +392,9 @@ until the experiment design and result schemas are frozen.
    preregistered. **Completed on 100 nominal development scenarios; locked data
    remain closed.**
 5. Run success-criterion sensitivities, freeze all choices, then run validation,
-   locked ID once, and locked OOD separately once.
+   locked ID once, and locked OOD separately once. **Development PI criteria
+   sensitivity is complete; workload frontiers, validation and both locked
+   evaluations remain pending.**
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and
