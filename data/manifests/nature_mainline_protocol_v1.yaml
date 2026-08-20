@@ -2,7 +2,7 @@ schema_version: 1
 protocol_id: aidrbench_nature_communications_mainline_v1
 study_type: nature_communications_mechanism_mainline
 status: analysis_plan_frozen_before_validation
-locked_ood_status: not_run
+locked_ood_status: approved_for_one_time_run
 locked_id_status: consumed
 analysis_plan_status: frozen
 community_profile_split: data/manifests/community_profile_split_v1.yaml
