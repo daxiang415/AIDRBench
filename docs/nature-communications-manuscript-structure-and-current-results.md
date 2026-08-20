@@ -2,11 +2,11 @@
 
 > 状态：作者确认后的论文架构草案，不是投稿稿件，也不是预注册文件
 >
-> 更新日期：2026-08-19
+> 更新日期：2026-08-20
 >
 > 当前代码分支：`codex/firm-flexibility-environment`
 >
-> 当前 sensitivity 分析代码提交：`9924ea8`
+> 当前 sensitivity 分析代码提交：`45eeb58`
 >
 > Model A 冻结提交：`d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`
 
@@ -223,9 +223,9 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 4. 将 locked-OOD 作为外推边界，而非替代 locked-ID；
 5. 明确四卡 measurement anchor、fluid/preemptible workload 和 1 h resolution 的局限。
 
-**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过，配对 PI 管线已实现并通过真实配置 smoke test，但完整 workload frontiers 尚未运行。H={4,8} 的 1,800 个 one-factor-at-a-time success-criteria PI programs 已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。
+**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过；完整配对 workload sensitivity 的 1,800/1,800 个 PI programs 为 optimal。提高 flexible arrival utilization 增大 H={4,8} 的 firm boundary，降低它则减小边界；预声明的 rigid-utilization、deadline-slack 和两个组合点未产生额外边界变化。独立的 1,800 个 one-factor-at-a-time success-criteria PI programs 也已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。
 
-**仍缺**：完整 sparse workload sensitivity frontiers、validation causal selection、locked-ID 和 locked-OOD。该 Result 在这些证据完成前只能保留部分 development 结论，不能写成独立泛化结论。
+**仍缺**：validation causal selection、locked-ID 和 locked-OOD。现有 sensitivity 只支持 Model A development 边界，不能写成独立泛化结论。
 
 **Figure 5**：hardware/workload sensitivity、validation-to-locked workflow、locked-ID certificate 和 locked-OOD generalization boundary。
 
@@ -617,14 +617,14 @@ Supplementary 应列出：
 | repeated-event exhaustion | development 已完成 | fixed-capacity mechanism diagnostic |
 | 2 × 2 × 2 hosting | development 已完成 | planning bounds and paired development contrasts |
 | sparse sensitivity service gate | 已完成 | 27/27 no-DR evaluations feasible，baseline miss/backlog 均为 0 |
-| sparse workload PI pipeline | 已实现、待完整运行 | 真实配置 smoke 18/18 optimal；尚无可报告的 workload effect |
+| sparse workload PI sensitivity | 已完成 | 1,800/1,800 optimal；arrival utilization 改变容量，rigid/deadline 在测试点为零效应 |
 | success-criteria PI sensitivity | 已完成 | 1,800/1,800 optimal；H={4,8} 仅 delivery threshold 改变容量 |
 | validation causal selection | 尚未完成 | `[Evidence needed]` |
 | locked-ID | 未打开 | 不能声称 causal certificate |
 | locked-OOD | 未打开 | 不能声称 generalization |
 | q=0.99 certificate | development n=100 不足 | 必须依赖预声明 500-episode locked-ID design |
 
-当前最准确的总状态是：**科学模型、可复现环境和 development mechanism evidence 已基本形成，但主论文的独立因果认证、敏感性闭环和 locked generalization 证据尚未完成。**
+当前最准确的总状态是：**科学模型、可复现环境和 development mechanism/sensitivity evidence 已基本形成，但主论文的独立因果认证和 locked generalization 证据尚未完成。**
 
 ## 16. Claim–evidence map
 
@@ -636,20 +636,20 @@ Supplementary 应列出：
 | compute debt limits repeated DR before delivery collapses | paired fresh-event exhaustion and joint service outcomes | supported on development |
 | workload flexibility increases hosting capacity | paired 2 × 2 × 2 scenario optimizations | supported as development planning result |
 | AI–BESS substitutes and AI–PV complements | predeclared interaction contrasts and simultaneous CIs | supported on development only |
+| flexible workload arrival changes single-event firm capacity | paired sparse-workload PI sensitivity | supported at predeclared Model A development points |
 | a fixed causal controller can certify firm capacity | validation selection + locked-ID Wilson lower bound | needs evidence |
-| findings generalize beyond Model A | sparse sensitivities + locked-OOD | needs evidence |
+| findings generalize beyond Model A | development sensitivities + locked-OOD | needs locked-OOD evidence |
 
 ## 17. 后续执行顺序
 
-1. 运行并汇总已通过 no-DR service gate 的 sparse workload PI sensitivity；
-2. 冻结 protocol 的 `analysis_plan_status`、图表 schema 和主统计量；
-3. 生成/核对 validation scenarios，在 validation 上冻结 robust-MPC capacity candidates；
-4. 在任何 locked read 前完成结果表模板、失败分类和 source-data schema；
-5. 获得作者明确授权后一次性运行 500 个 locked-ID episodes；
-6. 独立运行 locked-OOD，不用其替代 locked-ID；
-7. 生成五幅主图和 Supplementary environment figures；
-8. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
-9. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。
+1. 冻结 protocol 的 `analysis_plan_status`、图表 schema 和主统计量；
+2. 生成/核对 validation scenarios，在 validation 上冻结 robust-MPC capacity candidates；
+3. 在任何 locked read 前完成结果表模板、失败分类和 source-data schema；
+4. 获得作者明确授权后一次性运行 500 个 locked-ID episodes；
+5. 独立运行 locked-OOD，不用其替代 locked-ID；
+6. 生成五幅主图和 Supplementary environment figures；
+7. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
+8. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。
 
 ## 18. 作者需要继续确认的边界
 

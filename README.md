@@ -716,10 +716,18 @@ operating peak 的 5%，不得根据结果调整。
 
 Sparse workload schema 的 no-DR service gate 已在 9 个 cases × 3 个 seeds 上
 完成，27/27 baseline evaluations 均为零 deadline miss 和零 terminal backlog。
-配对的 sparse-workload PI 管线也已实现并通过真实配置 smoke test；它会在
-9 个 cases 共用的 100 个 development seeds 上验证 community、event 和随机流
-配对，再计算 H={4,8}、q=0.95 的边界。完整 1,800-program run 尚未执行，
-因此此处不预写 workload sensitivity 方向性结论。
+配对的 sparse-workload PI 已在 9 个 cases × 100 个共同 development seeds、
+H={4,8} 上完成，1,800/1,800 programs 为 `optimal`；全部 900 个冻结场景的
+no-DR baseline 也均为零 deadline miss 和零 terminal backlog。
+
+在 q=0.95、confidence=0.95 下，将 flexible arrival utilization 从 0.65
+降低到 0.50，使 H=4/H=8 firm boundary 从 40.15/37.76 kW 降至
+30.88/29.05 kW；提高到 0.80 后升至 77.99/53.49 kW。预声明的 rigid
+utilization 和 deadline-slack 变化不改变边界，两个组合点也分别等于对应的
+arrival-only case。rigid load 在相对 baseline 的单事件削减量中作为共同加性
+项相消，但仍会影响 PCC headroom 与 hosting；deadline 零效应仅限 Model A
+的这些稀疏测试点。结果均为 development PI bounds，不是 causal 或 locked
+generalization certificate。
 Success-criteria sensitivity 使用 one-factor-at-a-time 设计，而不是 3⁴ 笛卡尔
 积；100 个 frozen scenarios、H={4,8} 和 9 个 criteria cases 共形成 1,800 个
 `optimal` PI solves。
@@ -1043,9 +1051,9 @@ solver and tolerances
 - deadline distribution；
 - locked OOD communities。
 
-当前状态：power-case PI 与 success-criteria PI sensitivity 已完成；sparse
-workload PI 管线已实现并通过真实配置 smoke test，但完整 frontiers 与
-locked-OOD 仍未运行。
+当前状态：power-case PI、success-criteria PI sensitivity 与 sparse-workload
+PI frontiers 已完成；validation causal selection、locked-ID 和 locked-OOD
+仍未运行。
 
 ### Phase 6 — 独立因果容量认证
 

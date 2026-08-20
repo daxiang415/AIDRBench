@@ -23,6 +23,62 @@ sensitivity_service_gate:
     no_dr_service_feasibility.json: af8aa1366f7192710d69f4c4357846d51e286938b96f7b3d5b606cc584920c72
     no_dr_service_feasibility.parquet: db7915eda4eff317eb81b19483255f81fda18c6a8c61d1a42c9da6e8c0821ee5
 
+workload_sensitivity:
+  analysis_git_commit: 45eeb58a32fe5ea357ada7d6b380c352ec4196bd
+  independent_unit: frozen_scenario
+  independent_scenario_count_per_case: 100
+  design: sparse_factorial_pi
+  durations_h: [4, 8]
+  workload_case_count: 9
+  frozen_scenario_count: 900
+  optimization_row_count: 1800
+  optimal_row_count: 1800
+  reliability_target: 0.95
+  confidence_level: 0.95
+  tolerance_order_statistic_rank: 2
+  achieved_tolerance_confidence: 0.9629187906726449
+  full_frozen_scenario_service_audit:
+    scenario_count: 900
+    maximum_no_dr_baseline_deadline_miss_gpu_h: 0.0
+    maximum_no_dr_baseline_terminal_backlog_gpu_h: 0.0
+  capacity_kw_by_case:
+    reference_H4: 40.14687819300373
+    reference_H8: 37.75975404867362
+    flexible_arrival_low_H4: 30.88221399461824
+    flexible_arrival_low_H8: 29.045964652825898
+    flexible_arrival_high_H4: 77.99036751873687
+    flexible_arrival_high_H8: 53.492055664610106
+    rigid_utilization_low_H4: 40.14687819300373
+    rigid_utilization_low_H8: 37.75975404867362
+    rigid_utilization_high_H4: 40.146878193003666
+    rigid_utilization_high_H8: 37.75975404867362
+    deadline_tight_H4: 40.14687819300373
+    deadline_tight_H8: 37.75975404867362
+    deadline_loose_H4: 40.14687819300373
+    deadline_loose_H8: 37.75975404867362
+    high_arrival_tight_deadline_H4: 77.99036751873687
+    high_arrival_tight_deadline_H8: 53.492055664610106
+    low_arrival_loose_deadline_H4: 30.88221399461824
+    low_arrival_loose_deadline_H8: 29.045964652825898
+  interpretation:
+    flexible_arrival_changes_capacity: true
+    rigid_utilization_changes_single_event_reduction_capacity: false
+    deadline_slack_changes_capacity_at_predeclared_points: false
+    interaction_detected_at_predeclared_combined_points: false
+    binding_boundary_metric: minimum_interval_delivery_ratio
+    rigid_zero_effect_scope: additive_rigid_load_cancels_in_baseline_relative_reduction
+    deadline_zero_effect_scope: tested_sparse_points_under_model_a_service_thresholds
+    scope: development_PI_only_not_causal_or_generalization_certificate
+  outputs:
+    scenario_index: 00ef0b7fb1473d05337fa4176b1efc6f005b0ea83914298a9e8600ff68f18a77
+    workload_sensitivity.json: c28a14682976877d3613d9e7dfc8e7336794fa138f0be118ae41c43133fd017d
+    workload_pi_frontier.parquet: 321dd1be0725f1bc5d727bc11bf7f25b4c411b8888b3fc52d021c27e1dfbb0d8
+    workload_pi_firm_boundary.parquet: 5ccd22860f8045ed00757f343135e51850b8c9c8992de640db6f1a012704be42
+  equivalence_check:
+    reference_matches_existing_nominal_capacity_rows: true
+    compared_row_count: 200
+    maximum_absolute_capacity_difference_kw: 0.0
+
 success_criteria_sensitivity:
   analysis_git_commit: 9924ea88e0f63a4b38c41107b0a5f36cfc31f9b5
   independent_unit: frozen_scenario

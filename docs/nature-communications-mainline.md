@@ -282,9 +282,17 @@ python -m aidrbench optimize workload-sensitivity \
   --output results/nature_mainline/development_workload_sensitivity_v1
 ```
 
-The implementation and a real-configuration 18-program smoke test are
-complete. The full 1,800-program development run remains pending, so no
-workload-sensitivity effect is claimed yet.
+The complete development run solved all 1,800 PI programs at commit
+`45eeb58`. The 900 frozen scenarios also have zero no-DR baseline deadline
+misses and zero terminal backlog. At q=0.95 and 95% confidence, increasing
+flexible arrival utilization from 0.65 to 0.80 raises the H=4 and H=8
+boundaries from 40.15 and 37.76 kW to 77.99 and 53.49 kW; decreasing it to
+0.50 lowers them to 30.88 and 29.05 kW. The predeclared rigid-utilization and
+deadline-slack changes do not alter these boundaries. Rigid load is additive
+and therefore cancels in the baseline-relative single-event reduction metric;
+it remains relevant to PCC headroom and hosting analyses. The deadline result
+is limited to the tested sparse points and Model A service thresholds. These
+are development PI bounds, not causal or generalization certificates.
 
 Model A is frozen at Git commit `d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`.
 The separate repeated-event layer references that commit and the exact SHA-256
@@ -413,10 +421,10 @@ until the experiment design and result schemas are frozen.
    uncertainty, eight-contrast family and equivalence margin are now
    preregistered. **Completed on 100 nominal development scenarios; locked data
    remain closed.**
-5. Run success-criterion sensitivities, freeze all choices, then run validation,
-   locked ID once, and locked OOD separately once. **Development PI criteria
-   sensitivity is complete; workload frontiers, validation and both locked
-   evaluations remain pending.**
+5. Run success-criterion and sparse-workload sensitivities, freeze all choices,
+   then run validation, locked ID once, and locked OOD separately once.
+   **Both development PI sensitivity analyses are complete; validation and
+   both locked evaluations remain pending.**
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and
