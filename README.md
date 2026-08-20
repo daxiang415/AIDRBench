@@ -542,7 +542,7 @@ episode 的 deadline miss、terminal backlog 分开报告。joint-episode succes
 是重复事件主统计单位；固定容量下的配对交付比只是机制诊断，不得写成
 event-wise firm-capacity certificate。
 
-### 当前 development 结果
+### 当前 development 与 validation 结果
 
 100 个 nominal development scenarios 上的完整 H × recovery-gap 配对实验已
 完成。到第 4 次事件，平均配对 compute-debt increment 为 0.58–1.37 MWh，
@@ -556,6 +556,19 @@ joint-episode success 随 H/gap 在 0.00–0.94 之间变化。H=8、gap=24 h �
 不能写成“恢复间隔越长必然恢复越好”：只有空档内存在可用计算余量时，时间
 间隔才能偿还 compute debt。当前结果是 fixed-capacity mechanism diagnostic，
 不是 repeated-event firm-capacity certificate，也尚未经过 locked evaluation。
+
+独立 validation 规格随后在提交 `097ff89` 上按预注册 seeds 20000–20099
+完成，固定沿用 development 的 H=4（44.00 kW）和 H=8（41.19 kW）承诺，
+未在 validation 上重新选容量。100 个独立 seeds、10 个 H × gap programs
+共得到 1,000 个联合 episode 和 4,000 个事件结果。第 4 次事件的配对
+compute-debt increment 为 0.55–1.38 MWh，而 residual flexibility ratio 仍为
+0.9910–1.0000；跨 gap 平均债务到第 4 次分别增至 H=4 的 0.75 MWh 和
+H=8 的 1.14 MWh。四事件 joint success 为 0.00–0.97；只有 H=4、gap=8 h
+的经验成功率达到 0.95，但其单侧 95% Wilson 下界为 0.927，因此没有任何单元
+可被误写成 q=0.95 repeated-event 容量证书。该独立结果支持“服务债务先于
+功率能力耗尽”的有限机制解释。逐单元结果、描述性 development–validation
+一致性和完整哈希回执见
+[`data/manifests/nature_mainline_validation_exhaustion_results_v1.yaml`](data/manifests/nature_mainline_validation_exhaustion_results_v1.yaml)。
 
 ### 预期结论
 
@@ -1091,7 +1104,7 @@ Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 - [x] 名义、PI 和受限 NA 三层规划边界可重复计算；
 - [x] 固定因果候选在独立 locked-ID 上完成一次性检验并保留全部通过/失败结果；
 - [x] duration–notice–reliability surface 完成评估（部分单元未通过认证门槛）；
-- [x] development compute-debt exhaustion 机制得到量化；
+- [x] development 与独立 validation compute-debt exhaustion 机制得到量化；
 - [x] development 2 × 2 × 2 hosting-capacity 分析完成；
 - [x] development PV/BESS 互补与替代区域得到识别；
 - [ ] 硬件和场景不确定性分析完成；

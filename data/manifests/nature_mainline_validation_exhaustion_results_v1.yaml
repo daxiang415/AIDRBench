@@ -1,0 +1,136 @@
+schema_version: 1
+receipt_role: post_run_hash_receipt_not_preregistration
+evidence_scope: validation_repeated_event_exhaustion
+generated_at: "2026-08-20T18:54:19+09:00"
+analysis_git_commit: 097ff89ce737c138faf0b5807ee03f451cc91d55
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+reinforcement_learning_used: false
+locked_data_read: false
+
+interpretation_guardrails:
+  - fixed_development_capacity_no_validation_reselection
+  - paired_repeated_event_mechanism_diagnostic
+  - not_a_repeated_event_firm_capacity_certificate
+  - not_locked_id_or_locked_ood_evidence
+  - recovery_gap_is_not_elapsed_time_alone_because_spare_compute_headroom_matters
+  - cross_cell_correlations_are_descriptive_not_inferential
+
+specification:
+  path: configs/experiment/nature_exhaustion_validation_v1.yaml
+  file_sha256: 0cc9c0534292f7d3f0e4f8a9c7ef50438bceb79baa9764bdb6b6fe2605b656a0
+  normalized_sha256: d19f7ccbde813472d9f513a1716663daffea9c59def18815aea359aef8225587
+  dataset_role: validation_repeated_event_exhaustion
+  seed_range: [20000, 20099]
+  durations_h: [4, 8]
+  recovery_gaps_h: [2, 4, 8, 12, 24]
+  event_count: 4
+  notice_h: 0
+  reliability_target: 0.95
+  confidence_level: 0.95
+
+controller:
+  name: robust_mpc
+  config_path: configs/controller/nature_robust_mpc_v1.yaml
+  config_sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
+  normalized_specification_sha256: ba530b8a622e5d621e6d005369a07db9db7a9e2e5cbf9aff4e73209d828abf02
+  provenance_verified_on_checkpoint_replay: true
+
+scenario_set:
+  path: results/nature_mainline/validation_exhaustion_v1
+  index_sha256: 415d092e9a967ab2d3f96321a2509b0acfa05f8ac097dae33ae63a1ba6aca1f5
+  scenario_hash_list_sha256: 38051311c80eea6fd35f15ae2b96c3e75a929827ca04498b19fbed182d7bcda6
+  independent_seed_count: 100
+  paired_programs_per_seed: 10
+  scenario_program_count: 1000
+  unique_scenario_hash_count: 1000
+  payload_files_checked: 4000
+  payload_hash_mismatches: 0
+
+fixed_development_capacity_kw:
+  duration_4h: 44.000327053605915
+  duration_8h: 41.19081682288712
+
+joint_episode_results:
+  statistical_unit: joint_four_event_episode
+  cell_trial_count: 100
+  interval_method: one_sided_95_percent_wilson_descriptive_only
+  cells:
+    H4_G2:  {success_count: 78, empirical_fraction: 0.78, wilson_lower_bound: 0.704987, service_feasible_fraction: 1.00}
+    H4_G4:  {success_count: 87, empirical_fraction: 0.87, wilson_lower_bound: 0.804806, service_feasible_fraction: 1.00}
+    H4_G8:  {success_count: 97, empirical_fraction: 0.97, wilson_lower_bound: 0.927290, service_feasible_fraction: 1.00}
+    H4_G12: {success_count: 88, empirical_fraction: 0.88, wilson_lower_bound: 0.816306, service_feasible_fraction: 1.00}
+    H4_G24: {success_count: 77, empirical_fraction: 0.77, wilson_lower_bound: 0.694215, service_feasible_fraction: 0.86}
+    H8_G2:  {success_count: 80, empirical_fraction: 0.80, wilson_lower_bound: 0.726696, service_feasible_fraction: 1.00}
+    H8_G4:  {success_count: 83, empirical_fraction: 0.83, wilson_lower_bound: 0.759723, service_feasible_fraction: 1.00}
+    H8_G8:  {success_count: 54, empirical_fraction: 0.54, wilson_lower_bound: 0.458047, service_feasible_fraction: 1.00}
+    H8_G12: {success_count: 68, empirical_fraction: 0.68, wilson_lower_bound: 0.599399, service_feasible_fraction: 1.00}
+    H8_G24: {success_count: 0, empirical_fraction: 0.00, wilson_lower_bound: 0.000000, service_feasible_fraction: 0.00}
+  cells_with_empirical_fraction_at_least_0_95: 1
+  cells_with_one_sided_wilson_lower_bound_at_least_0_95: 0
+
+event4_mechanism_results:
+  paired_residual_flexibility_ratio:
+    H4_G2: 1.000000000
+    H4_G4: 1.000000000
+    H4_G8: 1.000000000
+    H4_G12: 0.999991267
+    H4_G24: 0.998732430
+    H8_G2: 0.990983286
+    H8_G4: 0.997515120
+    H8_G8: 0.996338265
+    H8_G12: 0.999542976
+    H8_G24: 0.993264028
+  mean_paired_compute_debt_increment_kwh:
+    H4_G2: 554.533824
+    H4_G4: 656.753632
+    H4_G8: 693.209371
+    H4_G12: 852.047919
+    H4_G24: 992.046686
+    H8_G2: 1058.363614
+    H8_G4: 1088.122036
+    H8_G8: 1166.074989
+    H8_G12: 1019.638728
+    H8_G24: 1381.835074
+
+ordinal_mechanism_summary:
+  mean_paired_compute_debt_increment_kwh_across_gaps:
+    H4: [0.0, 171.185721, 447.421680, 749.718287]
+    H8: [0.0, 330.751600, 753.907129, 1142.806888]
+  mean_paired_residual_flexibility_ratio_across_gaps:
+    H4: [1.000000, 1.000000, 1.000000, 0.999745]
+    H8: [1.000000, 0.999848, 0.999728, 0.995529]
+
+development_validation_pattern_concordance:
+  cell_count: 10
+  joint_success_fraction_pearson_r: 0.948330
+  event4_compute_debt_increment_pearson_r: 0.994533
+  event4_residual_flexibility_ratio_pearson_r: 0.929416
+  interpretation: descriptive_pattern_replication_not_a_hypothesis_test
+
+integrity_audit:
+  event_outcome_rows: 4000
+  episode_outcome_rows: 1000
+  exhaustion_summary_rows: 40
+  joint_summary_rows: 10
+  numeric_nonfinite_values: 0
+  checkpoint_count: 1000
+  checkpoint_payload_and_identity_hashes_verified: true
+  checkpoint_replay_resumed_count: 1000
+  checkpoint_replay_recomputed_count: 0
+  repeated_aggregate_artifacts_byte_identical: true
+  git_and_source_provenance_match_analysis_commit: true
+
+outputs:
+  exhaustion_diagnostics_run.json: defc6763c4f44fb449fde47bb9b5ab73e73693724cc1f39d0252489ae69f577e
+  exhaustion_diagnostics.json: 34bf3939a1d261342033eb88ccd42a6cffeefa4e60f2f98d56dbc5dc06efd8e0
+  repeated_event_outcomes.parquet: a596b35a4ca49030b7b15b831c8342868ab0d6ca1e66f3a0b74359894b819367
+  repeated_episode_outcomes.parquet: e4e63569672f82de48967032ff928d52c39f891e3ebc361e3bac8a35e6895d05
+  exhaustion_summary.parquet: 47fc075ef0871f7890679ddaab976779755001c61fc6d5c2c5ce354e50f380c5
+  joint_episode_summary.parquet: 2510a7de0f1bbac39d205f6897aad84522a52d57465fdb9fff44ca14207def37
+
+interpretation:
+  - validation_reproduces_compute_debt_accumulation_under_repeated_dispatch
+  - instantaneous_paired_delivery_remains_near_fresh_event_levels
+  - joint_service_reliability_degrades_before_instantaneous_power_flexibility_disappears
+  - longer_elapsed_gap_does_not_guarantee_recovery_without_spare_compute_headroom
+  - the_fixed_single_event_commitment_must_not_be_relabelled_as_repeated_event_firm_capacity

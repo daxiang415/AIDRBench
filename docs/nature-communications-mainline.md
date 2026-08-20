@@ -348,6 +348,23 @@ development mechanism diagnostic, not an exhaustion-capacity certificate.
 All numeric outputs are finite, and a checkpoint-only rerun reproduced the five
 aggregate artifacts byte-for-byte.
 
+The independently frozen validation exhaustion run is also complete at commit
+`097ff89`. It used seeds 20000--20099 and retained the development Model A
+commitments of 44.00 kW at H=4 and 41.19 kW at H=8 without validation-set
+capacity reselection. All 1,000 checkpoint identities and payload hashes were
+verified on replay; the resulting 4,000 event rows and four aggregate tables
+contain no non-finite numeric values. Event-four paired compute-debt increments
+are 0.55--1.38 MWh while paired residual flexibility remains
+0.9910--1.0000. Joint four-event success ranges from 0.00 to 0.97. Only the
+H=4, gap=8 h cell reaches an empirical fraction above 0.95, and its one-sided
+95% Wilson lower bound is 0.927. Therefore none of these fixed single-event
+commitments is reported as a q=0.95 repeated-event capacity certificate.
+The validation evidence thus supports the narrower mechanism claim that compute
+debt and service risk accumulate before paired instantaneous delivery materially
+disappears. Per-cell results, descriptive development--validation concordance
+and provenance are retained in
+`data/manifests/nature_mainline_validation_exhaustion_results_v1.yaml`.
+
 The existing hosting planner now exports both the declared eight portfolios
 and unclassified AI–BESS/AI–PV point interactions. One full-horizon development
 scenario takes about 42 seconds for all eight solves:
@@ -446,10 +463,10 @@ until the experiment design and result schemas are frozen.
    `d03b440`.**
 3. Scale the now-implemented paired repeated-event exhaustion pipeline from
    its three-seed smoke to the declared development/validation ensembles.
-   **Completed on 100 nominal development scenarios. The separate validation
-   specification is now hash-bound to seeds 20000--20099 and reuses the fixed
-   development Model A commitment without capacity reselection; its formal run
-   remains pending until this specification is committed on a clean tree.**
+   **Completed on 100 nominal development and 100 independent validation
+   scenarios. Validation reused the fixed development Model A commitments
+   without capacity reselection; all 1,000 checkpoint hashes and aggregate
+   outputs passed replay and finite-value audits.**
 4. Run the implemented 100-scenario 2 × 2 × 2 hosting ensemble. Its paired
    uncertainty, eight-contrast family and equivalence margin are now
    preregistered. **Completed on 100 nominal development scenarios; locked data
