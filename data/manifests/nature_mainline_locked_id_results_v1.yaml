@@ -1,0 +1,166 @@
+schema_version: 1
+receipt_role: post_run_locked_id_causal_certificate_receipt
+evidence_scope: locked_id_single_event_causal_capacity
+generated_at: "2026-08-20T17:26:33+09:00"
+analysis_git_commit: 5889405427b8f00f3cdd12b961b79d621b122e65
+reinforcement_learning_used: false
+locked_ood_read: false
+
+protocol:
+  path: data/manifests/nature_mainline_protocol_v1.yaml
+  sha256_before_locked_id_run: 795b6de9e3f7de2087490932ff4f1dff2e1b5e4fd15bfab537f1d958f446c870
+  sha256_after_locked_id_run: 72890572c988765508275470c42d622b6656e93ee47927e88510e713e377feb3
+  analysis_plan_status: frozen
+  locked_id_status: consumed
+  locked_ood_status: not_run
+
+controller:
+  name: robust_mpc
+  config_path: configs/controller/nature_robust_mpc_v1.yaml
+  config_sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
+  normalized_specification_sha256: ba530b8a622e5d621e6d005369a07db9db7a9e2e5cbf9aff4e73209d828abf02
+  provenance_verified_at_locked_replay: true
+
+scenario_set:
+  role: locked_id
+  output_directory: results/nature_mainline/locked_id_nominal
+  config:
+    path: configs/env/nature_mainline_locked_id.yaml
+    source_sha256: 5edac59719ca8ebb084df7bf0aa36e6214149a61b3f0c00a476df603ee33e63d
+    frozen_yaml_sha256: b5119fc3d2b6948c73044db939b89a8cc4bea383c64fb7af04770761a077dbd0
+  episode_seed_range: [30000, 30499]
+  scenario_count: 500
+  scenario_hash_list_sha256: e66a22ccac87bb36fe772b075a091f829dfacb30223a4632bf6479835797aa72
+  digest_definition: sha256_of_compact_json_ordered_scenario_hash_list
+  run_receipt_sha256: a771391565e4135fdfe26a82ae7252dcfe3c7e8cdbdb004c9e33fff59051d2c1
+  profile_id: eulp_mixed_3a
+  community_window: ["2018-10-20T00:00:00", "2019-01-01T00:00:00"]
+  arrival_process: nhpp
+  event_anchor_count: 24
+
+integrity_audit:
+  seeds_exact_and_contiguous: true
+  scenario_hashes_unique: true
+  payload_files_checked: 2000
+  payload_hash_mismatches: 0
+  maximum_no_dr_baseline_deadline_miss_gpu_h: 0.0
+  maximum_no_dr_baseline_terminal_backlog_gpu_h: 0.0
+  power_model_sha256: e392ea26657466e184b024c92e95747a58889cfc5dad0c21d8d653f596cd9369
+  calibration_artifact_sha256: ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193
+  validation_overlap_detected: false
+  controller_provenance_mismatch_detected: false
+
+selection_artifacts:
+  q_0_90:
+    path: results/nature_mainline/causal_selection_q90/causal_selection.json
+    sha256: e07eabf7980ef5ea0d48cfd447933fb26eb4340298a8894803071278e6a9f0a7
+  q_0_95:
+    path: results/nature_mainline/causal_selection_q95/causal_selection.json
+    sha256: ddd0094907e34f7f137856169c5fd6b84a33cf37cfc48e5158ceb5502fdd470b
+  q_0_99:
+    path: results/nature_mainline/causal_selection_q99/causal_selection.json
+    sha256: 7333a4b62bd3eec29a0125648b1ec9f8e67dbe2b1a0f8d79784ad6022b0da7ea
+
+locked_certificate_artifacts:
+  q_0_90:
+    manifest_sha256: a3ca328ae8a77a8b3f58cac9f8222199a3544d3954a1462d111857a5ad7809a2
+    summary_sha256: 70dfa776cfa371c337853542164219587c9cd7ce612cd752e54553761b87bf95
+    outcomes_sha256: a7c9ef4823fbef8fdd4f618892a5daba22dfa3989e67d62b24ade45e0b130a8c
+  q_0_95:
+    manifest_sha256: 122dc0dd82e5cd86fe00465468ecbf37340ebae65d415a0f431a91a3f075f842
+    summary_sha256: 7953c686ab7c5a7a33272d506d618e0ccccb00c85f01d8aba8b990d9de048670
+    outcomes_sha256: 2539388db5b0172318e61c510ff72fd81b964f1d123b12a03a33a2908de1b17b
+  q_0_99:
+    manifest_sha256: eff2126f2f8935d45b0e6244b6749696757b79b0cb25d617c8b5db43e62db128
+    summary_sha256: 6974f2f32595de8a49df2a6790d6e0292a3a08462d31830b58284a719868ff61
+    outcomes_sha256: 3c6370d78e96b959616b2e3e28d21921594716b2965c998d0d56f77987a4c4c4
+
+result_schema:
+  durations_h: [1, 2, 3, 4, 6, 8]
+  notices_h: [0, 2, 6]
+  trial_count_per_cell: 500
+  confidence_level: 0.95
+  interval_wise_wilson_only: true
+  simultaneous_surface_confidence_claimed: false
+  notice_selected_capacity_invariant_within_each_duration: true
+
+results:
+  q_0_90:
+    role: secondary_sensitivity
+    certified_cell_count: 15
+    total_cell_count: 18
+    failure_outcome_rows: 588
+    failure_reason_rows:
+      mean_and_interval_delivery: 192
+      interval_delivery_only: 396
+    unresolved_recovery_time_within_24h_rows: 8934
+    by_duration_all_notices:
+      - {duration_h: 1, capacity_kw: 60.260977, success_count: 454, empirical_success_fraction: 0.908, wilson_lower_bound: 0.884487, certified: false}
+      - {duration_h: 2, capacity_kw: 50.839065, success_count: 473, empirical_success_fraction: 0.946, wilson_lower_bound: 0.926846, certified: true}
+      - {duration_h: 3, capacity_kw: 44.950371, success_count: 477, empirical_success_fraction: 0.954, wilson_lower_bound: 0.935995, certified: true}
+      - {duration_h: 4, capacity_kw: 44.165211, success_count: 462, empirical_success_fraction: 0.924, wilson_lower_bound: 0.902144, certified: true}
+      - {duration_h: 6, capacity_kw: 39.846835, success_count: 473, empirical_success_fraction: 0.946, wilson_lower_bound: 0.926846, certified: true}
+      - {duration_h: 8, capacity_kw: 39.846835, success_count: 465, empirical_success_fraction: 0.930, wilson_lower_bound: 0.908825, certified: true}
+  q_0_95:
+    role: headline
+    certified_cell_count: 15
+    total_cell_count: 18
+    failure_outcome_rows: 186
+    failure_reason_rows:
+      mean_and_interval_delivery: 81
+      interval_delivery_only: 105
+    unresolved_recovery_time_within_24h_rows: 8953
+    by_duration_all_notices:
+      - {duration_h: 1, capacity_kw: 55.157442, success_count: 477, empirical_success_fraction: 0.954, wilson_lower_bound: 0.935995, certified: false}
+      - {duration_h: 2, capacity_kw: 45.735530, success_count: 491, empirical_success_fraction: 0.982, wilson_lower_bound: 0.969313, certified: true}
+      - {duration_h: 3, capacity_kw: 39.650545, success_count: 497, empirical_success_fraction: 0.994, wilson_lower_bound: 0.985083, certified: true}
+      - {duration_h: 4, capacity_kw: 39.650545, success_count: 492, empirical_success_fraction: 0.984, wilson_lower_bound: 0.971829, certified: true}
+      - {duration_h: 6, capacity_kw: 37.883937, success_count: 489, empirical_success_fraction: 0.978, wilson_lower_bound: 0.964363, certified: true}
+      - {duration_h: 8, capacity_kw: 36.706198, success_count: 492, empirical_success_fraction: 0.984, wilson_lower_bound: 0.971829, certified: true}
+  q_0_99:
+    role: secondary_sensitivity
+    certified_cell_count: 9
+    total_cell_count: 18
+    failure_outcome_rows: 45
+    failure_reason_rows:
+      mean_and_interval_delivery: 21
+      interval_delivery_only: 24
+    unresolved_recovery_time_within_24h_rows: 8973
+    by_duration_all_notices:
+      - {duration_h: 1, capacity_kw: 49.072457, success_count: 493, empirical_success_fraction: 0.986, wilson_lower_bound: 0.974377, certified: false}
+      - {duration_h: 2, capacity_kw: 39.257966, success_count: 497, empirical_success_fraction: 0.994, wilson_lower_bound: 0.985083, certified: false}
+      - {duration_h: 3, capacity_kw: 34.350720, success_count: 499, empirical_success_fraction: 0.998, wilson_lower_bound: 0.991086, certified: true}
+      - {duration_h: 4, capacity_kw: 34.350720, success_count: 498, empirical_success_fraction: 0.996, wilson_lower_bound: 0.987986, certified: false}
+      - {duration_h: 6, capacity_kw: 32.976691, success_count: 499, empirical_success_fraction: 0.998, wilson_lower_bound: 0.991086, certified: true}
+      - {duration_h: 8, capacity_kw: 32.976691, success_count: 499, empirical_success_fraction: 0.998, wilson_lower_bound: 0.991086, certified: true}
+
+interpretation:
+  - locked_id_replay_completed_once_and_authorization_consumed
+  - headline_q_0_95_certifies_positive_capacity_for_h_2_3_4_6_8_at_all_notices
+  - headline_h_1_validation_selected_candidate_did_not_meet_locked_wilson_target
+  - zero_notice_gain_is_retained_as_a_structural_result_not_repaired
+  - all_observed_certificate_failures_are_delivery_or_interval_delivery_failures
+  - recovery_time_nan_means_not_recovered_within_the_declared_24h_window_and_is_not_a_certificate_success_criterion
+  - selected_capacity_is_not_reestimated_from_locked_id_results
+  - locked_ood_remains_closed_and_requires_separate_authorization
+
+reporting_allocation:
+  main_text:
+    - q_0_95_locked_id_capacity_surface
+    - h_1_noncertification_boundary
+    - zero_notice_gain
+  methods:
+    - robust_mpc_specification_and_provenance
+    - interval_wise_wilson_rule
+    - one_time_locked_id_protocol
+  supplementary_information:
+    - q_0_90_and_q_0_99_sensitivity_surfaces
+    - full_failure_reason_tables
+    - recovery_time_diagnostics
+
+guardrails:
+  - do_not_call_the_validation_selected_h_1_q_0_95_candidate_certified
+  - do_not_claim_simultaneous_confidence_for_the_entire_surface
+  - do_not_reselect_capacity_on_locked_id
+  - do_not_treat_unresolved_24h_recovery_as_zero_recovery_time
+  - do_not_open_locked_ood_without_separate_explicit_authorization

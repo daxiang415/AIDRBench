@@ -1052,11 +1052,17 @@ solver and tolerances
 - locked OOD communities。
 
 当前状态：power-case PI、success-criteria PI sensitivity 与 sparse-workload
-PI frontiers 已完成；100 个 validation scenarios 已从冻结协议生成并通过
-集合级 hash/service audit，但尚未执行 causal capacity selection；locked-ID
-和 locked-OOD 仍未运行。`analysis_plan_status` 已在 validation 之前冻结；
-development 结果被明确披露为冻结 Model A 所使用的证据，而不是 locked
-evidence。
+PI frontiers 已完成。100 个 validation scenarios 已通过集合级 hash/service
+audit，并在提交 `5889405` 上完成 q={0.90,0.95,0.99} 的 frozen robust-MPC
+capacity selection。随后一次性生成并评估了 500 个 locked-ID episodes；授权已
+消费，500 个场景、2,000 个 payload 文件及 controller/source/git provenance
+均通过哈希审计。headline q=0.95 在 H={2,3,4,6,8}、N={0,2,6} 的 15 个
+单元达到一侧 95% Wilson 门槛；H=1 的 validation-selected 55.16 kW 候选为
+477/500、Wilson 下界 0.936，不能称为 q=0.95 certified。q=0.90 与 q=0.99
+分别有 15/18 和 9/18 个单元通过，作为 secondary sensitivity。三个 q 下同一
+duration 的 N={0,2,6} 容量均相同，zero notice gain 被保留为结构性结果。
+locked-OOD 仍未运行。完整机器可读审计见
+`data/manifests/nature_mainline_locked_id_results_v1.yaml`。
 
 ### Phase 6 — 独立因果容量认证
 
@@ -1077,17 +1083,17 @@ Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 
 当以下条件满足时，主论文已经形成完整闭环，无需等待 RL 结果：
 
-- [ ] 硬件校准和 workload-class 功率定义冻结；
-- [ ] 名义、PI 和受限 NA 三层规划边界可重复计算；
-- [ ] 固定因果策略在独立 locked-ID 上完成容量认证；
-- [ ] duration–notice–reliability surface 完成；
+- [x] 硬件校准和 workload-class 功率定义冻结；
+- [x] 名义、PI 和受限 NA 三层规划边界可重复计算；
+- [x] 固定因果候选在独立 locked-ID 上完成一次性检验并保留全部通过/失败结果；
+- [x] duration–notice–reliability surface 完成评估（部分单元未通过认证门槛）；
 - [x] development compute-debt exhaustion 机制得到量化；
 - [x] development 2 × 2 × 2 hosting-capacity 分析完成；
 - [x] development PV/BESS 互补与替代区域得到识别；
 - [ ] 硬件和场景不确定性分析完成；
 - [ ] 所有正式结果具有完整 provenance 和 hash；
 - [ ] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
-- [ ] 控制器结果未被误写成文章的核心创新。
+- [x] 控制器结果未被误写成文章的核心创新。
 
 ---
 

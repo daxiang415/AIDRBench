@@ -411,6 +411,17 @@ cannot establish 0.99 at 95% confidence; insufficient rows are `NaN` with
 sized for the final 0.99 design. Locked OOD does not substitute for this primary
 test.
 
+The one-time locked-ID replay was completed on commit `5889405` after frozen
+selection at q={0.90,0.95,0.99}. All 500 scenario hashes and 2,000 payload-file
+hashes passed audit. At headline q=0.95, the H={2,3,4,6,8} candidates were
+certified for N={0,2,6}; the H=1 candidate (55.16 kW) achieved 477/500 successes
+but a Wilson lower bound of 0.936 and is therefore not certified. Secondary
+q=0.90 and q=0.99 certified 15/18 and 9/18 cells, respectively. These are
+interval-wise decisions, not a simultaneous confidence claim for the whole
+surface. The machine-readable receipt is
+`data/manifests/nature_mainline_locked_id_results_v1.yaml`; locked OOD remains
+closed.
+
 For the hardware uncertainty smoke, write each power case to a separate
 directory:
 
@@ -443,9 +454,10 @@ until the experiment design and result schemas are frozen.
    remain closed.**
 5. Run success-criterion and sparse-workload sensitivities, freeze all choices,
    then run validation, locked ID once, and locked OOD separately once.
-   **Both development PI sensitivity analyses are complete; validation and
-   both locked evaluations remain pending. The validation input set is frozen
-   and audited, but causal selection remains deliberately unrun.**
+   **Both development PI sensitivity analyses, frozen validation selections
+   and the one-time 500-episode locked-ID replay are complete. The locked-ID
+   authorization is consumed and all pass/fail cells are retained; locked OOD
+   remains pending and requires separate explicit authorization.**
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and

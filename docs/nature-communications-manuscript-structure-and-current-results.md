@@ -223,9 +223,9 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 4. 将 locked-OOD 作为外推边界，而非替代 locked-ID；
 5. 明确四卡 measurement anchor、fluid/preemptible workload 和 1 h resolution 的局限。
 
-**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过；完整配对 workload sensitivity 的 1,800/1,800 个 PI programs 为 optimal。提高 flexible arrival utilization 增大 H={4,8} 的 firm boundary，降低它则减小边界；预声明的 rigid-utilization、deadline-slack 和两个组合点未产生额外边界变化。独立的 1,800 个 one-factor-at-a-time success-criteria PI programs 也已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。
+**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过；完整配对 workload sensitivity 的 1,800/1,800 个 PI programs 为 optimal。提高 flexible arrival utilization 增大 H={4,8} 的 firm boundary，降低它则减小边界；预声明的 rigid-utilization、deadline-slack 和两个组合点未产生额外边界变化。独立的 1,800 个 one-factor-at-a-time success-criteria PI programs 也已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。100 个 validation scenarios 上的 q={0.90,0.95,0.99} frozen robust-MPC selections 与 500 个不重叠 locked-ID episodes 的一次性 replay 已在同一提交 `5889405` 完成。headline q=0.95 在 H={2,3,4,6,8}、N={0,2,6} 的 15 个单元通过一侧 Wilson 门槛；H=1 的 55.16 kW 候选未通过。完整审计见 `data/manifests/nature_mainline_locked_id_results_v1.yaml`。
 
-**仍缺**：validation causal selection、locked-ID 和 locked-OOD。现有 sensitivity 只支持 Model A development 边界，不能写成独立泛化结论。
+**仍缺**：locked-OOD 外推检验，以及硬件/社区 profile 变化下的独立 causal 证据。当前 locked-ID 只支持 Model A 主分布内的单事件结论；H=1 未通过候选不能写成 certified capacity，且单事件证书不能替代 repeated-event exhaustion 结论。
 
 **Figure 5**：hardware/workload sensitivity、validation-to-locked workflow、locked-ID certificate 和 locked-OOD generalization boundary。
 
@@ -424,6 +424,33 @@ joint success 对 gap 并不单调，说明“墙上时钟经过了多久”不�
 
 结果说明，在这两个 development PI 点上，linked interval-delivery definition 决定容量；其他阈值仍约束可行调度，但不是容量设置约束。它不能外推为 causal controller 或 locked scenarios 的 binding-constraint 结论。
 
+### 11.7 Frozen causal selection and one-time locked-ID certificate
+
+所有 selection 与 replay 均绑定提交 `5889405`、完整 robust-MPC specification、
+controller/source hashes 和互不重叠的 scenario hashes。下表仅列 N=0；同一 H 下
+N={0,2,6} 的 selected capacity、success count 与 certification decision 相同。
+
+| q | H | Selected capacity | Locked success | One-sided 95% Wilson lower bound | Certified |
+|---:|---:|---:|---:|---:|:---:|
+| 0.95 | 1 h | 55.16 kW | 477/500 | 0.936 | 否 |
+| 0.95 | 2 h | 45.74 kW | 491/500 | 0.969 | 是 |
+| 0.95 | 3 h | 39.65 kW | 497/500 | 0.985 | 是 |
+| 0.95 | 4 h | 39.65 kW | 492/500 | 0.972 | 是 |
+| 0.95 | 6 h | 37.88 kW | 489/500 | 0.964 | 是 |
+| 0.95 | 8 h | 36.71 kW | 492/500 | 0.972 | 是 |
+
+headline q=0.95 因而是 15/18 个 H×N 单元通过，而不是整张 surface
+simultaneously certified。H=1 的经验成功率为 0.954，但置信下界未达到 0.95；
+该候选必须作为非认证边界保留，不能在看到 locked-ID 后向下重选。secondary
+q=0.90 与 q=0.99 分别为 15/18 和 9/18 个单元通过，完整表进入 SI。所有失败
+只由 mean/interval delivery 引起；deadline、rebound、window relief 和 terminal
+backlog 均未成为失败标签。
+
+逐场景 `recovery_time_h` 在大多数 rollout 中为 NaN，含义是 backlog 未在声明的
+24 h recovery window 内回到 baseline tolerance；它不是当前单事件 certificate
+success criterion，不能解释为零恢复时间。该观察应作为 repeated-event exhaustion
+与恢复边界的限定证据，而不是用于事后修改单事件容量。
+
 ## 12. Supplementary Information 总体结构
 
 建议补充材料采用以下目录：
@@ -574,7 +601,7 @@ Supplementary 应列出：
 | optimization software stack | HiGHS/Parquet clean-install smoke test |
 | repeated-run resume | exhaustion and hosting checkpoint tests |
 
-当前仓库可收集 211 项自动化测试；投稿前仍应在 clean environment 中保存完整 `pytest`、`ruff`、`mypy` 和 GitHub Actions 通过记录。
+当前仓库的 mechanism-core 路径通过 214 项自动化测试；投稿前仍应在 clean environment 中保存完整 `pytest`、`ruff`、`mypy` 和 GitHub Actions 通过记录。
 
 ### 13.9 建议的环境补充图表
 
@@ -619,13 +646,13 @@ Supplementary 应列出：
 | sparse sensitivity service gate | 已完成 | 27/27 no-DR evaluations feasible，baseline miss/backlog 均为 0 |
 | sparse workload PI sensitivity | 已完成 | 1,800/1,800 optimal；arrival utilization 改变容量，rigid/deadline 在测试点为零效应 |
 | success-criteria PI sensitivity | 已完成 | 1,800/1,800 optimal；H={4,8} 仅 delivery threshold 改变容量 |
-| validation scenario set | 已冻结并审计 | 100/100 payload hashes valid；未运行 controller 或选择容量 |
-| validation causal selection | 尚未完成 | `[Evidence needed]` |
-| locked-ID | 未打开 | 不能声称 causal certificate |
+| validation scenario set | 已冻结并审计 | 100/100 scenario payload sets valid；与 locked-ID 无重叠 |
+| validation causal selection | 已完成 | q={0.90,0.95,0.99}、18 cells/q、10-step binary search；provenance 绑定 `5889405` |
+| locked-ID | 已一次性运行并消费授权 | 500/500 scenarios、2,000 payload hashes valid；q=0.95 为 15/18 cells certified |
 | locked-OOD | 未打开 | 不能声称 generalization |
-| q=0.99 certificate | development n=100 不足 | 必须依赖预声明 500-episode locked-ID design |
+| q=0.99 certificate | locked-ID 已检验 | 9/18 cells certified；H={1,2,4} 的三个 notice cells 未达到 0.99 Wilson 门槛 |
 
-当前最准确的总状态是：**科学模型、可复现环境和 development mechanism/sensitivity evidence 已基本形成，但主论文的独立因果认证和 locked generalization 证据尚未完成。**
+当前最准确的总状态是：**科学模型、可复现环境、development mechanism/sensitivity evidence 和单次 locked-ID 因果检验均已形成；主分布内证书为部分 surface 成立，H=1 headline 候选明确未认证，locked-OOD generalization 仍未完成。**
 
 ## 16. Claim–evidence map
 
@@ -638,24 +665,25 @@ Supplementary 应列出：
 | workload flexibility increases hosting capacity | paired 2 × 2 × 2 scenario optimizations | supported as development planning result |
 | AI–BESS substitutes and AI–PV complements | predeclared interaction contrasts and simultaneous CIs | supported on development only |
 | flexible workload arrival changes single-event firm capacity | paired sparse-workload PI sensitivity | supported at predeclared Model A development points |
-| a fixed causal controller can certify firm capacity | validation selection + locked-ID Wilson lower bound | needs evidence |
+| a fixed causal controller can certify firm capacity | validation selection + locked-ID Wilson lower bound | supported for q=0.95 at H={2,3,4,6,8}; H=1 candidate not certified |
 | findings generalize beyond Model A | development sensitivities + locked-OOD | needs locked-OOD evidence |
 
 ## 17. 后续执行顺序
 
-1. 生成并核对 100 个 validation scenarios，只冻结输入与 hash，不提前读取 locked 数据；
-2. 获得作者明确授权后提交 `locked_id_status: approved_for_one_time_run`；
-3. 在同一干净 commit 上完成 q=0.95 headline 与 q={0.90,0.99} secondary validation selections，并一次性生成/评估 500 个 locked-ID episodes；
-4. 独立运行 locked-OOD，不用其替代 locked-ID；
-5. 生成五幅主图和 Supplementary environment figures；
-6. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
-7. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。
+1. 冻结并提交本次 locked-ID receipt、通过/失败单元和恢复边界，不对 H=1 做事后重选；
+2. 将 q=0.95 主结果与 H=1 non-certification 放主文，将 q={0.90,0.99} 和完整失败表放 SI；
+3. 对照预声明协议完成 repeated-event exhaustion 的剩余 validation-level evidence，不把单事件恢复 NaN 当作证书失败；
+4. 完成 2 × 2 × 2 hosting mainline 的正式结果整理；
+5. 仅在另行明确授权后独立运行 locked-OOD，不用其替代 locked-ID；
+6. 生成五幅主图和 Supplementary environment figures；
+7. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
+8. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。
 
 ## 18. 作者需要继续确认的边界
 
 - 主文是否使用首选题目，还是进一步突出 `compute debt`；
 - Fig. 4 是否将 hosting 与 DER interaction 做成一幅图，当前建议为“合并”；
-- locked-ID 运行前，是否接受当前 Model A 的 fluid/preemptible job 边界作为第一篇论文的明确适用范围；
+- 是否接受将 q=0.95、H=1 的 non-certification 作为主文边界，而不新增 locked 数据或事后调低容量；
 - AIDRBench 名称是否只在 Methods/Supplementary 出现，当前建议为“是”。
 
 后续若需调整，请指定本文件中的 Result、Figure 或 Claim；只修改对应部分，避免重写已经确认的结构。

@@ -5,9 +5,10 @@
 > of the RL/CMDP results below is a mainline capacity result. Current executable
 > status and commands are in `docs/nature-communications-mainline.md`.
 
-Updated: 2026-08-19. The Nature design audit separates locked-ID seeds
-`30000..30499` from locked-OOD seeds `40000..40499`; neither set has been
-generated or evaluated.
+Updated: 2026-08-20. The Nature design audit separates locked-ID seeds
+`30000..30499` from locked-OOD seeds `40000..40499`. The 500 locked-ID
+scenarios were generated and evaluated exactly once on commit `5889405`; the
+authorization is consumed. Locked-OOD has not been generated or evaluated.
 
 > Interface warning (2026-08-17): the current environment interface is
 > `firm_v5` with PCC-normalized observations and `firm_threshold_v2` costs.
@@ -62,7 +63,12 @@ intervals.
   raw-config hashes, the Git commit, and controller/evaluator source hashes;
   frozen test recomputes them and fails closed. Candidate selection supports a
   declared fine grid or binary search rather than a fixed 0.1 fraction grid.
-- The current repository passes 203 mechanism-core tests without RL
+- Frozen q={0.90,0.95,0.99} validation selections and their one-time locked-ID
+  replay are complete. At headline q=0.95, 15/18 H×N cells certify; the H=1,
+  55.16 kW candidate reaches 477/500 successes but only a 0.936 one-sided
+  Wilson lower bound and therefore does not certify. The full hash/result
+  receipt is `data/manifests/nature_mainline_locked_id_results_v1.yaml`.
+- The current repository passes 214 mechanism-core tests without RL
   dependencies, plus `ruff check .` and strict type checks on all changed
   modules. RL-only tests were not run in this environment because the optional
   Stable-Baselines3 dependency is not installed.
