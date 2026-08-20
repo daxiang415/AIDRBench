@@ -126,6 +126,7 @@ def test_interval_delivery_prevents_average_only_success() -> None:
     assert outcome.minimum_interval_delivery_ratio == pytest.approx(0.80)
     assert not success
     assert "interval_delivery" in failures
+    assert "mean_delivery" not in failures
 
 
 def test_zero_capacity_candidate_has_no_rebound_settlement_ratio() -> None:

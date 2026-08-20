@@ -22,6 +22,40 @@ _SCENARIO_SET_NAMES = ("development", "validation", "locked_id", "locked_ood")
 _CORE_DURATIONS = [1, 2, 3, 4, 6, 8]
 _CORE_NOTICES = [0, 2, 6]
 _CORE_RELIABILITIES = [0.90, 0.95, 0.99]
+_MODEL_A_DOWNSTREAM_LAYERS = {
+    "calibration_power_sensitivity",
+    "success_criteria_sensitivity",
+    "sparse_workload_sensitivity",
+    "repeated_event_exhaustion",
+    "hosting_capacity_2x2x2",
+    "validation_causal_selection",
+    "locked_id_causal_certificate_after_explicit_authorization",
+    "locked_ood_generalization_after_explicit_authorization",
+}
+_CAUSAL_FAILURE_TAXONOMY = {
+    "mean_delivery",
+    "interval_delivery",
+    "deadline_miss",
+    "rebound",
+    "window_peak_relief",
+    "terminal_backlog",
+}
+_WORKLOAD_SENSITIVITY_DIMENSIONS = [
+    "flexible_arrival_utilization",
+    "rigid_gpu_utilization",
+    "deadline_slack_scale",
+]
+_CAUSAL_HEADLINE_FIELDS = [
+    "duration_h",
+    "notice_h",
+    "reliability_target",
+    "candidate_reduction_kw",
+    "success_count",
+    "trial_count",
+    "empirical_success_fraction",
+    "wilson_lower_confidence_bound",
+    "certified",
+]
 
 
 def _mapping(value: object, name: str) -> dict[str, Any]:
@@ -80,6 +114,10 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
     checks: dict[str, bool] = {}
     execution_checks: dict[str, bool] = {}
     details: dict[str, object] = {}
+    checks["analysis_plan_frozen_before_validation"] = (
+        document.get("status") == "analysis_plan_frozen_before_validation"
+        and document.get("analysis_plan_status") == "frozen"
+    )
     prohibited = {"rl_training_seeds", "controller_selection", "reward_search"}
     checks["no_controller_training_mainline"] = not bool(prohibited & set(document))
     estimand = _mapping(document.get("scientific_estimand"), "scientific_estimand")
@@ -93,6 +131,45 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         estimand.get("controller_training_required") is False
         and estimand.get("controller_comparison_required") is False
     )
+
+    model_a = _mapping(document.get("model_a_freeze"), "model_a_freeze")
+    raw_downstream_layers = model_a.get("permitted_downstream_layers")
+    checks["model_a_downstream_layers"] = (
+        isinstance(raw_downstream_layers, list)
+        and set(str(value) for value in raw_downstream_layers)
+        == _MODEL_A_DOWNSTREAM_LAYERS
+    )
+
+    development_disclosure = _mapping(
+        document.get("development_analysis_disclosure"),
+        "development_analysis_disclosure",
+    )
+    development_receipt = _mapping(
+        development_disclosure.get("receipt"),
+        "development_analysis_disclosure.receipt",
+    )
+    development_receipt_path = Path(str(development_receipt.get("path", "")))
+    development_receipt_expected = str(development_receipt.get("sha256", ""))
+    development_receipt_exists = development_receipt_path.is_file()
+    development_receipt_actual = (
+        sha256_file(development_receipt_path) if development_receipt_exists else None
+    )
+    checks["development_analysis_disclosed"] = (
+        development_disclosure.get("completed_before_analysis_plan_freeze") is True
+        and development_disclosure.get("interpretation")
+        == "development_evidence_used_to_freeze_model_a_not_locked_evidence"
+    )
+    execution_checks["development_receipt_hash"] = (
+        development_receipt_exists
+        and len(development_receipt_expected) == 64
+        and development_receipt_actual == development_receipt_expected
+    )
+    details["development_analysis_receipt"] = {
+        "path": str(development_receipt_path),
+        "exists": development_receipt_exists,
+        "hash_matches": execution_checks["development_receipt_hash"],
+        "sha256": development_receipt_actual,
+    }
 
     data = _mapping(document.get("data"), "data")
     data_rows: dict[str, object] = {}
@@ -477,6 +554,31 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
     details["statistical_power"] = sample_size_rows
 
     causal = _mapping(document.get("causal_certificate"), "causal_certificate")
+    controller_entry = _mapping(
+        causal.get("controller_specification"),
+        "causal_certificate.controller_specification",
+    )
+    controller_path = Path(str(controller_entry.get("path", "")))
+    controller_expected_sha256 = str(controller_entry.get("sha256", ""))
+    controller_exists = controller_path.is_file()
+    controller_actual_sha256 = sha256_file(controller_path) if controller_exists else None
+    execution_checks["causal_controller_specification_hash"] = (
+        controller_exists
+        and len(controller_expected_sha256) == 64
+        and controller_actual_sha256 == controller_expected_sha256
+    )
+    selection_search = _mapping(
+        causal.get("selection_search"), "causal_certificate.selection_search"
+    )
+    secondary_reliabilities = causal.get("secondary_reliability_targets")
+    causal_reliabilities = (
+        [float(causal.get("headline_reliability_target", 0.0))]
+        + [float(value) for value in secondary_reliabilities]
+        if isinstance(secondary_reliabilities, list)
+        else []
+    )
+    failure_taxonomy = causal.get("failure_taxonomy")
+    output_schema = _mapping(causal.get("output_schema"), "causal_certificate.output_schema")
     checks["independent_causal_certificate_declared"] = (
         causal.get("role") == "independently_tested_operational_realization"
         and causal.get("policy") == "robust_mpc"
@@ -484,6 +586,104 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         and causal.get("capacity_selected_on") == "validation"
         and causal.get("capacity_evaluated_once_on") == "locked_id"
         and causal.get("confidence_method") == "one_sided_wilson_lower_bound"
+        and sorted(causal_reliabilities) == _CORE_RELIABILITIES
+        and causal.get("headline_reliability_target") == 0.95
+        and causal.get("intervalwise_confidence_only") is True
+        and causal.get("simultaneous_surface_confidence_claimed") is False
+        and selection_search.get("method") == "binary"
+        and selection_search.get("candidate_fraction_bounds") == [0.0, 1.0]
+        and selection_search.get("binary_iterations") == 10
+        and selection_search.get("durations_h") == _CORE_DURATIONS
+        and selection_search.get("notices_h") == _CORE_NOTICES
+        and isinstance(selection_search.get("scenario_workers"), int)
+        and not isinstance(selection_search.get("scenario_workers"), bool)
+        and int(selection_search["scenario_workers"]) > 0
+        and isinstance(failure_taxonomy, list)
+        and set(str(value) for value in failure_taxonomy) == _CAUSAL_FAILURE_TAXONOMY
+        and output_schema.get("validation_selection")
+        == ["causal_selection.json", "validation_candidate_diagnostics.parquet"]
+        and output_schema.get("locked_certificate")
+        == [
+            "causal_certificate.json",
+            "causal_certificates.parquet",
+            "causal_certificate_outcomes.parquet",
+        ]
+        and output_schema.get("headline_fields") == _CAUSAL_HEADLINE_FIELDS
+        and output_schema.get("outcome_failure_field") == "failure_reasons"
+    )
+    details["causal_controller_specification"] = {
+        "path": str(controller_path),
+        "exists": controller_exists,
+        "hash_matches": execution_checks["causal_controller_specification_hash"],
+        "sha256": controller_actual_sha256,
+    }
+
+    sensitivity_design = _mapping(document.get("sensitivity_design"), "sensitivity_design")
+    criteria_design = _mapping(
+        sensitivity_design.get("success_criteria"),
+        "sensitivity_design.success_criteria",
+    )
+    workload_design = _mapping(
+        sensitivity_design.get("workload"), "sensitivity_design.workload"
+    )
+    checks["sensitivity_design_frozen"] = (
+        sensitivity_design.get("evidence_scope") == "development_only"
+        and sensitivity_design.get("locked_sets_used") is False
+        and sensitivity_design.get("calibration_power_cases")
+        == ["lower_bound", "nominal", "upper_bound"]
+        and criteria_design.get("design") == "one_factor_at_a_time"
+        and criteria_design.get("durations_h") == [4, 8]
+        and criteria_design.get("reliability_target") == 0.95
+        and criteria_design.get("confidence_level") == 0.95
+        and workload_design.get("design") == "sparse_factorial_pi"
+        and workload_design.get("dimensions") == _WORKLOAD_SENSITIVITY_DIMENSIONS
+        and workload_design.get("case_count") == 9
+        and workload_design.get("development_seed_range") == [10000, 10099]
+        and workload_design.get("durations_h") == [4, 8]
+        and workload_design.get("reliability_target") == 0.95
+        and workload_design.get("confidence_level") == 0.95
+        and workload_design.get("require_no_dr_service_feasibility") is True
+    )
+    specification_entries = {
+        "success_criteria": _mapping(
+            criteria_design.get("specification"),
+            "sensitivity_design.success_criteria.specification",
+        ),
+        "workload_schema": _mapping(
+            workload_design.get("schema_specification"),
+            "sensitivity_design.workload.schema_specification",
+        ),
+        "workload_execution": _mapping(
+            workload_design.get("execution_specification"),
+            "sensitivity_design.workload.execution_specification",
+        ),
+    }
+    specification_details: dict[str, object] = {}
+    specification_hashes_valid = True
+    for name, entry in specification_entries.items():
+        specification_path = Path(str(entry.get("path", "")))
+        expected_sha256 = str(entry.get("sha256", ""))
+        exists = specification_path.is_file()
+        actual_sha256 = sha256_file(specification_path) if exists else None
+        matches = exists and len(expected_sha256) == 64 and actual_sha256 == expected_sha256
+        specification_hashes_valid = specification_hashes_valid and matches
+        specification_details[name] = {
+            "path": str(specification_path),
+            "exists": exists,
+            "hash_matches": matches,
+            "sha256": actual_sha256,
+        }
+    execution_checks["sensitivity_specification_hashes"] = specification_hashes_valid
+    details["sensitivity_specifications"] = specification_details
+
+    uncertainty = _mapping(document.get("uncertainty"), "uncertainty")
+    checks["uncertainty_scope_matches_model_a"] = (
+        uncertainty.get("calibration_power_cases")
+        == ["lower_bound", "nominal", "upper_bound"]
+        and uncertainty.get("workload_sensitivities")
+        == _WORKLOAD_SENSITIVITY_DIMENSIONS
+        and uncertainty.get("infrastructure_sensitivities_planned_not_executed")
+        == ["pue", "node_overhead"]
     )
 
     repeated = _mapping(document.get("repeated_event_exhaustion"), "repeated_event_exhaustion")

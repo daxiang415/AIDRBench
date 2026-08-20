@@ -1053,7 +1053,8 @@ solver and tolerances
 
 当前状态：power-case PI、success-criteria PI sensitivity 与 sparse-workload
 PI frontiers 已完成；validation causal selection、locked-ID 和 locked-OOD
-仍未运行。
+仍未运行。`analysis_plan_status` 已在 validation 之前冻结；development
+结果被明确披露为冻结 Model A 所使用的证据，而不是 locked evidence。
 
 ### Phase 6 — 独立因果容量认证
 
@@ -1061,6 +1062,12 @@ PI frontiers 已完成；validation causal selection、locked-ID 和 locked-OOD
 - 在 500 个 locked-ID episodes 上一次性计算 Wilson 下界；
 - 将 locked-OOD 作为单独的外推压力测试；
 - 额外 controller/RL 比较保持可选，且不得改变主证书。
+
+正式流程先生成并审计 validation scenarios，但暂不选择容量。由于
+`causal_selection.json` 会绑定精确 Git commit，locked-ID 的一次性授权必须先
+提交；随后才在同一干净 commit 上依次完成 q=0.95 headline、q={0.90,0.99}
+secondary validation selection 和预声明 locked replay。各单元格报告 interval-wise
+Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 
 ---
 

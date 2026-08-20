@@ -64,6 +64,7 @@ def test_frozen_causal_selection_is_separate_from_locked_certificate(tmp_path: P
         selection_path=selected["selection"],
         controller_config=CONTROLLER_CONFIG,
         output_directory=tmp_path / "certificate",
+        workers=2,
     )
     selection_document = json.loads(Path(selected["selection"]).read_text(encoding="utf-8"))
     certificate_document = json.loads(Path(certified["manifest"]).read_text(encoding="utf-8"))
@@ -75,6 +76,7 @@ def test_frozen_causal_selection_is_separate_from_locked_certificate(tmp_path: P
     )
     assert certificate_document["capacity_layer"] == "independent_causal_certificate"
     assert certificate_document["controller"] == "robust_mpc"
+    assert certificate_document["scenario_workers"] == 2
     assert selection_document["schema_version"] == 2
     assert selection_document["capacity_search"]["method"] == "binary"
     assert selection_document["capacity_search"]["scenario_workers"] == 2

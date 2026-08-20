@@ -1,10 +1,10 @@
 schema_version: 1
 protocol_id: aidrbench_nature_communications_mainline_v1
 study_type: nature_communications_mechanism_mainline
-status: preregistration_draft
+status: analysis_plan_frozen_before_validation
 locked_ood_status: not_run
 locked_id_status: not_run
-analysis_plan_status: draft
+analysis_plan_status: frozen
 community_profile_split: data/manifests/community_profile_split_v1.yaml
 community_temporal_split: data/manifests/split_v1.yaml
 
@@ -29,8 +29,21 @@ model_a_freeze:
     result: zero_notice_gain_at_H4_and_H8
     interpretation: potentially_structural_not_a_failure_to_repair
   permitted_downstream_layers:
+    - calibration_power_sensitivity
+    - success_criteria_sensitivity
+    - sparse_workload_sensitivity
     - repeated_event_exhaustion
     - hosting_capacity_2x2x2
+    - validation_causal_selection
+    - locked_id_causal_certificate_after_explicit_authorization
+    - locked_ood_generalization_after_explicit_authorization
+
+development_analysis_disclosure:
+  completed_before_analysis_plan_freeze: true
+  receipt:
+    path: data/manifests/nature_mainline_development_results_v1.yaml
+    sha256: 6bb61cd0149ffbafd512e84a9ff1b3f2d3ff0bb647a454ab73167753c4e37dc4
+  interpretation: development_evidence_used_to_freeze_model_a_not_locked_evidence
 
 data:
   community:
@@ -111,11 +124,82 @@ primary_single_event:
 causal_certificate:
   role: independently_tested_operational_realization
   policy: robust_mpc
+  controller_specification:
+    path: configs/controller/nature_robust_mpc_v1.yaml
+    sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
   policy_frozen_before_locked_id: true
   capacity_selected_on: validation
   capacity_evaluated_once_on: locked_id
   confidence_method: one_sided_wilson_lower_bound
+  headline_reliability_target: 0.95
+  secondary_reliability_targets: [0.90, 0.99]
+  intervalwise_confidence_only: true
+  simultaneous_surface_confidence_claimed: false
+  selection_search:
+    method: binary
+    candidate_fraction_bounds: [0.0, 1.0]
+    binary_iterations: 10
+    durations_h: [1, 2, 3, 4, 6, 8]
+    notices_h: [0, 2, 6]
+    scenario_workers: 16
+  failure_taxonomy:
+    - mean_delivery
+    - interval_delivery
+    - deadline_miss
+    - rebound
+    - window_peak_relief
+    - terminal_backlog
+  output_schema:
+    validation_selection:
+      - causal_selection.json
+      - validation_candidate_diagnostics.parquet
+    locked_certificate:
+      - causal_certificate.json
+      - causal_certificates.parquet
+      - causal_certificate_outcomes.parquet
+    headline_fields:
+      - duration_h
+      - notice_h
+      - reliability_target
+      - candidate_reduction_kw
+      - success_count
+      - trial_count
+      - empirical_success_fraction
+      - wilson_lower_confidence_bound
+      - certified
+    outcome_failure_field: failure_reasons
   interpretation: deployable_reference_not_controller_comparison
+
+sensitivity_design:
+  evidence_scope: development_only
+  locked_sets_used: false
+  calibration_power_cases: [lower_bound, nominal, upper_bound]
+  success_criteria:
+    design: one_factor_at_a_time
+    specification:
+      path: configs/sensitivity/nature_success_criteria_oat_v1.yaml
+      sha256: a35a7d375a20513f6252b56b5219eea8d9a3d99387bab60ec1c84973c2b92a8e
+    durations_h: [4, 8]
+    reliability_target: 0.95
+    confidence_level: 0.95
+  workload:
+    design: sparse_factorial_pi
+    schema_specification:
+      path: configs/sensitivity/nature_sparse_factorial_v1.yaml
+      sha256: d11fee3cb0720572e878522b269ca68da3b94744ed32774894595549026072ec
+    execution_specification:
+      path: configs/sensitivity/nature_workload_pi_v1.yaml
+      sha256: ea248b10e7a31bf6287db211508d112dfa1dc6e748b0f4bec90cd8a0a2c683e1
+    dimensions:
+      - flexible_arrival_utilization
+      - rigid_gpu_utilization
+      - deadline_slack_scale
+    case_count: 9
+    development_seed_range: [10000, 10099]
+    durations_h: [4, 8]
+    reliability_target: 0.95
+    confidence_level: 0.95
+    require_no_dr_service_feasibility: true
 
 repeated_event_exhaustion:
   separate_from_primary_surface: true
@@ -149,8 +233,11 @@ hosting_capacity:
 
 uncertainty:
   calibration_power_cases: [lower_bound, nominal, upper_bound]
-  workload_sensitivities: [utilization, deadline, training_offline_mix, burstiness]
-  infrastructure_sensitivities: [pue, node_overhead]
+  workload_sensitivities:
+    - flexible_arrival_utilization
+    - rigid_gpu_utilization
+    - deadline_slack_scale
+  infrastructure_sensitivities_planned_not_executed: [pue, node_overhead]
 
 optional_control_extension:
   enabled_in_mainline: false

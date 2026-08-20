@@ -602,6 +602,12 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
         help="frozen validation or locked-ID scenario directory for frozen certification",
     )
     certify.add_argument("--output", help="output directory for certify select or locked-test")
+    certify.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to replay concurrently (default: 1)",
+    )
 
     compare_envelopes = subparsers.add_parser(
         "compare-envelopes", help="compare static planning envelopes with certificates"
@@ -1535,6 +1541,7 @@ def _run_certify(args: argparse.Namespace) -> int:
             binary_iterations=args.binary_iterations,
             criteria=criteria,
             output_directory=args.output,
+            workers=args.workers,
         )
         _print_summary(summary)
         return 0
@@ -1558,6 +1565,7 @@ def _run_certify(args: argparse.Namespace) -> int:
             selection_path=args.selection,
             controller_config=args.controller_config,
             output_directory=args.output,
+            workers=args.workers,
         )
         _print_summary(summary)
         return 0

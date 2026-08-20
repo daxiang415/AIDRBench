@@ -176,8 +176,14 @@ python -m aidrbench certify frozen-select \
   --binary-iterations 10 \
   --reliability 0.95 \
   --confidence 0.95 \
+  --workers 16 \
   --output results/nature_mainline/causal_selection_q95
 ```
+
+The 0.95 target is the headline certificate. The same frozen search is
+predeclared for the secondary q={0.90,0.99} targets in separate output
+directories; these are interval-wise certificates, not a simultaneous
+confidence statement for the full surface.
 
 Only after the plan is frozen and locked-ID is explicitly authorized, evaluate
 that fixed selection without another search:
@@ -187,6 +193,7 @@ python -m aidrbench certify frozen-test \
   --scenarios results/nature_mainline/locked_id_nominal \
   --selection results/nature_mainline/causal_selection_q95/causal_selection.json \
   --controller-config configs/controller/nature_robust_mpc_v1.yaml \
+  --workers 16 \
   --output results/nature_mainline/causal_locked_id_q95
 ```
 
@@ -194,6 +201,13 @@ python -m aidrbench certify frozen-test \
 SHA-256, the raw YAML SHA-256, the Git commit, and the hashes of every source
 file on the formal controller/evaluator path. `frozen-test` recomputes all of
 them and fails closed on any mismatch.
+
+Because the selection pins the exact Git commit, the one-time locked-ID
+authorization must be committed before `frozen-select`; selection and all
+predeclared locked-ID replays then run from that same clean commit. Therefore
+the current frozen-plan stage stops after validation scenario generation and
+hash audit, and requests explicit author authorization before capacity
+selection or locked access.
 
 The preregistered notice-mechanism diagnostic reuses the completed nominal PI
 and NA artifacts; it does not rerun the nominal NA grid and cannot read a

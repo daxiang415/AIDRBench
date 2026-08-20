@@ -182,16 +182,16 @@ class EventOutcome:
             self.minimum_interval_delivery_ratio + _EPSILON
             < criteria.min_interval_delivery_ratio
         )
-        if mean_delivery_failed or interval_delivery_failed:
-            failures.append("delivery")
+        if mean_delivery_failed:
+            failures.append("mean_delivery")
         if interval_delivery_failed:
             failures.append("interval_delivery")
         if self.deadline_miss_rate - _EPSILON > criteria.max_deadline_miss_rate:
-            failures.append("deadline")
+            failures.append("deadline_miss")
         if self.rebound_ratio - _EPSILON > criteria.max_rebound_ratio:
             failures.append("rebound")
         if self.window_peak_relief_fraction + _EPSILON < criteria.min_window_peak_relief_fraction:
-            failures.append("window_relief")
+            failures.append("window_peak_relief")
         if self.terminal_backlog_fraction - _EPSILON > criteria.max_terminal_backlog_fraction:
             failures.append("terminal_backlog")
         return not failures, tuple(failures)

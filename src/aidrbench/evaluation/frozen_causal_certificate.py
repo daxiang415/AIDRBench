@@ -250,6 +250,8 @@ def evaluate_frozen_causal_candidate(
     summary: dict[str, float | int | bool] = {
         "duration_h": duration_h,
         "notice_h": notice_h,
+        "reliability_target": criteria.reliability_target,
+        "confidence_level": criteria.confidence_level,
         "candidate_reduction_kw": requested_reduction_kw,
         "candidate_fraction_of_reference_mix_peak": (requested_reduction_kw / reference_peak_kw),
         "success_count": success_count,
@@ -548,6 +550,7 @@ def certify_selected_frozen_causal_capacities(
     controller_config: str | Path,
     output_directory: str | Path,
     event_id: int = 0,
+    workers: int = 1,
 ) -> dict[str, str | int]:
     """Evaluate frozen validation selections once on independent locked-ID data."""
 
@@ -591,6 +594,7 @@ def certify_selected_frozen_causal_capacities(
             requested_reduction_kw=float(row["candidate_reduction_kw"]),
             criteria=criteria,
             event_id=event_id,
+            workers=workers,
         )
         outcome_tables.append(outcomes)
         summaries.append(summary)
@@ -610,6 +614,7 @@ def certify_selected_frozen_causal_capacities(
                 "controller_provenance": selection["controller_provenance"],
                 "selection": str(selection_path),
                 "criteria": criteria.as_dict(),
+                "scenario_workers": workers,
                 "locked_id_scenario_hashes": [artifact.scenario_hash for artifact in artifacts],
                 "all_points_certified": bool(summary_table["certified"].all()),
                 "summary": str(summary_path),

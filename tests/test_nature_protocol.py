@@ -18,6 +18,8 @@ def test_nature_mainline_protocol_structure_is_valid_without_opening_locked_scen
     assert isinstance(checks, dict)
     assert checks["single_event_primary_configs"] is True
     assert checks["all_workload_classes_calibrated"] is True
+    assert checks["analysis_plan_frozen_before_validation"] is True
+    assert checks["sensitivity_design_frozen"] is True
     rows = report["details"]["statistical_power"]
     assert any(
         row["scenario_set"] == "validation"
@@ -31,6 +33,60 @@ def test_nature_mainline_protocol_structure_is_valid_without_opening_locked_scen
         and row["sample_size_sufficient"] is True
         for row in rows
     )
+
+
+def test_nature_protocol_rejects_a_draft_analysis_plan(tmp_path: Path) -> None:
+    document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
+    document["status"] = "preregistration_draft"
+    document["analysis_plan_status"] = "draft"
+    candidate = tmp_path / "protocol.yaml"
+    candidate.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+
+    report = validate_nature_mainline_protocol(candidate)
+
+    assert report["structure_valid"] is False
+    assert report["checks"]["analysis_plan_frozen_before_validation"] is False
+
+
+def test_nature_protocol_rejects_stale_workload_sensitivity_scope(tmp_path: Path) -> None:
+    document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
+    document["uncertainty"]["workload_sensitivities"].append("burstiness")
+    candidate = tmp_path / "protocol.yaml"
+    candidate.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+
+    report = validate_nature_mainline_protocol(candidate)
+
+    assert report["structure_valid"] is False
+    assert report["checks"]["uncertainty_scope_matches_model_a"] is False
+
+
+def test_nature_protocol_fails_execution_on_sensitivity_hash_mismatch(
+    tmp_path: Path,
+) -> None:
+    document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
+    document["sensitivity_design"]["workload"]["execution_specification"][
+        "sha256"
+    ] = "0" * 64
+    candidate = tmp_path / "protocol.yaml"
+    candidate.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+
+    report = validate_nature_mainline_protocol(candidate)
+
+    assert report["structure_valid"] is True
+    assert report["execution_ready"] is False
+    assert report["execution_checks"]["sensitivity_specification_hashes"] is False
+
+
+def test_nature_protocol_rejects_unplanned_causal_search(tmp_path: Path) -> None:
+    document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
+    document["causal_certificate"]["selection_search"]["binary_iterations"] = 8
+    candidate = tmp_path / "protocol.yaml"
+    candidate.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+
+    report = validate_nature_mainline_protocol(candidate)
+
+    assert report["structure_valid"] is False
+    assert report["checks"]["independent_causal_certificate_declared"] is False
 
 
 def test_nature_protocol_rejects_randomized_multi_event_primary_config(

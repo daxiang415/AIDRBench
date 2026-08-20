@@ -642,14 +642,13 @@ Supplementary 应列出：
 
 ## 17. 后续执行顺序
 
-1. 冻结 protocol 的 `analysis_plan_status`、图表 schema 和主统计量；
-2. 生成/核对 validation scenarios，在 validation 上冻结 robust-MPC capacity candidates；
-3. 在任何 locked read 前完成结果表模板、失败分类和 source-data schema；
-4. 获得作者明确授权后一次性运行 500 个 locked-ID episodes；
-5. 独立运行 locked-OOD，不用其替代 locked-ID；
-6. 生成五幅主图和 Supplementary environment figures；
-7. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
-8. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。
+1. 生成并核对 100 个 validation scenarios，只冻结输入与 hash，不提前读取 locked 数据；
+2. 获得作者明确授权后提交 `locked_id_status: approved_for_one_time_run`；
+3. 在同一干净 commit 上完成 q=0.95 headline 与 q={0.90,0.99} secondary validation selections，并一次性生成/评估 500 个 locked-ID episodes；
+4. 独立运行 locked-OOD，不用其替代 locked-ID；
+5. 生成五幅主图和 Supplementary environment figures；
+6. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
+7. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。
 
 ## 18. 作者需要继续确认的边界
 

@@ -34,8 +34,10 @@ def test_locked_scenario_fails_before_data_access_without_explicit_acknowledgeme
         )
 
 
-def test_locked_scenario_cannot_run_while_analysis_plan_is_draft(tmp_path: Path) -> None:
-    with pytest.raises(ValueError, match="analysis_plan_status"):
+def test_locked_scenario_cannot_run_without_one_time_status_authorization(
+    tmp_path: Path,
+) -> None:
+    with pytest.raises(ValueError, match="locked_ood status"):
         prepare_locked_ood_freeze(
             ROOT / "configs/env/nature_mainline_locked_ood.yaml",
             output_directory=tmp_path / "locked",
