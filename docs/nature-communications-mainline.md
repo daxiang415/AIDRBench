@@ -209,6 +209,12 @@ the current frozen-plan stage stops after validation scenario generation and
 hash audit, and requests explicit author authorization before capacity
 selection or locked access.
 
+The 100 validation scenarios (seeds 20000--20099) have now been generated from
+the frozen plan at commit `0659eb3` and passed payload-hash, seed, event-anchor,
+random-stream and no-DR service audits. The aggregate receipt is
+`data/manifests/nature_mainline_validation_scenarios_v1.yaml`. No controller
+has been evaluated and no capacity has been selected on this set.
+
 The preregistered notice-mechanism diagnostic reuses the completed nominal PI
 and NA artifacts; it does not rerun the nominal NA grid and cannot read a
 locked path:
@@ -438,7 +444,8 @@ until the experiment design and result schemas are frozen.
 5. Run success-criterion and sparse-workload sensitivities, freeze all choices,
    then run validation, locked ID once, and locked OOD separately once.
    **Both development PI sensitivity analyses are complete; validation and
-   both locked evaluations remain pending.**
+   both locked evaluations remain pending. The validation input set is frozen
+   and audited, but causal selection remains deliberately unrun.**
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and

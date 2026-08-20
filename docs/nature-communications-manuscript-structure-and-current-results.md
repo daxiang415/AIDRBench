@@ -619,6 +619,7 @@ Supplementary 应列出：
 | sparse sensitivity service gate | 已完成 | 27/27 no-DR evaluations feasible，baseline miss/backlog 均为 0 |
 | sparse workload PI sensitivity | 已完成 | 1,800/1,800 optimal；arrival utilization 改变容量，rigid/deadline 在测试点为零效应 |
 | success-criteria PI sensitivity | 已完成 | 1,800/1,800 optimal；H={4,8} 仅 delivery threshold 改变容量 |
+| validation scenario set | 已冻结并审计 | 100/100 payload hashes valid；未运行 controller 或选择容量 |
 | validation causal selection | 尚未完成 | `[Evidence needed]` |
 | locked-ID | 未打开 | 不能声称 causal certificate |
 | locked-OOD | 未打开 | 不能声称 generalization |

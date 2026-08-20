@@ -1052,9 +1052,11 @@ solver and tolerances
 - locked OOD communities。
 
 当前状态：power-case PI、success-criteria PI sensitivity 与 sparse-workload
-PI frontiers 已完成；validation causal selection、locked-ID 和 locked-OOD
-仍未运行。`analysis_plan_status` 已在 validation 之前冻结；development
-结果被明确披露为冻结 Model A 所使用的证据，而不是 locked evidence。
+PI frontiers 已完成；100 个 validation scenarios 已从冻结协议生成并通过
+集合级 hash/service audit，但尚未执行 causal capacity selection；locked-ID
+和 locked-OOD 仍未运行。`analysis_plan_status` 已在 validation 之前冻结；
+development 结果被明确披露为冻结 Model A 所使用的证据，而不是 locked
+evidence。
 
 ### Phase 6 — 独立因果容量认证
 
