@@ -20,6 +20,7 @@ def test_nature_mainline_protocol_structure_is_valid_without_opening_locked_scen
     assert checks["all_workload_classes_calibrated"] is True
     assert checks["analysis_plan_frozen_before_validation"] is True
     assert checks["sensitivity_design_frozen"] is True
+    assert checks["validation_exhaustion_declared_without_reselection"] is True
     rows = report["details"]["statistical_power"]
     assert any(
         row["scenario_set"] == "validation"
@@ -75,6 +76,23 @@ def test_nature_protocol_fails_execution_on_sensitivity_hash_mismatch(
     assert report["structure_valid"] is True
     assert report["execution_ready"] is False
     assert report["execution_checks"]["sensitivity_specification_hashes"] is False
+
+
+def test_nature_protocol_fails_execution_on_exhaustion_hash_mismatch(
+    tmp_path: Path,
+) -> None:
+    document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
+    document["repeated_event_exhaustion"]["validation_specification"]["sha256"] = (
+        "0" * 64
+    )
+    candidate = tmp_path / "protocol.yaml"
+    candidate.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+
+    report = validate_nature_mainline_protocol(candidate)
+
+    assert report["structure_valid"] is True
+    assert report["execution_ready"] is False
+    assert report["execution_checks"]["exhaustion_specification_hashes"] is False
 
 
 def test_nature_protocol_rejects_unplanned_causal_search(tmp_path: Path) -> None:

@@ -1,4 +1,4 @@
-"""Development-only repeated-event exhaustion scenarios and diagnostics."""
+"""Preregistered development and validation repeated-event exhaustion diagnostics."""
 
 from __future__ import annotations
 
@@ -73,13 +73,19 @@ def _exact_fields(document: Mapping[str, Any], expected: set[str], name: str) ->
 
 @dataclass(frozen=True, slots=True)
 class RepeatedEventExhaustionSpecification:
-    """Strict preregistration for the separate development exhaustion study."""
+    """Strict preregistration for a separate exhaustion mechanism study."""
 
     schema_version: int
     model_a_git_commit: str
-    dataset_role: Literal["development_repeated_event_exhaustion"]
+    dataset_role: Literal[
+        "development_repeated_event_exhaustion",
+        "validation_repeated_event_exhaustion",
+    ]
     base_environment_config: str
+    base_environment_config_sha256: str | None
     controller_config: str
+    controller_config_sha256: str | None
+    expected_seed_range: tuple[int, int] | None
     first_event_start_hour: int
     max_event_count: int
     duration_hours: tuple[int, ...]
@@ -94,12 +100,42 @@ class RepeatedEventExhaustionSpecification:
     criteria: FirmFlexibilityCriteria
 
     def __post_init__(self) -> None:
-        if self.schema_version != 1:
+        if self.schema_version not in {1, 2}:
             raise ValueError("unsupported exhaustion specification schema_version")
         if len(self.model_a_git_commit) != 40 or any(
             value not in "0123456789abcdef" for value in self.model_a_git_commit
         ):
             raise ValueError("model_a_git_commit must be a lowercase 40-character SHA-1")
+        if self.dataset_role not in {
+            "development_repeated_event_exhaustion",
+            "validation_repeated_event_exhaustion",
+        }:
+            raise ValueError("unsupported exhaustion dataset_role")
+        if self.schema_version == 1:
+            if any(
+                value is not None
+                for value in (
+                    self.base_environment_config_sha256,
+                    self.controller_config_sha256,
+                    self.expected_seed_range,
+                )
+            ):
+                raise ValueError("schema v1 cannot contain v2 provenance fields")
+        else:
+            for name, provenance_value in (
+                ("base_environment_config_sha256", self.base_environment_config_sha256),
+                ("controller_config_sha256", self.controller_config_sha256),
+            ):
+                if provenance_value is None or len(provenance_value) != 64 or any(
+                    character not in "0123456789abcdef"
+                    for character in provenance_value
+                ):
+                    raise ValueError(f"{name} must be a lowercase SHA-256 hex digest")
+            if self.expected_seed_range is None:
+                raise ValueError("schema v2 requires expected_seed_range")
+            seed_start, seed_end = self.expected_seed_range
+            if seed_start < 0 or seed_end < seed_start:
+                raise ValueError("expected_seed_range must be increasing and non-negative")
         if self.first_event_start_hour < 0 or self.max_event_count < 2:
             raise ValueError("exhaustion study needs a non-negative start and at least two events")
         if not self.duration_hours or any(value <= 0 for value in self.duration_hours):
@@ -124,13 +160,24 @@ class RepeatedEventExhaustionSpecification:
             raise ValueError("criteria reliability_target must match the study target")
         if self.criteria.confidence_level != self.confidence_level:
             raise ValueError("criteria confidence_level must match the study confidence")
-        if len(self.capacity_source_sha256) != 64:
-            raise ValueError("capacity_source_sha256 must be a SHA-256 hex digest")
+        if len(self.capacity_source_sha256) != 64 or any(
+            character not in "0123456789abcdef"
+            for character in self.capacity_source_sha256
+        ):
+            raise ValueError("capacity_source_sha256 must be a lowercase SHA-256 hex digest")
+        if self.capacity_column not in {"na_capacity_kw", "pi_empirical_capacity_kw"}:
+            raise ValueError("unsupported exhaustion capacity column")
 
     def as_dict(self) -> dict[str, Any]:
         result = asdict(self)
+        if self.schema_version == 1:
+            result.pop("base_environment_config_sha256")
+            result.pop("controller_config_sha256")
+            result.pop("expected_seed_range")
         result["duration_hours"] = list(self.duration_hours)
         result["recovery_gaps_hours"] = list(self.recovery_gaps_hours)
+        if self.expected_seed_range is not None:
+            result["expected_seed_range"] = list(self.expected_seed_range)
         return result
 
     @property
@@ -161,6 +208,15 @@ def load_repeated_event_exhaustion_specification(
         "capacity_source",
         "criteria",
     }
+    schema_version = int(document.get("schema_version", -1))
+    if schema_version == 2:
+        expected.update(
+            {
+                "base_environment_config_sha256",
+                "controller_config_sha256",
+                "expected_seed_range",
+            }
+        )
     _exact_fields(document, expected, "exhaustion specification")
     capacity = _mapping(document["capacity_source"], "capacity_source")
     _exact_fields(
@@ -183,12 +239,32 @@ def load_repeated_event_exhaustion_specification(
     )
     reliability = float(document["reliability_target"])
     confidence = float(document["confidence_level"])
+    raw_expected_seed_range = document.get("expected_seed_range")
+    expected_seed_range: tuple[int, int] | None = None
+    if isinstance(raw_expected_seed_range, list):
+        if len(raw_expected_seed_range) != 2:
+            raise ValueError("expected_seed_range must contain exactly two integers")
+        expected_seed_range = (
+            int(raw_expected_seed_range[0]),
+            int(raw_expected_seed_range[1]),
+        )
     return RepeatedEventExhaustionSpecification(
-        schema_version=int(document["schema_version"]),
+        schema_version=schema_version,
         model_a_git_commit=str(document["model_a_git_commit"]),
         dataset_role=str(document["dataset_role"]),  # type: ignore[arg-type]
         base_environment_config=str(document["base_environment_config"]),
+        base_environment_config_sha256=(
+            str(document["base_environment_config_sha256"])
+            if document.get("base_environment_config_sha256") is not None
+            else None
+        ),
         controller_config=str(document["controller_config"]),
+        controller_config_sha256=(
+            str(document["controller_config_sha256"])
+            if document.get("controller_config_sha256") is not None
+            else None
+        ),
+        expected_seed_range=expected_seed_range,
         first_event_start_hour=int(document["first_event_start_hour"]),
         max_event_count=int(document["max_event_count"]),
         duration_hours=tuple(int(value) for value in document["duration_hours"]),
@@ -217,6 +293,51 @@ def load_repeated_event_exhaustion_specification(
             ),
         ),
     )
+
+
+def _validate_v2_provenance_files(
+    specification: RepeatedEventExhaustionSpecification,
+) -> None:
+    if specification.schema_version < 2:
+        return
+    declared_files = (
+        (
+            "base environment config",
+            Path(specification.base_environment_config),
+            specification.base_environment_config_sha256,
+        ),
+        (
+            "controller config",
+            Path(specification.controller_config),
+            specification.controller_config_sha256,
+        ),
+    )
+    for label, path, expected_sha256 in declared_files:
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        actual_sha256 = sha256_file(path)
+        if actual_sha256 != expected_sha256:
+            raise ValueError(
+                f"exhaustion {label} SHA-256 mismatch: expected "
+                f"{expected_sha256}, got {actual_sha256}"
+            )
+
+
+def _validate_declared_seeds(
+    specification: RepeatedEventExhaustionSpecification,
+    seeds: Sequence[int],
+) -> None:
+    if not seeds or len(set(seeds)) != len(seeds):
+        raise ValueError("exhaustion seeds must be non-empty and unique")
+    if specification.expected_seed_range is None:
+        return
+    start, end = specification.expected_seed_range
+    expected = tuple(range(start, end + 1))
+    if tuple(seeds) != expected:
+        raise ValueError(
+            "exhaustion seeds must exactly match expected_seed_range "
+            f"[{start}, {end}] in increasing order"
+        )
 
 
 def repeated_event_start_hours(
@@ -271,15 +392,21 @@ def freeze_repeated_event_scenarios(
     seeds: Sequence[int],
     output_directory: str | Path,
 ) -> dict[str, Any]:
-    """Freeze or resume separate development scenarios for every H/gap program."""
+    """Freeze or resume separate development/validation scenarios per H/gap program."""
 
     specification = load_repeated_event_exhaustion_specification(specification_path)
-    if not seeds or len(set(seeds)) != len(seeds):
-        raise ValueError("exhaustion seeds must be non-empty and unique")
+    _validate_v2_provenance_files(specification)
+    _validate_declared_seeds(specification, seeds)
     base_path = Path(specification.base_environment_config)
     raw = yaml.safe_load(base_path.read_text(encoding="utf-8"))
     base = _mapping(raw, "base_environment_config")
     env = _mapping(base.get("env"), "base_environment_config.env")
+    if specification.expected_seed_range is not None:
+        declared_seed_range = env.get("episode_seed_range")
+        if declared_seed_range != list(specification.expected_seed_range):
+            raise ValueError(
+                "base environment episode_seed_range does not match exhaustion specification"
+            )
     main_hours = int(env["episode_days"]) * 24
     capacity_by_duration = _capacity_by_duration(specification)
     output = Path(output_directory)
@@ -825,6 +952,7 @@ def compute_repeated_event_exhaustion_diagnostics(
     """Evaluate frozen Model A at one fixed commitment over event chains."""
 
     specification = load_repeated_event_exhaustion_specification(specification_path)
+    _validate_v2_provenance_files(specification)
     root = Path(scenario_root)
     index_path = root / _INDEX_NAME
     index = json.loads(index_path.read_text(encoding="utf-8"))
@@ -836,6 +964,10 @@ def compute_repeated_event_exhaustion_diagnostics(
         raise ValueError("exhaustion scenario specification mismatch")
     if index.get("specification_file_sha256") != sha256_file(Path(specification_path)):
         raise ValueError("exhaustion scenario specification file hash mismatch")
+    if specification.expected_seed_range is not None:
+        start, end = specification.expected_seed_range
+        if index.get("seeds") != list(range(start, end + 1)):
+            raise ValueError("exhaustion scenario seed range mismatch")
     capacity_by_duration = _capacity_by_duration(specification)
     controller_specification = load_robust_mpc_specification(
         specification.controller_config

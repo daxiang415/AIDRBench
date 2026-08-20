@@ -204,6 +204,15 @@ sensitivity_design:
 repeated_event_exhaustion:
   separate_from_primary_surface: true
   statistical_unit: joint_episode
+  development_specification:
+    path: configs/experiment/nature_exhaustion_v1.yaml
+    sha256: c07bc8b9ef4dfdbce138c7f2dac379a2079d0325feae109a4b4e6a570d06e1b1
+  validation_specification:
+    path: configs/experiment/nature_exhaustion_validation_v1.yaml
+    sha256: 0cc9c0534292f7d3f0e4f8a9c7ef50438bceb79baa9764bdb6b6fe2605b656a0
+  development_seed_range: [10000, 10099]
+  validation_seed_range: [20000, 20099]
+  validation_capacity_policy: fixed_development_Model_A_commitment_no_reselection
   event_counts: [1, 2, 3, 4]
   recovery_gaps_hours: [2, 4, 8, 12, 24]
   metrics: [compute_debt_kwh, residual_flexibility_ratio, rebound_ratio]

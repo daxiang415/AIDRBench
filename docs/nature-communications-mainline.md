@@ -446,8 +446,10 @@ until the experiment design and result schemas are frozen.
    `d03b440`.**
 3. Scale the now-implemented paired repeated-event exhaustion pipeline from
    its three-seed smoke to the declared development/validation ensembles.
-   **Completed on 100 nominal development scenarios; validation remains
-   pending.**
+   **Completed on 100 nominal development scenarios. The separate validation
+   specification is now hash-bound to seeds 20000--20099 and reuses the fixed
+   development Model A commitment without capacity reselection; its formal run
+   remains pending until this specification is committed on a clean tree.**
 4. Run the implemented 100-scenario 2 × 2 × 2 hosting ensemble. Its paired
    uncertainty, eight-contrast family and equivalence margin are now
    preregistered. **Completed on 100 nominal development scenarios; locked data

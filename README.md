@@ -1037,6 +1037,10 @@ solver and tolerances
 - residual flexibility；
 - rebound。
 
+Development 与 validation 使用独立规格。Validation 固定使用 development Model A
+承诺，不在 validation 上重新选择 repeated-event 容量；规格绑定环境/controller
+SHA-256 和完整 seeds 20000--20099。
+
 ### Phase 4 — 计算社区 hosting capacity
 
 - 2 × 2 × 2 portfolio；

@@ -92,6 +92,52 @@ def test_exhaustion_specification_is_strict_and_checks_horizon(tmp_path: Path) -
         load_repeated_event_exhaustion_specification(path)
 
 
+def test_validation_exhaustion_v2_binds_files_and_exact_seed_range(
+    tmp_path: Path,
+) -> None:
+    source = yaml.safe_load(_write_specification(tmp_path).read_text(encoding="utf-8"))
+    base_path = Path(source["base_environment_config"])
+    base_document = yaml.safe_load(base_path.read_text(encoding="utf-8"))
+    base_document["env"]["episode_seed_range"] = [201, 202]
+    base_path.write_text(yaml.safe_dump(base_document, sort_keys=False), encoding="utf-8")
+    source.update(
+        {
+            "schema_version": 2,
+            "dataset_role": "validation_repeated_event_exhaustion",
+            "base_environment_config_sha256": sha256_file(base_path),
+            "controller_config_sha256": sha256_file(Path(source["controller_config"])),
+            "expected_seed_range": [201, 202],
+        }
+    )
+    specification_path = tmp_path / "validation-exhaustion.yaml"
+    specification_path.write_text(
+        yaml.safe_dump(source, sort_keys=False), encoding="utf-8"
+    )
+
+    specification = load_repeated_event_exhaustion_specification(specification_path)
+    assert specification.dataset_role == "validation_repeated_event_exhaustion"
+    frozen = freeze_repeated_event_scenarios(
+        specification_path,
+        seeds=[201, 202],
+        output_directory=tmp_path / "validation-scenarios",
+    )
+    assert frozen["scenario_count"] == 2
+    with pytest.raises(ValueError, match="exactly match expected_seed_range"):
+        freeze_repeated_event_scenarios(
+            specification_path,
+            seeds=[201],
+            output_directory=tmp_path / "wrong-seeds",
+        )
+
+    base_path.write_text("changed: true\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="base environment config SHA-256 mismatch"):
+        freeze_repeated_event_scenarios(
+            specification_path,
+            seeds=[201, 202],
+            output_directory=tmp_path / "changed-base",
+        )
+
+
 def test_repeated_event_development_pipeline(tmp_path: Path) -> None:
     specification_path = _write_specification(tmp_path)
     scenario_root = tmp_path / "scenarios"

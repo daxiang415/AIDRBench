@@ -1,0 +1,32 @@
+schema_version: 2
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+dataset_role: validation_repeated_event_exhaustion
+base_environment_config: configs/env/nature_mainline_validation.yaml
+base_environment_config_sha256: d7dab9f8b3640100456c427acf720898d09f5b70af29b8875ccd670bec6281a9
+controller_config: configs/controller/nature_robust_mpc_v1.yaml
+controller_config_sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
+expected_seed_range: [20000, 20099]
+
+# Validation uses the same fixed Model A commitment as the development
+# mechanism experiment. It does not reselect a repeated-event capacity.
+first_event_start_hour: 63
+max_event_count: 4
+duration_hours: [4, 8]
+recovery_gaps_hours: [2, 4, 8, 12, 24]
+notice_hours: 0
+reliability_target: 0.95
+confidence_level: 0.95
+
+capacity_source:
+  path: results/nature_mainline/development_notice_diagnostics_v2/notice_mechanism_diagnostics.parquet
+  sha256: 60195054f5dddc0d6c35ea0b281d585b1f9d041d1f26f58686581ca187722218
+  column: na_capacity_kw
+  notice_hours: 0
+
+criteria:
+  min_delivery_ratio: 0.95
+  min_interval_delivery_ratio: 0.95
+  max_deadline_miss_rate: 0.01
+  max_rebound_ratio: 0.25
+  min_window_peak_relief_fraction: 0.50
+  max_terminal_backlog_fraction: 0.02

@@ -286,7 +286,7 @@ def _add_scenario_parsers(subparsers: Any) -> None:
     freeze.add_argument("--output", required=True)
     freeze_exhaustion = commands.add_parser(
         "freeze-exhaustion",
-        help="freeze the separate development repeated-event scenario programs",
+        help="freeze preregistered development/validation repeated-event programs",
     )
     freeze_exhaustion.add_argument("--specification", required=True)
     freeze_exhaustion.add_argument("--seeds", nargs="+", type=int, required=True)
@@ -417,7 +417,7 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     notice_diagnostics.add_argument("--output", required=True)
     exhaustion = commands.add_parser(
         "exhaustion-diagnostics",
-        help="evaluate frozen Model A over development repeated-event chains",
+        help="evaluate frozen Model A over development/validation repeated-event chains",
     )
     exhaustion.add_argument("--scenarios", required=True)
     exhaustion.add_argument("--specification", required=True)

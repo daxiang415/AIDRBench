@@ -687,10 +687,54 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
     )
 
     repeated = _mapping(document.get("repeated_event_exhaustion"), "repeated_event_exhaustion")
+    repeated_development = _mapping(
+        repeated.get("development_specification"),
+        "repeated_event_exhaustion.development_specification",
+    )
+    repeated_validation = _mapping(
+        repeated.get("validation_specification"),
+        "repeated_event_exhaustion.validation_specification",
+    )
     checks["repeated_events_are_separate"] = (
         repeated.get("separate_from_primary_surface") is True
         and repeated.get("statistical_unit") == "joint_episode"
     )
+    checks["validation_exhaustion_declared_without_reselection"] = (
+        repeated.get("development_seed_range") == [10000, 10099]
+        and repeated.get("validation_seed_range") == [20000, 20099]
+        and repeated.get("validation_capacity_policy")
+        == "fixed_development_Model_A_commitment_no_reselection"
+        and str(repeated_development.get("path", "")).endswith(
+            "nature_exhaustion_v1.yaml"
+        )
+        and str(repeated_validation.get("path", "")).endswith(
+            "nature_exhaustion_validation_v1.yaml"
+        )
+    )
+    exhaustion_specification_details: dict[str, object] = {}
+    exhaustion_specification_hashes_valid = True
+    for name, entry in (
+        ("development", repeated_development),
+        ("validation", repeated_validation),
+    ):
+        specification_path = Path(str(entry.get("path", "")))
+        expected_sha256 = str(entry.get("sha256", ""))
+        exists = specification_path.is_file()
+        actual_sha256 = sha256_file(specification_path) if exists else None
+        matches = exists and len(expected_sha256) == 64 and actual_sha256 == expected_sha256
+        exhaustion_specification_hashes_valid = (
+            exhaustion_specification_hashes_valid and matches
+        )
+        exhaustion_specification_details[name] = {
+            "path": str(specification_path),
+            "exists": exists,
+            "hash_matches": matches,
+            "sha256": actual_sha256,
+        }
+    execution_checks["exhaustion_specification_hashes"] = (
+        exhaustion_specification_hashes_valid
+    )
+    details["exhaustion_specifications"] = exhaustion_specification_details
     hosting = _mapping(document.get("hosting_capacity"), "hosting_capacity")
     matrix = _mapping(hosting.get("portfolio_matrix"), "hosting_capacity.portfolio_matrix")
     checks["hosting_2x2x2_declared"] = all(
