@@ -8,7 +8,10 @@
 Updated: 2026-08-20. The Nature design audit separates locked-ID seeds
 `30000..30499` from locked-OOD seeds `40000..40499`. The 500 locked-ID
 scenarios were generated and evaluated exactly once on commit `5889405`; the
-authorization is consumed. Locked-OOD has not been generated or evaluated.
+authorization is consumed. The separately authorized 500 locked-OOD scenarios
+were generated on commit `0058cb1` and replayed with the fixed controller/source
+provenance at `5889405`; all three reliability layers yielded 0/18 certified
+cells. This bounds generalization and was not used to reselect capacity.
 
 > Interface warning (2026-08-17): the current environment interface is
 > `firm_v5` with PCC-normalized observations and `firm_threshold_v2` costs.
@@ -459,17 +462,9 @@ the optimization bound controls class-indexed execution while the online
 environment exposes one aggregate execution fraction; the oracle remains a
 planning upper bound, not a deployable controller.
 
-## Next controlled steps
+## Historical control-extension ideas (not the active mainline)
 
-1. Treat `firm_cmdp_v5` as a diagnostic, not a selected reward. Preserve its
-   service-safe useful-compute objective, but add a preregistered recovery
-   safety margin or an explicitly labelled safety layer before more long runs.
-2. Validate the revised candidate on all 100 validation episodes; do not use a
-   ten-episode slice as evidence for 95% reliability.
-3. Only after the reward and controller semantics are frozen, train seeds
-   `101..105` and select among their 5k periodic checkpoints using validation
-   data alone.
-4. Keep any action projection or class-specific actuator as an explicitly
-   labelled extension, because it changes the online controller's authority.
-5. Freeze controller checkpoints, capacity, and reward sensitivity choices
-   before the first 500-episode locked OOD certificate run.
+The earlier RL/CMDP steps are retained only as historical diagnostics and must
+not be executed as a continuation of the Nature Communications mainline. The
+formal locked-OOD run used the frozen robust-MPC candidates, not an RL policy;
+any future learned-control study is a separate optional extension.

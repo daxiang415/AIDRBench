@@ -767,11 +767,13 @@ active/idle power uncertainty 做笛卡尔积：reference 为 PUE=1.20、overhea
 不能外推为 hosting capacity 不受影响。完整回执见
 [`data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml`](data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml)。
 
-### 预期结论
+### 当前结论
 
 绝对 kW 与归一化比例对硬件和基础设施参数的响应不同；duration ordering 在
-当前 development sensitivity 中保持不变，但场景分布外推仍需单独的
-locked-OOD 检验。
+当前 development sensitivity 中保持不变。独立 locked-OOD 检验进一步表明，
+Model A 上 validation-selected 的固定候选不能直接外推到联合 community-profile
+与 arrival-process shift；这限定了 causal certificate 的适用域，而不是重新估计
+OOD 容量。
 
 ### 对应主图
 
@@ -1094,8 +1096,18 @@ capacity selection。随后一次性生成并评估了 500 个 locked-ID episode
 477/500、Wilson 下界 0.936，不能称为 q=0.95 certified。q=0.90 与 q=0.99
 分别有 15/18 和 9/18 个单元通过，作为 secondary sensitivity。三个 q 下同一
 duration 的 N={0,2,6} 容量均相同，zero notice gain 被保留为结构性结果。
-locked-OOD 仍未运行。完整机器可读审计见
-`data/manifests/nature_mainline_locked_id_results_v1.yaml`。
+完整机器可读审计见 `data/manifests/nature_mainline_locked_id_results_v1.yaml`。
+
+经单独明确授权后，500 个 locked-OOD episodes 已一次性生成，500 个场景、
+2,000 个 payload 哈希、seed 范围、集合无重叠及 no-DR 服务可行性均通过审计。
+为保持固定候选的 controller/source/Git provenance，三个 q 均在原 selection
+提交 `5889405` 上重放。q={0.90,0.95,0.99} 的 validation-selected 候选在 OOD
+上均为 0/18 certified cells；headline q=0.95 各 duration 的成功数为
+H={1,2,3,4,6,8}: {437,433,445,425,398,383}/500，对应 Wilson 下界
+0.733–0.865。主要失败来自 mean/interval delivery。同一 duration 下三个 notice
+的结果仍完全相同。该结果说明主分布内证书没有在此联合分布偏移下保持，不能
+表述为“OOD firm capacity 为零”，因为协议禁止在 locked-OOD 上重新选择容量。
+完整回执见 `data/manifests/nature_mainline_locked_ood_results_v1.yaml`。
 
 ### Phase 6 — 独立因果容量认证
 
@@ -1124,9 +1136,9 @@ Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 - [x] development 2 × 2 × 2 hosting-capacity 分析完成；
 - [x] development PV/BESS 互补与替代区域得到识别；
 - [x] 硬件校准、PUE、node overhead 与 workload development sensitivity 完成；
-- [ ] locked-OOD 场景分布外推完成；
+- [x] locked-OOD 场景分布外推完成，固定候选未保留目标可靠性；
 - [ ] 所有正式结果具有完整 provenance 和 hash；
-- [ ] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
+- [x] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
 - [x] 控制器结果未被误写成文章的核心创新。
 
 ---

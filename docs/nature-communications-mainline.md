@@ -436,8 +436,21 @@ but a Wilson lower bound of 0.936 and is therefore not certified. Secondary
 q=0.90 and q=0.99 certified 15/18 and 9/18 cells, respectively. These are
 interval-wise decisions, not a simultaneous confidence claim for the whole
 surface. The machine-readable receipt is
-`data/manifests/nature_mainline_locked_id_results_v1.yaml`; locked OOD remains
-closed.
+`data/manifests/nature_mainline_locked_id_results_v1.yaml`.
+
+The separately authorized locked-OOD stress test is also complete. Its 500
+scenarios changed both the community profile (`eulp_mixed_3c`) and arrival
+process (`block`); all 2,000 payload hashes, the seed range, cross-set
+non-overlap and no-DR service feasibility passed audit. The fixed q={0.90,
+0.95,0.99} validation selections were replayed with the exact controller and
+source provenance pinned to commit `5889405`. None of the 54 candidates
+retained its target reliability (0/18 cells at each q). At headline q=0.95,
+the per-duration success counts were 437, 433, 445, 425, 398 and 383 out of 500
+for H={1,2,3,4,6,8}, respectively; delivery failures dominated. This is a
+generalization boundary for the fixed Model A candidates, not an estimate that
+OOD firm capacity is zero, because no selection or reselection was permitted on
+locked OOD. The machine-readable receipt is
+`data/manifests/nature_mainline_locked_ood_results_v1.yaml`.
 
 The calibration lower/nominal/upper PI ensembles and the five-point PUE and
 node-overhead sparse OAT analysis are complete. The latter ran on clean commit
@@ -493,13 +506,14 @@ post-run receipt is
 5. Run success-criterion and sparse-workload sensitivities, freeze all choices,
    then run validation, locked ID once, and locked OOD separately once.
    **Both development PI sensitivity analyses, frozen validation selections
-   and the one-time 500-episode locked-ID replay are complete. The locked-ID
-   authorization is consumed and all pass/fail cells are retained; locked OOD
-   remains pending and requires separate explicit authorization.**
+   and the separately authorized 500-episode locked-ID and locked-OOD replays
+   are complete. Both authorizations are consumed and all pass/fail cells are
+   retained without OOD reselection.**
 6. Complete infrastructure uncertainty without a Cartesian grid. **The
    five-point PUE/node-overhead OAT design completed on 100 paired development
-   seeds; service, hash, solver and replay audits passed. Scenario-distribution
-   uncertainty remains separate because locked OOD is still closed.**
+   seeds; service, hash, solver and replay audits passed. The separate joint
+   profile/arrival distribution shift is now bounded by the completed
+   locked-OOD stress test.**
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and

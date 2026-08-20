@@ -2,7 +2,7 @@ schema_version: 1
 protocol_id: aidrbench_nature_communications_mainline_v1
 study_type: nature_communications_mechanism_mainline
 status: analysis_plan_frozen_before_validation
-locked_ood_status: approved_for_one_time_run
+locked_ood_status: consumed
 locked_id_status: consumed
 analysis_plan_status: frozen
 community_profile_split: data/manifests/community_profile_split_v1.yaml
@@ -269,7 +269,10 @@ uncertainty:
     - rigid_gpu_utilization
     - deadline_slack_scale
   infrastructure_sensitivities_completed_development: [pue, node_overhead]
-  scenario_distribution_uncertainty_status: locked_ood_not_run
+  scenario_distribution_uncertainty_status: locked_ood_completed_without_reselection
+  locked_ood_result_receipt:
+    path: data/manifests/nature_mainline_locked_ood_results_v1.yaml
+    sha256: ec98832909a0ad7da4406a75702ad2dcf9cf2b733ac4532272011f047f3093ab
 
 optional_control_extension:
   enabled_in_mainline: false

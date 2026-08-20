@@ -1,0 +1,187 @@
+schema_version: 1
+receipt_role: one_time_locked_ood_generalization_stress_test
+evidence_scope: fixed_validation_selected_causal_candidates_under_joint_profile_and_arrival_shift
+generated_at: '2026-08-20T22:30:03+09:00'
+
+interpretation_guardrails:
+  - locked_ood_is_a_separate_generalization_stress_test_not_the_locked_id_primary_certificate
+  - no_candidate_was_selected_or_reselected_on_locked_ood
+  - zero_certified_cells_does_not_estimate_zero_ood_firm_capacity
+  - the_joint_shift_changes_both_community_profile_and_arrival_process
+  - failure_mechanisms_cannot_be_attributed_to_only_one_shifted_dimension
+  - interval_wise_wilson_decisions_are_not_a_simultaneous_surface_confidence_statement
+  - reinforcement_learning_was_not_used
+
+authorization:
+  explicitly_authorized_by_user: true
+  authorization_date: '2026-08-20'
+  one_time_authorization_consumed: true
+  protocol_path: data/manifests/nature_mainline_protocol_v1.yaml
+  protocol_sha256_before_run: 4a06e244fbbf62b5dc4dfc15667897805697ad729caa341780991c72b9e654e3
+  scenario_generation_git_commit: 0058cb15f7051421d6fbba473eb8baa7362d720d
+  locked_ood_run_receipt:
+    path: results/nature_mainline/locked_ood_nominal/locked_ood_run_receipt.json
+    sha256: 3157e4d22f0d69c340942aa1a931c0cd33cc8c39b6df2493d00e9d0033ec06ea
+
+frozen_scenario_set:
+  config:
+    path: configs/env/nature_mainline_locked_ood.yaml
+    sha256: 9a13830543cfa5f798d3398a4223229ffde946da90729c0590e932bde568d5e0
+  path: results/nature_mainline/locked_ood_nominal
+  dataset_role: locked_ood_generalization
+  community_profile_id: eulp_mixed_3c
+  arrival_process: block
+  episode_seed_range: [40000, 40499]
+  scenario_count: 500
+  unique_scenario_hash_count: 500
+  payload_files_checked: 2000
+  payload_hash_mismatches: 0
+  validation_or_locked_id_hash_overlap: 0
+  ordered_scenario_hash_list_sha256: 81c04e622ac4f44232d662dbf3a6e8b3245bbb727c4d133274897a0f159ce3a9
+  first_scenario_hash: d45178b20310c3f40f252ead8562afa72e5824229701e55c7d0a9dbb95a0b2f6
+  last_scenario_hash: e3228352529e3af0922cbea2fc5d16dc4f19dc017d4fba28539ddb5bcbf4fa4d
+  no_dr_service_audit:
+    maximum_deadline_miss_gpu_h: 0.0
+    maximum_terminal_backlog_gpu_h: 0.0
+    all_scenarios_service_feasible: true
+  power_model:
+    calibration_power_case: nominal
+    node_fixed_overhead_power_case: nominal
+    node_count: 144
+    power_model_sha256: e392ea26657466e184b024c92e95747a58889cfc5dad0c21d8d653f596cd9369
+  generation_source_sha256:
+    src/aidrbench/data/frozen_scenarios.py: f8ecdd83e457000c788a61fd5de02388323e5022b616542d666eaca600ffd3da
+    src/aidrbench/evaluation/locked_ood.py: 8c0d023b5464350608ed1aedadcbea269cad57f4f4302acd3d627a6adaa980f3
+
+fixed_controller_replay:
+  evaluation_git_commit: 5889405427b8f00f3cdd12b961b79d621b122e65
+  reason_for_original_commit_replay: causal_selections_fail_closed_on_exact_git_and_source_provenance
+  controller: robust_mpc
+  controller_config:
+    path: configs/controller/nature_robust_mpc_v1.yaml
+    sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
+  workers:
+    q90: 16
+    q95: 32
+    q99: 16
+  selection_artifacts:
+    q90:
+      path: results/nature_mainline/causal_selection_q90/causal_selection.json
+      sha256: e07eabf7980ef5ea0d48cfd447933fb26eb4340298a8894803071278e6a9f0a7
+    q95:
+      path: results/nature_mainline/causal_selection_q95/causal_selection.json
+      sha256: ddd0094907e34f7f137856169c5fd6b84a33cf37cfc48e5158ceb5502fdd470b
+    q99:
+      path: results/nature_mainline/causal_selection_q99/causal_selection.json
+      sha256: 7333a4b62bd3eec29a0125648b1ec9f8e67dbe2b1a0f8d79784ad6022b0da7ea
+  selected_capacity_count_per_reliability: 18
+  duration_hours: [1, 2, 3, 4, 6, 8]
+  notice_hours: [0, 2, 6]
+  confidence_level: 0.95
+  fixed_candidate_confidence_method: one_sided_wilson_lower_bound
+  no_locked_ood_reselection: true
+
+results:
+  statistical_unit: independent_frozen_episode_within_each_fixed_duration_notice_cell
+  trials_per_cell: 500
+  q90:
+    reliability_target: 0.90
+    certified_cells: 0
+    tested_cells: 18
+    locked_id_certified_cells: 15
+    per_cell_success_count_change_from_locked_id_range: [-120, -36]
+    duration_results_repeated_identically_for_each_notice:
+      H1: {candidate_reduction_kw: 60.26097722958721, successes: 418, empirical_fraction: 0.836, wilson_lower_bound: 0.8069674248614448}
+      H2: {candidate_reduction_kw: 50.83906548033579, successes: 410, empirical_fraction: 0.820, wilson_lower_bound: 0.7900404900931586}
+      H3: {candidate_reduction_kw: 44.95037063705365, successes: 419, empirical_fraction: 0.838, wilson_lower_bound: 0.8090895111655729}
+      H4: {candidate_reduction_kw: 44.16521132461603, successes: 395, empirical_fraction: 0.790, wilson_lower_bound: 0.7585176003839522}
+      H6: {candidate_reduction_kw: 39.846835106209134, successes: 372, empirical_fraction: 0.744, wilson_lower_bound: 0.7106431584552668}
+      H8: {candidate_reduction_kw: 39.846835106209134, successes: 345, empirical_fraction: 0.690, wilson_lower_bound: 0.6550326496488056}
+  q95:
+    reliability_target: 0.95
+    certified_cells: 0
+    tested_cells: 18
+    locked_id_certified_cells: 15
+    per_cell_success_count_change_from_locked_id_range: [-109, -40]
+    duration_results_repeated_identically_for_each_notice:
+      H1: {candidate_reduction_kw: 55.157441698742694, successes: 437, empirical_fraction: 0.874, wilson_lower_bound: 0.8475589840772573}
+      H2: {candidate_reduction_kw: 45.73552994949127, successes: 433, empirical_fraction: 0.866, wilson_lower_bound: 0.8389617982875386}
+      H3: {candidate_reduction_kw: 39.65054527809973, successes: 445, empirical_fraction: 0.890, wilson_lower_bound: 0.8648510881025832}
+      H4: {candidate_reduction_kw: 39.65054527809973, successes: 425, empirical_fraction: 0.850, wilson_lower_bound: 0.8218532438353758}
+      H6: {candidate_reduction_kw: 37.883936825115086, successes: 398, empirical_fraction: 0.796, wilson_lower_bound: 0.7648014864464682}
+      H8: {candidate_reduction_kw: 36.70619785645866, successes: 383, empirical_fraction: 0.766, wilson_lower_bound: 0.7334760453891713}
+  q99:
+    reliability_target: 0.99
+    certified_cells: 0
+    tested_cells: 18
+    locked_id_certified_cells: 9
+    per_cell_success_count_change_from_locked_id_range: [-78, -31]
+    duration_results_repeated_identically_for_each_notice:
+      H1: {candidate_reduction_kw: 49.07245702735115, successes: 453, empirical_fraction: 0.906, wilson_lower_bound: 0.8822946017300648}
+      H2: {candidate_reduction_kw: 39.25796562188092, successes: 466, empirical_fraction: 0.932, wilson_lower_bound: 0.9110606673349093}
+      H3: {candidate_reduction_kw: 34.3507199191458, successes: 466, empirical_fraction: 0.932, wilson_lower_bound: 0.9110606673349093}
+      H4: {candidate_reduction_kw: 34.3507199191458, successes: 452, empirical_fraction: 0.904, wilson_lower_bound: 0.8801048193973666}
+      H6: {candidate_reduction_kw: 32.976691122379975, successes: 439, empirical_fraction: 0.878, wilson_lower_bound: 0.8518692849523977}
+      H8: {candidate_reduction_kw: 32.976691122379975, successes: 421, empirical_fraction: 0.842, wilson_lower_bound: 0.8133380524633241}
+  all_reliability_targets:
+    certified_cells: 0
+    tested_cells: 54
+    notice_outcomes_identical_within_duration: true
+    dominant_failure_class: delivery
+
+failure_diagnostics_across_all_duration_notice_cells:
+  q90:
+    interval_delivery: 588
+    mean_delivery_and_interval_delivery: 1155
+    mean_delivery_interval_delivery_and_rebound: 141
+    mean_delivery_interval_delivery_and_window_peak_relief: 6
+    window_peak_relief: 33
+  q95:
+    interval_delivery: 498
+    mean_delivery_and_interval_delivery: 828
+    mean_delivery_interval_delivery_and_rebound: 93
+    mean_delivery_interval_delivery_and_window_peak_relief: 3
+    window_peak_relief: 15
+  q99:
+    interval_delivery: 288
+    mean_delivery_and_interval_delivery: 552
+    mean_delivery_interval_delivery_and_rebound: 54
+    mean_delivery_interval_delivery_and_window_peak_relief: 3
+    window_peak_relief: 12
+  counting_note: each_scenario_appears_once_per_duration_notice_cell_and_notice_outcomes_are_identical
+
+numerical_audit:
+  summary_rows: 54
+  outcome_rows: 27000
+  missing_success_or_certified_values: 0
+  nonfinite_certification_or_success_criterion_values: 0
+  recovery_time_h_nan:
+    q90: 8904
+    q95: 8925
+    q99: 8956
+  recovery_time_h_nan_semantics: recovery_tolerance_not_reached_within_the_declared_recovery_window
+  recovery_time_h_is_not_a_success_criterion: true
+  runtime_numpy_reduce_warnings_observed: true
+  warning_effect_on_certification_fields: none_detected
+
+outputs:
+  q90:
+    causal_certificate.json: 0ad0192bb1bc946363325c1a484d6f4afe71605267ea22cce9fcd7085ab79f4c
+    causal_certificate_outcomes.parquet: a5508766622d6add963ecb29b883bc7a0bc41af7d3c71c509b8c6e26c48d2b9a
+    causal_certificates.parquet: 26a86ca7b095a7de666aa3d036a6a090618cf007f8bbc90cccf8a5765b73b337
+  q95:
+    causal_certificate.json: 287215f41410f08c00c568cc846dc19d94a5bb650622f2db8e6d9470580f2610
+    causal_certificate_outcomes.parquet: 112bd871953f5d6ccef600e20e8fe613154c0c5f62a9f8299bc786b8c89cfea3
+    causal_certificates.parquet: 90225924075c1e08c9eba9c449b6129e71062e68399371518e29b30e26dcc42d
+  q99:
+    causal_certificate.json: ed2917f6cab4877fd3e0a3ef036f41aa5c586d26d23677805d9c722a8e099760
+    causal_certificate_outcomes.parquet: 26257b5ac03c0b2343c958132988f8dc5ae58c1462cac60bcae76cfd26489dfe
+    causal_certificates.parquet: 04b24cfef3951b4a29e07742751b4cbe268b920075c75a6cbb541186e606aad8
+
+interpretation:
+  - none_of_the_54_validation_selected_candidates_retained_its_target_reliability_under_the_joint_ood_shift
+  - the_primary_locked_id_certificate_remains_valid_only_for_its_declared_in_distribution_scope
+  - locked_ood_results_bound_generalization_and_do_not_replace_the_locked_id_certificate
+  - delivery_failures_dominate_the_observed_ood_loss_of_reliability
+  - the_ood_capacity_surface_was_not_estimated_because_reselection_on_locked_ood_is_prohibited
+  - zero_notice_gain_persisted_for_the_fixed_candidates_under_this_ood_stress_test

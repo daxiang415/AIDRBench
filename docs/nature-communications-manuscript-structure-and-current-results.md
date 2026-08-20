@@ -225,7 +225,9 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 
 **当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过；完整配对 workload sensitivity 的 1,800/1,800 个 PI programs 为 optimal。提高 flexible arrival utilization 增大 H={4,8} 的 firm boundary，降低它则减小边界；预声明的 rigid-utilization、deadline-slack 和两个组合点未产生额外边界变化。独立的 1,800 个 one-factor-at-a-time success-criteria PI programs 也已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。100 个 validation scenarios 上的 q={0.90,0.95,0.99} frozen robust-MPC selections 与 500 个不重叠 locked-ID episodes 的一次性 replay 已在同一提交 `5889405` 完成。headline q=0.95 在 H={2,3,4,6,8}、N={0,2,6} 的 15 个单元通过一侧 Wilson 门槛；H=1 的 55.16 kW 候选未通过。完整审计见 `data/manifests/nature_mainline_locked_id_results_v1.yaml`。
 
-**仍缺**：locked-OOD 外推检验，以及硬件/社区 profile 变化下的独立 causal 证据。当前 locked-ID 只支持 Model A 主分布内的单事件结论；H=1 未通过候选不能写成 certified capacity，且单事件证书不能替代 repeated-event exhaustion 结论。
+PUE/node-overhead sparse OAT 已完成；PUE 按比例改变绝对容量，而固定 node overhead 在 baseline-relative 单事件削减中相消但改变 operating peak。随后单独授权的 500 个 locked-OOD episodes 同时改变 community profile 与 arrival process；500 个场景和 2,000 个 payload 哈希全部通过审计，三个 q 均为 0/18 certified cells。headline q=0.95 的各 duration 成功数为 437、433、445、425、398 和 383/500，主要失败来自 delivery。完整审计见 `data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml` 与 `data/manifests/nature_mainline_locked_ood_results_v1.yaml`。
+
+**结论边界**：当前 locked-ID 只支持 Model A 主分布内的单事件结论；固定候选未在联合 OOD shift 下保留目标可靠性，但这不等于 OOD capacity 为零，因为没有也不得在 locked-OOD 上重选。H=1 未通过候选不能写成 certified capacity，单事件证书也不能替代 repeated-event exhaustion 结论。由于 OOD 同时改变 profile 与 arrival process，本实验不能把可靠性下降唯一归因于其中一个因素。
 
 **Figure 5**：hardware/workload sensitivity、validation-to-locked workflow、locked-ID certificate 和 locked-OOD generalization boundary。
 
@@ -646,13 +648,14 @@ Supplementary 应列出：
 | sparse sensitivity service gate | 已完成 | 27/27 no-DR evaluations feasible，baseline miss/backlog 均为 0 |
 | sparse workload PI sensitivity | 已完成 | 1,800/1,800 optimal；arrival utilization 改变容量，rigid/deadline 在测试点为零效应 |
 | success-criteria PI sensitivity | 已完成 | 1,800/1,800 optimal；H={4,8} 仅 delivery threshold 改变容量 |
+| PUE/node-overhead PI sensitivity | 已完成 | 1,000/1,000 optimal；PUE 缩放绝对容量，固定 overhead 改变 peak 而不改变 baseline-relative firm kW |
 | validation scenario set | 已冻结并审计 | 100/100 scenario payload sets valid；与 locked-ID 无重叠 |
 | validation causal selection | 已完成 | q={0.90,0.95,0.99}、18 cells/q、10-step binary search；provenance 绑定 `5889405` |
 | locked-ID | 已一次性运行并消费授权 | 500/500 scenarios、2,000 payload hashes valid；q=0.95 为 15/18 cells certified |
-| locked-OOD | 未打开 | 不能声称 generalization |
+| locked-OOD | 已一次性运行并消费授权 | 500/500 scenarios、2,000 payload hashes valid；q={0.90,0.95,0.99} 均为 0/18 cells certified，限定外推边界 |
 | q=0.99 certificate | locked-ID 已检验 | 9/18 cells certified；H={1,2,4} 的三个 notice cells 未达到 0.99 Wilson 门槛 |
 
-当前最准确的总状态是：**科学模型、可复现环境、development mechanism/sensitivity evidence 和单次 locked-ID 因果检验均已形成；主分布内证书为部分 surface 成立，H=1 headline 候选明确未认证，locked-OOD generalization 仍未完成。**
+当前最准确的总状态是：**科学模型、可复现环境、development mechanism/sensitivity evidence、单次 locked-ID 因果检验与独立 locked-OOD 外推压力测试均已形成；主分布内证书仅对部分 surface 成立，H=1 headline 候选未认证，所有固定候选在联合 OOD shift 下均未保留目标可靠性。**
 
 ## 16. Claim–evidence map
 
@@ -666,7 +669,7 @@ Supplementary 应列出：
 | AI–BESS substitutes and AI–PV complements | predeclared interaction contrasts and simultaneous CIs | supported on development only |
 | flexible workload arrival changes single-event firm capacity | paired sparse-workload PI sensitivity | supported at predeclared Model A development points |
 | a fixed causal controller can certify firm capacity | validation selection + locked-ID Wilson lower bound | supported for q=0.95 at H={2,3,4,6,8}; H=1 candidate not certified |
-| findings generalize beyond Model A | development sensitivities + locked-OOD | needs locked-OOD evidence |
+| fixed Model A candidates generalize to the declared joint OOD shift | one-time locked-OOD replay | not supported；0/18 cells certified at every q |
 
 ## 17. 后续执行顺序
 
@@ -674,7 +677,7 @@ Supplementary 应列出：
 2. 将 q=0.95 主结果与 H=1 non-certification 放主文，将 q={0.90,0.99} 和完整失败表放 SI；
 3. 对照预声明协议完成 repeated-event exhaustion 的剩余 validation-level evidence，不把单事件恢复 NaN 当作证书失败；
 4. 完成 2 × 2 × 2 hosting mainline 的正式结果整理；
-5. 仅在另行明确授权后独立运行 locked-OOD，不用其替代 locked-ID；
+5. 将 locked-OOD 的 0/18 结果作为主文 generalization boundary，不做事后 OOD capacity 重选；
 6. 生成五幅主图和 Supplementary environment figures；
 7. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
 8. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。

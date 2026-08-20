@@ -732,8 +732,29 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         and uncertainty.get("infrastructure_sensitivities_completed_development")
         == ["pue", "node_overhead"]
         and uncertainty.get("scenario_distribution_uncertainty_status")
-        == "locked_ood_not_run"
+        == "locked_ood_completed_without_reselection"
     )
+    locked_ood_receipt = _mapping(
+        uncertainty.get("locked_ood_result_receipt"),
+        "uncertainty.locked_ood_result_receipt",
+    )
+    locked_ood_receipt_path = Path(str(locked_ood_receipt.get("path", "")))
+    locked_ood_receipt_expected = str(locked_ood_receipt.get("sha256", ""))
+    locked_ood_receipt_exists = locked_ood_receipt_path.is_file()
+    locked_ood_receipt_actual = (
+        sha256_file(locked_ood_receipt_path) if locked_ood_receipt_exists else None
+    )
+    execution_checks["locked_ood_result_receipt_hash"] = (
+        locked_ood_receipt_exists
+        and len(locked_ood_receipt_expected) == 64
+        and locked_ood_receipt_actual == locked_ood_receipt_expected
+    )
+    details["locked_ood_result_receipt"] = {
+        "path": str(locked_ood_receipt_path),
+        "exists": locked_ood_receipt_exists,
+        "hash_matches": execution_checks["locked_ood_result_receipt_hash"],
+        "sha256": locked_ood_receipt_actual,
+    }
 
     repeated = _mapping(document.get("repeated_event_exhaustion"), "repeated_event_exhaustion")
     repeated_development = _mapping(

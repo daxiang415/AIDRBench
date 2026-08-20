@@ -95,6 +95,21 @@ def test_nature_protocol_fails_execution_on_infrastructure_receipt_mismatch(
     assert report["execution_checks"]["infrastructure_result_receipt_hash"] is False
 
 
+def test_nature_protocol_fails_execution_on_locked_ood_receipt_mismatch(
+    tmp_path: Path,
+) -> None:
+    document = yaml.safe_load(PROTOCOL.read_text(encoding="utf-8"))
+    document["uncertainty"]["locked_ood_result_receipt"]["sha256"] = "0" * 64
+    candidate = tmp_path / "protocol.yaml"
+    candidate.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
+
+    report = validate_nature_mainline_protocol(candidate)
+
+    assert report["structure_valid"] is True
+    assert report["execution_ready"] is False
+    assert report["execution_checks"]["locked_ood_result_receipt_hash"] is False
+
+
 def test_nature_protocol_fails_execution_on_exhaustion_hash_mismatch(
     tmp_path: Path,
 ) -> None:
