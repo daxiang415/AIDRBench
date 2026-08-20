@@ -223,7 +223,7 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 4. 将 locked-OOD 作为外推边界，而非替代 locked-ID；
 5. 明确四卡 measurement anchor、fluid/preemptible workload 和 1 h resolution 的局限。
 
-**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过。H={4,8} 的 1,800 个 one-factor-at-a-time success-criteria PI programs 也已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。
+**当前证据**：三种功率 case 的 development PI sensitivity 已完成；绝对 kW 随功率斜率上升，但相对 operating peak 的容量比例下降。Sparse workload schema 的 27 个 no-DR gate evaluations 全部通过，配对 PI 管线已实现并通过真实配置 smoke test，但完整 workload frontiers 尚未运行。H={4,8} 的 1,800 个 one-factor-at-a-time success-criteria PI programs 已完成；delivery threshold 改变容量，而 deadline、rebound 和 window-relief 阈值没有改变这两个 development 容量点。
 
 **仍缺**：完整 sparse workload sensitivity frontiers、validation causal selection、locked-ID 和 locked-OOD。该 Result 在这些证据完成前只能保留部分 development 结论，不能写成独立泛化结论。
 
@@ -617,6 +617,7 @@ Supplementary 应列出：
 | repeated-event exhaustion | development 已完成 | fixed-capacity mechanism diagnostic |
 | 2 × 2 × 2 hosting | development 已完成 | planning bounds and paired development contrasts |
 | sparse sensitivity service gate | 已完成 | 27/27 no-DR evaluations feasible，baseline miss/backlog 均为 0 |
+| sparse workload PI pipeline | 已实现、待完整运行 | 真实配置 smoke 18/18 optimal；尚无可报告的 workload effect |
 | success-criteria PI sensitivity | 已完成 | 1,800/1,800 optimal；H={4,8} 仅 delivery threshold 改变容量 |
 | validation causal selection | 尚未完成 | `[Evidence needed]` |
 | locked-ID | 未打开 | 不能声称 causal certificate |
@@ -640,7 +641,7 @@ Supplementary 应列出：
 
 ## 17. 后续执行顺序
 
-1. 完成 success-criterion 与 sparse workload sensitivities，并通过 no-DR service feasibility gate；
+1. 运行并汇总已通过 no-DR service gate 的 sparse workload PI sensitivity；
 2. 冻结 protocol 的 `analysis_plan_status`、图表 schema 和主统计量；
 3. 生成/核对 validation scenarios，在 validation 上冻结 robust-MPC capacity candidates；
 4. 在任何 locked read 前完成结果表模板、失败分类和 source-data schema；

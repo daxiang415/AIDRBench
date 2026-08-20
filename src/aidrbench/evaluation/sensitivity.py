@@ -141,20 +141,26 @@ def apply_sensitivity_case(
     document = copy.deepcopy(dict(base_document))
     workload = document.get("workload")
     virtual_dc = document.get("virtual_datacenter")
-    dr = document.get("dr")
     if not isinstance(workload, dict) or not isinstance(virtual_dc, dict):
         raise ValueError("sensitivity base config lacks workload/virtual_datacenter mappings")
-    if not isinstance(dr, dict):
-        raise ValueError("sensitivity base config lacks a dr mapping")
     workload.pop("target_total_utilization", None)
     virtual_dc.pop("target_total_utilization", None)
     virtual_dc.pop("target_flexible_utilization", None)
     workload["flexible_arrival_utilization"] = case.flexible_arrival_utilization
     workload["deadline_slack_scale"] = case.deadline_slack_scale
     virtual_dc["rigid_gpu_utilization"] = case.rigid_gpu_utilization
-    # The gate evaluates ordinary service without requesting demand response.
-    dr["event_reduction_kw"] = 0.0
     return document
+
+
+def _disable_demand_response(document: Mapping[str, Any]) -> dict[str, Any]:
+    """Return a copy configured for the mandatory ordinary-service gate."""
+
+    result = copy.deepcopy(dict(document))
+    dr = result.get("dr")
+    if not isinstance(dr, dict):
+        raise ValueError("sensitivity base config lacks a dr mapping")
+    dr["event_reduction_kw"] = 0.0
+    return result
 
 
 def check_sparse_sensitivity_no_dr_feasibility(
@@ -173,7 +179,9 @@ def check_sparse_sensitivity_no_dr_feasibility(
         raise ValueError("sensitivity base config must be a mapping")
     rows: list[dict[str, Any]] = []
     for case in spec.cases:
-        document = apply_sensitivity_case(base_document, case)
+        document = _disable_demand_response(
+            apply_sensitivity_case(base_document, case)
+        )
         for seed in seeds:
             env = HourlyCommunityAIDemandResponseEnv(document)
             env.reset(seed=seed)

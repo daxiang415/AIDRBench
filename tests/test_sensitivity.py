@@ -42,6 +42,7 @@ def test_split_utilization_and_deadline_scale_are_independently_parsed() -> None
     assert config.rigid_gpu_utilization == 0.30
     assert config.deadline_slack_scale == 0.80
     assert config.make_power_model().rigid_gpu_utilization == 0.30
+    assert "event_reduction_kw" not in document["dr"]
 
 
 def test_sparse_sensitivity_requires_no_dr_service_gate(tmp_path: Path) -> None:

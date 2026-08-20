@@ -716,6 +716,10 @@ operating peak 的 5%，不得根据结果调整。
 
 Sparse workload schema 的 no-DR service gate 已在 9 个 cases × 3 个 seeds 上
 完成，27/27 baseline evaluations 均为零 deadline miss 和零 terminal backlog。
+配对的 sparse-workload PI 管线也已实现并通过真实配置 smoke test；它会在
+9 个 cases 共用的 100 个 development seeds 上验证 community、event 和随机流
+配对，再计算 H={4,8}、q=0.95 的边界。完整 1,800-program run 尚未执行，
+因此此处不预写 workload sensitivity 方向性结论。
 Success-criteria sensitivity 使用 one-factor-at-a-time 设计，而不是 3⁴ 笛卡尔
 积；100 个 frozen scenarios、H={4,8} 和 9 个 criteria cases 共形成 1,800 个
 `optimal` PI solves。
@@ -1040,7 +1044,8 @@ solver and tolerances
 - locked OOD communities。
 
 当前状态：power-case PI 与 success-criteria PI sensitivity 已完成；sparse
-workload frontiers 和 locked-OOD 仍未运行。
+workload PI 管线已实现并通过真实配置 smoke test，但完整 frontiers 与
+locked-OOD 仍未运行。
 
 ### Phase 6 — 独立因果容量认证
 

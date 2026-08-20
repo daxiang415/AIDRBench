@@ -264,6 +264,28 @@ it is not a causal or locked certificate. A clean-tree repeat at commit
 `9924ea8` reproduced every capacity/status value and the boundary artifact
 byte-for-byte; raw frontier bytes differ only in solver timing columns.
 
+The paired sparse-workload PI pipeline is implemented separately from the
+success-definition analysis. It freezes the same 100 development seeds for
+all nine workload cases, verifies the paired community/event/random-stream
+hashes, and then evaluates H={4,8} at q=0.95. The service-gate and scenario
+specification hashes are checked fail closed:
+
+```bash
+python -m aidrbench scenario freeze-sensitivities \
+  --specification configs/sensitivity/nature_workload_pi_v1.yaml \
+  --output results/nature_mainline/development_workload_scenarios_v1
+
+python -m aidrbench optimize workload-sensitivity \
+  --scenarios results/nature_mainline/development_workload_scenarios_v1 \
+  --specification configs/sensitivity/nature_workload_pi_v1.yaml \
+  --workers 16 \
+  --output results/nature_mainline/development_workload_sensitivity_v1
+```
+
+The implementation and a real-configuration 18-program smoke test are
+complete. The full 1,800-program development run remains pending, so no
+workload-sensitivity effect is claimed yet.
+
 Model A is frozen at Git commit `d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9`.
 The separate repeated-event layer references that commit and the exact SHA-256
 of the completed N=0 development capacity table. The complete 100-scenario
