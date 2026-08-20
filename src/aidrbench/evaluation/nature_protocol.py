@@ -648,6 +648,7 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         and workload_design.get("confidence_level") == 0.95
         and workload_design.get("require_no_dr_service_feasibility") is True
         and infrastructure_design.get("design") == "sparse_oat_pi"
+        and infrastructure_design.get("status") == "completed_development"
         and infrastructure_design.get("dimensions") == ["pue", "node_overhead"]
         and infrastructure_design.get("case_count") == 5
         and infrastructure_design.get("gpu_calibration_power_case") == "nominal"
@@ -698,6 +699,29 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         }
     execution_checks["sensitivity_specification_hashes"] = specification_hashes_valid
     details["sensitivity_specifications"] = specification_details
+    infrastructure_receipt = _mapping(
+        infrastructure_design.get("result_receipt"),
+        "sensitivity_design.infrastructure.result_receipt",
+    )
+    infrastructure_receipt_path = Path(str(infrastructure_receipt.get("path", "")))
+    infrastructure_receipt_expected = str(infrastructure_receipt.get("sha256", ""))
+    infrastructure_receipt_exists = infrastructure_receipt_path.is_file()
+    infrastructure_receipt_actual = (
+        sha256_file(infrastructure_receipt_path)
+        if infrastructure_receipt_exists
+        else None
+    )
+    execution_checks["infrastructure_result_receipt_hash"] = (
+        infrastructure_receipt_exists
+        and len(infrastructure_receipt_expected) == 64
+        and infrastructure_receipt_actual == infrastructure_receipt_expected
+    )
+    details["infrastructure_result_receipt"] = {
+        "path": str(infrastructure_receipt_path),
+        "exists": infrastructure_receipt_exists,
+        "hash_matches": execution_checks["infrastructure_result_receipt_hash"],
+        "sha256": infrastructure_receipt_actual,
+    }
 
     uncertainty = _mapping(document.get("uncertainty"), "uncertainty")
     checks["uncertainty_scope_matches_model_a"] = (
@@ -705,8 +729,10 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         == ["lower_bound", "nominal", "upper_bound"]
         and uncertainty.get("workload_sensitivities")
         == _WORKLOAD_SENSITIVITY_DIMENSIONS
-        and uncertainty.get("infrastructure_sensitivities_planned_not_executed")
+        and uncertainty.get("infrastructure_sensitivities_completed_development")
         == ["pue", "node_overhead"]
+        and uncertainty.get("scenario_distribution_uncertainty_status")
+        == "locked_ood_not_run"
     )
 
     repeated = _mapping(document.get("repeated_event_exhaustion"), "repeated_event_exhaustion")

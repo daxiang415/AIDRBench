@@ -202,6 +202,7 @@ sensitivity_design:
     require_no_dr_service_feasibility: true
   infrastructure:
     design: sparse_oat_pi
+    status: completed_development
     case_specification:
       path: configs/sensitivity/nature_infrastructure_sparse_v1.yaml
       sha256: 8d9045357ecae08f5b3b723b5874f2dd97278cc6c42a0ba2a4ad373138690c7c
@@ -218,6 +219,9 @@ sensitivity_design:
     reliability_target: 0.95
     confidence_level: 0.95
     require_no_dr_service_feasibility: true
+    result_receipt:
+      path: data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml
+      sha256: 6c7eeb4cd15671f7bc23b629d6b2be2f2ac7df09618f565ee7b650b1320f86fc
 
 repeated_event_exhaustion:
   separate_from_primary_surface: true
@@ -264,7 +268,8 @@ uncertainty:
     - flexible_arrival_utilization
     - rigid_gpu_utilization
     - deadline_slack_scale
-  infrastructure_sensitivities_planned_not_executed: [pue, node_overhead]
+  infrastructure_sensitivities_completed_development: [pue, node_overhead]
+  scenario_distribution_uncertainty_status: locked_ood_not_run
 
 optional_control_extension:
   enabled_in_mainline: false

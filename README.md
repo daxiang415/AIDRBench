@@ -757,15 +757,21 @@ PUE 与 node fixed overhead 使用单独的 5 点 sparse OAT 设计，不与 GPU
 active/idle power uncertainty 做笛卡尔积：reference 为 PUE=1.20、overhead=
 300 W；另设 PUE=1.10/1.30 和 calibration artifact 中的 overhead=150/450 W。
 所有 case 固定 144 个节点和 nominal GPU 功率，只改变一个基础设施因素。
-正式执行规格已冻结在
-[`configs/sensitivity/nature_infrastructure_pi_v1.yaml`](configs/sensitivity/nature_infrastructure_pi_v1.yaml)：
-先对 seeds 10000–10002 做 no-DR gate，再冻结全部 100 个共同 development
-seeds，并在 H={4,8} 上求 q=0.95 PI boundary。该分析尚未执行，不能提前写入
-稳健性结论。
+正式分析已在干净提交 `f305224` 上完成：15/15 preliminary no-DR gate 与
+500/500 frozen-scenario service audit 均通过，1,000/1,000 H={4,8} PI programs
+均为 `optimal`。PUE=1.10/1.30 使绝对 firm capacity 相对 nominal 精确变化
+−8.33%/+8.33%，但 capacity/operating-peak 比例不变。node overhead=150/450 W
+不改变 baseline-relative firm kW，因为该固定加性项在 controlled 与 baseline
+之差中相消；不过 operating peak 相对 nominal 变化 −12.90%/+12.90%，所以会
+改变归一化 flexibility 与社区 headroom。该零效应只属于单事件相对削减指标，
+不能外推为 hosting capacity 不受影响。完整回执见
+[`data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml`](data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml)。
 
 ### 预期结论
 
-绝对 kW 和 hosting-capacity 数字存在区间，但名义高估、duration effect 和 compute-debt exhaustion 在合理参数范围内保持稳定。
+绝对 kW 与归一化比例对硬件和基础设施参数的响应不同；duration ordering 在
+当前 development sensitivity 中保持不变，但场景分布外推仍需单独的
+locked-OOD 检验。
 
 ### 对应主图
 
@@ -1078,8 +1084,8 @@ SHA-256 和完整 seeds 20000--20099。
 - deadline distribution；
 - locked OOD communities。
 
-当前状态：power-case PI、success-criteria PI sensitivity 与 sparse-workload
-PI frontiers 已完成。100 个 validation scenarios 已通过集合级 hash/service
+当前状态：power-case PI、success-criteria、sparse-workload 与 sparse
+infrastructure PI sensitivities 已完成。100 个 validation scenarios 已通过集合级 hash/service
 audit，并在提交 `5889405` 上完成 q={0.90,0.95,0.99} 的 frozen robust-MPC
 capacity selection。随后一次性生成并评估了 500 个 locked-ID episodes；授权已
 消费，500 个场景、2,000 个 payload 文件及 controller/source/git provenance
@@ -1117,7 +1123,8 @@ Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 - [x] development 与独立 validation compute-debt exhaustion 机制得到量化；
 - [x] development 2 × 2 × 2 hosting-capacity 分析完成；
 - [x] development PV/BESS 互补与替代区域得到识别；
-- [ ] 硬件和场景不确定性分析完成；
+- [x] 硬件校准、PUE、node overhead 与 workload development sensitivity 完成；
+- [ ] locked-OOD 场景分布外推完成；
 - [ ] 所有正式结果具有完整 provenance 和 hash；
 - [ ] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
 - [x] 控制器结果未被误写成文章的核心创新。

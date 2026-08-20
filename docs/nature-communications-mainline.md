@@ -439,10 +439,9 @@ surface. The machine-readable receipt is
 `data/manifests/nature_mainline_locked_id_results_v1.yaml`; locked OOD remains
 closed.
 
-The calibration lower/nominal/upper PI ensembles are complete. The remaining
-PUE and node-overhead uncertainty is preregistered as a five-point sparse OAT
-design, with nominal GPU power and a fixed 144-node facility in every case.
-It must be run from a clean committed tree in this order:
+The calibration lower/nominal/upper PI ensembles and the five-point PUE and
+node-overhead sparse OAT analysis are complete. The latter ran on clean commit
+`f305224` with nominal GPU power and a fixed 144-node facility in every case:
 
 ```bash
 python -m aidrbench scenario check-infrastructure-sensitivities \
@@ -461,9 +460,17 @@ python -m aidrbench optimize infrastructure-sensitivity \
   --output results/nature_mainline/development_infrastructure_sensitivity_v1
 ```
 
-The preliminary three-seed gate must pass before freezing, and every one of the
-500 frozen case-scenarios is then audited for no-DR service feasibility. No
-locked scenario is read by this development-only analysis.
+The preliminary 15-row gate and all 500 frozen case-scenarios passed no-DR
+service checks; all 1,000 H={4,8} PI programs were optimal. PUE=1.10/1.30
+scaled both absolute firm capacity and the operating peak by -8.33% and +8.33%,
+leaving their ratio invariant. Moving node overhead from 300 W to 150/450 W
+left baseline-relative firm kW unchanged but moved the operating peak by
+-12.90% and +12.90%. Thus additive node overhead affects normalization and PCC
+headroom even though it cancels from this single-event reduction metric. A
+second 32-worker replay reproduced all substantive frontier columns exactly
+and the firm-boundary artifact byte-for-byte. No locked scenario was read. The
+post-run receipt is
+`data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml`.
 
 ## Remaining mainline work
 
@@ -490,8 +497,9 @@ locked scenario is read by this development-only analysis.
    authorization is consumed and all pass/fail cells are retained; locked OOD
    remains pending and requires separate explicit authorization.**
 6. Complete infrastructure uncertainty without a Cartesian grid. **The
-   five-point PUE/node-overhead OAT design, service gate and paired PI execution
-   route are preregistered; the formal development run remains pending.**
+   five-point PUE/node-overhead OAT design completed on 100 paired development
+   seeds; service, hash, solver and replay audits passed. Scenario-distribution
+   uncertainty remains separate because locked OOD is still closed.**
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and
