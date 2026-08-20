@@ -383,6 +383,9 @@ def freeze_hourly_scenario(
             "sha256": power_model_fingerprint(env.power_model),
             "parameters": asdict(env.power_model),
             "calibration_power_case": env.config.calibration_power_case,
+            "node_fixed_overhead_power_case": (
+                env.config.node_fixed_overhead_power_case
+            ),
             "calibration_artifact_sha256": (
                 env.config.calibration_artifact.artifact_sha256
                 if env.config.calibration_artifact is not None

@@ -111,6 +111,16 @@ def test_hourly_config_consumes_calibration_artifact_and_rejects_missing_flexibl
     assert upper_case.idle_power_w_per_gpu == pytest.approx(90.0)
     assert upper_case.active_power_w_by_class["training"] == pytest.approx(470.0)
     assert upper_case.calibration_power_case == "upper_bound"
+    assert upper_case.node_fixed_overhead_power_case == "upper_bound"
+    assert upper_case.node_fixed_overhead_w == pytest.approx(340.0)
+
+    document["hardware"]["calibration_power_case"] = "nominal"
+    document["hardware"]["node_fixed_overhead_power_case"] = "lower_bound"
+    separated_node_case = load_hourly_environment_config(document)
+    assert separated_node_case.idle_power_w_per_gpu == pytest.approx(80.0)
+    assert separated_node_case.active_power_w_by_class["training"] == pytest.approx(450.0)
+    assert separated_node_case.node_fixed_overhead_power_case == "lower_bound"
+    assert separated_node_case.node_fixed_overhead_w == pytest.approx(260.0)
 
     _write_artifact(artifact_path, classes={"offline_inference": 350.0})
     with pytest.raises(ValueError, match="no active-power estimate"):
@@ -122,6 +132,10 @@ def test_hourly_config_requires_an_artifact_when_declared_formal() -> None:
     document["hardware"] = {"require_calibration_artifact": True}
 
     with pytest.raises(ValueError, match="requires calibration_artifact"):
+        load_hourly_environment_config(document)
+
+    document["hardware"] = {"node_fixed_overhead_power_case": "upper_bound"}
+    with pytest.raises(ValueError, match="node_fixed_overhead_power_case requires"):
         load_hourly_environment_config(document)
 
 

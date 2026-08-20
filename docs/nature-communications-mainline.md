@@ -439,19 +439,31 @@ surface. The machine-readable receipt is
 `data/manifests/nature_mainline_locked_id_results_v1.yaml`; locked OOD remains
 closed.
 
-For the hardware uncertainty smoke, write each power case to a separate
-directory:
+The calibration lower/nominal/upper PI ensembles are complete. The remaining
+PUE and node-overhead uncertainty is preregistered as a five-point sparse OAT
+design, with nominal GPU power and a fixed 144-node facility in every case.
+It must be run from a clean committed tree in this order:
 
 ```bash
-python -m aidrbench scenario freeze \
-  --config configs/env/nature_mainline_development.yaml \
-  --calibration-power-case lower_bound \
-  --seeds 10000 \
-  --output results/nature_mainline/development_lower_bound
+python -m aidrbench scenario check-infrastructure-sensitivities \
+  --specification configs/sensitivity/nature_infrastructure_sparse_v1.yaml \
+  --seeds 10000 10001 10002 \
+  --output results/nature_mainline/infrastructure_service_gate_v1
+
+python -m aidrbench scenario freeze-infrastructure-sensitivities \
+  --specification configs/sensitivity/nature_infrastructure_pi_v1.yaml \
+  --output results/nature_mainline/development_infrastructure_scenarios_v1
+
+python -m aidrbench optimize infrastructure-sensitivity \
+  --scenarios results/nature_mainline/development_infrastructure_scenarios_v1 \
+  --specification configs/sensitivity/nature_infrastructure_pi_v1.yaml \
+  --workers 32 \
+  --output results/nature_mainline/development_infrastructure_sensitivity_v1
 ```
 
-Use `nominal` and `upper_bound` analogously. Do not generate locked scenarios
-until the experiment design and result schemas are frozen.
+The preliminary three-seed gate must pass before freezing, and every one of the
+500 frozen case-scenarios is then audited for no-DR service feasibility. No
+locked scenario is read by this development-only analysis.
 
 ## Remaining mainline work
 
@@ -477,6 +489,9 @@ until the experiment design and result schemas are frozen.
    and the one-time 500-episode locked-ID replay are complete. The locked-ID
    authorization is consumed and all pass/fail cells are retained; locked OOD
    remains pending and requires separate explicit authorization.**
+6. Complete infrastructure uncertainty without a Cartesian grid. **The
+   five-point PUE/node-overhead OAT design, service gate and paired PI execution
+   route are preregistered; the formal development run remains pending.**
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and

@@ -302,12 +302,25 @@ def _add_scenario_parsers(subparsers: Any) -> None:
     sensitivity_check.add_argument("--specification", required=True)
     sensitivity_check.add_argument("--seeds", nargs="+", type=int, required=True)
     sensitivity_check.add_argument("--output", required=True)
+    infrastructure_check = commands.add_parser(
+        "check-infrastructure-sensitivities",
+        help="gate sparse PUE/node-overhead cases on no-DR service feasibility",
+    )
+    infrastructure_check.add_argument("--specification", required=True)
+    infrastructure_check.add_argument("--seeds", nargs="+", type=int, required=True)
+    infrastructure_check.add_argument("--output", required=True)
     freeze_sensitivities = commands.add_parser(
         "freeze-sensitivities",
         help="freeze paired development scenarios for a sparse workload design",
     )
     freeze_sensitivities.add_argument("--specification", required=True)
     freeze_sensitivities.add_argument("--output", required=True)
+    freeze_infrastructure = commands.add_parser(
+        "freeze-infrastructure-sensitivities",
+        help="freeze paired development scenarios for sparse infrastructure cases",
+    )
+    freeze_infrastructure.add_argument("--specification", required=True)
+    freeze_infrastructure.add_argument("--output", required=True)
 
 
 def _add_optimization_parsers(subparsers: Any) -> None:
@@ -358,6 +371,19 @@ def _add_optimization_parsers(subparsers: Any) -> None:
         help="independent frozen scenarios to solve concurrently (default: 1)",
     )
     workload_sensitivity.add_argument("--output", required=True)
+    infrastructure_sensitivity = commands.add_parser(
+        "infrastructure-sensitivity",
+        help="solve predeclared sparse PUE/node-overhead PI sensitivity",
+    )
+    infrastructure_sensitivity.add_argument("--scenarios", required=True)
+    infrastructure_sensitivity.add_argument("--specification", required=True)
+    infrastructure_sensitivity.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to solve concurrently (default: 1)",
+    )
+    infrastructure_sensitivity.add_argument("--output", required=True)
     non_anticipative = commands.add_parser(
         "non-anticipative-firm",
         help="compute a restricted finite-scenario causal non-anticipative bound",
@@ -1259,12 +1285,35 @@ def _run_scenario(args: argparse.Namespace) -> int:
         )
         _print_summary(summary)
         return 0
+    if args.scenario_command == "check-infrastructure-sensitivities":
+        from aidrbench.evaluation.infrastructure_sensitivity import (
+            check_infrastructure_no_dr_feasibility,
+        )
+
+        summary = check_infrastructure_no_dr_feasibility(
+            args.specification,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
     if args.scenario_command == "freeze-sensitivities":
         from aidrbench.evaluation.workload_sensitivity import (
             freeze_workload_sensitivity_scenarios,
         )
 
         summary = freeze_workload_sensitivity_scenarios(
+            args.specification,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.scenario_command == "freeze-infrastructure-sensitivities":
+        from aidrbench.evaluation.infrastructure_sensitivity import (
+            freeze_infrastructure_sensitivity_scenarios,
+        )
+
+        summary = freeze_infrastructure_sensitivity_scenarios(
             args.specification,
             output_directory=args.output,
         )
@@ -1308,6 +1357,19 @@ def _run_optimization(args: argparse.Namespace) -> int:
         )
 
         summary = compute_and_save_workload_sensitivity(
+            args.scenarios,
+            specification=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "infrastructure-sensitivity":
+        from aidrbench.evaluation.infrastructure_sensitivity import (
+            compute_and_save_infrastructure_sensitivity,
+        )
+
+        summary = compute_and_save_infrastructure_sensitivity(
             args.scenarios,
             specification=args.specification,
             output_directory=args.output,

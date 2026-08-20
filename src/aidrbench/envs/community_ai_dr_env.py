@@ -263,12 +263,16 @@ class HourlyCommunityAIDemandResponseEnv(gym.Env[np.ndarray, np.ndarray | int]):
                 "calibration_artifact_id": "",
                 "calibration_artifact_sha256": "",
                 "calibration_power_case": "fallback_parameters",
+                "node_fixed_overhead_power_case": "fallback_parameters",
                 "hardware_evidence_class": "fallback_parameters",
             }
         return {
             "calibration_artifact_id": artifact.artifact_id,
             "calibration_artifact_sha256": artifact.artifact_sha256,
             "calibration_power_case": self.config.calibration_power_case,
+            "node_fixed_overhead_power_case": (
+                self.config.node_fixed_overhead_power_case
+            ),
             "hardware_evidence_class": artifact.evidence_class.value,
         }
 

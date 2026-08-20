@@ -1,0 +1,20 @@
+schema_version: 1
+design: sparse_oat
+base_config: configs/env/nature_mainline_development.yaml
+require_no_dr_service_feasibility: true
+cases:
+  - name: reference
+    pue: 1.20
+    node_fixed_overhead_power_case: nominal
+  - name: pue_low
+    pue: 1.10
+    node_fixed_overhead_power_case: nominal
+  - name: pue_high
+    pue: 1.30
+    node_fixed_overhead_power_case: nominal
+  - name: node_overhead_lower
+    pue: 1.20
+    node_fixed_overhead_power_case: lower_bound
+  - name: node_overhead_upper
+    pue: 1.20
+    node_fixed_overhead_power_case: upper_bound

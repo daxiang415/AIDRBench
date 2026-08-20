@@ -1,0 +1,10 @@
+schema_version: 1
+design: sparse_oat_pi
+case_specification: configs/sensitivity/nature_infrastructure_sparse_v1.yaml
+service_gate_manifest: results/nature_mainline/infrastructure_service_gate_v1/no_dr_service_feasibility.json
+service_gate_seed_range: [10000, 10002]
+development_seed_range: [10000, 10099]
+durations_h: [4, 8]
+reliability_target: 0.95
+confidence_level: 0.95
+nominal_flexibility_fraction: 0.50

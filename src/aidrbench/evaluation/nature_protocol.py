@@ -626,6 +626,10 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
     workload_design = _mapping(
         sensitivity_design.get("workload"), "sensitivity_design.workload"
     )
+    infrastructure_design = _mapping(
+        sensitivity_design.get("infrastructure"),
+        "sensitivity_design.infrastructure",
+    )
     checks["sensitivity_design_frozen"] = (
         sensitivity_design.get("evidence_scope") == "development_only"
         and sensitivity_design.get("locked_sets_used") is False
@@ -643,6 +647,17 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         and workload_design.get("reliability_target") == 0.95
         and workload_design.get("confidence_level") == 0.95
         and workload_design.get("require_no_dr_service_feasibility") is True
+        and infrastructure_design.get("design") == "sparse_oat_pi"
+        and infrastructure_design.get("dimensions") == ["pue", "node_overhead"]
+        and infrastructure_design.get("case_count") == 5
+        and infrastructure_design.get("gpu_calibration_power_case") == "nominal"
+        and infrastructure_design.get("node_count_policy") == "fixed"
+        and infrastructure_design.get("service_gate_seed_range") == [10000, 10002]
+        and infrastructure_design.get("development_seed_range") == [10000, 10099]
+        and infrastructure_design.get("durations_h") == [4, 8]
+        and infrastructure_design.get("reliability_target") == 0.95
+        and infrastructure_design.get("confidence_level") == 0.95
+        and infrastructure_design.get("require_no_dr_service_feasibility") is True
     )
     specification_entries = {
         "success_criteria": _mapping(
@@ -656,6 +671,14 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         "workload_execution": _mapping(
             workload_design.get("execution_specification"),
             "sensitivity_design.workload.execution_specification",
+        ),
+        "infrastructure_schema": _mapping(
+            infrastructure_design.get("case_specification"),
+            "sensitivity_design.infrastructure.case_specification",
+        ),
+        "infrastructure_execution": _mapping(
+            infrastructure_design.get("execution_specification"),
+            "sensitivity_design.infrastructure.execution_specification",
         ),
     }
     specification_details: dict[str, object] = {}

@@ -753,6 +753,16 @@ Success-criteria sensitivity 使用 one-factor-at-a-time 设计，而不是 3⁴
 容量的设置约束；结果不是 causal 或 locked certificate。精确数值和 SHA-256
 记录在 `data/manifests/nature_mainline_development_results_v1.yaml`。
 
+PUE 与 node fixed overhead 使用单独的 5 点 sparse OAT 设计，不与 GPU
+active/idle power uncertainty 做笛卡尔积：reference 为 PUE=1.20、overhead=
+300 W；另设 PUE=1.10/1.30 和 calibration artifact 中的 overhead=150/450 W。
+所有 case 固定 144 个节点和 nominal GPU 功率，只改变一个基础设施因素。
+正式执行规格已冻结在
+[`configs/sensitivity/nature_infrastructure_pi_v1.yaml`](configs/sensitivity/nature_infrastructure_pi_v1.yaml)：
+先对 seeds 10000–10002 做 no-DR gate，再冻结全部 100 个共同 development
+seeds，并在 H={4,8} 上求 q=0.95 PI boundary。该分析尚未执行，不能提前写入
+稳健性结论。
+
 ### 预期结论
 
 绝对 kW 和 hosting-capacity 数字存在区间，但名义高估、duration effect 和 compute-debt exhaustion 在合理参数范围内保持稳定。

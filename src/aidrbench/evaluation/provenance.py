@@ -72,6 +72,9 @@ def optimization_provenance(
                 "calibration_power_case": artifact.metadata["power_model"].get(
                     "calibration_power_case", "unknown_legacy_artifact"
                 ),
+                "node_fixed_overhead_power_case": artifact.metadata["power_model"].get(
+                    "node_fixed_overhead_power_case", "unknown_legacy_artifact"
+                ),
                 "calibration_artifact_sha256": artifact.metadata["power_model"].get(
                     "calibration_artifact_sha256"
                 ),

@@ -200,6 +200,7 @@ class HourlyEnvironmentConfig:
     node_fixed_overhead_w: float
     calibration_artifact: HardwareCalibrationArtifact | None
     calibration_power_case: Literal["lower_bound", "nominal", "upper_bound"]
+    node_fixed_overhead_power_case: Literal["lower_bound", "nominal", "upper_bound"]
     pue: float
     dr_source: Literal["configured", "manifest"]
     dr_manifest_path: Path | None
@@ -359,6 +360,7 @@ def load_hourly_environment_config(
         "active_power_w_per_gpu_by_class",
         "calibration_artifact",
         "calibration_power_case",
+        "node_fixed_overhead_power_case",
         "fallback_idle_power_w_per_gpu",
         "fallback_node_overhead_w",
         "require_calibration_artifact",
@@ -393,6 +395,22 @@ def load_hourly_environment_config(
         raise ValueError(
             "hardware.calibration_power_case must be 'lower_bound', 'nominal', or 'upper_bound'"
         )
+    raw_node_overhead_power_case = str(
+        hardware.get("node_fixed_overhead_power_case", calibration_power_case)
+    ).strip()
+    node_fixed_overhead_power_case = {
+        "lower_ci": "lower_bound",
+        "upper_ci": "upper_bound",
+    }.get(raw_node_overhead_power_case, raw_node_overhead_power_case)
+    if node_fixed_overhead_power_case not in {
+        "lower_bound",
+        "nominal",
+        "upper_bound",
+    }:
+        raise ValueError(
+            "hardware.node_fixed_overhead_power_case must be "
+            "'lower_bound', 'nominal', or 'upper_bound'"
+        )
     if raw_calibration_artifact is None:
         calibration_artifact = None
         if require_calibration_artifact:
@@ -403,6 +421,10 @@ def load_hourly_environment_config(
         raise ValueError("hardware.calibration_artifact must be a non-empty path when supplied")
     if calibration_artifact is None and calibration_power_case != "nominal":
         raise ValueError("hardware.calibration_power_case requires calibration_artifact")
+    if calibration_artifact is None and node_fixed_overhead_power_case != "nominal":
+        raise ValueError(
+            "hardware.node_fixed_overhead_power_case requires calibration_artifact"
+        )
     fallback_hardware_keys = {
         "active_power_w_per_gpu_by_class",
         "fallback_idle_power_w_per_gpu",
@@ -419,7 +441,6 @@ def load_hourly_environment_config(
         if calibration_power_case == "nominal":
             power_by_class = calibration_artifact.active_power_by_class
             idle_power_w_per_gpu = calibration_artifact.idle_power_w_per_gpu
-            node_fixed_overhead_w = calibration_artifact.node_fixed_overhead_w
         else:
             interval_index = 0 if calibration_power_case == "lower_bound" else 1
             power_by_class = {
@@ -429,8 +450,14 @@ def load_hourly_environment_config(
             idle_power_w_per_gpu = calibration_artifact.idle_power_uncertainty_interval_w[
                 interval_index
             ]
+        if node_fixed_overhead_power_case == "nominal":
+            node_fixed_overhead_w = calibration_artifact.node_fixed_overhead_w
+        else:
+            node_interval_index = (
+                0 if node_fixed_overhead_power_case == "lower_bound" else 1
+            )
             node_fixed_overhead_w = calibration_artifact.node_fixed_overhead_uncertainty_interval_w[
-                interval_index
+                node_interval_index
             ]
     else:
         power_by_class = _mapping(
@@ -779,6 +806,10 @@ def load_hourly_environment_config(
         calibration_artifact=calibration_artifact,
         calibration_power_case=cast(
             Literal["lower_bound", "nominal", "upper_bound"], calibration_power_case
+        ),
+        node_fixed_overhead_power_case=cast(
+            Literal["lower_bound", "nominal", "upper_bound"],
+            node_fixed_overhead_power_case,
         ),
         pue=_positive_float(virtual_dc.get("pue", 1.20), "virtual_datacenter.pue"),
         dr_source=cast(Literal["configured", "manifest"], configured_dr_source),
