@@ -42,6 +42,24 @@ IDs, physical size, backend, minimum configured font size, scientific conclusion
 and output hashes. SVG and PDF are editable vector outputs; TIFF is exported at 600 dpi and PNG is
 provided for rapid review.
 
+The production renderer uses a reference-led Nature Communications visual contract rather than an
+equal-sized dashboard grid:
+
+- Figure 1 is a schematic-led composite in which the nominal-to-job-derived mechanism is the hero
+  panel and the quantitative gap, hardware anchor, and evidence hierarchy are subordinate;
+- Figure 2 gives most of the page width to the duration-dependent capacity layers, while reliability
+  and notice diagnostics remain compact supporting panels;
+- Figure 3 makes compute-debt accumulation the dominant mechanism and pairs the development and
+  validation service heatmaps below it;
+- Figure 4 uses a validation hosting-capacity dumbbell as the hero panel and keeps replication and
+  AI–DER interaction contrasts as supporting evidence;
+- Figure 5 places the locked-ID versus locked-OOD generalization boundary across the full lower row,
+  above compact predeclared sensitivity summaries.
+
+The shared visual system uses low-saturation colours, direct labels, short panel headings, asymmetric
+panel areas, and explicit white space. It deliberately avoids decorative cards, repeated long titles,
+redundant legends, and duplicate panels that do not add a distinct claim.
+
 ## 3. Clean provenance workflow
 
 Final manuscript artifacts should be generated from a committed, clean tree:

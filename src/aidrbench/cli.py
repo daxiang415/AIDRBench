@@ -1914,7 +1914,9 @@ def _run_paper(args: argparse.Namespace) -> int:
         _print_summary(summary)
         return 0
     if args.paper_command == "figures":
-        from aidrbench.evaluation.nature_figures import plot_nature_mainline_figures
+        from aidrbench.evaluation.nature_figures_reference import (
+            plot_nature_mainline_figures,
+        )
 
         summary = plot_nature_mainline_figures(
             args.source_data,

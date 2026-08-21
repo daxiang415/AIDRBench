@@ -7,7 +7,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from aidrbench.evaluation.nature_figures import (
+from aidrbench.evaluation.nature_figures_reference import (
     plot_nature_mainline_figure2,
     plot_nature_mainline_figures,
 )
@@ -369,15 +369,15 @@ def test_plot_all_nature_mainline_figures_write_editable_svg(tmp_path: Path) -> 
         tmp_path / "figures_replay",
         formats=("svg",),
     )
-    assert Path(str(summary["manifest"])).read_bytes() == Path(
-        str(replay_summary["manifest"])
-    ).read_bytes()
-    for record, replay_record in zip(
-        summary["figures"], replay_summary["figures"], strict=True
-    ):
-        assert Path(str(record["manifest"])).read_bytes() == Path(
-            str(replay_record["manifest"])
-        ).read_bytes()
+    assert (
+        Path(str(summary["manifest"])).read_bytes()
+        == Path(str(replay_summary["manifest"])).read_bytes()
+    )
+    for record, replay_record in zip(summary["figures"], replay_summary["figures"], strict=True):
+        assert (
+            Path(str(record["manifest"])).read_bytes()
+            == Path(str(replay_record["manifest"])).read_bytes()
+        )
 
 
 def test_plot_nature_mainline_figure2_rejects_source_hash_mismatch(
@@ -418,14 +418,8 @@ def test_plot_nature_mainline_figure2_writes_all_submission_formats(
         tmp_path / "figures_replay",
         formats=("svg", "pdf", "tiff", "png"),
     )
-    replay_outputs = {
-        str(item["format"]): Path(str(item["path"])) for item in replay["outputs"]
-    }
-    assert {
-        extension: _sha256(path) for extension, path in outputs.items()
-    } == {
+    replay_outputs = {str(item["format"]): Path(str(item["path"])) for item in replay["outputs"]}
+    assert {extension: _sha256(path) for extension, path in outputs.items()} == {
         extension: _sha256(path) for extension, path in replay_outputs.items()
     }
-    assert Path(str(result["manifest"])).read_bytes() == Path(
-        str(replay["manifest"])
-    ).read_bytes()
+    assert Path(str(result["manifest"])).read_bytes() == Path(str(replay["manifest"])).read_bytes()
