@@ -145,10 +145,16 @@ def _publication_style() -> None:
     )
 
 
-def _panel_label(axis: Axes, label: str) -> None:
+def _panel_label(
+    axis: Axes,
+    label: str,
+    *,
+    x: float = -0.12,
+    y: float = 1.06,
+) -> None:
     axis.text(
-        -0.12,
-        1.06,
+        x,
+        y,
         label,
         transform=axis.transAxes,
         fontsize=9,
@@ -818,7 +824,7 @@ def plot_nature_mainline_figure3(
     ax_b.set_ylabel("Residual flexibility ratio")
     ax_b.set_title("Power delivery remains near the fresh-event counterfactual", loc="left")
     ax_b.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
-    _panel_label(ax_b, "b")
+    _panel_label(ax_b, "b", x=-0.18)
 
     _exhaustion_heatmap(ax_c, joint, "development", "Development joint-episode success")
     _panel_label(ax_c, "c")
@@ -1087,22 +1093,22 @@ def plot_nature_mainline_figure4(
 def _case_label(value: str) -> str:
     replacements = {
         "reference": "Reference",
-        "flexible_arrival_low": "Flexible arrivals low",
-        "flexible_arrival_high": "Flexible arrivals high",
-        "rigid_utilization_low": "Rigid utilization low",
-        "rigid_utilization_high": "Rigid utilization high",
+        "flexible_arrival_low": "Arrival low",
+        "flexible_arrival_high": "Arrival high",
+        "rigid_utilization_low": "Rigid util. low",
+        "rigid_utilization_high": "Rigid util. high",
         "deadline_tight": "Deadline tight",
         "deadline_loose": "Deadline loose",
-        "high_arrival_tight_deadline": "High arrival + tight deadline",
-        "low_arrival_loose_deadline": "Low arrival + loose deadline",
-        "delivery_090": "Delivery threshold 0.90",
-        "delivery_098": "Delivery threshold 0.98",
-        "deadline_000": "Deadline miss 0.00",
-        "deadline_002": "Deadline miss 0.02",
-        "rebound_010": "Rebound limit 0.10",
-        "rebound_050": "Rebound limit 0.50",
-        "window_relief_025": "Window relief 0.25",
-        "window_relief_075": "Window relief 0.75",
+        "high_arrival_tight_deadline": "High arrival + tight DL",
+        "low_arrival_loose_deadline": "Low arrival + loose DL",
+        "delivery_090": "Delivery 0.90",
+        "delivery_098": "Delivery 0.98",
+        "deadline_000": "Miss 0.00",
+        "deadline_002": "Miss 0.02",
+        "rebound_010": "Rebound 0.10",
+        "rebound_050": "Rebound 0.50",
+        "window_relief_025": "Relief 0.25",
+        "window_relief_075": "Relief 0.75",
         "pue_low": "PUE 1.10",
         "pue_high": "PUE 1.30",
         "node_overhead_lower": "Node overhead 150 W",
@@ -1194,7 +1200,7 @@ def plot_nature_mainline_figure5(
     ax_a.set_xticks([1, 2, 3, 4, 6, 8])
     ax_a.set_xlabel("Event duration (h)")
     ax_a.set_ylabel("PI firm capacity (kW)")
-    ax_a.set_title("Hardware power uncertainty shifts absolute capacity", loc="left")
+    ax_a.set_title("Power uncertainty shifts capacity", loc="left")
     ax_a.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
     ax_a.legend(loc="upper right")
     _panel_label(ax_a, "a")
@@ -1204,7 +1210,7 @@ def plot_nature_mainline_figure5(
         workload,
         case_column="workload_case",
         value_column="firm_capacity_delta_from_reference_kw",
-        title="Workload arrivals dominate tested job sensitivity",
+        title="Workload arrivals dominate sensitivity",
         xlabel="Capacity change from reference (kW)",
     )
     _panel_label(ax_b, "b")
@@ -1285,15 +1291,6 @@ def plot_nature_mainline_figure5(
     )
     ax_e.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
     ax_e.legend(ncol=3, loc="lower left")
-    ax_e.text(
-        0.98,
-        0.04,
-        "OOD protocol replays fixed candidates; it does not estimate OOD capacity.",
-        transform=ax_e.transAxes,
-        ha="right",
-        va="bottom",
-        color=_COLORS["neutral"],
-    )
     _panel_label(ax_e, "e")
     figure.subplots_adjust(
         left=0.11,
