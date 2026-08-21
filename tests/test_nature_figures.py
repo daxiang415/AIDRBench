@@ -397,3 +397,17 @@ def test_plot_nature_mainline_figure2_writes_all_submission_formats(
     assert set(outputs) == {"svg", "pdf", "tiff", "png"}
     assert all(path.stat().st_size > 10_000 for path in outputs.values())
     assert outputs["tiff"].stat().st_size < 10_000_000
+
+    replay = plot_nature_mainline_figure2(
+        source_data,
+        tmp_path / "figures_replay",
+        formats=("svg", "pdf", "tiff", "png"),
+    )
+    replay_outputs = {
+        str(item["format"]): Path(str(item["path"])) for item in replay["outputs"]
+    }
+    assert {
+        extension: _sha256(path) for extension, path in outputs.items()
+    } == {
+        extension: _sha256(path) for extension, path in replay_outputs.items()
+    }

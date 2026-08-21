@@ -141,6 +141,7 @@ def _publication_style() -> None:
             "pdf.fonttype": 42,
             "ps.fonttype": 42,
             "svg.fonttype": "none",
+            "svg.hashsalt": "aidrbench-nature-mainline-v1",
         }
     )
 
@@ -208,8 +209,22 @@ def _format_outputs(
     for extension in normalized:
         path = output_directory / f"{stem}.{extension}"
         dpi = 600 if extension == "tiff" else 300
-        if extension in {"svg", "pdf"}:
-            figure.savefig(path, dpi=dpi, metadata={"Creator": "AIDRBench"})
+        if extension == "svg":
+            figure.savefig(
+                path,
+                dpi=dpi,
+                metadata={"Creator": "AIDRBench", "Date": None},
+            )
+        elif extension == "pdf":
+            figure.savefig(
+                path,
+                dpi=dpi,
+                metadata={
+                    "Creator": "AIDRBench",
+                    "CreationDate": None,
+                    "ModDate": None,
+                },
+            )
         elif extension == "tiff":
             figure.savefig(
                 path,
