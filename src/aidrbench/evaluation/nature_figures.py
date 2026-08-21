@@ -38,7 +38,9 @@ _COLORS = {
     "grid": "#D9DDE0",
 }
 _ALLOWED_FORMATS = frozenset({"svg", "pdf", "tiff", "png"})
-_FIGURE_WIDTH_IN = 183.0 / 25.4
+_FIGURE_WIDTH_MM = 183.0
+_FIGURE_WIDTH_IN = _FIGURE_WIDTH_MM / 25.4
+# Export contract: figure.svg, figure.pdf, figure.tiff, and figure.png.
 _MIN_FONT_PT = 6.5
 
 
@@ -630,6 +632,8 @@ def plot_nature_mainline_figure2(
         color=_COLORS["flex"],
         label="Spare capacity",
     )
+    if np.any(eligible <= 0) or np.any(spare <= 0):
+        raise ValueError("notice-mechanism quantities must be strictly positive on a log axis")
     ax_d.set_xscale("log")
     ax_d.set_yticks(
         y_positions,
@@ -1249,7 +1253,7 @@ def plot_nature_mainline_figure5(
         color=_COLORS["neutral"],
         linestyle="--",
         linewidth=0.9,
-        label="q=0.95 target",
+        label="Target q=0.95",
     )
     id_flags = _bool_series(q95_id["certified"])
     ax_e.scatter(
