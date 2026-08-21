@@ -461,6 +461,27 @@ bound；NA ensemble optimization 单独报告为受限场景边界。
 - 区分 nominal、PI、restricted NA 和 fixed causal realization 四层容量；
 - 四 GPU 功率测量与 held-out validation 仅作为功率模型锚点，原始曲线进入 Supplementary。
 
+### 当前定量结果
+
+Model A 的 reference-mix operating peak 为 201.00 kW，因此预声明的 50%
+nominal proxy 为 100.50 kW。100 个 development frozen scenarios 上，q=0.95、
+95% confidence 的 exact-binomial PI lower-tolerance boundary 为：
+
+| Duration | Nominal / kW | PI firm bound / kW | Nominal overstatement / kW | Overstatement / nominal |
+|---:|---:|---:|---:|---:|
+| 1 h | 100.50 | 53.01 | 47.50 | 47.3% |
+| 2 h | 100.50 | 44.46 | 56.04 | 55.8% |
+| 3 h | 100.50 | 41.19 | 59.31 | 59.0% |
+| 4 h | 100.50 | 40.15 | 60.35 | 60.1% |
+| 6 h | 100.50 | 40.15 | 60.35 | 60.1% |
+| 8 h | 100.50 | 37.76 | 62.74 | 62.4% |
+
+因此 nominal proxy 在测试持续时间内高估 job-derived PI bound 的幅度为
+47.50--62.74 kW，即 nominal 的 47.3--62.4%。PI 是知道完整未来的物理规划
+上界，尚且只有 nominal 的 37.6--52.7%；这使“不能把可移负荷比例直接当作
+firm DR 容量”成为可量化结果，而不只是概念判断。完整输入与结果哈希见
+[`data/manifests/nature_mainline_nominal_gap_results_v1.yaml`](data/manifests/nature_mainline_nominal_gap_results_v1.yaml)。
+
 ### 预期结论
 
 名义柔性不能直接作为电网资源；deadline 与功率结构会产生显著的物理可行性差距。
@@ -645,6 +666,21 @@ certificate 或现实因果效应：
 两组 development 主实验的精确数值、输入/输出 SHA-256 和复跑状态统一记录在
 [`data/manifests/nature_mainline_development_results_v1.yaml`](data/manifests/nature_mainline_development_results_v1.yaml)；
 该文件是 post-run receipt，不会反向修改预注册协议。
+
+### 独立 validation 复现
+
+在不重新选择模型、portfolio 或统计规则的条件下，同一 2 × 2 × 2 分析已在
+100 个独立 validation scenarios（seeds 20000--20099）上完成，800/800 个
+优化均为 optimal，未读取 locked-ID/OOD。四个平均 paired AI hosting gains
+分别为 326.02、273.71、370.61 和 282.07 kW，其 Bonferroni 95%
+simultaneous intervals 均高于 0。AI–BESS 在两个 PV strata 中仍为 substitution。
+AI–PV 在无 BESS 时仍达到 practical complementarity；有 BESS 时估计为
++8.36 kW，区间 [1.05, 15.74] kW 虽保留正方向，却跨过预声明的 10.05 kW
+practical margin，因此必须标为实际幅度不确定，而不能宣称强互补。
+
+该 validation 分析复现的是 planning result，不是 causal hosting certificate。
+预注册测试、所有容量、区间和输出哈希见
+[`data/manifests/nature_mainline_validation_hosting_results_v1.yaml`](data/manifests/nature_mainline_validation_hosting_results_v1.yaml)。
 
 ### AI–DER 交互与预期结论
 
@@ -1036,6 +1072,10 @@ SHA-256 和完整 seeds 20000--20099。
 - DC/PV/BESS response surface；
 - complementarity/substitution analysis。
 
+Development 与独立 validation 的 100-scenario 配对矩阵均已完成。Validation
+沿用冻结的 Model A、portfolio、8 个 contrasts 和 10.05 kW practical margin，
+不读取 locked 数据，也不重新选择分析规则。
+
 ### Phase 5 — 稳健性和外推
 
 - 硬件 lower/nominal/upper uncertainty bounds；
@@ -1091,11 +1131,11 @@ Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 - [x] 固定因果候选在独立 locked-ID 上完成一次性检验并保留全部通过/失败结果；
 - [x] duration–notice–reliability surface 完成评估（部分单元未通过认证门槛）；
 - [x] development 与独立 validation compute-debt exhaustion 机制得到量化；
-- [x] development 2 × 2 × 2 hosting-capacity 分析完成；
-- [x] development PV/BESS 互补与替代区域得到识别；
+- [x] development 与独立 validation 2 × 2 × 2 hosting-capacity 分析完成；
+- [x] AI–BESS 替代关系在 validation 复现；AI–PV 的条件性边界被保留；
 - [x] 硬件校准、PUE、node overhead 与 workload development sensitivity 完成；
 - [x] locked-OOD 场景分布外推完成，固定候选未保留目标可靠性；
-- [ ] 所有正式结果具有完整 provenance 和 hash；
+- [x] 所有主线数值结果具有结果回执、provenance 和 hash；
 - [x] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
 - [x] 控制器结果未被误写成文章的核心创新。
 

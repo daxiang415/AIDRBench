@@ -102,7 +102,8 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 5. 报告 repeated-event compute debt 和 2 × 2 × 2 hosting 的关键定量结果；
 6. 以“有限、状态依赖且需独立认证的电网资源”收束，并明确结果边界。
 
-`[Evidence needed: locked-ID causal capacities and final primary quantitative statistic before drafting the abstract.]`
+决定性数值证据现已齐备；Abstract 在五幅主图的 source-data 表冻结后再写最终
+英文，以保证所有数字、限定语和图中统计量一致。
 
 ## 6. Introduction 结构
 
@@ -146,11 +147,15 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 - 功率 artifact 已锁定 training 和 offline-inference 的类别功率，并带 SHA-256；
 - 100 个 development scenarios 的 class-aware PI frontier 已完成；
 - PI 紧凑累计模型与旧 job-edge 模型在 18 个诊断点完全一致，最大绝对差为 0.0 kW。
+- reference-mix peak 为 201.00 kW，50% nominal proxy 为 100.50 kW；q=0.95
+  PI lower-tolerance bound 从 H=1 的 53.01 kW 降至 H=8 的 37.76 kW；
+- nominal overstatement 为 47.50--62.74 kW，即 nominal proxy 的
+  47.3--62.4%。完整回执见
+  `data/manifests/nature_mainline_nominal_gap_results_v1.yaml`。
 
-**仍缺**：
+**仍需整理而非新增实验**：
 
-- 对 nominal–PI physical gap 的最终主图和预声明统计汇总；
-- locked 之前对硬件假设范围、PUE 和 workload mix 的 sensitivity；
+- nominal–PI physical gap 的主图和 source-data 导出；
 - 文献定位与外部效度边界。
 
 **Figure 1**：以 nominal–job-derived 定量差距为中心，辅以系统概念图、作业约束到功率的映射和四层容量定义。四卡原始功率曲线全部移至 Supplementary。
@@ -169,12 +174,10 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 
 **当前证据**：development q=0.95 的 restricted NA surface 已完成，0、2、6 h notice 在所有 duration 上相同；H=4 和 H=8 的 notice diagnostics 也显示 PI/NA notice gain 为 0。固定容量 robust MPC 在这两个诊断点的 development 成功率均为 0.92，interval delivery 为约束项。
 
-**仍缺**：
-
-- validation 上冻结 causal capacity；
-- locked-ID 上一次性认证；
-- 500 个 locked-ID episodes 才能支持预声明 q=0.99 设计；
-- success-criterion sensitivities。
+**证据状态**：validation frozen selection、500 个 locked-ID episodes、q=0.99
+secondary design 和 success-criterion sensitivities 均已完成。当前只需将完整
+surface、H=1 non-certification 和零 notice gain 的机制边界整理进主图/SI，
+不再新增或重选实验。
 
 **Figure 2**：duration–notice–reliability surface、四层容量曲线、gap decomposition 和 notice-mechanism inset。
 
@@ -190,9 +193,13 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 4. 展示 compute debt 先于瞬时交付能力恶化；
 5. 说明只有 gap 内存在 spare compute headroom 时，时间才可偿还债务。
 
-**当前证据**：100 个 development scenarios、1,000 个联合程序和 4,000 个事件结果已完成。第 4 次事件的平均配对 compute-debt increment 为 0.58–1.37 MWh，而 p05 residual flexibility ratio 仍为 0.9897–1.0000；joint success 为 0.00–0.94。H=8、gap=24 h 时联合服务 0/100 成功，但第 4 次事件的 p05 配对交付仍为 fresh event 的 98.97%。
-
-**仍缺**：validation exhaustion 和预声明 robustness；当前结果不能称为 repeated-event firm-capacity certificate。
+**当前证据**：development 和独立 validation 各 100 个 scenarios 的完整实验均
+已完成。Validation 固定沿用 development 容量，1,000 个联合程序和 4,000 个
+事件结果均通过哈希与复跑审计；第 4 次事件的平均配对 compute-debt increment
+为 0.55–1.38 MWh，residual flexibility ratio 仍为 0.9910–1.0000，joint
+success 为 0.00–0.97。只有 H=4、gap=8 h 的经验成功率达到 0.97，但其一侧
+95% Wilson 下界为 0.927，因此没有单元可称为 q=0.95 repeated-event firm
+capacity certificate。这是已完成实验的结论边界，不是尚待修复的失败。
 
 **Figure 3**：代表性轨迹、compute-debt growth、event-4 residual delivery、joint-success heatmap，以及 debt/headroom 与失败模式的关系。
 
@@ -206,11 +213,21 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 2. 报告 100 个 frozen scenarios 上的 simultaneous scenario-feasible capacity；
 3. 报告场景内 flexible–rigid paired effects 及 simultaneous intervals；
 4. 报告 AI–BESS substitution 和 AI–PV complementarity；
-5. 将结论限定为 Model A 下的 development planning bounds。
+5. 将 development 发现与独立 validation 复现都限定为 planning bounds。
 
-**当前证据**：800 个 portfolio optimizations 均完成。四种 DER 条件下，flexible capacity 均高于 rigid capacity；四个平均 paired AI gains 的 Bonferroni 95% simultaneous intervals 均高于 0。按预声明 10.05 kW equivalence margin，AI–BESS 在两个 PV strata 中为 substitution，AI–PV 在两个 BESS strata 中为 complementarity。
+**当前证据**：development 与 validation 各 800 个 portfolio optimizations 均
+完成。两个集合中，四种 DER 条件下 flexible capacity 均高于 rigid capacity，
+四个平均 paired AI gains 的 Bonferroni 95% simultaneous intervals 均高于
+0。AI–BESS substitution 在 validation 的两个 PV strata 中复现；AI–PV 的
+正方向也在两个 BESS strata 中复现，但 validation 的 with-BESS 区间
+[1.05, 15.74] kW 跨过 10.05 kW practical margin，只能标为实际幅度不确定。
+完整 validation 回执见
+`data/manifests/nature_mainline_validation_hosting_results_v1.yaml`。
 
-**仍缺**：validation/locked 外部检验、profile 和参数 sensitivities，以及对 planning bound 与可部署 causal hosting value 的严格区分。
+**证据边界**：该结果已有独立 validation replication，但不是 locked 或可部署
+causal hosting certificate。Profile/arrival 联合变化下的泛化风险由单独
+locked-OOD 结果限定；不能把单事件 controller 的 locked 证书套用到 hosting
+planner。
 
 **Figure 4**：八种 portfolio 的 hosting capacities、AI paired gains、AI–DER interactions 和不同社区 headroom 下的 regime map。原 README 的 Result 4 与 Result 5 合并到这一节，避免重复同一 2 × 2 × 2 证据。
 
@@ -302,7 +319,9 @@ Discussion 不逐图复述，按五段组织：
 
 ## 11. 当前可报告结果
 
-以下全部是 development evidence，除特别说明外都不能写成最终 certificate。
+以下同时包含 development、validation、locked-ID 与 locked-OOD 证据；每节
+必须按其数据角色表述，只有明确通过 locked-ID 门槛的单元才能称为 causal
+certificate。
 
 ### 11.1 四卡功率测量锚点
 
@@ -411,6 +430,23 @@ joint success 对 gap 并不单调，说明“墙上时钟经过了多久”不�
 | AI × PV, with BESS | +35.22 kW | [26.78, 43.71] | complementarity |
 
 这些标签只对当前预声明 10.05 kW equivalence margin 和 development ensemble 成立。
+
+同一冻结分析随后在 100 个独立 validation scenarios 上预注册复现。800/800
+solves 为 optimal，四个 paired AI gain intervals 均高于 0；AI–BESS 在两个
+PV strata 中仍为 substitution。AI–PV 在无 BESS 时为 practical
+complementarity，在有 BESS 时均值仍为正，但区间 [1.05, 15.74] kW 跨过
+10.05 kW practical margin，因此标为 `indeterminate`：
+
+| Validation interaction | Estimate | Simultaneous CI | Interpretation |
+|---|---:|---:|---|
+| AI × BESS, no PV | −52.31 kW | [−55.42, −49.52] | substitution |
+| AI × BESS, with PV | −88.54 kW | [−91.22, −85.66] | substitution |
+| AI × PV, no BESS | +44.59 kW | [36.57, 52.63] | complementarity |
+| AI × PV, with BESS | +8.36 kW | [1.05, 15.74] | positive direction, practical magnitude indeterminate |
+
+因此主文可报告“柔性 hosting value 与 BESS substitution 独立复现”，但必须把
+“PV complementarity”写成依赖 BESS 条件的结果。该 replication 仍是 planning
+bound，不升级为 causal hosting certificate。
 
 ### 11.6 Success-criteria sensitivity
 
@@ -606,7 +642,9 @@ Supplementary 应列出：
 | optimization software stack | HiGHS/Parquet clean-install smoke test |
 | repeated-run resume | exhaustion and hosting checkpoint tests |
 
-当前仓库的 mechanism-core 路径通过 214 项自动化测试；投稿前仍应在 clean environment 中保存完整 `pytest`、`ruff`、`mypy` 和 GitHub Actions 通过记录。
+当前仓库已有按物理合同组织的自动化测试；投稿前仍应在 clean environment 中
+保存完整 `pytest`、`ruff`、`mypy` 和 GitHub Actions 通过记录。此处不固定写死
+测试数量，避免新增测试后文档立即失真。
 
 ### 13.9 建议的环境补充图表
 
@@ -646,8 +684,9 @@ Supplementary 应列出：
 | 100-scenario restricted NA q=0.95 | 已完成 | same-ensemble restricted scenario-based bound |
 | notice diagnostic | 已完成 | development mechanism diagnostic; zero gain is allowed |
 | Model A freeze | 已完成 | downstream development design fixed at `d03b440` |
-| repeated-event exhaustion | development 已完成 | fixed-capacity mechanism diagnostic |
-| 2 × 2 × 2 hosting | development 已完成 | planning bounds and paired development contrasts |
+| nominal–PI physical gap | 已汇总并锁定哈希 | q=0.95 nominal overstatement 为 47.50–62.74 kW（nominal 的 47.3–62.4%） |
+| repeated-event exhaustion | development + validation 已完成 | fixed-capacity paired mechanism diagnostic；不是 repeated-event certificate |
+| 2 × 2 × 2 hosting | development + validation 已完成 | planning bounds；AI gain 与 BESS substitution 复现，PV interaction 为条件性 |
 | sparse sensitivity service gate | 已完成 | 27/27 no-DR evaluations feasible，baseline miss/backlog 均为 0 |
 | sparse workload PI sensitivity | 已完成 | 1,800/1,800 optimal；arrival utilization 改变容量，rigid/deadline 在测试点为零效应 |
 | success-criteria PI sensitivity | 已完成 | 1,800/1,800 optimal；H={4,8} 仅 delivery threshold 改变容量 |
@@ -658,30 +697,35 @@ Supplementary 应列出：
 | locked-OOD | 已一次性运行并消费授权 | 500/500 scenarios、2,000 payload hashes valid；q={0.90,0.95,0.99} 均为 0/18 cells certified，限定外推边界 |
 | q=0.99 certificate | locked-ID 已检验 | 9/18 cells certified；H={1,2,4} 的三个 notice cells 未达到 0.99 Wilson 门槛 |
 
-当前最准确的总状态是：**科学模型、可复现环境、development mechanism/sensitivity evidence、单次 locked-ID 因果检验与独立 locked-OOD 外推压力测试均已形成；主分布内证书仅对部分 surface 成立，H=1 headline 候选未认证，所有固定候选在联合 OOD shift 下均未保留目标可靠性。**
+当前最准确的总状态是：**五个 Results 所需的主线数值实验已经完成，包括
+nominal–PI gap 汇总、development/validation mechanism evidence、独立 validation
+hosting replication、单次 locked-ID 因果检验与 locked-OOD 外推压力测试；主分布
+内证书仅对部分 surface 成立，H=1 headline 候选未认证，所有固定候选在联合
+OOD shift 下均未保留目标可靠性。后续主线是 source data、作图、写作和完整 CI，
+不是继续寻找更好看的事后结果。**
 
 ## 16. Claim–evidence map
 
 | Claim | Decisive evidence | Status |
 |---|---|---|
-| nominal flexibility overstates firm flexibility | nominal vs PI under job/deadline constraints | needs final summarized gap |
+| nominal flexibility overstates firm flexibility | nominal vs PI under job/deadline constraints | supported on development；q=0.95 gap 为 nominal 的 47.3–62.4% |
 | duration reduces deliverable capacity | PI/NA frontiers over 1–8 h | supported on development |
 | notice gain can be zero under Model A | PI invariance, NA equality and mechanism diagnostics | supported on development |
-| compute debt limits repeated DR before delivery collapses | paired fresh-event exhaustion and joint service outcomes | supported on development |
-| workload flexibility increases hosting capacity | paired 2 × 2 × 2 scenario optimizations | supported as development planning result |
-| AI–BESS substitutes and AI–PV complements | predeclared interaction contrasts and simultaneous CIs | supported on development only |
+| compute debt limits repeated DR before delivery collapses | paired fresh-event exhaustion and joint service outcomes | supported on independent development and validation diagnostics |
+| workload flexibility increases hosting capacity | paired 2 × 2 × 2 scenario optimizations | supported as development result with independent validation replication |
+| AI–BESS substitutes and AI–PV interaction is context-dependent | predeclared interaction contrasts and simultaneous CIs | BESS substitution replicated；PV practical complementarity not retained with BESS |
 | flexible workload arrival changes single-event firm capacity | paired sparse-workload PI sensitivity | supported at predeclared Model A development points |
 | a fixed causal controller can certify firm capacity | validation selection + locked-ID Wilson lower bound | supported for q=0.95 at H={2,3,4,6,8}; H=1 candidate not certified |
 | fixed Model A candidates generalize to the declared joint OOD shift | one-time locked-OOD replay | not supported；0/18 cells certified at every q |
 
 ## 17. 后续执行顺序
 
-1. 冻结并提交本次 locked-ID receipt、通过/失败单元和恢复边界，不对 H=1 做事后重选；
-2. 将 q=0.95 主结果与 H=1 non-certification 放主文，将 q={0.90,0.99} 和完整失败表放 SI；
-3. 对照预声明协议完成 repeated-event exhaustion 的剩余 validation-level evidence，不把单事件恢复 NaN 当作证书失败；
-4. 完成 2 × 2 × 2 hosting mainline 的正式结果整理；
-5. 将 locked-OOD 的 0/18 结果作为主文 generalization boundary，不做事后 OOD capacity 重选；
-6. 生成五幅主图和 Supplementary environment figures；
+1. 从已锁定结果回执生成统一的主文/SI source-data 表，不再新增或重选主线实验；
+2. 生成五幅主图和 Supplementary environment figures，并逐图核对数值与限定语；
+3. 将 q=0.95 主结果与 H=1 non-certification 放主文，将 q={0.90,0.99} 和完整失败表放 SI；
+4. 将 repeated-event validation 写成 mechanism diagnostic，不误称 repeated-event certificate；
+5. 将 validation hosting 写成 planning-result replication，并保留 with-BESS 下 PV interaction 的实际幅度不确定性；
+6. 将 locked-OOD 的 0/18 结果作为主文 generalization boundary，不做事后 OOD capacity 重选；
 7. 按 Results → Introduction/Discussion → Methods → Title → Abstract 的顺序写英文稿；
 8. 准备 Data Availability、Code Availability、Reporting Summary 和 Zenodo DOI。
 

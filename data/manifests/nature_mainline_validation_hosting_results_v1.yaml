@@ -1,0 +1,120 @@
+schema_version: 1
+receipt_role: post_run_hash_receipt_not_preregistration
+evidence_scope: validation_replication_of_development_hosting_planning_result
+generated_at: "2026-08-21T14:16:17+09:00"
+analysis_git_commit: 621c3bb402b653541f59ff16b7bae2d8bf10e08a
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+reinforcement_learning_used: false
+locked_data_read: false
+
+interpretation_guardrails:
+  - same_frozen_model_and_portfolio_as_development
+  - no_hyperparameter_or_portfolio_reselection_on_validation
+  - validation_replication_is_not_a_locked_certificate
+  - hosting_values_are_planning_bounds_not_deployed_causal_capacity
+  - retain_practical_effect_indeterminacy_when_the_interval_crosses_the_equivalence_margin
+
+preregistration:
+  protocol:
+    path: data/manifests/nature_mainline_hosting_validation_protocol_v1.yaml
+    sha256: cc476db5603672ab105d3112af003aed79fa05205153a1b7c212670726417e84
+  specification:
+    path: configs/experiment/nature_hosting_validation_v1.yaml
+    sha256: 0fdeb3d8287fbfc4740bc95fd77e9c30e965350c963b41c3a4763fd2d972a466
+    normalized_sha256: 75b2c134e912ccea3d828428dc739ee42ec88edf1d7828cfa696310e6ffc4cca
+  scenario_receipt:
+    path: data/manifests/nature_mainline_validation_scenarios_v1.yaml
+    sha256: b891bb16cb667298e8c1b51b1f3680889e9a5b456645a0819489fa0f29462f6f
+
+design:
+  independent_unit: frozen_scenario
+  seed_range: [20000, 20099]
+  independent_scenario_count: 100
+  paired_portfolios_per_scenario: 8
+  optimization_row_count: 800
+  planned_contrast_count: 8
+  familywise_confidence_level: 0.95
+  familywise_method: bonferroni
+  bootstrap_resamples: 10000
+  bootstrap_seed: 260821
+  practical_equivalence_margin_kw: 10.0500391992
+
+integrity_audit:
+  optimal_optimization_rows: 800
+  unique_scenario_hash_count: 100
+  portfolio_cell_count: 8
+  rows_per_portfolio_cell: 100
+  numeric_nonfinite_values: 0
+  maximum_simultaneous_bess_charge_discharge_kw: 0.0
+  maximum_absolute_terminal_soc_deviation_kwh: 0.0
+  locked_data_read: false
+
+reproducibility_check:
+  resumed_scenario_count: 100
+  solved_scenario_count: 0
+  aggregate_artifacts_byte_identical: true
+
+simultaneous_feasible_capacity_kw:
+  rigid_no_pv_no_bess: 361.4393002822234
+  flexible_no_pv_no_bess: 668.3317973402607
+  rigid_no_pv_bess: 418.6369792191676
+  flexible_no_pv_bess: 685.8373881333280
+  rigid_pv_no_bess: 460.5829422019996
+  flexible_pv_no_bess: 869.5321332545739
+  rigid_pv_bess: 556.0315310240048
+  flexible_pv_bess: 875.0995255934478
+
+paired_contrasts_kw:
+  ai_gain_no_pv_no_bess:
+    estimate: 326.0193791934451
+    simultaneous_ci: [319.3265008682347, 332.8052017793179]
+    direction: positive
+  ai_gain_no_pv_bess:
+    estimate: 273.7130142860988
+    simultaneous_ci: [267.3251843528100, 280.0373831986931]
+    direction: positive
+  ai_gain_pv_no_bess:
+    estimate: 370.6117869109295
+    simultaneous_ci: [362.7361858539966, 378.2773475989481]
+    direction: positive
+  ai_gain_pv_bess:
+    estimate: 282.0706176201715
+    simultaneous_ci: [273.8447670469294, 290.4651407368329]
+    direction: positive
+  ai_bess_interaction_no_pv:
+    estimate: -52.3063649073464
+    simultaneous_ci: [-55.4179625483565, -49.5186493354693]
+    practical_interpretation: substitution
+  ai_bess_interaction_pv:
+    estimate: -88.5411692907580
+    simultaneous_ci: [-91.2242772369974, -85.6608926394830]
+    practical_interpretation: substitution
+  ai_pv_interaction_no_bess:
+    estimate: 44.5924077174843
+    simultaneous_ci: [36.5725068521448, 52.6300026724246]
+    practical_interpretation: complementarity
+  ai_pv_interaction_bess:
+    estimate: 8.3576033340727
+    simultaneous_ci: [1.0505861464902, 15.7371538820222]
+    direction: positive
+    practical_interpretation: indeterminate_against_10_05_kw_margin
+
+predeclared_test_results:
+  all_four_ai_gain_intervals_exclude_zero: pass
+  ai_bess_interactions_retain_development_sign_in_both_pv_strata: pass
+  ai_pv_interactions_retain_development_sign_in_both_bess_strata: pass
+  all_eight_simultaneous_capacities_reported_without_selection: pass
+
+development_validation_interpretation:
+  ai_hosting_gain_direction_replicated_in_all_four_portfolios: true
+  ai_bess_substitution_replicated_in_both_pv_strata: true
+  ai_pv_positive_direction_replicated_in_both_bess_strata: true
+  ai_pv_practical_complementarity_replicated_without_bess: true
+  ai_pv_practical_complementarity_replicated_with_bess: false
+  conclusion: positive_hosting_value_and_bess_substitution_are_stable_while_pv_interaction_strength_depends_on_bess_context
+
+outputs:
+  hosting_ensemble.json: a96f6a2639707ea1ad43d7c6df59295c77fde2788f6424ee899f769a82d64da8
+  scenario_hosting_capacity.parquet: 2a04fc79fcdc5ba62bf8284a64eff9f068741d3814e5f9046460da414fa4e1eb
+  hosting_capacity_summary.parquet: 97399bfb0e93270765c1531d63846cf8dd632aa09312ce0aa26997eee2b6dc4d
+  hosting_paired_contrasts.parquet: b8a09ba64a0bae9443e63bdf8e235e66a0ec8de095ce8866d56138fac578445f

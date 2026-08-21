@@ -414,6 +414,19 @@ AI–BESS interactions are substitution and the AI–PV interactions are
 complementarity in both conditioning strata. This is a development-set
 planning result and does not open or substitute for locked evaluation.
 
+The same frozen 2 × 2 × 2 design was then preregistered and replayed on 100
+independent validation scenarios (seeds 20000--20099) without portfolio or
+analysis reselection. All 800 optimizations were optimal. The four paired AI
+hosting-gain simultaneous intervals again excluded zero, and both AI--BESS
+interactions retained the preregistered substitution classification. Both
+AI--PV point estimates remained positive; without BESS the interval retained
+practical complementarity, whereas with BESS the +8.36 kW estimate and
+[1.05, 15.74] kW interval crossed the 10.05 kW practical margin. The latter is
+therefore directionally positive but practically indeterminate. This is an
+independent replication of a planning bound, not a locked or deployed causal
+hosting-capacity certificate. The complete receipt is
+`data/manifests/nature_mainline_validation_hosting_results_v1.yaml`.
+
 Without `--require-execution-ready`, `protocol-check` validates only the
 committed preregistration structure and is therefore suitable for a clean CI
 checkout. Formal data-server runs must use the flag so missing/hash-mismatched
@@ -485,7 +498,7 @@ and the firm-boundary artifact byte-for-byte. No locked scenario was read. The
 post-run receipt is
 `data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml`.
 
-## Remaining mainline work
+## Completed mainline evidence and remaining packaging work
 
 1. Run the fixed H={4,8}, N={0,6}, q=0.95 development diagnostic. Zero notice
    gain remains a valid structural result; do not add mechanisms to force a
@@ -501,8 +514,11 @@ post-run receipt is
    outputs passed replay and finite-value audits.**
 4. Run the implemented 100-scenario 2 × 2 × 2 hosting ensemble. Its paired
    uncertainty, eight-contrast family and equivalence margin are now
-   preregistered. **Completed on 100 nominal development scenarios; locked data
-   remain closed.**
+   preregistered. **Completed on 100 nominal development scenarios and
+   preregistered 100-scenario validation replication; locked data remain
+   closed. The validation result retains positive AI hosting gain and BESS
+   substitution but limits the with-BESS AI--PV interaction to a directionally
+   positive, practically indeterminate effect.**
 5. Run success-criterion and sparse-workload sensitivities, freeze all choices,
    then run validation, locked ID once, and locked OOD separately once.
    **Both development PI sensitivity analyses, frozen validation selections
@@ -514,6 +530,11 @@ post-run receipt is
    seeds; service, hash, solver and replay audits passed. The separate joint
    profile/arrival distribution shift is now bounded by the completed
    locked-OOD stress test.**
+
+All five Results now have the numerical evidence required by the frozen
+manuscript structure. Remaining work is source-data export, figure generation,
+manuscript drafting and clean-environment verification; it is not an invitation
+to add post hoc experiments or reopen locked selections.
 
 Each locked config is technically guarded. Before its one permitted generation,
 the protocol must be committed with `analysis_plan_status: frozen` and
