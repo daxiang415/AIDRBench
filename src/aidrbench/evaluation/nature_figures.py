@@ -236,7 +236,7 @@ def _format_outputs(
         records.append(
             {
                 "format": extension,
-                "path": str(path),
+                "path": path.name,
                 "bytes": path.stat().st_size,
                 "sha256": _sha256(path),
             }
@@ -274,7 +274,19 @@ def _write_figure_manifest(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    return {"figure": figure_number, "outputs": outputs, "manifest": str(path)}
+    runtime_outputs: list[dict[str, object]] = []
+    for output in outputs:
+        filename = output.get("path")
+        if not isinstance(filename, str):
+            raise ValueError("figure output manifest path must be a filename")
+        runtime_output = dict(output)
+        runtime_output["path"] = str(output_directory / filename)
+        runtime_outputs.append(runtime_output)
+    return {
+        "figure": figure_number,
+        "outputs": runtime_outputs,
+        "manifest": str(path),
+    }
 
 
 def _finalize_figure(
@@ -1382,9 +1394,29 @@ def plot_nature_mainline_figures(
         )
         for number in requested
     ]
+    portable_records: list[dict[str, object]] = []
+    for record in records:
+        runtime_outputs = record.get("outputs")
+        manifest_path = record.get("manifest")
+        if not isinstance(runtime_outputs, list) or not isinstance(manifest_path, str):
+            raise ValueError("invalid runtime figure record")
+        portable_outputs: list[dict[str, object]] = []
+        for output in runtime_outputs:
+            if not isinstance(output, dict):
+                raise ValueError("invalid runtime figure output record")
+            portable_output = dict(output)
+            portable_output["path"] = Path(str(output["path"])).name
+            portable_outputs.append(portable_output)
+        portable_records.append(
+            {
+                "figure": record["figure"],
+                "outputs": portable_outputs,
+                "manifest": Path(manifest_path).name,
+            }
+        )
     index: dict[str, object] = {
         "schema_version": "aidrbench.nature_figure_bundle.v1",
-        "figures": records,
+        "figures": portable_records,
     }
     index_path = destination / "nature_mainline_figure_manifest.json"
     index_path.write_text(

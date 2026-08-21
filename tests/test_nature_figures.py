@@ -364,6 +364,21 @@ def test_plot_all_nature_mainline_figures_write_editable_svg(tmp_path: Path) -> 
             source_data / "source_data_manifest.json"
         )
 
+    replay_summary = plot_nature_mainline_figures(
+        source_data,
+        tmp_path / "figures_replay",
+        formats=("svg",),
+    )
+    assert Path(str(summary["manifest"])).read_bytes() == Path(
+        str(replay_summary["manifest"])
+    ).read_bytes()
+    for record, replay_record in zip(
+        summary["figures"], replay_summary["figures"], strict=True
+    ):
+        assert Path(str(record["manifest"])).read_bytes() == Path(
+            str(replay_record["manifest"])
+        ).read_bytes()
+
 
 def test_plot_nature_mainline_figure2_rejects_source_hash_mismatch(
     tmp_path: Path,
@@ -411,3 +426,6 @@ def test_plot_nature_mainline_figure2_writes_all_submission_formats(
     } == {
         extension: _sha256(path) for extension, path in replay_outputs.items()
     }
+    assert Path(str(result["manifest"])).read_bytes() == Path(
+        str(replay["manifest"])
+    ).read_bytes()
