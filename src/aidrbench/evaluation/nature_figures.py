@@ -113,7 +113,14 @@ def _publication_style() -> None:
     plt.rcParams.update(
         {
             "font.family": "sans-serif",
-            "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans", "sans-serif"],
+            "font.sans-serif": [
+                "Arial",
+                "Liberation Sans",
+                "Helvetica",
+                "Nimbus Sans",
+                "DejaVu Sans",
+                "sans-serif",
+            ],
             "font.size": 7.0,
             "axes.titlesize": 7.5,
             "axes.labelsize": 7.0,
