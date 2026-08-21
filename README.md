@@ -448,7 +448,7 @@ bound；NA ensemble optimization 单独报告为受限场景边界。
 
 ## 8. Nature Communications 主文 Results 结构
 
-## Result 1 — 从硬件和任务推导可靠灵活性，而不是预设柔性比例
+## Result 1 — 名义可移负荷高估 job-derived firm capacity
 
 ### 科学问题
 
@@ -456,11 +456,10 @@ bound；NA ensemble optimization 单独报告为受限场景边界。
 
 ### 分析内容
 
-- 四 GPU 节点功率测量与 held-out validation；
-- training 与 offline inference 的类别功率；
-- 任务 arrival、GPU-hour 和 deadline 分布；
-- 从任务队列到数据中心功率再到 PCC 的映射；
-- 比较 \(F^{\mathrm{nominal}}\) 与 \(F_q^{\mathrm{PI}}\)。
+- 首先比较 \(F^{\mathrm{nominal}}\) 与 \(F_q^{\mathrm{PI}}\)，报告任务约束造成的定量折损；
+- 再用任务 arrival、GPU-hour、deadline 和类别功率解释该差距；
+- 区分 nominal、PI、restricted NA 和 fixed causal realization 四层容量；
+- 四 GPU 功率测量与 held-out validation 仅作为功率模型锚点，原始曲线进入 Supplementary。
 
 ### 预期结论
 
@@ -468,12 +467,12 @@ bound；NA ensemble optimization 单独报告为受限场景边界。
 
 ### 对应主图
 
-**Figure 1：Measurement-to-flexibility framework**
+**Figure 1：Nominal-to-job-derived firm-capacity gap**
 
-- a：四 GPU 硬件测量与功率模型；
+- a：名义容量与 job-derived PI boundary 的定量差距；
 - b：任务 arrival–deadline–execution 关系；
 - c：任务调度到 DC/PCC 功率；
-- d：名义柔性与 job-derived boundary 的概念差异。
+- d：nominal、PI、restricted NA 与 causal 四层证据关系。
 
 ---
 
@@ -586,7 +585,7 @@ H=8 的 1.14 MWh。四事件 joint success 为 0.00–0.97；只有 H=4、gap=8 
 
 ---
 
-## Result 4 — AI 柔性增加社区数据中心接入容量
+## Result 4 — AI 柔性增加社区数据中心接入容量并改变分布式能源价值
 
 ### 科学问题
 
@@ -647,69 +646,28 @@ certificate 或现实因果效应：
 [`data/manifests/nature_mainline_development_results_v1.yaml`](data/manifests/nature_mainline_development_results_v1.yaml)；
 该文件是 post-run receipt，不会反向修改预注册协议。
 
-### 预期结论
+### AI–DER 交互与预期结论
 
-AI 柔性可以转化为真实接入容量，但价值高度依赖社区峰值时刻、光伏富余和储能时长。
+同一 2 × 2 × 2 配对设计同时识别 hosting gain 和分布式能源交互，不再将它们
+拆成两个 Results。AI–BESS 和 AI–PV 均使用预声明的场景内
+difference-in-differences；只有不确定性区间与 practical-equivalence margin
+共同支持时，才标记为互补、替代或近似独立。
+
+AI 柔性可以转化为社区接入容量，但价值高度依赖社区峰值时刻、光伏富余和
+储能时长；它与 PV/BESS 的价值不能按各自独立增益简单相加。
 
 ### 对应主图
 
-**Figure 4：Community hosting-capacity gain**
+**Figure 4：Community hosting capacity and distributed-energy interactions**
 
 - a：八种 portfolio 的 hosting capacity；
 - b：柔性带来的绝对增益；
-- c：不同社区 headroom 下的接入容量地图；
-- d：哪些受限社区能够被 AI 柔性“救回”。
+- c：AI–PV 与 AI–BESS 的交互及 simultaneous intervals；
+- d：不同社区 headroom 下的 regime map。
 
 ---
 
-## Result 5 — AI 柔性与 PV/BESS 的互补和替代边界
-
-### 科学问题
-
-AI workload flexibility 与 DER 是叠加价值，还是重复提供同一种服务？
-
-定义 AI–BESS 交互项：
-
-\[
-I_{\mathrm{AI,BESS}}
-=
-\left(C_{\mathrm{flex+BESS}}-C_{\mathrm{rigid+BESS}}\right)
--
-\left(C_{\mathrm{flex}}-C_{\mathrm{rigid}}\right).
-\]
-
-- \(I>0\)：互补；
-- \(I<0\)：替代；
-- \(I\approx0\)：近似独立。
-
-上述标签只在场景级不确定性区间和预声明 equivalence margin 完成后使用；
-单个 development scenario 的点估计只用于验证 2 × 2 × 2 求解路径。
-主分析的 practical-equivalence margin 在全量场景运行前固定为 reference-mix
-operating peak 的 5%，不得根据结果调整。
-
-对 PV 可定义相同交互项。
-
-### 分析内容
-
-- PV penetration；
-- BESS power 和 duration；
-- 数据中心占 PCC 比例；
-- 社区峰值形态；
-- 事件持续时间；
-- deadline 严格程度。
-
-### 对应主图
-
-**Figure 5：Complementarity and substitution regimes**
-
-- a：AI–PV 交互地图；
-- b：AI–BESS 交互地图；
-- c：duration 和 BESS duration 的交互；
-- d：不同社区类型的 regime classification。
-
----
-
-## Result 6 — 硬件与模型不确定性下的稳健性
+## Result 5 — 独立评估定义稳健性与泛化边界
 
 ### 科学问题
 
@@ -777,12 +735,12 @@ OOD 容量。
 
 ### 对应主图
 
-**Figure 6：Robustness and generalization**
+**Figure 5：Robustness, certification and generalization**
 
 - a：不同硬件功率 case 下的 firm frontier；
-- b：主要效应的 uncertainty interval；
-- c：不同 workload/deadline 场景的机制一致性；
-- d：结论稳定区间与失效边界。
+- b：不同 workload/deadline 场景的机制一致性；
+- c：validation-to-locked-ID 的独立容量认证；
+- d：locked-OOD 下的失效边界。
 
 ---
 

@@ -41,12 +41,16 @@ def _short_pv_scenario_config() -> dict[str, object]:
     return document
 
 
-def _write_specification(tmp_path: Path) -> Path:
+def _write_specification(
+    tmp_path: Path,
+    *,
+    dataset_role: str = "development_hosting_capacity",
+) -> Path:
     portfolio_path = ROOT / "configs/community/pv_bess.yaml"
     document = {
         "schema_version": 1,
         "model_a_git_commit": "a" * 40,
-        "dataset_role": "development_hosting_capacity",
+        "dataset_role": dataset_role,
         "independent_unit": "frozen_scenario",
         "expected_scenario_count": 2,
         "expected_episode_seed_range": [91, 92],
@@ -87,6 +91,52 @@ def test_hosting_ensemble_specification_rejects_implicit_fields(tmp_path: Path) 
     path.write_text(yaml.safe_dump(document, sort_keys=False), encoding="utf-8")
     with pytest.raises(ValueError, match="fields mismatch"):
         load_hosting_ensemble_specification(path)
+
+
+def test_validation_hosting_requires_validation_scenario_path(tmp_path: Path) -> None:
+    scenarios = tmp_path / "development_scenarios"
+    freeze_hourly_scenarios(
+        _short_pv_scenario_config(),
+        seeds=[91, 92],
+        output_directory=scenarios,
+    )
+    specification = _write_specification(
+        tmp_path,
+        dataset_role="validation_hosting_replication",
+    )
+
+    with pytest.raises(ValueError, match="requires a validation scenario path"):
+        compute_hosting_ensemble(
+            scenarios,
+            specification_path=specification,
+            output_directory=tmp_path / "hosting",
+            workers=1,
+        )
+
+
+def test_validation_hosting_replication_uses_same_paired_matrix(tmp_path: Path) -> None:
+    scenarios = tmp_path / "validation_scenarios"
+    freeze_hourly_scenarios(
+        _short_pv_scenario_config(),
+        seeds=[91, 92],
+        output_directory=scenarios,
+    )
+    specification = _write_specification(
+        tmp_path,
+        dataset_role="validation_hosting_replication",
+    )
+
+    summary = compute_hosting_ensemble(
+        scenarios,
+        specification_path=specification,
+        output_directory=tmp_path / "hosting",
+        workers=1,
+    )
+
+    assert summary["scenario_count"] == 2
+    assert summary["row_count"] == 16
+    manifest = Path(summary["manifest"]).read_text(encoding="utf-8")
+    assert '"dataset_role": "validation_hosting_replication"' in manifest
 
 
 def test_hosting_ensemble_is_paired_checkpointed_and_resumable(tmp_path: Path) -> None:

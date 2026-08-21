@@ -61,11 +61,14 @@ def _canonical_sha256(value: object) -> str:
 
 @dataclass(frozen=True, slots=True)
 class HostingEnsembleSpecification:
-    """Complete preregistration for the development hosting ensemble."""
+    """Complete preregistration for a non-locked hosting ensemble."""
 
     schema_version: int
     model_a_git_commit: str
-    dataset_role: Literal["development_hosting_capacity"]
+    dataset_role: Literal[
+        "development_hosting_capacity",
+        "validation_hosting_replication",
+    ]
     independent_unit: Literal["frozen_scenario"]
     expected_scenario_count: int
     expected_episode_seed_range: tuple[int, int]
@@ -217,14 +220,23 @@ def load_hosting_ensemble_specification(
     )
 
 
-def _discover_development_artifacts(
+def _discover_hosting_artifacts(
     scenario_path: str | Path,
     specification: HostingEnsembleSpecification,
 ) -> list[FrozenHourlyScenario]:
     root = Path(scenario_path)
     labels = [part.lower() for part in root.parts]
     if any("locked" in label for label in labels):
-        raise ValueError("hosting development ensemble may not read a locked path")
+        raise ValueError("hosting ensemble may not read a locked path")
+    required_label = (
+        "validation"
+        if specification.dataset_role == "validation_hosting_replication"
+        else "development"
+    )
+    if required_label not in root.name.lower():
+        raise ValueError(
+            f"{specification.dataset_role} requires a {required_label} scenario path"
+        )
     artifacts = [
         load_frozen_hourly_scenario(child)
         for child in sorted(root.iterdir())
@@ -531,7 +543,7 @@ def compute_hosting_ensemble(
     if sha256_file(portfolio_path) != specification.portfolio_sha256:
         raise ValueError("hosting portfolio SHA-256 mismatch")
     portfolio = load_community_portfolio(portfolio_path)
-    artifacts = _discover_development_artifacts(scenario_path, specification)
+    artifacts = _discover_hosting_artifacts(scenario_path, specification)
     output = Path(output_directory)
     output.mkdir(parents=True, exist_ok=True)
     partitions = output / "scenario_partitions"

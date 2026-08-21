@@ -2,7 +2,7 @@
 
 > 状态：作者确认后的论文架构草案，不是投稿稿件，也不是预注册文件
 >
-> 更新日期：2026-08-20
+> 更新日期：2026-08-21
 >
 > 当前代码分支：`codex/firm-flexibility-environment`
 >
@@ -61,16 +61,19 @@
 
 ## 3. Nature Communications 篇幅与展示预算
 
-文章类型按 Research Article 规划。当前建议控制在约 5,000 词以内，且该上限包含 Methods。
+文章类型按 Research Article 规划。按 2026 年 Nature Communications 官方 Article
+指南，Introduction、Results 与 Discussion 组成的 main text 建议控制在约 5,000 词，
+不含 Abstract、Methods、References 和图注；Methods 通常少于 3,000 词。最终投稿前
+以[期刊 Article 指南](https://www.nature.com/ncomms/submit/article)为准。
 
 | 部分 | 建议词数 | 功能 |
 |---|---:|---|
-| Abstract | 150 | 单段，最后写，含至少一个定量结果 |
+| Abstract | 不超过 200 | 单段，最后写，含至少一个定量结果 |
 | Introduction | 650 | 重要性、缺口、科学问题和本文贡献 |
-| Results | 2,100 | 五个结论导向的结果部分 |
+| Results | 2,800–3,300 | 五个结论导向的结果部分 |
 | Discussion | 650 | 解释、边界、替代解释和系统意义 |
-| Methods | 1,450 | 可复现定义、模型、统计与 provenance |
-| 合计 | 约 5,000 | 不另设冗长 Conclusion |
+| Methods | 1,800–2,500 | 可复现定义、模型、统计与 provenance；单独计数 |
+| main text 合计 | 约 4,100–4,600 | 为修改和审稿留出余量，不另设冗长 Conclusion |
 
 主文采用 5 幅多面板图，不设置独立主文表格。Nature Communications 没有 Extended Data 层，额外证据进入 Supplementary Information。
 
@@ -127,16 +130,16 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 
 ## 7. Results 结构
 
-### Result 1 — Job constraints convert nominal load flexibility into a firm-flexibility envelope
+### Result 1 — Nominal load flexibility overstates job-derived firm capacity
 
 **问题**：固定比例的 nominal flexibility 与任务可行边界之间相差多少？
 
 **段落任务**：
 
-1. 定义从作业到达、deadline 和类别 GPU-hour 到数据中心功率的映射；
-2. 说明四卡实验只提供 class-aware 功率参数的 measurement anchor；
+1. 先报告 nominal capacity 与 job-derived PI boundary 的定量差距；
+2. 再用作业到达、deadline 和类别 GPU-hour 解释该差距如何形成；
 3. 区分 nominal、PI、restricted NA 和 causal 四层容量；
-4. 用 nominal–PI gap 展示任务约束造成的第一层折损。
+4. 四卡实验只作为 class-aware 功率参数的 measurement anchor，不作为本节主发现。
 
 **当前证据**：
 
@@ -150,7 +153,7 @@ Abstract 在 locked-ID 结果完成后再写成最终英文。当前只冻结六
 - locked 之前对硬件假设范围、PUE 和 workload mix 的 sensitivity；
 - 文献定位与外部效度边界。
 
-**Figure 1**：系统概念图、作业约束到功率的映射、四层容量定义和 nominal–job-derived 差距。四卡原始功率曲线全部移至 Supplementary。
+**Figure 1**：以 nominal–job-derived 定量差距为中心，辅以系统概念图、作业约束到功率的映射和四层容量定义。四卡原始功率曲线全部移至 Supplementary。
 
 ### Result 2 — Duration and reliability shape firm flexibility, whereas notice alone may not
 
