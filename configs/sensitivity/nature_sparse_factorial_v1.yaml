@@ -1,0 +1,41 @@
+schema_version: 1
+design: sparse_factorial
+base_config: configs/env/nature_mainline_development.yaml
+require_no_dr_service_feasibility: true
+cases:
+  - name: reference
+    flexible_arrival_utilization: 0.65
+    rigid_gpu_utilization: 0.40625
+    deadline_slack_scale: 1.0
+  - name: flexible_arrival_low
+    flexible_arrival_utilization: 0.50
+    rigid_gpu_utilization: 0.40625
+    deadline_slack_scale: 1.0
+  - name: flexible_arrival_high
+    flexible_arrival_utilization: 0.80
+    rigid_gpu_utilization: 0.40625
+    deadline_slack_scale: 1.0
+  - name: rigid_utilization_low
+    flexible_arrival_utilization: 0.65
+    rigid_gpu_utilization: 0.25
+    deadline_slack_scale: 1.0
+  - name: rigid_utilization_high
+    flexible_arrival_utilization: 0.65
+    rigid_gpu_utilization: 0.60
+    deadline_slack_scale: 1.0
+  - name: deadline_tight
+    flexible_arrival_utilization: 0.65
+    rigid_gpu_utilization: 0.40625
+    deadline_slack_scale: 0.75
+  - name: deadline_loose
+    flexible_arrival_utilization: 0.65
+    rigid_gpu_utilization: 0.40625
+    deadline_slack_scale: 1.25
+  - name: high_arrival_tight_deadline
+    flexible_arrival_utilization: 0.80
+    rigid_gpu_utilization: 0.40625
+    deadline_slack_scale: 0.75
+  - name: low_arrival_loose_deadline
+    flexible_arrival_utilization: 0.50
+    rigid_gpu_utilization: 0.40625
+    deadline_slack_scale: 1.25

@@ -1,0 +1,50 @@
+schema_version: 1
+receipt_role: post_generation_validation_scenario_set_receipt
+evidence_scope: validation_inputs_only
+generated_at: "2026-08-20T14:32:54+09:00"
+analysis_git_commit: 0659eb31147c9d16344ecfa3b61fa28be63874a6
+locked_data_read: false
+controller_evaluated: false
+capacity_selected: false
+
+protocol:
+  path: data/manifests/nature_mainline_protocol_v1.yaml
+  sha256: 575b9f14fd4093359f7e20f9e9d4ed279d6c520ab620f46dbf67f46daa7b0014
+  analysis_plan_status: frozen
+
+scenario_set:
+  role: validation
+  output_directory: results/nature_mainline/validation_nominal
+  config:
+    path: configs/env/nature_mainline_validation.yaml
+    source_sha256: d7dab9f8b3640100456c427acf720898d09f5b70af29b8875ccd670bec6281a9
+    frozen_yaml_sha256: 1bc41058d970d1cda989723e4106cd20d7759eed02fa2ad9469cbebc27f9b0bc
+  episode_seed_range: [20000, 20099]
+  scenario_count: 100
+  scenario_set_sha256: 86555b486e321873c1967ecc086dcd5f1d96646cf5297c7ed19ddc5da697bf66
+  digest_definition: canonical_json_sorted_records_of_episode_seed_scenario_id_scenario_hash_and_payload_file_hashes
+  profile_id: eulp_mixed_3a
+  community_window: ["2018-08-08T00:00:00", "2018-10-20T00:00:00"]
+  arrival_process: nhpp
+  event_start_policy: uniform_one_start_per_episode_from_independent_event_rng
+
+integrity_audit:
+  seeds_exact_and_contiguous: true
+  scenario_hashes_unique: true
+  every_metadata_and_payload_hash_verified: true
+  event_start_hours_subset_of_protocol: true
+  observed_event_start_hours: [63, 64, 65, 66, 67, 68, 87, 88, 89, 90, 91, 92, 111, 112, 113, 114, 115, 116, 135, 136, 137, 138, 139, 140]
+  random_stream_unique_counts:
+    community: 100
+    events: 100
+    workload: 100
+  maximum_no_dr_baseline_deadline_miss_gpu_h: 0.0
+  maximum_no_dr_baseline_terminal_backlog_gpu_h: 0.0
+  power_model_sha256: e392ea26657466e184b024c92e95747a58889cfc5dad0c21d8d653f596cd9369
+  calibration_artifact_sha256: ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193
+
+guardrails:
+  - validation_is_for_frozen_candidate_selection_not_final_certificate
+  - no_locked_id_or_locked_ood_scenario_was_generated_or_read
+  - no_controller_or_reinforcement_learning_policy_was_trained
+  - exact_git_commit_must_remain_fixed_from_future_frozen_select_through_frozen_test

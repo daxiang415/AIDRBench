@@ -112,7 +112,7 @@ def test_alibaba2026_lite_arrivals_are_reproducible_and_target_scaled(tmp_path: 
     kwargs = {
         "hours": 48,
         "total_gpu_count": 8,
-        "target_total_utilization": 0.5,
+        "flexible_arrival_utilization": 0.5,
         "workload_shares": {
             "training": 0.5,
             "offline_inference": 0.5,
@@ -184,7 +184,7 @@ def test_alibaba2026_lite_requires_matching_flexible_samples(tmp_path: Path) -> 
             normalized,
             hours=4,
             total_gpu_count=4,
-            target_total_utilization=0.5,
+            flexible_arrival_utilization=0.5,
             workload_shares={"training": 0.5, "offline_inference": 0.5},
             flexible_fractions={"training": 0.0, "offline_inference": 1.0},
             flexible_priorities=("HP",),
@@ -225,7 +225,7 @@ def test_hourly_environment_can_replay_prebuilt_alibaba_lite_arrivals(tmp_path: 
         normalized,
         hours=168,
         total_gpu_count=8,
-        target_total_utilization=0.5,
+        flexible_arrival_utilization=0.5,
         workload_shares={"training": 0.5, "offline_inference": 0.5},
         flexible_fractions={"training": 1.0, "offline_inference": 1.0},
         seed=11,

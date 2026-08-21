@@ -1,0 +1,23 @@
+algorithm: ppo
+environment_config: configs/env/hourly_formal_train_continuous.yaml
+total_timesteps: 10000
+checkpoint_interval: 5000
+n_envs: 4
+policy: MlpPolicy
+reward_adapter:
+  version: firm_cmdp_v3
+  useful_compute_weight: 1.0
+  potential_shaping_weight: 0.25
+  switching_weight: 0.001
+  dual_learning_rate: 0.005
+  dual_tolerance: 0.01
+  initial_multiplier: 1.0
+  maximum_multiplier: 20.0
+  cost_clip: 10.0
+hyperparameters:
+  learning_rate: 0.0003
+  n_steps: 192
+  batch_size: 256
+  n_epochs: 10
+  gamma: 0.995
+  gae_lambda: 0.95

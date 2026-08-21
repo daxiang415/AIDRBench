@@ -3,17 +3,24 @@ from __future__ import annotations
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 import pytest
 
 from aidrbench.controllers.hourly import make_hourly_controller
-from aidrbench.envs.community_ai_dr_env import ContinuousCommunityAIDemandResponseEnv
+from aidrbench.envs.community_ai_dr_env import (
+    ContinuousCommunityAIDemandResponseEnv,
+    HourlyDREvent,
+)
 from aidrbench.evaluation.certification import (
     certify_firm_flexibility,
     make_certificate_scenario,
+    summarize_candidate_outcomes,
 )
 from aidrbench.evaluation.firm_flexibility import (
     FirmFlexibilityCriteria,
     derive_event_outcomes,
+    lower_tolerance_order_statistic_rank,
+    minimum_successes_for_wilson,
     wilson_lower_bound,
 )
 from aidrbench.evaluation.hourly_rollout import rollout_hourly_episode
@@ -29,6 +36,23 @@ def test_wilson_lower_bound_is_conservative_and_monotone() -> None:
 
     assert 0.0 < lower_partial_success < lower_all_success < 1.0
     assert wilson_lower_bound(0, 10, 0.95) == 0.0
+
+
+def test_wilson_sample_size_gate_rejects_underpowered_q99_design() -> None:
+    assert minimum_successes_for_wilson(100, 0.95, 0.95) == 99
+    assert minimum_successes_for_wilson(100, 0.99, 0.95) is None
+    assert minimum_successes_for_wilson(500, 0.99, 0.95) == 499
+
+
+def test_exact_lower_tolerance_rank_accounts_for_selected_capacity() -> None:
+    rank_95 = lower_tolerance_order_statistic_rank(100, 0.95, 0.95)
+    rank_99_small = lower_tolerance_order_statistic_rank(100, 0.99, 0.95)
+    rank_99_large = lower_tolerance_order_statistic_rank(500, 0.99, 0.95)
+
+    assert rank_95 is not None and rank_95[0] == 2
+    assert rank_95[1] >= 0.95
+    assert rank_99_small is None
+    assert rank_99_large is not None and rank_99_large[0] == 2
 
 
 def test_rollout_exposes_compute_debt_and_rebound_aware_event_metrics() -> None:
@@ -52,6 +76,89 @@ def test_rollout_exposes_compute_debt_and_rebound_aware_event_metrics() -> None:
     assert "firm_event_success_rate" in summary
     assert "max_event_rebound_ratio" in summary
     assert summary["rebound_ratio"] == summary["max_event_rebound_ratio"]
+
+
+def test_interval_delivery_prevents_average_only_success() -> None:
+    frame = pd.DataFrame(
+        {
+            "hour": [0, 1, 2, 3, 4],
+            "event_active": [True, True, True, True, False],
+            "pcc_power_kw": [90.0, 90.0, 90.0, 92.0, 100.0],
+            "baseline_pcc_power_kw": [100.0] * 5,
+            "delivered_reduction_kw": [10.0, 10.0, 10.0, 8.0, 0.0],
+            "requested_reduction_kw": [10.0, 10.0, 10.0, 10.0, 0.0],
+            "backlog_gpu_h": [0.0] * 5,
+            "baseline_backlog_gpu_h": [0.0] * 5,
+            "missed_gpu_h": [0.0] * 5,
+            "arrival_gpu_h": [1.0, 0.0, 0.0, 0.0, 0.0],
+            "terminal_backlog_excess_gpu_h": [0.0] * 5,
+        }
+    )
+    event = HourlyDREvent(
+        event_id=0,
+        source_event_id="test-event",
+        start_hour=0,
+        stop_hour=4,
+        recovery_stop_hour=5,
+        requested_reduction_kw=10.0,
+        notice_hours=0.0,
+    )
+
+    outcome = derive_event_outcomes(
+        frame,
+        (event,),
+        recovery_tolerance_gpu_h=0.0,
+    )[0]
+    success, failures = outcome.success(
+        FirmFlexibilityCriteria(
+            reliability_target=0.5,
+            confidence_level=0.5,
+            min_delivery_ratio=0.95,
+            min_interval_delivery_ratio=0.95,
+            max_deadline_miss_rate=1.0,
+            max_rebound_ratio=1.0,
+            min_window_peak_relief_fraction=0.0,
+            max_terminal_backlog_fraction=1.0,
+        )
+    )
+
+    assert outcome.delivery_ratio == pytest.approx(0.95)
+    assert outcome.minimum_interval_delivery_ratio == pytest.approx(0.80)
+    assert not success
+    assert "interval_delivery" in failures
+    assert "mean_delivery" not in failures
+
+
+def test_zero_capacity_candidate_has_no_rebound_settlement_ratio() -> None:
+    frame = pd.DataFrame(
+        {
+            "hour": [0, 1],
+            "event_active": [True, False],
+            "pcc_power_kw": [99.0, 110.0],
+            "baseline_pcc_power_kw": [100.0, 100.0],
+            "delivered_reduction_kw": [1.0, 0.0],
+            "requested_reduction_kw": [0.0, 0.0],
+            "backlog_gpu_h": [0.0, 0.0],
+            "baseline_backlog_gpu_h": [0.0, 0.0],
+            "missed_gpu_h": [0.0, 0.0],
+            "arrival_gpu_h": [1.0, 0.0],
+            "terminal_backlog_excess_gpu_h": [0.0, 0.0],
+        }
+    )
+    event = HourlyDREvent(
+        event_id=0,
+        source_event_id="zero-capacity",
+        start_hour=0,
+        stop_hour=1,
+        recovery_stop_hour=2,
+        requested_reduction_kw=0.0,
+        notice_hours=0.0,
+    )
+
+    outcome = derive_event_outcomes(frame, (event,), recovery_tolerance_gpu_h=0.0)[0]
+
+    assert outcome.rebound_peak_kw == pytest.approx(10.0)
+    assert outcome.rebound_ratio == pytest.approx(0.0)
 
 
 def test_certificate_uses_joint_success_and_one_sided_lower_bound() -> None:
@@ -78,8 +185,36 @@ def test_certificate_uses_joint_success_and_one_sided_lower_bound() -> None:
     assert certificate.certified_reduction_kw == pytest.approx(0.0)
     assert certificate.success_rate_lower_ci >= criteria.reliability_target
     assert candidates.loc[0, "certified"]
-    assert len(outcomes) == 2
+    assert certificate.episode_count == 2
+    assert certificate.event_count_per_episode == 3
+    assert certificate.event_start_hours == (17, 65, 113)
+    assert certificate.certificate_scope == "repeated_event_joint_episode"
+    assert len(outcomes) == 6
     assert outcomes["success"].all()
+
+
+def test_candidate_summary_counts_joint_episode_success_not_event_rows() -> None:
+    criteria = FirmFlexibilityCriteria(reliability_target=0.5, confidence_level=0.5)
+    outcomes = pd.DataFrame(
+        {
+            "seed": [1, 1, 2, 2],
+            "candidate_reduction_kw": [10.0] * 4,
+            "success": [True, False, True, True],
+            "delivery_ratio": [1.0] * 4,
+            "minimum_interval_delivery_ratio": [1.0] * 4,
+            "deadline_miss_rate": [0.0] * 4,
+            "rebound_ratio": [0.0] * 4,
+            "window_peak_relief_kw": [10.0] * 4,
+            "window_peak_relief_fraction": [1.0] * 4,
+            "recovery_time_h": [0.0] * 4,
+        }
+    )
+
+    summary = summarize_candidate_outcomes(outcomes, criteria=criteria, dc_peak_kw=100.0)
+
+    assert summary["success_count"] == 1
+    assert summary["episode_count"] == 2
+    assert summary["event_count_per_episode"] == 2
 
 
 def test_certificate_scenario_disables_training_randomization() -> None:
@@ -91,7 +226,8 @@ def test_certificate_scenario_disables_training_randomization() -> None:
     dr = scenario["dr"]
 
     assert isinstance(dr, dict)
-    assert dr["event_start_jitter_hours"] == 0
+    assert dr["event_start_hours"] == [17, 65, 113]
+    assert dr["event_start_jitter_hours"] == 4
     assert dr["event_duration_choices"] is None
     assert dr["event_notice_choices"] is None
     assert dr["event_notice_hours"] == 0

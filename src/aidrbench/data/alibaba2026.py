@@ -115,18 +115,27 @@ class DeadlineClassPolicy:
         if self.multiplier_high < self.multiplier_low:
             raise ValueError("multiplier_high must be at least multiplier_low")
 
-    def sample_slack_hours(self, duration_hours: float, rng: np.random.Generator) -> int:
+    def sample_slack_hours(
+        self,
+        duration_hours: float,
+        rng: np.random.Generator,
+        *,
+        slack_scale: float = 1.0,
+        max_deadline_hours: int | None = None,
+    ) -> int:
         duration = _positive_float(duration_hours, "duration_hours")
+        scale = _positive_float(slack_scale, "slack_scale")
         multiplier = float(rng.uniform(self.multiplier_low, self.multiplier_high))
-        return int(
-            math.ceil(
-                np.clip(
-                    multiplier * duration,
-                    self.minimum_slack_h,
-                    self.maximum_slack_h,
-                )
+        base_slack = float(
+            np.clip(
+                multiplier * duration,
+                self.minimum_slack_h,
+                self.maximum_slack_h,
             )
         )
+        upper = max_deadline_hours if max_deadline_hours is not None else self.maximum_slack_h
+        _positive_int(upper, "max_deadline_hours")
+        return max(1, min(int(upper), math.ceil(base_slack * scale)))
 
 
 @dataclass(frozen=True, slots=True)
@@ -462,11 +471,13 @@ def make_alibaba_lite_hourly_arrivals(
     *,
     hours: int,
     total_gpu_count: int,
-    target_total_utilization: float,
+    flexible_arrival_utilization: float,
     workload_shares: Mapping[str, float],
     flexible_fractions: Mapping[str, float],
     flexible_priorities: Sequence[str] = ("lp",),
     deadline_policy: AlibabaDeadlinePolicy | None = None,
+    deadline_slack_scale: float = 1.0,
+    max_deadline_hours: int = 48,
     arrival_process: str = "nhpp",
     seed: int,
 ) -> pd.DataFrame:
@@ -480,7 +491,12 @@ def make_alibaba_lite_hourly_arrivals(
 
     _positive_int(hours, "hours")
     _positive_int(total_gpu_count, "total_gpu_count")
-    utilization = _fraction(target_total_utilization, "target_total_utilization")
+    utilization = _fraction(
+        flexible_arrival_utilization,
+        "flexible_arrival_utilization",
+    )
+    slack_scale = _positive_float(deadline_slack_scale, "deadline_slack_scale")
+    _positive_int(max_deadline_hours, "max_deadline_hours")
     if set(workload_shares) != set(flexible_fractions):
         raise ValueError("workload_shares and flexible_fractions must have the same classes")
     shares = {
@@ -537,7 +553,10 @@ def make_alibaba_lite_hourly_arrivals(
                         "model_type": str(row["model_type_public"]),
                         "arrival_gpu_h": float(arrival_gpu_h),
                         "slack_hours": class_policy.sample_slack_hours(
-                            float(row["duration_hours"]), rng
+                            float(row["duration_hours"]),
+                            rng,
+                            slack_scale=slack_scale,
+                            max_deadline_hours=max_deadline_hours,
                         ),
                         "source_mode": "alibaba2026_lite_calibrated_synthetic",
                     }

@@ -1,2912 +1,1170 @@
-# AIDRBench
+# AIDRBench：Nature Communications 主线研究方案
 
-**A trace-driven experimental platform for reliable, rebound-aware demand flexibility from AI data centers**
-**面向 AI 数据中心可靠需求响应与计算债务评估的实验平台**
+> **文档定位**：本文件定义 AIDRBench 面向 *Nature Communications* 的主论文科学主线。它是系统与机制研究方案，不是控制算法论文，也不是强化学习 benchmark 论文。
+> **核心原则**：先建立物理与统计意义上的灵活性边界，再解释计算债务、恢复反弹和社区接入价值；PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
 
-> 文档状态：实施规范（implementation specification）
-> 版本：v0.3-firm-flexibility
-> 日期：2026-08-12
-> 目标服务器：Ubuntu 24.04，4 × NVIDIA RTX PRO 6000
-> 默认控制步长：1 h；可选扩展：15 min
-> 目标论文定位：以科学问题和可交付灵活性为主，平台与算法比较为验证工具
+论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
 
 ---
 
-## 0. 一句话说明
+## 1. 一句话科学命题
 
-AIDRBench 不以“PPO 是否优于规则控制”为最终科学问题，而是用于回答：
+**AI 数据中心的可移位负荷并不等于可向电网承诺的可靠灵活性。真正可交付的灵活性取决于任务期限、事件持续时间、提前通知、未来信息、既往调度历史以及恢复阶段产生的计算债务和功率反弹。**
 
-> **AI 数据中心在真实任务到达、异质期限和连续需求响应事件下，究竟能够向社区可靠承诺多少削峰能力；这种能力会不会因计算任务积压而耗尽，并在事件结束后形成新的反弹峰值。**
+论文要回答的不是：
 
-平台将训练、离线推理和批处理表示为带 release time、GPU demand、runtime 和 deadline 的可延迟计算；将在线推理、idle power 和其他服务关键负荷表示为刚性负荷。控制器按小时决定柔性计算的执行量，统一比较 No-control、Rule-based、EDF/valley filling、滚动优化/MPC、DQN、PPO 和 SAC。
+> 哪一种控制器或强化学习算法表现最好？
 
-本版本研究：
+而是：
 
-- 小时级或 15 min 级 temporal workload shifting；
-- community/PCC peak shaving；
-- job backlog、deadline、compute debt 和 repeated-event exhaustion；
-- event-only reduction 与 post-event rebound；
-- 从真实 trace 和四卡服务器测量中推导可交付灵活性；
-- 不同控制器在相同数据、约束和评价协议下的表现。
-
-本版本不研究：
-
-- 秒级 frequency regulation；
-- GPU DVFS、SM clock 或 power-cap tracking；
-- 每秒 GPU 温度、风扇和热动态；
-- 配电网节点电压、无功功率和潮流；
-- 完整冷冻水、液冷或海水冷却动态；
-- 新的安全强化学习理论。
-
-四张 RTX PRO 6000 的作用是标定 AI workload 的平均运行功率、runtime、energy per job/GPU-hour 和暂停恢复开销，而不是作为秒级温控对象。
+> AI 工作负荷中名义上“可以延迟”的部分，到底有多少能够在服务质量、恢复和可靠性约束下转化为真实的电网资源；这种资源为何会随持续时间和连续调用而衰减；它能为社区电网和数据中心接入带来多大价值？
 
 ---
 
-## 1. 科学命题与论文定位
+## 2. 论文定位：是什么，不是什么
 
-### 1.1 中心命题
+### 2.1 这篇论文是什么
 
-论文的中心命题应当是：
+这是一篇连接以下四个层次的系统科学研究：
 
-> **AI 数据中心的需求响应能力不是固定的“20% 或 30% 灵活负荷”，而是一种由当前任务队列、剩余 slack、历史调度和未来恢复需求共同决定的动态资源。它可以被连续事件耗尽，并可能以 compute debt 和 rebound 的形式把风险转移到事件之后。**
+1. **AI 任务层**：任务到达时间、GPU-hour 需求、工作负荷类别、运行时长和 deadline；
+2. **数据中心层**：任务执行、刚性与柔性功率、积压、计算债务、恢复和反弹；
+3. **社区能源层**：背景负荷、光伏、储能和 PCC/变压器容量约束；
+4. **电网服务层**：可靠需求响应、灵活性耗尽和数据中心接入容量。
 
-因此，平台的核心输出不是单次事件中的最大削减，而是：
-
-1. 不同事件持续时间下的**可靠可交付灵活性**；
-2. 连续事件后的**剩余灵活性**；
-3. 任务积压恢复所需的时间；
-4. 事件窗口与恢复窗口合并后的真实社区峰值缓解；
-5. 静态 flexibility envelope 与 job-derived flexibility 之间的偏差。
-
-### 1.2 论文层级
-
-建议将工作分成两层：
-
-**科学层：**
-
-- 量化 static flexible fraction 是否系统性高估可交付削峰；
-- 揭示 compute debt、rebound 和 repeated-event exhaustion；
-- 提出可审计的 flexibility certificate；
-- 给出跨 workload、社区负荷、deadline 和控制器的稳健结论。
-
-**方法与平台层：**
-
-- 构建 trace-driven Gymnasium 环境；
-- 用公开 AI cluster trace 驱动任务到达；
-- 用四卡服务器标定 energy model；
-- 在统一协议下比较 Rule-based、MPC 和标准 RL；
-- 提供可复现的数据处理、训练、评价和绘图命令。
-
-Nature Communications 是目标之一，但不是由“平台 + PPO”自动保证。达到该目标需要中心结论具有跨算法、跨数据集和跨场景的普遍性，并通过严格的 out-of-sample 与不确定性分析支持。
-
-### 1.3 第一篇论文不应如何表述
-
-不建议：
-
-> We propose a reinforcement-learning platform and show that PPO reduces the peak more than rule-based control.
-
-建议：
-
-> We quantify when AI workload flexibility can be contracted as reliable community demand response, and show how compute debt, deadline risk and rebound separate nominal peak reduction from deliverable peak relief.
-
-算法比较是验证这一命题的工具，而不是论文唯一结论。
-
----
-
-## 2. 现有研究边界与本项目的差异
-
-不能声称“从未有人做过数据中心 workload shifting、需求响应、RL 平台或真实 GPU 灵活性实验”。至少需要明确面对以下相邻工作：
-
-1. 数据中心通过 workload shifting 避开 coincident peak 至少在 2013 年已经被系统研究：
-   `https://doi.org/10.1016/j.peva.2013.08.014`
-
-2. SustainDC 已提供 workload scheduling、cooling 和 battery 的数据中心强化学习 benchmark：
-   `https://proceedings.neurips.cc/paper_files/paper/2024/hash/b6676756f8a935e208f394a1ba47f0bc-Abstract-Datasets_and_Benchmarks_Track.html`
-
-3. Nature Energy 已在 256-GPU 集群上展示软件编排驱动的 AI 数据中心电网交互能力：
-   `https://www.nature.com/articles/s41560-025-01927-1`
-
-4. 2026 年 Nature Communications 已在电力系统规划层使用 firm、pause 和 shift 等标准化 flexibility envelopes：
-   `https://www.nature.com/articles/s41467-026-72324-9`
-
-因此，本项目不以“首次提出灵活数据中心”或“首次将 RL 用于数据中心”为卖点。拟验证的差异是：
-
-- 不预先给定固定 flexible fraction；
-- 从真实 AI job queue 和服务器测量自下而上推导灵活性；
-- 将 deadline miss、terminal backlog、rebound 和 repeated events 纳入同一个可交付性定义；
-- 区分 nominal reduction、event-only performance 与 recovery-window-wide peak relief；
-- 输出不同持续时间和可靠度下可审计的 flexibility certificate；
-- 评估 static envelopes 对社区实际可获得削峰价值的偏差。
-
-在完成系统综述和正式检索前，README 和论文中禁止使用“the first”之类绝对表述。可以使用更稳妥的写法：
-
-> To our knowledge, existing planning envelopes and field demonstrations have not yet established a trace-derived, rebound-adjusted certificate of firm AI workload flexibility under heterogeneous deadlines and repeated demand-response events.
-
-该表述在投稿前仍需通过系统检索重新核实。
-
----
-
-## 3. 研究问题与可证伪假设
-
-### RQ1：静态 flexibility fraction 是否高估真实可交付能力？
-
-比较：
-
-- static-20%；
-- static-30%；
-- static-40%；
-- 从 job slack、GPU demand、runtime 和 deadline 推导的动态灵活性。
-
-**H1：** 对较长 DR 持续时间、紧 deadline 和高到达强度，固定比例 envelope 会高估满足服务约束后的可交付削峰。
-
-### RQ2：灵活性是否会被连续事件耗尽？
-
-测试单次事件、同日连续事件、多日高峰和恢复时间不足的情景。
-
-**H2：** 第一次事件积累的 compute debt 会降低后续事件的可交付容量；事件间隔越短，剩余灵活性越低。
-
-### RQ3：单次事件表现最好的控制器是否也提供最可靠的长期灵活性？
-
-比较 Rule-based、MPC 和 RL 在：
-
-- event tracking；
-- deadline miss；
-- rebound；
-- terminal backlog；
-- out-of-distribution events；
-- repeated-event firm flexibility
-
-上的排名。
-
-**H3：** 最大化单次 peak reduction 的控制器不一定具有最高的 reliable deliverable flexibility；部分策略只是把峰值和服务风险转移到事件之后。
-
-### RQ4：四卡实测对 MW 级结论的影响有多大？
-
-比较 fallback power assumptions、median hardware calibration 和 workload-specific calibration。
-
-**H4：** 硬件标定会改变灵活性绝对值，但 compute debt、exhaustion 和 rebound 的主要机制在合理缩放下保持稳定。
-
-所有假设都允许被数据否定。论文不能预设 RL 一定优于 MPC，也不能预设 static flexibility 一定被高估。
-
----
-
-## 4. Demand response 问题和系统边界
-
-社区和数据中心接在同一个公共连接点（PCC）后：
+研究的最终产物不是某个控制器的 reward，而是一个具有物理和统计含义的：
 
 \[
-P_t^{\mathrm{PCC}}
-=
-P_t^{\mathrm{community}}
--
-P_t^{\mathrm{PV}}
-+
-P_t^{\mathrm{DC}}.
-\]
-
-社区、聚合商或合同给出小时级动态功率上限：
-
-\[
-P_t^{\mathrm{PCC}}\le \overline P_t^{\mathrm{PCC}}.
-\]
-
-也可以给出事件型削减要求：
-
-\[
-\Delta P_{e}^{\mathrm{req}},\qquad t\in \mathcal T_e.
-\]
-
-数据中心负荷分成：
-
-\[
-P_t^{\mathrm{DC}}
-=
-P_t^{\mathrm{rigid}}
-+
-P_t^{\mathrm{flex}}.
+\boxed{F_q(H,N,\Theta)}
 \]
 
 其中：
 
-- `rigid`：在线推理、idle、控制面、存储、网络和服务关键负荷；
-- `flex`：训练、离线推理、批处理和其他可延迟计算。
+- \(H\)：需求响应事件持续时间；
+- \(N\)：提前通知时间；
+- \(q\)：要求的可靠性水平；
+- \(\Theta\)：工作负荷、deadline、历史调度、硬件功率和社区条件。
 
-控制器每个时间步决定本小时执行多少柔性计算：
+### 2.2 这篇论文不是什么
 
-\[
-x_t=\text{executed flexible GPU-hours}.
-\]
+主论文不应被写成：
 
-未执行的工作进入 backlog，不能消失。复杂性集中在 AI workload scheduling，而不是配电网潮流。
+- DQN、PPO、SAC 的性能比较；
+- 新 reward function 的算法论文；
+- MPC 与 RL 的控制器竞赛；
+- 一个只展示“AI 数据中心可以削峰”的案例研究；
+- 一个把四卡服务器直接等同于 MW 级数据中心的硬件论文。
 
-本项目可以声称：
-
-- 降低 community PCC peak；
-- 减少共享容量或合同容量超限；
-- 提供 event-based demand response；
-- 量化 AI workload 对社区 peak relief 的贡献。
-
-本项目不能在 V0 中声称：
-
-- 解决节点电压越限；
-- 缓解特定线路拥塞；
-- 提供 frequency regulation；
-- 证明某一真实社区配电网可免扩容。
+强化学习、CMDP、安全层和硬件在环控制可以保留在代码库中，但应作为后续控制论文或 Supplementary extension，而不是决定本篇 NC 主线。
 
 ---
 
-## 5. 核心科学量：compute debt、rebound 和 firm flexibility
+## 3. 现有研究缺口
 
-### 5.1 Compute debt
-
-令：
-
-- \(A_t\)：本时段新到达的柔性计算量，GPU-h；
-- \(X_t\)：本时段实际执行量，GPU-h；
-- \(M_t\)：本时段因 deadline 失效的计算量，GPU-h；
-- \(B_t\)：尚未完成的 backlog，GPU-h。
-
-则：
+许多电力系统研究将数据中心柔性写成峰值功率的固定比例：
 
 \[
-B_{t+1}=B_t+A_t-X_t-M_t.
+F^{\mathrm{nominal}}=\alpha P_{\mathrm{DC,peak}}.
 \]
 
-定义 compute debt energy：
+这种表示忽略了五个关键事实：
+
+1. **任务不是任意可移的电量**：任务具有 release time、GPU-hour 需求和 deadline；
+2. **持续时间会改变可行域**：能够削减 1 小时，不代表能够削减 6 小时；
+3. **可靠性不是平均表现**：电网承诺要求在大量场景中稳定交付，而不是少数案例上的平均值；
+4. **推迟计算不会消失**：未执行任务形成计算债务，并必须在之后恢复；
+5. **灵活性具有历史依赖性**：第一次调度可能成功，但连续调用会消耗 deadline slack，并诱发恢复反弹。
+
+同时，现有数据中心灵活性研究常停留在“可以削峰多少”，没有进一步回答：
+
+- 这种灵活性是否能够增加数据中心的社区接入容量；
+- 它和光伏、储能是互补还是替代；
+- 硬件功率和 workload mix 的不确定性会否改变系统结论。
+
+AIDRBench 的贡献应围绕这些缺口展开，而不是围绕算法排名展开。
+
+---
+
+## 4. 核心科学问题与假设
+
+### Q1. 名义可移负荷会高估多少可靠灵活性？
+
+**假设 H1**：固定比例模型 \(F^{\mathrm{nominal}}\) 会系统性高估可交付容量，且高估程度随事件持续时间和可靠性要求增加而扩大。
+
+### Q2. 持续时间、通知时间和可靠性如何共同决定灵活性？
+
+**假设 H2**：可靠灵活性形成一个非线性的 duration–notice–reliability surface：
+
+\[
+F_q(H,N).
+\]
+
+预声明的弱单调关系为：
+
+\[
+\frac{\partial F_q}{\partial H}<0,
+\qquad
+\frac{\partial F_q}{\partial N}\ge 0,
+\qquad
+\frac{\partial F_q}{\partial q}<0.
+\]
+
+其中零 notice gain 是允许成立的结构性结果。严格正增益只是一项条件性假设：仅当通知窗口内同时存在可提前执行任务、可用空闲算力、后续服务约束具有约束力，并且因果调度确实改变执行轨迹时，才预期 \(F_q(H,N_2)>F_q(H,N_1)\)。不得通过不断增加模型复杂度来制造正结果。
+
+### Q3. 为什么连续需求响应会耗尽 AI 灵活性？
+
+**假设 H3**：第一次需求响应推迟任务后形成计算债务，降低后续 deadline slack，使后续事件的可持续容量下降，并增加恢复反弹：
+
+\[
+\text{DR dispatch}
+\rightarrow
+\text{compute debt}
+\rightarrow
+\text{reduced slack}
+\rightarrow
+\text{lower subsequent flexibility}
+\rightarrow
+\text{rebound}.
+\]
+
+### Q4. AI 柔性能够增加多少数据中心接入容量？
+
+**假设 H4**：在同一 PCC 或变压器容量下，柔性 AI 负荷可以提高可接入数据中心规模，但增益取决于社区峰值形态、光伏、储能和 deadline 分布。
+
+### Q5. AI 柔性与 PV/BESS 是互补还是替代？
+
+**假设 H5**：
+
+- AI 柔性与 PV 在部分场景中互补，因为任务可在光伏富余时提前执行；
+- AI 柔性与短时 BESS 可能部分替代，因为二者均可覆盖短峰值；
+- 在长持续时间事件或恢复约束下，AI 柔性与 BESS 可能再次表现为互补。
+
+### Q6. 硬件和工作负荷不确定性是否改变机制结论？
+
+**假设 H6**：硬件功率参数会显著改变绝对 kW 和接入容量，但“名义灵活性高估、持续时间效应和计算债务耗尽”这些机制结论应在合理不确定性范围内保持稳定。
+
+---
+
+## 5. 统一理论框架
+
+主论文区分四层证据：名义假设、完美信息上界、受限场景 NA 边界，以及独立检验的因果容量证书。只固定一个因果实现用于验证，不进行控制器排名。
+
+### 5.1 名义灵活性
+
+\[
+F^{\mathrm{nominal}}=\alpha P_{\mathrm{DC,peak}}.
+\]
+
+它代表电力系统模型中常用的静态规划假设，不考虑具体任务可行性。
+
+### 5.2 完美信息可行边界
+
+对场景 \(s\)，假设已知完整未来任务、负荷、PV 和事件信息，求得：
+
+\[
+F_s^{\mathrm{PI}}(H).
+\]
+
+这是当前任务和硬件模型下的物理上界。它回答：
+
+> 在知道未来的理想条件下，任务约束本身最多允许削减多少？
+
+为便于可靠性比较，可进一步定义跨场景的 clairvoyant firm boundary：
+
+\[
+F_q^{\mathrm{PI}}(H)
+=
+\max\left\{R:\Pr_s\left[F_s^{\mathrm{PI}}(H)\geq R\right]\geq q\right\}.
+\]
+
+实现时不能先在样本上选择 (R)，再把同一批样本套入 Bernoulli
+置信区间。PI 分布边界使用 exact-binomial nonparametric lower tolerance
+order statistic；样本量不足时报告 `estimable=false` 和 `NaN`，而不是把
+容量写成 0 kW。
+
+### 5.3 非前视可靠边界
+
+现实决策不能看到完整未来。非前视优化要求在当时不可区分的场景中采取相同决策：
+
+\[
+x_{t,s}=x_{t,s'},
+\qquad
+\text{if }s\text{ and }s'\text{ are indistinguishable at time }t.
+\]
+
+理论目标是：
+
+\[
+F_q^{\mathrm{NA}}(H,N).
+\]
+
+当前优化器在有限场景集合 (S) 和预声明策略类 \(\mathcal P\) 上实际计算：
+
+\[
+F_{q,S}^{\mathrm{NA},\mathcal P}(H,N).
+\]
+
+它应表述为 **restricted scenario-based causal bound**，不能把在同一集合
+上同时选择容量和失败场景所得的数值称为独立的可靠性认证，也不能把其
+审计用 policy export 描述成可直接部署到 unseen locked scenario 的控制器。
+
+它是有限场景与预声明策略类下的信息约束规划边界，而不是独立可靠性证书。它回答：
+
+> 在给定场景集合和受限信息结构中，非前视约束会把 PI 上界压低多少？
+
+为使这个差值具有同一统计口径，同时从集合 \(S\) 的逐场景 PI 容量定义
+经验 order statistic：
+
+\[
+F_{q,S}^{\mathrm{PI,emp}}(H)
+=
+F_{(\lfloor(1-q)|S|\rfloor+1),S}^{\mathrm{PI}},
+\]
+
+其中右侧按容量升序排列。该值与 NA 使用相同场景、相同允许失败数，且
+同样不带独立置信下界。正式 PI tolerance bound
+\(F_q^{\mathrm{PI}}\) 仍单独报告，不能与经验 NA 数值直接相减后声称统计
+置信度。
+
+### 5.4 独立因果容量证书
+
+固定一个不训练的因果 reference implementation（当前为 robust MPC），只使用当时已释放任务、当前队列、短时社区负荷预测以及已经进入 notice window 的 DR 请求。容量仅在 validation 集选择，然后在不重叠的 500 个 locked-ID episode 上一次性检验：
+
+\[
+F_q^{\mathrm{causal}}(H,N)
+=
+\max\{R:\underline p_{0.95}^{\mathrm{locked-ID}}(R)\ge q\}.
+\]
+
+这里的 Wilson 下界只用于预先冻结的候选容量。`locked_ood` 另行检验气候 profile 和 arrival process 外推，不用于定义主分布上的 q。
+
+### 5.5 三个证据差距
+
+#### 物理可行性差距
+
+\[
+\Delta_{\mathrm{physical}}
+=
+F^{\mathrm{nominal}}-F_q^{\mathrm{PI}}.
+\]
+
+它反映固定比例假设因为忽略任务 deadline、工作量守恒和恢复义务而产生的高估。
+
+#### 信息与可靠性差距
+
+\[
+\Delta_{\mathrm{information},S}
+=
+F_{q,S}^{\mathrm{PI,emp}}-F_{q,S}^{\mathrm{NA},\mathcal P}.
+\]
+
+它是在同一有限场景集合和相同经验成功比例下，由预声明信息/策略限制
+产生的描述性差距；独立统计单位是一个 frozen episode，不附带置信区间。
+它不能用正式 PI tolerance bound 与同集合 NA 数值混算。
+
+#### 实现与泛化差距
+
+\[
+\Delta_{\mathrm{implementation}}
+=
+F_{q,S}^{\mathrm{NA},\mathcal P}-F_q^{\mathrm{causal}}.
+\]
+
+该差距不用于比较算法优劣，而用于防止把同一场景集合上求得的 NA 数值误写成 unseen scenarios 上的可靠承诺。
+
+### 5.6 控制算法扩展仍为可选
+
+主线必须报告一个冻结的因果实现及其独立证书；额外的 threshold、MPC 或 RL 横向比较仍只属于 Supplementary/后续控制论文：
+
+\[
+\eta_{\mathrm{online}}
+=
+\frac{F_q^{\mathrm{MPC}}}{F_q^{\mathrm{NA}}}.
+\]
+
+它只用于说明理论边界具有一定在线可实现性。无需比较 DQN、PPO、SAC，更不能把在线控制器作为主创新。
+
+---
+
+## 6. 系统模型
+
+### 6.1 AI 任务与队列
+
+对工作负荷类别 \(c\)：
+
+\[
+B_{c,t+1}
+=
+B_{c,t}+A_{c,t}-X_{c,t}-M_{c,t},
+\]
+
+其中：
+
+- \(A_{c,t}\)：新到达任务量；
+- \(X_{c,t}\)：本时段执行量；
+- \(M_{c,t}\)：因 deadline 到期而未完成的任务量；
+- \(B_{c,t}\)：任务积压。
+
+约束包括：
+
+- release time；
+- deadline；
+- 每小时 GPU 执行容量；
+- 任务工作量守恒；
+- deadline miss 上限；
+- terminal backlog 上限。
+
+### 6.2 数据中心功率
+
+使用工作负荷类别相关的功率模型：
+
+\[
+P_t^{\mathrm{DC}}
+=
+P_{\mathrm{fixed}}
++
+\sum_c e_c X_{c,t},
+\]
+
+其中 \(e_c\) 来自四 GPU 服务器的硬件测量和校准。硬件 repeat 的统计单位是一次独立 workload run；同一次四卡运行中的四张卡只用于形成该 run 的均值，不能当作四个独立重复。当前 active-power 拟合只有两个独立 fit runs 和一个 held-out run，因此区间应被视为小样本不确定性，而不是高精度硬件定律；idle 仅有一个 node-level run，node fixed overhead 仍是工程假设范围。
+
+数据来源也必须准确表述：社区负荷为 NLR/NREL EULP 建模并经实测校验的 profile，不是本项目采集的社区电表数据；任务到达为 Alibaba GPU 2026 trace-calibrated synthetic process，deadline 由预声明 policy 生成；DR 事件来自配置的峰时窗口随机抽样，不是真实 utility dispatch 记录。
+
+应同时区分：
+
+- **reference-mix operating peak**：按参考 workload mix 得到的运行峰值；
+- **worst-class/nameplate peak**：所有柔性 GPU 运行最高功率类别时的上界。
+
+论文中的归一化容量应明确选择一种稳定定义，不能把二者混用。
+
+### 6.3 计算债务
+
+如果计算债务表示“延迟任务造成的额外未来能源义务”，应定义为增量功率：
 
 \[
 D_t^{\mathrm{comp}}
 =
-B_t\,\bar e_{\mathrm{GPU-h}},
+\sum_c
+B_{c,t}\,
+\mathrm{PUE}
+\left(P_{c}^{\mathrm{active}}-P^{\mathrm{idle}}\right).
 \]
 
-其中 \(\bar e_{\mathrm{GPU-h}}\) 由四卡服务器实测的 workload-energy 参数得到。该量不是额外消耗的能量，而是未来仍需兑现的计算能量义务。
+如果使用 gross service energy，则必须明确改名，不能同时声称排除了 idle pool。
 
-### 5.2 事件内削减
-
-对事件 \(e\)：
+### 6.4 社区 PCC 功率
 
 \[
-\Delta P_{e,t}^{\mathrm{del}}
+P_t^{\mathrm{PCC}}
 =
-P_{t}^{\mathrm{PCC,baseline}}
--
-P_{t}^{\mathrm{PCC,control}},
-\qquad t\in\mathcal T_e.
+L_t
++P_t^{\mathrm{DC}}
++P_t^{\mathrm{ch}}
+-P_t^{\mathrm{dis}}
+-G_t^{\mathrm{PV}},
 \]
 
-事件平均履约率：
+并满足：
 
 \[
-\eta_e^{\mathrm{delivery}}
-=
-\frac{\sum_{t\in\mathcal T_e}
-\min(\Delta P_{e,t}^{\mathrm{del}},\Delta P_e^{\mathrm{req}})}
-{|\mathcal T_e|\Delta P_e^{\mathrm{req}}}.
-\]
-
-只看该指标会奖励“事件内全停、事件后全补”的策略，因此不能作为唯一结果。
-
-### 5.3 Rebound 与窗口级真实削峰
-
-设事件后的恢复窗口为 \(\mathcal T_e^{\mathrm{post}}\)。定义最大反弹：
-
-\[
-P_e^{\mathrm{rebound}}
-=
-\max_{t\in\mathcal T_e^{\mathrm{post}}}
-\left[
-P_t^{\mathrm{PCC,control}}
--
-P_t^{\mathrm{PCC,baseline}}
-\right]_+.
-\]
-
-定义包含事件与恢复期的 window-wide peak relief：
-
-\[
-\Delta P_e^{\mathrm{window}}
-=
-\max_{t\in \mathcal W_e}P_t^{\mathrm{PCC,baseline}}
--
-\max_{t\in \mathcal W_e}P_t^{\mathrm{PCC,control}},
+P_t^{\mathrm{PCC}}
+\leq
+K^{\mathrm{PCC}}.
 \]
 
 其中：
 
-\[
-\mathcal W_e=\mathcal T_e\cup\mathcal T_e^{\mathrm{post}}.
-\]
-
-若 \(\Delta P_e^{\mathrm{window}}\le0\)，说明控制器没有真正降低该窗口的社区峰值，只是移动了峰值。
-
-### 5.4 可靠可交付灵活性
-
-对控制器 \(\pi\)、事件持续时间 \(H\)、候选削减容量 \(c\) 和测试 episode \(\omega\)，定义成功事件：
-
-\[
-I_{\pi,\omega}(c,H)=1
-\]
-
-当且仅当同时满足：
-
-1. \(\eta^{\mathrm{delivery}}\ge \eta_{\min}\)；
-2. deadline miss rate \(\le \epsilon_M\)；
-3. rebound ratio \(\le \epsilon_R\)；
-4. window-wide peak relief \(\ge \eta_W c\)；
-5. terminal backlog excess \(\le \epsilon_B\)；
-6. 没有违反柔性 GPU 容量和任务守恒。
-
-经验可靠可交付灵活性定义为：
-
-\[
-F_q^{\pi}(H)
-=
-\sup\left\{
- c:
-\frac{1}{N}\sum_{\omega=1}^{N}I_{\pi,\omega}(c,H)\ge q
-\right\}.
-\]
-
-默认可以报告：
-
-- \(F_{0.90}(1\,\mathrm h)\)；
-- \(F_{0.95}(2\,\mathrm h)\)；
-- \(F_{0.95}(4\,\mathrm h)\)；
-- \(F_{0.99}(1\,\mathrm h)\)。
-
-正式论文不应仅使用样本成功率。候选容量只有在二项分布成功率的单侧置信下界达到 \(q\) 时才被认证。实现可采用 Wilson 或 Clopper-Pearson lower confidence bound，并在配置中固定置信水平。
-
-### 5.5 灵活性耗尽和恢复
-
-定义 fresh-state flexibility 为 \(F_q^{(0)}(H)\)，第 \(k\) 次事件前的 flexibility 为 \(F_q^{(k)}(H)\)。剩余灵活性比例：
-
-\[
-\rho_k^{\mathrm{res}}(H)
-=
-\frac{F_q^{(k)}(H)}{F_q^{(0)}(H)}.
-\]
-
-定义 exhaustion：
-
-\[
-E_k(H)=1-\rho_k^{\mathrm{res}}(H).
-\]
-
-恢复时间定义为事件结束后，backlog 和 slack distribution 回到 pre-event 基线容差范围所需时间：
-
-\[
-T_e^{\mathrm{recover}}
-=
-\min\{\tau:\ |B_{t_e+\tau}-B_e^{\mathrm{base}}|\le \epsilon\}.
-\]
-
-### 5.6 静态 envelope 偏差
-
-对固定 flexibility fraction \(\alpha\)：
-
-\[
-F^{\mathrm{static}}(H)=\alpha P^{\mathrm{DC,peak}}.
-\]
-
-比较：
-
-\[
-\mathrm{Bias}_{\alpha}(H)
-=
-\frac{F^{\mathrm{static}}(H)-F_q(H)}{F_q(H)+\epsilon}.
-\]
-
-该指标用于检验规划研究中固定 pause/shift envelope 与 job-derived firm flexibility 之间是否存在系统性偏差。
+- \(L_t\)：不含数据中心的社区背景负荷；
+- \(G_t^{\mathrm{PV}}\)：本地使用的光伏功率；
+- \(P_t^{\mathrm{ch}},P_t^{\mathrm{dis}}\)：储能充放电功率；
+- \(K^{\mathrm{PCC}}\)：PCC 或变压器容量。
 
 ---
 
-## 6. 数据中心小时功率模型
+## 7. 可靠灵活性定义
 
-将数据中心 IT 负荷分为刚性部分和柔性 GPU 池。
+### 7.1 主分析：单事件独立 episode
 
-### 6.1 刚性部分
+为了清楚识别 duration、notice 和 reliability 的作用，主 firm-capacity surface 使用：
+
+> 每个 episode 只设置一个需求响应事件，每个 episode 是一个独立 Bernoulli trial。
+
+候选容量 \(R\) 成功，必须同时满足：
+
+1. 事件平均交付：
 
 \[
-P_t^{\mathrm{rigid,IT}}
-=
-P_t^{\mathrm{inference}}
-+
-P_t^{\mathrm{other,rigid}}.
+\eta_e^{\mathrm{mean}}\geq0.95;
 \]
 
-V0 可采用三种来源：
-
-1. Alibaba 2026 中 `online_inference` 和高优先级 workload 的小时聚合；
-2. 由 trace 分布生成的刚性日负荷曲线；
-3. 简单的归一化固定曲线，作为环境开发 fallback。
-
-刚性负荷不受 agent 控制。
-
-### 6.2 柔性 GPU 池
-
-设柔性池有 \(N_{\mathrm{flex}}\) 张 GPU，时间步为 \(\Delta t=1\) h。本小时执行 \(x_t\) GPU-h，则平均 active GPU 数为：
+2. 每个小时交付：
 
 \[
-n_t^{\mathrm{active}}=\frac{x_t}{\Delta t},
+P_t^{\mathrm{control}}
+\leq
+P_t^{\mathrm{baseline}}-0.95R,
+\quad \forall t\in\mathcal E;
+\]
+
+3. deadline miss rate 不超过阈值；
+4. rebound ratio 不超过阈值；
+5. event-plus-recovery window 的峰值 relief 达到阈值；
+6. terminal backlog 不超过阈值。
+
+可靠容量定义为：
+
+\[
+F_q(H,N)
+=
+\max\left\{R:\underline p_{0.95}(R)\geq q\right\},
+\]
+
+其中 \(\underline p_{0.95}\) 是针对**预先固定候选容量**的一侧 Wilson
+置信下界。若容量本身由同一批 PI 样本选择，则改用精确非参数 tolerance
+bound；NA ensemble optimization 单独报告为受限场景边界。
+
+### 7.2 重复事件：单独的耗尽机制实验
+
+重复事件不应与主 duration surface 混在一起，而应作为独立 Result：
+
+- 每个 episode 包含多个事件；
+- 同一 episode 中所有事件成功，episode 才算成功；
+- 事件行不能被当作独立统计样本；
+- 主要变量为事件次数、事件间隔、恢复窗口和前次计算债务。
+
+定义第 \(j\) 次事件的剩余灵活性：
+
+\[
+\rho_j
+=
+\frac{F_j}{F_1}.
+\]
+
+并研究：
+
+\[
+\rho_j=f(j,\text{gap},H,\text{deadline policy},D_{j-1}^{\mathrm{comp}}).
+\]
+
+---
+
+## 8. Nature Communications 主文 Results 结构
+
+## Result 1 — 名义可移负荷高估 job-derived firm capacity
+
+### 科学问题
+
+固定比例 \(\alpha P_{\mathrm{DC,peak}}\) 与真实任务可行性之间存在多大差距？
+
+### 分析内容
+
+- 首先比较 \(F^{\mathrm{nominal}}\) 与 \(F_q^{\mathrm{PI}}\)，报告任务约束造成的定量折损；
+- 再用任务 arrival、GPU-hour、deadline 和类别功率解释该差距；
+- 区分 nominal、PI、restricted NA 和 fixed causal realization 四层容量；
+- 四 GPU 功率测量与 held-out validation 仅作为功率模型锚点，原始曲线进入 Supplementary。
+
+### 当前定量结果
+
+Model A 的 reference-mix operating peak 为 201.00 kW，因此预声明的 50%
+nominal proxy 为 100.50 kW。100 个 development frozen scenarios 上，q=0.95、
+95% confidence 的 exact-binomial PI lower-tolerance boundary 为：
+
+| Duration | Nominal / kW | PI firm bound / kW | Nominal overstatement / kW | Overstatement / nominal |
+|---:|---:|---:|---:|---:|
+| 1 h | 100.50 | 53.01 | 47.50 | 47.3% |
+| 2 h | 100.50 | 44.46 | 56.04 | 55.8% |
+| 3 h | 100.50 | 41.19 | 59.31 | 59.0% |
+| 4 h | 100.50 | 40.15 | 60.35 | 60.1% |
+| 6 h | 100.50 | 40.15 | 60.35 | 60.1% |
+| 8 h | 100.50 | 37.76 | 62.74 | 62.4% |
+
+因此 nominal proxy 在测试持续时间内高估 job-derived PI bound 的幅度为
+47.50--62.74 kW，即 nominal 的 47.3--62.4%。PI 是知道完整未来的物理规划
+上界，尚且只有 nominal 的 37.6--52.7%；这使“不能把可移负荷比例直接当作
+firm DR 容量”成为可量化结果，而不只是概念判断。完整输入与结果哈希见
+[`data/manifests/nature_mainline_nominal_gap_results_v1.yaml`](data/manifests/nature_mainline_nominal_gap_results_v1.yaml)。
+
+### 预期结论
+
+名义柔性不能直接作为电网资源；deadline 与功率结构会产生显著的物理可行性差距。
+
+### 对应主图
+
+**Figure 1：Nominal-to-job-derived firm-capacity gap**
+
+- a：名义容量与 job-derived PI boundary 的定量差距；
+- b：任务 arrival–deadline–execution 关系；
+- c：任务调度到 DC/PCC 功率；
+- d：nominal、PI、restricted NA 与 causal 四层证据关系。
+
+---
+
+## Result 2 — 持续时间、通知时间和可靠性共同塑造 firm-flexibility surface
+
+### 科学问题
+
+可靠灵活性如何随 \(H\)、\(N\) 和 \(q\) 变化？
+
+### 分析内容
+
+计算：
+
+\[
+F_q^{\mathrm{PI}}(H),
 \qquad
-0\le n_t^{\mathrm{active}}\le N_{\mathrm{flex}}.
+F_{q,S}^{\mathrm{NA},\mathcal P}(H,N),
+\qquad
+F_q^{\mathrm{causal}}(H,N).
 \]
 
-使用实测的 idle 和 active 平均功率：
+核心网格：
 
-\[
-P_t^{\mathrm{flex,IT}}
-=
-N_{\mathrm{flex}}p^{\mathrm{idle}}
-+n_t^{\mathrm{active}}
-\left(p^{\mathrm{active}}-p^{\mathrm{idle}}\right).
-\]
+- duration：1、2、3、4、6、8 h；
+- notice：0、2、6 h；
+- reliability：90%、95%、99%；
+- workload utilization：低、参考、高；
+- deadline policy：宽松、参考、严格。
 
-如果不同任务类型的平均功率不同：
+### 预期结论
 
-\[
-P_t^{\mathrm{flex,IT}}
-=
-N_{\mathrm{flex}}p^{\mathrm{idle}}
-+
-\sum_c n_{c,t}^{\mathrm{active}}
-\left(p_c^{\mathrm{active}}-p^{\mathrm{idle}}\right).
-\]
+- 短事件受动态功率上限约束；
+- 长事件逐渐转为 deadline 和总计算量约束；
+- 提前通知的容量价值允许为零；只有在可提前执行工作、空闲算力和约束条件同时满足时，才可能通过预执行增加 slack；
+- 更高可靠性要求显著压低可承诺容量。
 
-V0 为了保持一维动作，可以先使用 workload-mix 加权后的平均 \(p^{\mathrm{active}}\)。不同任务类别的独立调度放到 V1。
+### 对应主图
 
-### 6.3 Facility power
+**Figure 2：Nominal-to-firm flexibility surface**
 
-\[
-P_t^{\mathrm{DC}}
-=
-\mathrm{PUE}_t
-\left(
-P_t^{\mathrm{rigid,IT}}+P_t^{\mathrm{flex,IT}}
-\right).
-\]
-
-V0 默认：
-
-```yaml
-pue:
-  mode: constant
-  value: 1.20
-```
-
-环境不需要温度状态。若以后研究气候相关冷却，可把 `PUE_t` 替换成按小时变化的外生序列，但仍不必改动 workload scheduler。
+- a：不同 duration 下的 \(F^{\mathrm{nominal}}\)、\(F_q^{\mathrm{PI}}\)、\(F_{q,S}^{\mathrm{NA},\mathcal P}\) 与 \(F_q^{\mathrm{causal}}\)；
+- b：duration–notice heatmap；
+- c：不同 reliability 水平的 capacity curves；
+- d：physical gap 与 information gap 分解。
 
 ---
 
-## 7. 柔性 workload 表示：deadline buckets
+## Result 3 — 计算债务导致灵活性耗尽和恢复反弹
 
-V0 不直接让 agent 从数千个 job 中做组合选择。所有柔性任务被转换成带 deadline 的 GPU-hour，并放入固定的 deadline buckets。
+### 科学问题
 
-推荐 bucket：
+为什么第一次可以成功的需求响应，在连续调用后会失效？
 
-```text
-0 h       已到期，当前必须完成
-1 h       1小时内到期
-2 h       2小时内到期
-3 h       3小时内到期
-4–6 h
-7–12 h
-13–24 h
->24 h
-```
+### 分析内容
 
-环境内部始终用 earliest-deadline-first（EDF）从最紧迫 bucket 中扣除 agent 决定的执行量。agent 只决定总执行量，不决定任务排序。
+- 单次事件前后 backlog、deadline slack 和 compute debt；
+- 不同事件间隔下的第二、第三、第四次可持续容量；
+- 每次重复事件与同一 frozen scenario、同一时刻的 fresh single-event
+  counterfactual 配对，避免把社区时段差异误判为历史耗尽；
+- 恢复过程中的 PCC rebound；
+- 计算债务与剩余灵活性的关联；
+- event duration 与 recovery gap 的交互作用。
 
-### 7.1 每一步的 bucket 更新
+事件局部的 delivery、interval delivery、rebound 和 window relief 与联合
+episode 的 deadline miss、terminal backlog 分开报告。joint-episode success
+是重复事件主统计单位；固定容量下的配对交付比只是机制诊断，不得写成
+event-wise firm-capacity certificate。
 
-1. 将新到达任务加入与其 slack 对应的 bucket；
-2. agent 给出本小时执行量 \(x_t\)；
-3. 按 EDF 顺序从 bucket 中扣除 \(x_t\)；
-4. 未完成的 `0 h` bucket 记为 deadline miss；
-5. 所有剩余 bucket 向前移动一档；
-6. 进入下一小时。
+### 当前 development 与 validation 结果
 
-伪代码：
+100 个 nominal development scenarios 上的完整 H × recovery-gap 配对实验已
+完成。到第 4 次事件，平均配对 compute-debt increment 为 0.58–1.37 MWh，
+但相对同场景、同钟点 fresh event 的 p05 residual flexibility ratio 仍为
+0.9897–1.0000。也就是说，当前 Model A 中首先积累的是计算债务和服务风险，
+不是瞬时削峰功率的大幅消失。
 
-```python
-arrivals = scenario.arrivals[t]
-buckets.add(arrivals)
+joint-episode success 随 H/gap 在 0.00–0.94 之间变化。H=8、gap=24 h 时
+四次事件几乎铺满 7 天主时域，100/100 episodes 都违反联合 deadline 服务
+阈值，尽管第 4 次事件的 p05 配对交付仍为 fresh event 的 98.97%。因此结果
+不能写成“恢复间隔越长必然恢复越好”：只有空档内存在可用计算余量时，时间
+间隔才能偿还 compute debt。当前结果是 fixed-capacity mechanism diagnostic，
+不是 repeated-event firm-capacity certificate，也尚未经过 locked evaluation。
 
-requested_work = action_to_gpu_hours(action)
-executed = buckets.serve_edf(min(requested_work, flex_capacity_gpu_h))
+独立 validation 规格随后在提交 `097ff89` 上按预注册 seeds 20000–20099
+完成，固定沿用 development 的 H=4（44.00 kW）和 H=8（41.19 kW）承诺，
+未在 validation 上重新选容量。100 个独立 seeds、10 个 H × gap programs
+共得到 1,000 个联合 episode 和 4,000 个事件结果。第 4 次事件的配对
+compute-debt increment 为 0.55–1.38 MWh，而 residual flexibility ratio 仍为
+0.9910–1.0000；跨 gap 平均债务到第 4 次分别增至 H=4 的 0.75 MWh 和
+H=8 的 1.14 MWh。四事件 joint success 为 0.00–0.97；只有 H=4、gap=8 h
+的经验成功率达到 0.95，但其单侧 95% Wilson 下界为 0.927，因此没有任何单元
+可被误写成 q=0.95 repeated-event 容量证书。该独立结果支持“服务债务先于
+功率能力耗尽”的有限机制解释。逐单元结果、描述性 development–validation
+一致性和完整哈希回执见
+[`data/manifests/nature_mainline_validation_exhaustion_results_v1.yaml`](data/manifests/nature_mainline_validation_exhaustion_results_v1.yaml)。
 
-missed = buckets.expire_zero_bucket()
-buckets.shift_one_hour()
-```
+### 预期结论
 
-### 7.2 为什么选择 fluid workload
+需求响应不是无成本地“删除”电量，而是将计算义务转移到未来；连续调用造成可量化的资源耗尽。
 
-V0 允许一个大任务被表示为跨小时执行的 GPU-hour，因此是 preemptive / fluid approximation。它的优点是：
+### 对应主图
 
-- 环境非常稳定；
-- MPC 可以写成 LP；
-- RL 动作空间是一维；
-- 易于检查计算守恒；
-- 适合先验证社区调峰可行性。
+**Figure 3：Compute-debt-driven exhaustion**
 
-V1 再加入：
-
-- non-preemptive jobs；
-- gang scheduling；
-- checkpoint overhead；
-- 多种 GPU 类型；
-- job-level action masking。
-
----
-
-### 7.3 两种内部模式：bucket mode 与 job-level mode
-
-平台应同时保留两个后端：
-
-**Bucket mode**
-
-- 用于环境开发和大规模 RL 训练；
-- 将待完成工作按 remaining slack 聚合；
-- 状态维度固定，计算速度快；
-- action 为本时段执行的 aggregate GPU-hours。
-
-**Job-level mode**
-
-- 用于正式外部验证和关键敏感性分析；
-- 每个 job 至少包含 `release_time`, `gpu_request`, `runtime_h`, `deadline_h`, `priority`, `job_type`；
-- 可配置 preemptible/non-preemptible；
-- 可配置 gang scheduling、minimum run quantum 和 checkpoint overhead；
-- agent 仍可输出 aggregate capacity，环境内部使用 EDF/slack-aware dispatcher 映射到具体 jobs。
-
-正式论文至少应证明 bucket mode 的主要结论在 job-level mode 中不发生方向性反转。若两种模式排名不同，应将该差异作为结果报告，而不是只保留更有利的模式。
-
-## 8. 时间分辨率和 episode
-
-### 8.1 默认设置
-
-```yaml
-timestep_hours: 1
-episode_days: 7
-clearance_tail_hours: 48
-forecast_horizon_hours: 6
-max_deadline_hours: 48
-```
-
-推荐使用一周 episode，而不是单日 episode，原因是：
-
-- 可以出现连续多次 DR；
-- 能观察 backlog 累积；
-- 能观察周内负荷模式；
-- 能评估事件结束后的 rebound。
-
-episode 末尾增加 24 h clearance tail，用于清理尚未完成的任务。主 KPI 只统计前 7 天，tail 仅避免利用 episode 边界逃避任务完成。
-
-### 8.2 15 min 扩展
-
-V1 可将 `timestep_hours` 改为 0.25，并把 Alibaba 小时任务量在小时内按随机或均匀方式细分。只有在以下情况下才值得做：
-
-- 小时模型已稳定；
-- 审稿人要求更细 DR 时间尺度；
-- 有 15 min 社区负荷；
-- 需要研究 15–60 min DR 事件。
-
-第一版无需秒级环境。
+- a：代表性任务队列和功率轨迹；
+- b：compute debt 随时间变化；
+- c：第 \(j\) 次事件的 residual flexibility ratio；
+- d：recovery gap–event count response surface；
+- e：rebound 与计算债务的关系。
 
 ---
 
-## 9. 数据源
+## Result 4 — AI 柔性增加社区数据中心接入容量并改变分布式能源价值
 
-## 9.1 Alibaba Cluster Trace GPU v2026
+### 科学问题
 
-官方仓库：
+在同一 PCC 容量下，任务柔性能够使社区多接入多少 AI 数据中心？
 
-```text
-https://github.com/alibaba/clusterdata/tree/master/cluster-trace-gpu-v2026
-```
+### 核心 2 × 2 × 2 设计
 
-官方数据目录：
-
-```text
-https://tre-clusterdata.oss-cn-hangzhou.aliyuncs.com/cluster-trace-gpu-v2026/data/
-```
-
-该 release 提供约 6 个月的相对时间 trace，公开表包括：
-
-| 文件 | 压缩大小 | V0 用途 |
-|---|---:|---|
-| `asi_opensource_job_execution_summary.zip` | 约 1.19 GB | GPU request、duration、priority、job/model type 分布 |
-| `asi_opensource_pod_hourly.zip` | 约 351.8 GB | 真实的 day/hour 时间顺序、used GPU-hours、运行/等待状态 |
-| `asi_opensource_server_hourly.zip` | 约 3.08 GB | 服务器和 GPU inventory；V0 非必需 |
-| `asi_opensource_network_hourly.zip` | 约 204 MB | 网络研究；V0 不使用 |
-
-关键字段：
-
-```text
-pod_id
-workload_id
-state_public
-priority_class
-job_type_public
-model_type_public
-gpu_request
-used_gpu_hours
-avg_gpu_sm_util
-day
-hour
-duration_hours
-```
-
-公开 job type 包括：
-
-```text
-training
-online_inference
-offline_inference
-dev
-other
-unknown
-```
-
-### 9.1.1 Lite 模式
-
-只下载 `job_execution_summary`。它没有 day/hour，因此只能得到任务类型、GPU request 和 duration 分布，不能 replay 真实到达顺序。
-
-Lite 模式应被描述为：
-
-> **Alibaba-2026-calibrated synthetic arrivals**
-
-而不是：
-
-> **Alibaba 2026 chronological trace replay**
-
-Lite 模式适合先搭环境、调算法和做单元测试。
-
-### 9.1.2 Full-trace 模式
-
-下载 `pod_hourly`，按 `pod_id` 聚合得到：
-
-- first observed hour；
-- last observed hour；
-- total used GPU-hours；
-- job type；
-- priority；
-- GPU request；
-- model type。
-
-Full-trace 模式可以构造真实相对日序列，是正式论文的推荐主结果。官方压缩包很大，下载前应确认存储空间；解压后的 Parquet 数据会显著大于压缩包。
-
-### 9.1.3 V0 的 flexible / rigid 分类
-
-主分析建议：
-
-```yaml
-flexible:
-  job_type_public: [training, offline_inference]
-  priority_class: [LP]
-
-rigid:
-  job_type_public: [online_inference]
-  priority_class: [HP]
-
-excluded_main_analysis:
-  job_type_public: [dev, other, unknown]
-```
-
-敏感性分析再测试：
-
-- `Other` priority 中有多少比例可以移动；
-- training 是否全部可移动；
-- offline inference 的 flexible share；
-- dev workload 是否纳入。
-
-Alibaba trace 不提供真实 deadline。所有 deadline 都是平台生成的场景参数，必须在论文中明确说明。
-
----
-
-## 9.2 社区负荷
-
-### 默认：可复现合成社区
-
-仓库必须自带一个无需外部数据即可运行的社区负荷生成器，包含：
-
-- base load；
-- morning peak；
-- evening peak；
-- weekday/weekend variation；
-- seasonal multiplier；
-- Gaussian 或 block-bootstrap noise；
-- optional PV。
-
-合成数据用于：
-
-- CI 单元测试；
-- 快速训练；
-- 开源用户零配置运行。
-
-### 正式数据：NREL/OEDI End-Use Load Profiles
-
-官方页面：
-
-```text
-https://data.openei.org/submissions/4520
-```
-
-公开 S3：
-
-```text
-s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/
-```
-
-该数据提供住宅和商业建筑的 15 min load profiles。正式论文可：
-
-1. 选择一个气候区；
-2. 抽取住宅、办公、零售或学校建筑；
-3. 聚合成社区；
-4. 从 15 min 重采样为 1 h；
-5. 归一化到目标社区峰值。
-
-查看数据目录：
-
-```bash
-aws s3 ls --no-sign-request \
-  s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/
-```
-
-不建议第一周就下载整个数据湖。先使用仓库自带 synthetic community，把环境跑通后再接入一个选定区域的公开 profile。
-
-### 日本扩展
-
-以后可加入九州/JEPX 价格或日本区域负荷，但除非获得真实配电馈线数据，不应将结果表述为具体福冈配电网实证。
-
----
-
-## 9.3 DR 信号
-
-V0 不依赖复杂电力市场。仓库生成三类 DR 场景：
-
-### Capacity-limit
-
-```text
-PCC total power must remain below a dynamic limit.
-```
-
-### Event-based reduction
-
-```text
-Start: 17:00
-Duration: 2–4 h
-Requested reduction: 10%–30% of uncontrolled DC peak
-Notice: 0–6 h
-```
-
-### Price-only extension
-
-低优先级扩展，用电价代替硬上限。价格不应成为第一篇论文唯一场景，因为价格响应无法直接评价 DR 是否履约。
-
----
-
-## 9.4 四卡服务器标定数据
-
-最小 workload classes：
-
-| Class | 示例 | 主要映射 |
+| 组合维度 | 水平 1 | 水平 2 |
 |---|---|---|
-| `idle` | 模型未运行或空闲 GPU | flexible pool idle power |
-| `offline_inference` | 批量 LLM 推理 | Alibaba offline inference |
-| `training` | LoRA/QLoRA 或代表性训练 | Alibaba training |
-| `optional_other` | diffusion / CV | 敏感性分析 |
+| 数据中心 | rigid | workload-flexible |
+| 光伏 | without PV | with PV |
+| 储能 | without BESS | with BESS |
 
-每个 class 至少测试：
+对每个组合求：
 
-- 1 GPU；
-- 2 GPU；
-- 4 GPU；
-- 3–5 个重复；
-- 足够长的稳定运行区间。
+\[
+C_{\mathrm{DC,max}}.
+\]
 
-最终输出 `workload_energy.csv`，而不是秒级 telemetry 文件作为环境输入。
+并报告：
+
+\[
+\Delta C_{\mathrm{hosting}}
+=
+C_{\mathrm{flex}}-C_{\mathrm{rigid}},
+\]
+
+\[
+M_{\mathrm{hosting}}
+=
+\frac{C_{\mathrm{flex}}}{C_{\mathrm{rigid}}}.
+\]
+
+独立统计单位是 frozen scenario，8 个 portfolio 是同一场景内的配对条件。
+每个场景分别求解后，共同可行的 headline hosting capacity 取场景最优值的
+最小值；该分解与共享一个 capacity scale 的联合优化完全等价。场景内的
+flexible–rigid 差值和 AI–DER difference-in-differences 使用 10,000 次确定性
+bootstrap，并对 8 个预声明 contrasts 构造 Bonferroni 95% family-wise
+simultaneous intervals。
+
+### 当前 development 结果
+
+100 个 frozen scenarios（而非 800 个 portfolio 行）构成独立样本。共同可行
+容量和同场景配对结果如下；这些是 development planning bounds，不是 locked
+certificate 或现实因果效应：
+
+| PV | BESS | rigid / kW | flexible / kW | simultaneous gain / kW |
+|---|---:|---:|---:|---:|
+| 无 | 无 | 202.15 | 429.72 | 227.57 |
+| 无 | 有 | 278.60 | 592.93 | 314.34 |
+| 有 | 无 | 212.44 | 451.60 | 239.16 |
+| 有 | 有 | 313.51 | 658.16 | 344.65 |
+
+四个场景内平均 AI hosting gains 的 Bonferroni 95% simultaneous intervals
+均完全高于零。按预注册的 10.05 kW practical-equivalence margin，AI–BESS 在
+有/无 PV 条件下均表现为替代，AI–PV 在有/无 BESS 条件下均表现为互补。
+两组 development 主实验的精确数值、输入/输出 SHA-256 和复跑状态统一记录在
+[`data/manifests/nature_mainline_development_results_v1.yaml`](data/manifests/nature_mainline_development_results_v1.yaml)；
+该文件是 post-run receipt，不会反向修改预注册协议。
+
+### 独立 validation 复现
+
+在不重新选择模型、portfolio 或统计规则的条件下，同一 2 × 2 × 2 分析已在
+100 个独立 validation scenarios（seeds 20000--20099）上完成，800/800 个
+优化均为 optimal，未读取 locked-ID/OOD。四个平均 paired AI hosting gains
+分别为 326.02、273.71、370.61 和 282.07 kW，其 Bonferroni 95%
+simultaneous intervals 均高于 0。AI–BESS 在两个 PV strata 中仍为 substitution。
+AI–PV 在无 BESS 时仍达到 practical complementarity；有 BESS 时估计为
++8.36 kW，区间 [1.05, 15.74] kW 虽保留正方向，却跨过预声明的 10.05 kW
+practical margin，因此必须标为实际幅度不确定，而不能宣称强互补。
+
+该 validation 分析复现的是 planning result，不是 causal hosting certificate。
+预注册测试、所有容量、区间和输出哈希见
+[`data/manifests/nature_mainline_validation_hosting_results_v1.yaml`](data/manifests/nature_mainline_validation_hosting_results_v1.yaml)。
+
+### AI–DER 交互与预期结论
+
+同一 2 × 2 × 2 配对设计同时识别 hosting gain 和分布式能源交互，不再将它们
+拆成两个 Results。AI–BESS 和 AI–PV 均使用预声明的场景内
+difference-in-differences；只有不确定性区间与 practical-equivalence margin
+共同支持时，才标记为互补、替代或近似独立。
+
+AI 柔性可以转化为社区接入容量，但价值高度依赖社区峰值时刻、光伏富余和
+储能时长；它与 PV/BESS 的价值不能按各自独立增益简单相加。
+
+### 对应主图
+
+**Figure 4：Community hosting capacity and distributed-energy interactions**
+
+- a：八种 portfolio 的 hosting capacity；
+- b：柔性带来的绝对增益；
+- c：AI–PV 与 AI–BESS 的交互及 simultaneous intervals；
+- d：不同社区 headroom 下的 regime map。
 
 ---
 
-## 9.5 NC 级稳健性所需的独立数据源
+## Result 5 — 独立评估定义稳健性与泛化边界
 
-单一 Alibaba 2026 trace 可以完成平台主开发，但高水平投稿建议至少有两组独立 workload 数据和两组独立 community profiles：
+### 科学问题
 
-### 9.5.1 Workload primary
+绝对功率参数变化后，主要机制是否仍成立？
 
-- Alibaba Cluster Trace GPU v2026；
-- six-month relative chronology；
-- `job_type_public`, `priority_class`, `gpu_request`, `used_gpu_hours`, `avg_gpu_sm_util`, `schedule_delay_sec`；
-- 不包含真实 deadline，因此 deadline 是显式情景参数。
+### 分析内容
 
-### 9.5.2 Workload external validation
+- calibration lower / nominal / upper uncertainty bounds；
+- node fixed overhead sensitivity；
+- PUE sensitivity；
+- workload mix sensitivity；
+- deadline distribution sensitivity；
+- reference-mix peak 与 worst-class peak；
+- fluid scheduling 与更严格任务约束的敏感性。
 
-- Alibaba GPU v2020；或
-- 另一个能够提供 GPU request、start/end 或 execution duration 的公开 trace。
+### 当前 development 结果
 
-外部验证不需要与主数据完全相同，但必须重新训练或直接 OOD 测试，并明确说明字段映射。
+Sparse workload schema 的 no-DR service gate 已在 9 个 cases × 3 个 seeds 上
+完成，27/27 baseline evaluations 均为零 deadline miss 和零 terminal backlog。
+配对的 sparse-workload PI 已在 9 个 cases × 100 个共同 development seeds、
+H={4,8} 上完成，1,800/1,800 programs 为 `optimal`；全部 900 个冻结场景的
+no-DR baseline 也均为零 deadline miss 和零 terminal backlog。
 
-### 9.5.3 Community primary
+在 q=0.95、confidence=0.95 下，将 flexible arrival utilization 从 0.65
+降低到 0.50，使 H=4/H=8 firm boundary 从 40.15/37.76 kW 降至
+30.88/29.05 kW；提高到 0.80 后升至 77.99/53.49 kW。预声明的 rigid
+utilization 和 deadline-slack 变化不改变边界，两个组合点也分别等于对应的
+arrival-only case。rigid load 在相对 baseline 的单事件削减量中作为共同加性
+项相消，但仍会影响 PCC headroom 与 hosting；deadline 零效应仅限 Model A
+的这些稀疏测试点。结果均为 development PI bounds，不是 causal 或 locked
+generalization certificate。
+Success-criteria sensitivity 使用 one-factor-at-a-time 设计，而不是 3⁴ 笛卡尔
+积；100 个 frozen scenarios、H={4,8} 和 9 个 criteria cases 共形成 1,800 个
+`optimal` PI solves。
 
-- NREL/OEDI End-Use Load Profiles，15 min；
-- 从住宅和商业建筑聚合为社区 profile；
-- 可覆盖不同气候区、季节和建筑组合。
+在 q=0.95、confidence=0.95 下，reference capacities 为 H=4 的 40.15 kW
+和 H=8 的 37.76 kW。将 linked mean/minimum-interval delivery threshold 放宽到
+0.90 后分别变为 42.38 和 39.86 kW，收紧到 0.98 后分别变为 38.92 和
+36.60 kW。预声明的 deadline-miss、rebound 和 window-relief threshold 变化在
+这两个点上不改变容量。这说明 delivery definition 是当前 development PI
+容量的设置约束；结果不是 causal 或 locked certificate。精确数值和 SHA-256
+记录在 `data/manifests/nature_mainline_development_results_v1.yaml`。
 
-### 9.5.4 Community external validation
+PUE 与 node fixed overhead 使用单独的 5 点 sparse OAT 设计，不与 GPU
+active/idle power uncertainty 做笛卡尔积：reference 为 PUE=1.20、overhead=
+300 W；另设 PUE=1.10/1.30 和 calibration artifact 中的 overhead=150/450 W。
+所有 case 固定 144 个节点和 nominal GPU 功率，只改变一个基础设施因素。
+正式分析已在干净提交 `f305224` 上完成：15/15 preliminary no-DR gate 与
+500/500 frozen-scenario service audit 均通过，1,000/1,000 H={4,8} PI programs
+均为 `optimal`。PUE=1.10/1.30 使绝对 firm capacity 相对 nominal 精确变化
+−8.33%/+8.33%，但 capacity/operating-peak 比例不变。node overhead=150/450 W
+不改变 baseline-relative firm kW，因为该固定加性项在 controlled 与 baseline
+之差中相消；不过 operating peak 相对 nominal 变化 −12.90%/+12.90%，所以会
+改变归一化 flexibility 与社区 headroom。该零效应只属于单事件相对削减指标，
+不能外推为 hosting capacity 不受影响。完整回执见
+[`data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml`](data/manifests/nature_mainline_infrastructure_sensitivity_results_v1.yaml)。
 
-推荐二选一：
+### 当前结论
 
-- Low Carbon London refactored smart-meter dataset，30 min；
-- SimBench load profiles。
+绝对 kW 与归一化比例对硬件和基础设施参数的响应不同；duration ordering 在
+当前 development sensitivity 中保持不变。独立 locked-OOD 检验进一步表明，
+Model A 上 validation-selected 的固定候选不能直接外推到联合 community-profile
+与 arrival-process shift；这限定了 causal certificate 的适用域，而不是重新估计
+OOD 容量。
 
-不得仅通过把同一条社区曲线乘以不同常数来声称跨地区泛化。
+### 对应主图
 
-### 9.5.5 Minimum robustness matrix
+**Figure 5：Robustness, certification and generalization**
+
+- a：不同硬件功率 case 下的 firm frontier；
+- b：不同 workload/deadline 场景的机制一致性；
+- c：validation-to-locked-ID 的独立容量认证；
+- d：locked-OOD 下的失效边界。
+
+---
+
+## 9. 方法与代码模块映射
+
+| NC 主线任务 | 所需代码模块 | 是否属于主论文 |
+|---|---|---:|
+| 硬件功率校准 | calibration artifact、power model | 是 |
+| 任务 arrival/deadline 建模 | workload sampler、deadline queue | 是 |
+| Frozen scenario | scenario freeze、hash/provenance | 是 |
+| PI frontier | perfect-information optimizer | 是 |
+| 非前视 firm frontier | non-anticipative optimization | 是 |
+| 单事件可靠容量 | frozen robust-MPC selection + locked-ID certification | 是 |
+| 重复事件耗尽 | repeated-event stress test | 是 |
+| Hosting capacity | PV/BESS/PCC optimization | 是 |
+| 参数不确定性 | lower/nominal/upper uncertainty bounds | 是 |
+| Rule/MPC smoke test | software validation | 否，最多补充材料 |
+| DQN/PPO/SAC benchmark | online-control extension | 否 |
+| CMDP v1–v5 reward | control-algorithm development | 否 |
+| Hardware-in-the-loop | future extension | 否 |
+
+**重要区分**：非前视优化给出受限场景规划边界；只有独立 locked-ID 上的固定因果候选才能称为容量证书。这一验证不等于控制器竞赛。
+
+---
+
+## 10. 实验设计
+
+### 10.1 基准归一化系统
+
+以 PCC 容量为基准：
+
+\[
+K^{\mathrm{PCC}}=1\ \mathrm{p.u.}
+\]
+
+参考组合：
+
+```yaml
+community:
+  pcc_capacity_pu: 1.0
+
+datacenter:
+  peak_capacity_pu: 0.20
+
+pv:
+  rated_capacity_pu: 0.50
+
+battery:
+  power_capacity_pu: 0.10
+  duration_hours: 2
+```
+
+该组合只用于解释，不应被描述为普遍物理事实。
+
+### 10.2 Response-surface 参数
+
+#### 数据中心
+
+\[
+\gamma_{\mathrm{DC}}
+\in
+\{0.05,0.10,0.20,0.30,0.40\}.
+\]
+
+#### 光伏
+
+\[
+\gamma_{\mathrm{PV}}
+\in[0,1.0].
+\]
+
+#### 储能
+
+\[
+\gamma_{\mathrm{B,P}}
+\in[0,0.20],
+\qquad
+h_{\mathrm{BESS}}
+\in\{1,2,4\}\ \mathrm{h}.
+\]
+
+#### 需求响应
+
+- duration：1、2、3、4、6、8 h；
+- notice：0、2、6 h；
+- reliability：90%、95%、99%；
+- event count：1、2、3、4；
+- recovery gap：2、4、8、12、24 h。
+
+#### 工作负荷
+
+- utilization：低、参考、高；
+- deadline：宽松、参考、严格；
+- training/offline-inference mix；
+- arrival burstiness；
+- hardware power case。
+
+响应面不建议使用完整笛卡尔积。可以采用 sparse factorial design 或 Latin hypercube，并保留预先指定的核心情景矩阵。
+
+---
+
+## 11. 数据划分与统计原则
+
+### 11.1 主论文不需要 RL training split
+
+NC 主线的数据划分应围绕模型校准和最终评估，而不是围绕 controller training：
+
+1. **Calibration fit set**：拟合功率参数；
+2. **Calibration held-out set**：检验功率模型；
+3. **Scenario development set**：确定模型和实验设计；
+4. **Validation scenario set**：检查数值稳定性、冻结因果策略与候选容量；
+5. **Locked-ID scenario set**：同一目标生成分布的最终可靠性证书，500 个 episode 支持 q=0.99 的预声明检验；
+6. **Locked-OOD scenario set**：气候 profile 与 arrival process 改变后的稳健性和外推评估，不能替代 locked-ID 主证书。
+
+### 11.2 统计单位
+
+- 单事件主分析：一个 episode 是一个独立 trial；
+- 重复事件分析：一个包含多个事件的 episode 是一个独立 trial；
+- 同一 episode 内的多个事件不能作为独立样本；
+- hardware repeat 应以独立 run 为统计单位，不能把同一次四卡运行中的四张 GPU 当成四个完全独立实验。
+
+### 11.3 报告要求
+
+每个正式结果记录：
 
 ```text
-2 workload datasets
-× 2 community datasets
-× 4 seasons/load regimes
-× 4 event durations
-× 3 deadline regimes
-× repeated-event and single-event scenarios
-```
-
-在计算量不足时，主 benchmark 可以使用完整矩阵的子集，但 reliable flexibility 的核心结论至少要在独立 workload 和独立 community profile 上复现。
-
----
-
-## 10. 推荐目录结构
-
-```text
-AIDRBench/
-├── README.md
-├── pyproject.toml
-├── uv.lock
-├── configs/
-│   ├── base.yaml
-│   ├── env/
-│   │   ├── hourly_continuous.yaml
-│   │   └── hourly_discrete.yaml
-│   ├── scenarios/
-│   │   ├── synthetic_week.yaml
-│   │   ├── alibaba_lite.yaml
-│   │   └── alibaba_full.yaml
-│   └── algorithms/
-│       ├── dqn.yaml
-│       ├── ppo.yaml
-│       ├── sac.yaml
-│       └── mpc.yaml
-├── data/
-│   ├── raw/
-│   │   ├── alibaba2026/
-│   │   ├── community/
-│   │   └── hardware/
-│   ├── interim/
-│   └── processed/
-│       ├── jobs.parquet
-│       ├── arrivals_hourly.parquet
-│       ├── rigid_load_hourly.parquet
-│       ├── community_load_hourly.parquet
-│       ├── workload_energy.csv
-│       └── scenario_index.parquet
-├── src/aidrbench/
-│   ├── envs/
-│   │   ├── community_ai_dr_env.py
-│   │   ├── deadline_buckets.py
-│   │   └── registration.py
-│   ├── data/
-│   │   ├── alibaba2026.py
-│   │   ├── community.py
-│   │   ├── deadlines.py
-│   │   └── scaling.py
-│   ├── models/
-│   │   ├── power.py
-│   │   └── workload.py
-│   ├── controllers/
-│   │   ├── no_control.py
-│   │   ├── threshold.py
-│   │   ├── edf_valley_fill.py
-│   │   ├── mpc.py
-│   │   └── rl.py
-│   ├── evaluation/
-│   │   ├── metrics.py
-│   │   ├── runner.py
-│   │   └── plots.py
-│   └── cli.py
-├── scripts/
-│   ├── monitor_gpu_power.sh
-│   └── run_all_baselines.sh
-├── tests/
-│   ├── test_env_checker.py
-│   ├── test_compute_conservation.py
-│   ├── test_deadline_buckets.py
-│   ├── test_no_control.py
-│   └── test_mpc_oracle.py
-├── results/
-└── logs/
+git commit
+scenario hash
+input-data hashes
+calibration-artifact hash
+hardware power case
+protocol version
+evaluation seed range
+event duration and notice
+reliability target
+portfolio definition
+fixed-candidate success count and confidence bound, or PI tolerance rank
+failure reasons
+solver and tolerances
 ```
 
 ---
 
-## 11. 服务器安装
+## 12. 因果实现与控制器在这篇论文中的正确位置
 
-以下命令可以直接执行。
+### 12.1 主文
 
-### 11.1 系统检查
+主文不需要完整控制器 benchmark，但需要一个冻结、可部署的因果 reference implementation 在独立 locked-ID 场景上验证可交付容量。当前预声明为 robust MPC；不训练、不调 reward、不参与算法排名。
 
-```bash
-nvidia-smi -L
-nvidia-smi --query-gpu=name,memory.total,power.limit --format=csv
-nvidia-smi topo -m
-uname -a
-lsb_release -a
-```
+正式控制器必须由 `configs/controller/nature_robust_mpc_v1.yaml` 完整定义。validation selection 固化规范化配置及其 SHA-256、原始 YAML SHA-256、Git commit 和控制/评估路径源码 hash；locked-ID replay 必须逐项重新验证，任意不一致均 fail closed。容量搜索使用预声明细网格或 binary search，不使用 0.1 fraction 粗网格作为容量结论。
+
+### 12.2 Supplementary 可选内容
+
+可以额外增加简短的在线实现对照：
+
+- 一个 threshold rule；
+- 一个因果 MPC；
+- 相同场景和相同物理约束；
+- 报告它们实现 \(F_q^{\mathrm{NA}}\) 的比例。
+
+这一部分只回答：
+
+> 理论定义的 firm frontier 是否完全脱离实际在线实现？
+
+### 12.3 不进入本篇主线的内容
+
+以下内容移动到单独文档或后续论文：
+
+- DQN、PPO、SAC；
+- CMDP reward v1–v5；
+- controller checkpoint selection；
+- safety layer；
+- aggregate action 与 class-specific actuation；
+- HIL 和实时控制。
+
+后续控制论文可以命名为：
+
+> **Safe online realization of firm AI data-centre flexibility under compute-debt and rebound constraints**
+
+---
+
+## 13. 仓库文档建议
+
+### `README.md`
+
+只保留：
+
+- 项目核心命题；
+- 已实现功能；
+- 可运行的主要 CLI；
+- 当前协议和校准状态；
+- 哪些结果是历史诊断；
+- 指向各专题文档的链接。
+
+### `docs/nature-communications-mainline.md`
+
+保存本文件，定义 NC 主线。
+
+### `docs/online-control-extension.md`
 
 保存：
 
-```bash
-mkdir -p logs/system
-nvidia-smi -q > logs/system/nvidia_smi_q.txt
-nvidia-smi topo -m > logs/system/nvidia_smi_topology.txt
-```
+- rule/MPC/RL；
+- CMDP reward；
+- controller diagnostics；
+- future safe-control paper。
 
-### 11.2 基础软件
+### `docs/hourly-validation-status.md`
 
-```bash
-sudo apt update
-sudo apt install -y \
-  git curl wget unzip aria2 awscli tmux htop build-essential
-```
+只记录真实运行状态：
 
-安装 `uv`：
+- 哪些场景已冻结；
+- 哪些 seed 已运行；
+- 哪些模型已废弃；
+- locked OOD 是否开启；
+- failure decomposition。
 
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-source "$HOME/.local/bin/env"
-uv --version
-```
+### `docs/historical-results.md`
 
-### 11.3 Python 环境
-
-如果仓库还没有 `pyproject.toml`，先在仓库根目录执行：
-
-```bash
-uv init --package
-```
-
-然后创建并激活 Python 3.11 环境：
-
-```bash
-uv python install 3.11
-uv venv --python 3.11
-source .venv/bin/activate
-```
-
-推荐依赖：
-
-```bash
-uv add \
-  "gymnasium==1.3.0" \
-  "stable-baselines3==2.9.0" \
-  "cvxpy==1.9.2" \
-  numpy pandas scipy pyarrow polars duckdb pyyaml pydantic \
-  matplotlib tensorboard tqdm rich typer highspy
-
-uv add --dev pytest pytest-cov ruff mypy
-```
-
-执行后提交 `uv.lock`，保证服务器和论文复现使用相同版本。
-
-RL 网络很小，训练可在 CPU 上运行，不应占用四张 GPU；四张 GPU 主要用于 workload energy calibration。
+保存旧版 63.52 kW、68.86 kW、firm_v4 和早期 reward 结果，避免再次混入当前结论。
 
 ---
 
-## 12. 下载 Alibaba 2026 数据
+## 14. 主论文建议标题与贡献表述
 
-### 12.1 Lite 模式：先下载 1.19 GB summary
+### 工作标题
 
-```bash
-mkdir -p data/raw/alibaba2026
-cd data/raw/alibaba2026
+**Job-derived flexibility envelopes reveal compute-debt limits and community hosting value of AI data centres**
 
-wget -c \
-  https://tre-clusterdata.oss-cn-hangzhou.aliyuncs.com/cluster-trace-gpu-v2026/data/asi_opensource_job_execution_summary.zip
+### 三句话贡献
 
-unzip -q asi_opensource_job_execution_summary.zip
-cd ../../..
-```
+> First, we replace exogenous flexible-load fractions with job-derived firm-flexibility envelopes that jointly account for interval delivery, workload deadlines, recovery and rebound.
 
-预期结构：
+> Second, we separate nominal, perfect-information and non-anticipative capacities to quantify physical and information losses, and translate reliable AI flexibility into community data-centre hosting capacity under photovoltaic and battery portfolios.
 
-```text
-data/raw/alibaba2026/
-└── asi_opensource_job_execution_summary/
-    └── part-000.parquet
-```
+> Third, we reveal compute debt as the mechanism that makes AI flexibility exhaustible and recovery-dependent under repeated grid dispatch.
 
-### 12.2 Full-trace 模式：正式论文推荐
+### 主结论应落在这里
 
-```bash
-cd data/raw/alibaba2026
+\[
+\boxed{
+\text{AI workload flexibility is finite, state-dependent, duration-dependent and exhaustible.}
+}
+\]
 
-aria2c -c -x 16 -s 16 \
-  https://tre-clusterdata.oss-cn-hangzhou.aliyuncs.com/cluster-trace-gpu-v2026/data/asi_opensource_pod_hourly.zip
+而不是：
 
-unzip asi_opensource_pod_hourly.zip
-cd ../../..
-```
-
-预期结构：
-
-```text
-data/raw/alibaba2026/
-└── asi_opensource_pod_hourly/
-    └── day=<day>/hour=<hour>/part-000.parquet
-```
-
-不要为了 V0 下载 `network_hourly`。`server_hourly` 只有在研究 GPU inventory 或集群拓扑时才需要。
+\[
+\boxed{
+\text{One RL algorithm outperforms another.}
+}
+\]
 
 ---
 
-## 13. Alibaba 2026 预处理
+## 15. 建议的执行顺序
 
-下面的 CLI 是本仓库需要实现的**目标接口**，不是现成的 Alibaba 命令。
+### Phase 0 — 冻结论文范围
 
-### 13.1 Lite summary 处理
+- 明确本篇 NC 不以控制器为主线；
+- 将 RL/CMDP 内容移到 control extension；
+- 修正 README 与当前实现不一致的问题。
 
-```bash
-uv run aidrbench data preprocess-alibaba-summary \
-  --input data/raw/alibaba2026/asi_opensource_job_execution_summary/part-000.parquet \
-  --output data/processed/jobs_summary.parquet
-```
+### Phase 1 — 冻结物理与数据模型
 
-核心计算：
+- 补齐所有 workload class 的功率参数；
+- 区分 reference-mix peak 和 worst-class peak；
+- 修正 compute-debt 定义；
+- 完成 calibration uncertainty cases；
+- 冻结数据、场景和 hash。
 
-```text
-requested_work_gpu_h = gpu_request × duration_hours
-```
+### Phase 2 — 计算单事件 firm-flexibility surface
 
-该量是 requested GPU capacity-time proxy，不是实测完成的计算量。Lite 模式在环境中把它作为统一 work unit；Full-trace 模式优先使用 `sum(used_gpu_hours)` 表示观察到的 GPU-hours。
+- duration × notice × reliability；
+- nominal、PI、NA 三层边界；
+- workload utilization 和 deadline sensitivity。
 
-保留：
+### Phase 3 — 计算 repeated-event exhaustion
 
-```text
-pod_id
-workload_id
-gpu_spec_public
-priority_class
-job_type_public
-model_type_public
-gpu_request
-duration_hours
-requested_work_gpu_h
-```
-
-过滤建议：
-
-```text
-gpu_request > 0
-duration_hours > 0
-finite values only
-```
-
-不要直接删除极长任务。主分析可 winsorize 到 99.5 percentile，并把原始长尾作为敏感性分析。
-
-### 13.2 Full trace 聚合
-
-推荐用 DuckDB 直接扫描分区 Parquet，避免将全部数据载入内存。
-
-示例 SQL：
-
-```sql
-CREATE OR REPLACE TABLE pod_jobs AS
-SELECT
-    pod_id,
-    any_value(workload_id) AS workload_id,
-    any_value(priority_class) AS priority_class,
-    any_value(job_type_public) AS job_type_public,
-    any_value(model_type_public) AS model_type_public,
-    max(gpu_request) AS gpu_request,
-    sum(used_gpu_hours) AS work_gpu_h,
-    min(CAST(day AS INTEGER) * 24 + CAST(hour AS INTEGER)) AS first_hour,
-    max(CAST(day AS INTEGER) * 24 + CAST(hour AS INTEGER)) AS last_hour,
-    count(*) AS observed_hours
-FROM read_parquet(
-    'data/raw/alibaba2026/asi_opensource_pod_hourly/day=*/hour=*/part-*.parquet',
-    hive_partitioning = true
-)
-WHERE gpu_request > 0
-GROUP BY pod_id;
-```
-
-正式实现还应：
-
-- 使用 `state_public` 区分 Running/Pending；
-- 将 `first_hour` 明确表述为 first observed hour，而不是精确提交时间；
-- 对同一 `workload_id` 的多个 pod 是否合并做敏感性分析；
-- 与 execution summary 通过 `pod_id` 连接，用其 `duration_hours` 校验。
-
-目标命令：
-
-```bash
-uv run aidrbench data preprocess-alibaba-full \
-  --pod-root data/raw/alibaba2026/asi_opensource_pod_hourly \
-  --summary data/raw/alibaba2026/asi_opensource_job_execution_summary/part-000.parquet \
-  --output data/processed/jobs_full.parquet
-```
-
-### 13.3 从 jobs 构造小时 arrivals
-
-Lite 模式：
-
-- 从 summary 经验分布采样 `gpu_request`、`duration_hours`、job type 和 priority；
-- 到达时间由可配置 non-homogeneous Poisson process 或 block process 生成；
-- 每日总 GPU-h 由 `target_utilization` 控制。
-
-Full 模式：
-
-- `arrival_hour = first_hour`；
-- `work_gpu_h = sum(used_gpu_hours)`；
-- 按 trace 相对时间 replay；
-- 再按目标虚拟数据中心规模做比例缩放。
-
-输出：
-
-```text
-arrivals_hourly.parquet
-```
-
-推荐 schema：
-
-```text
-episode_id
-timestamp_index
-job_class
-priority_class
-model_type
-arrival_gpu_h
-slack_hours
-source_mode
-```
-
----
-
-## 14. Deadline 生成
-
-Alibaba 2026 不提供真实 deadline，因此 deadline 是场景假设，不是 trace observation。
-
-推荐策略：
-
-```yaml
-deadline_policy:
-  training:
-    slack_multiplier_range: [2.0, 6.0]
-    minimum_slack_h: 6
-    maximum_slack_h: 48
-  offline_inference:
-    slack_multiplier_range: [1.5, 4.0]
-    minimum_slack_h: 2
-    maximum_slack_h: 24
-```
-
-对 job \(j\)：
-
-\[
-\text{slack}_j
-=
-\operatorname{clip}
-\left(
-\kappa_j d_j,
-S_{\min,c},
-S_{\max,c}
-\right),
-\]
-
-其中 \(d_j\) 是 duration，\(\kappa_j\) 从类别对应范围采样。
-
-主文必须报告：
-
-- deadline 不是 Alibaba 原始字段；
-- deadline policy；
-- 采用的最小/最大 slack；
-- 对 slack 的敏感性。
-
----
-
-## 15. 从阿里超大集群缩放到虚拟社区数据中心
-
-Alibaba trace 的规模远大于四卡节点和社区数据中心，不能原样使用。
-
-V0 使用 fluid scaling：
-
-\[
-A_t^{\mathrm{target}}
-=s A_t^{\mathrm{raw}},
-\]
-
-其中 \(s\) 由目标柔性池平均利用率决定：
-
-\[
-s
-=
-\frac{u_{\mathrm{target}}N_{\mathrm{flex}}\Delta t}
-{\operatorname{mean}(A_t^{\mathrm{raw}})}.
-\]
-
-推荐默认：
-
-```yaml
-virtual_datacenter:
-  gpus_per_node: 4
-  node_count: auto
-  target_dc_peak_share_of_community: 0.20
-  flexible_gpu_fraction: 0.50
-  target_flexible_utilization: 0.65
-```
-
-`node_count: auto` 的逻辑：选择节点数，使 uncontrolled data-center peak 约等于社区峰值的 20%。敏感性分析测试 10%、20%、30% 和 40%。
-
-四卡服务器只标定单节点参数；论文结果可以模拟多个同质节点，但必须称为：
-
-> **hardware-calibrated virtual data center**
-
-不能称为 MW-scale field experiment。
-
----
-
-## 16. 社区负荷和 DR scenario 生成
-
-合成社区 smoke 数据：
-
-```bash
-conda run -n aidrbench aidrbench data make-synthetic-community \
-  --days 30 \
-  --resolution-seconds 900 \
-  --peak-kw 1000 \
-  --seed 2026 \
-  --output data/processed/community_synthetic.parquet
-```
-
-已下载的 NREL EULP profile 预处理：
-
-```bash
-conda run -n aidrbench aidrbench data preprocess \
-  --config configs/data/community_eulp.yaml
-```
-
-真实来源社区profile已经可以直接接入小时环境；环境选择一个profile、将15分钟功率按小时平均、统一缩放社区毛负荷与PV，并按seed抽取连续episode：
-
-```bash
-conda run -n aidrbench aidrbench rollout \
-  --controller threshold \
-  --scenario nrel_eulp_mixed_3a \
-  --config configs/env/hourly_continuous_nrel_eulp.yaml \
-  --seed 7 \
-  --save results/nrel_eulp_mixed_3a_threshold
-```
-
-配置中的 `community.episode_start` 可固定窗口；省略时由episode seed可复现地抽样。`pv_enabled: false` 会保留社区毛负荷但将PV置零。
-
-生成与小时环境严格对齐的独立DR manifest：
-
-```bash
-conda run -n aidrbench aidrbench data preprocess \
-  --config configs/data/dr_events_hourly.yaml
-```
-
-运行“真实来源社区profile + 独立DR manifest”闭环场景：
-
-```bash
-conda run -n aidrbench aidrbench rollout \
-  --controller threshold \
-  --scenario nrel_eulp_manifest_hourly \
-  --config configs/env/hourly_continuous_nrel_eulp_manifest.yaml \
-  --seed 7 \
-  --save results/nrel_eulp_manifest_threshold
-```
-
-小时环境要求manifest事件从整点开始、持续时间为整小时，并会拒绝旧的15/30分钟事件，避免静默改变事件能量。manifest中的 `reduction_fraction` 按可调数据中心动态峰值解释；若提供 `requested_reduction_kw` 列则优先采用绝对kW请求。旧manifest中的社区侧 `pcc_limit_kw` 不直接复用，因为它不包含加入PCC后的数据中心基线。
-
-默认事件生成规则：
-
-1. 在社区 top-20% load hours 中选择候选窗口；
-2. 随机生成 2–4 h event；
-3. 给出 0、2、4 或 6 h notice；
-4. 每周 2–5 个事件；
-5. 至少包含一组相邻两天连续事件；
-6. event 后继续模拟至少 12 h，用于测 rebound。
-
----
-
-## 17. 四卡 GPU workload-energy 标定
-
-### 17.1 目标
-
-只标定以下参数：
-
-```text
-p_idle_w_per_gpu
-p_active_w_per_gpu by workload class
-node_fixed_overhead_w
-runtime / completed work
-energy_kwh per run
-```
-
-不建立温度动态模型。
-
-### 17.2 记录 GPU 功率
-
-```bash
-mkdir -p data/raw/hardware logs/hardware
-
-nvidia-smi \
-  --query-gpu=timestamp,index,name,power.draw,utilization.gpu \
-  --format=csv,noheader,nounits \
-  -l 1 \
-  > logs/hardware/gpu_power_run001.csv
-```
-
-在另一个终端运行 benchmark。完成后停止 `nvidia-smi`。
-
-1 s 采样只用于计算均值和积分能耗：
-
-\[
-E=\sum_k P_k\Delta t.
-\]
-
-### 17.3 推荐实验矩阵
-
-| workload | GPU 数 | repeats | 输出 |
-|---|---:|---:|---|
-| idle | 1/2/4 | 5 | idle power |
-| offline LLM inference | 1/2/4 | 5 | avg power, throughput, energy |
-| LoRA/QLoRA training | 1/2/4 | 5 | avg power, runtime, energy |
-| optional diffusion/CV | 1/2/4 | 3 | sensitivity |
-
-环境只使用 run-level summary：
-
-```text
-workload_energy.csv
-```
-
-Schema：
-
-```text
-run_id
-workload_class
-model_name
-active_gpu_count
-runtime_seconds
-completed_work_units
-avg_gpu_power_w
-avg_node_power_w
-energy_kwh
-measurement_source
-repeat_id
-```
-
-### 17.4 没有整机功率计时
-
-使用：
-
-\[
-P^{\mathrm{node}}
-=
-\sum_g P_g^{\mathrm{GPU}}
-+P^{\mathrm{host,fixed}}.
-\]
-
-`P_host_fixed` 可由空闲整机功率、BMC/PSU telemetry 或保守参数估计。论文中需分别报告：
-
-- GPU-only measured energy；
-- modelled node/facility energy。
-
----
-
-## 18. Gymnasium 环境定义
-
-注册环境：
-
-```text
-AIDRBench-Continuous-v0
-AIDRBench-Discrete-v0
-AIDRBench-JobLevel-v0
-```
-
-Gymnasium API：
-
-```python
-obs, info = env.reset(seed=seed)
-obs, reward, terminated, truncated, info = env.step(action)
-```
-
-### 18.1 Observation
-
-当前接口版本为 `firm_v4`，使用63维、顺序固定的无量纲向量。环境的小时顺序为：
-
-```text
-本小时任务release并进入队列 → 构造observation → controller选择action → EDF执行与状态转移
-```
-
-因此 controller 在做决定前能够看到本小时已经 release 的工作。主要状态组为：
-
-```text
-4 calendar sin/cos features
-community、PV、PCC limit、fixed DC power / community target peak
-available flexible-power headroom / flexible DC power range
-DR request / flexible DC power range
-controlled、baseline、excess backlog / (hourly capacity × max deadline)
-cumulative arrival utilization、controlled/baseline miss rate、terminal excess fraction
-mean/p10 slack / max deadline
-8 controlled deadline-feasibility ratios
-8 excess-over-baseline deadline-feasibility ratios
-event、notice、recovery和event-window状态
-running baseline peak、controlled peak、window relief和rebound
-previous action、previous PCC
-H-step community forecast和flexible-power headroom forecast
-```
-
-对每个 deadline horizon $h$，核心队列状态定义为：
-
-\[
-u_t(h)=\frac{W_t(\le h)}{\min(h+1,H_{\max})C},
-\]
-
-其中bucket label 0表示本小时到期，$C$ 是每小时柔性GPU-h容量。`u=1`表示
-截止前可用容量恰好用满，
-`u>1`表示该deadline集合已经不可行。额外提供相对No-control baseline的
-feasibility excess，避免把输入trace自身的自然拥塞误归因于controller。
-
-除时间sin/cos、signed headroom和window relief外，特征均为非负；每一维具有
-显式边界。它们不被强行压到同一个 `[0,1]` 区间，但正常约束边界约为1，极端值
-在进入网络前截断到声明范围。按比例同时扩大社区峰值与虚拟集群节点数时，state
-保持不变；这使同一接口可用于不同装机容量。完整顺序由
-`env.observation_feature_names` 暴露，checkpoint记录`observation_version`和维度。
-
-预测不是 perfect information。训练时可加入：
-
-```yaml
-forecast_error:
-  community_load_std_fraction: 0.05
-  event_start_error_hours: 0
-  event_duration_error_hours: 0
-  workload_arrival_forecast: none
-```
-
-主结果至少比较：
-
-- no forecast；
-- finite noisy forecast；
-- perfect-future oracle。
-
-### 18.2 Continuous action
-
-\[
-a_t\in[0,1].
-\]
-
-含义：本小时计划使用多少比例的柔性 GPU 容量：
-
-\[
-x_t=a_tN_{\mathrm{flex}}\Delta t.
-\]
-
-环境将其限制为不超过当前 backlog、物理容量和 job-level dispatch feasibility。
-
-用于：
-
-- PPO；
-- SAC；
-- continuous RBC；
-- continuous MPC。
-
-### 18.3 Discrete action
-
-```text
-0 → 0%
-1 → 25%
-2 → 50%
-3 → 75%
-4 → 100%
-```
-
-用于：
-
-- DQN；
-- PPO-discrete；
-- rule-based 对照。
-
-### 18.4 Step 顺序
-
-```text
-1. 读取当前社区负荷、PV、PCC limit 和 DR request
-2. 加入本小时新到达的柔性 jobs/GPU-hours
-3. 更新 repeated-event history 和 notice state
-4. 构造包含本小时released work的observation
-5. controller选择action并转成计划执行GPU-hours
-6. 在 bucket mode 中按 EDF 完成 work；在 job mode 中 dispatch jobs
-7. 计算 deadline miss、checkpoint overhead 和 unfinished work
-8. 计算 active GPU 数、IT power、facility power 和 PCC power
-9. 更新 compute debt、rebound 和 recovery state
-10. 计算独立cost、标量reward和KPI
-11. buckets/slack向前移动并返回next observation
-```
-
-### 18.5 Reward与独立cost接口
-
-当前版本为 `firm_threshold_v2`。环境先输出独立物理量，再用冻结的认证阈值将
-违反程度变成无量纲cost；不是直接试凑`20/50/2`等权重。
-
-\[
-v_D=\frac{[\eta_{\min}-\eta_t^{delivery}]_+}{1-\eta_{\min}},\qquad
-v_M=\frac{[m_t-\epsilon_M]_+}{\epsilon_M},
-\]
-
-\[
-v_R=\frac{[R_t-\epsilon_R]_+}{\epsilon_R},\qquad
-v_W=\frac{[\eta_W-\eta_t^{window}]_+}{\eta_W},
-\]
-
-\[
-v_T=\frac{[b_T-\epsilon_T]_+}{\epsilon_T}.
-\]
-
-这里使用冻结值`delivery≥0.95`、`deadline miss≤0.01`、`rebound≤0.25`、
-`window relief≥0.50`、`terminal excess≤0.02`。满足条件时对应violation cost为0；
-数值1表示又越过一个阈值尺度。
-
-deadline尚未真正miss之前，另给dense feasibility cost：
-
-\[
-v_F=\max_h\left[
-\frac{u_t(h)}{\max(1,u_t^{base}(h))}-1
-\right]_+.
-\]
-
-标准DQN/PPO/SAC需要标量时，默认adapter使用Huber penalty：
-
-\[
-r_t=-\sum_{i\in\{D,F,M,R,W,T\}}\rho(v_i)
--0.05e_t^{excess\ backlog}
--0.001|a_t-a_{t-1}|.
-\]
-
-\[
-\rho(v)=
-\begin{cases}
-\frac12v^2,&0\le v\le1,\\
-v-\frac12,&v>1.
-\end{cases}
-\]
-
-以一个阈值尺度为Huber转折点，使边界附近保持二次敏感度，但防止严重违规时的
-平方爆炸破坏PPO/SAC数值条件。原始violation cost不做这种压缩，仍完整写入`info`。
-
-cost结算时间与认证定义一致：delivery按每个事件小时结算，deadline feasibility
-按每小时结算；rebound与window relief只在对应recovery window结束时各结算一次；
-episode-wide deadline miss与terminal backlog只在episode结束时结算一次。运行中的
-rebound/window violation仍作为state和`info`输出，但不会把同一事件失败按恢复窗口
-长度重复计权。
-
-六项主cost默认等权，是因为都已经按物理认证阈值归一化；backlog和switching只作
-小幅dense shaping。环境同时在`info`中保留每个未加权cost和每个weighted cost，
-以后可接Lagrangian/constrained RL，而不需要修改物理状态转移。
-
-重要：`F_q(H)` 的认证必须由独立 evaluator 计算，不能直接等同于训练 reward。所有控制器使用同一 success criterion、同一 test episodes 和同一置信区间方法。
-
-至少进行以下 reward 敏感性：
-
-- no rebound penalty；
-- no backlog penalty；
-- low/high deadline penalty；
-- equalized service constraints 后再比较 controller performance。
-
-### 18.6 `info` 字段
-
-```text
-pcc_power_kw
-dc_power_kw
-community_power_kw
-pcc_limit_kw
-requested_reduction_kw
-delivered_reduction_kw
-delivery_ratio
-limit_violation_kw
-dr_tracking_error_fraction
-reward_version
-delivery_violation_cost
-deadline_feasibility_violation_cost
-deadline_miss_rate_so_far
-deadline_violation_cost
-rebound_violation_cost
-window_relief_violation_cost
-running_rebound_violation_cost
-running_window_relief_violation_cost
-completed_recovery_event_count
-terminal_backlog_violation_cost
-reward_penalty
-executed_gpu_h
-arrival_gpu_h
-backlog_gpu_h
-baseline_backlog_gpu_h
-backlog_excess_gpu_h
-compute_debt_kwh
-missed_gpu_h
-mean_slack_h
-p10_slack_h
-action_fraction
-event_active
-event_id
-rebound_excess_kw
-rebound_reference_kw
-rebound_ratio_proxy
-running_window_relief_fraction
-running_rebound_ratio
-hours_since_previous_event
-recovery_active
-recovery_remaining_hours
-recovery_complete
-terminal_backlog_excess_gpu_h
-```
-
-## 19. 必须实现的 baseline
-
-## 19.1 No-control
-
-每小时尽可能执行所有现有 backlog：
-
-\[
-x_t=\min(B_t+A_t,N_{\mathrm{flex}}\Delta t).
-\]
-
-它定义未参与 DR 的数据中心基线。
-
-## 19.2 Threshold rule
-
-```python
-available_budget = pcc_limit - community_load - rigid_dc_power
-if available_budget <= 0:
-    action = 0.0
-else:
-    action = clip(available_budget / flexible_pool_peak_power, 0.0, 1.0)
-```
-
-## 19.3 EDF with urgency override
-
-先计算未来一小时必须完成的 work：
-
-```text
-urgent_work = bucket_0 + bucket_1
-```
-
-即使社区处于高峰，也执行保证 deadline 所需的最低量。其余容量仅在低负荷时使用。
-
-## 19.4 Valley filling rule
-
-当未来预测负荷低于 rolling percentile 时提高 action，高于 percentile 时降低 action。
-
-## 19.5 Rolling-horizon optimizer / MPC
-
-这里的 MPC 是 receding-horizon workload scheduler，不是热过程控制。
-
-每小时求解未来 \(H\) 小时：
-
-\[
-\min
-\sum_{\tau=t}^{t+H-1}
-\left[
-\alpha z_\tau
-+\beta B_\tau
-+\gamma M_\tau
-+\eta |x_\tau-x_{\tau-1}|
-\right],
-\]
-
-满足：
-
-\[
-P_\tau^{\mathrm{PCC}}-\overline P_\tau^{\mathrm{PCC}}\le z_\tau,
-\qquad z_\tau\ge0,
-\]
-
-以及 backlog、capacity 和 deadline bucket 动态。
-
-推荐：
-
-```yaml
-mpc:
-  horizon_hours: 24
-  solver: HIGHS
-  arrival_forecast: historical_mean
-  community_forecast: noisy
-```
-
-额外实现 full-horizon oracle，使用完整未来信息，作为可达到性能的参考上界；oracle 不能与在线控制方法混为一谈。
-
-## 19.6 RL algorithms
-
-第一篇主算法：
-
-| 算法 | 环境 | 角色 |
-|---|---|---|
-| DQN | Discrete | 离散 baseline |
-| PPO | Continuous + Discrete | 主 RL baseline |
-| SAC | Continuous | off-policy continuous baseline |
-| A2C | optional | 补充，不必作为主结果 |
-
-不要一开始加入十几个 RL 算法。平台论文更重要的是统一环境、数据和评价。
-
----
-
-## 20. 目标 CLI
-
-以下是仓库应实现的统一命令。README 中的命令是接口规范；在相应模块完成前不要假装命令已经可用。
-
-### 20.1 检查环境
-
-```bash
-uv run aidrbench env check --config configs/env/hourly_continuous.yaml
-```
-
-内部执行：
-
-```python
-from gymnasium.utils.env_checker import check_env
-check_env(env.unwrapped)
-```
-
-### 20.2 运行一个 episode
-
-```bash
-uv run aidrbench rollout \
-  --controller no_control \
-  --scenario synthetic_week_001 \
-  --save results/smoke/no_control
-```
-
-```bash
-uv run aidrbench rollout \
-  --controller threshold \
-  --scenario synthetic_week_001 \
-  --save results/smoke/threshold
-```
-
-### 20.3 训练 RL
-
-```bash
-uv run aidrbench train \
-  --algo dqn \
-  --env discrete \
-  --config configs/algorithms/dqn.yaml \
-  --seed 1
-```
-
-```bash
-uv run aidrbench train \
-  --algo ppo \
-  --env continuous \
-  --config configs/algorithms/ppo.yaml \
-  --seed 1
-```
-
-```bash
-uv run aidrbench train \
-  --algo sac \
-  --env continuous \
-  --config configs/algorithms/sac.yaml \
-  --seed 1
-```
-
-### 20.4 运行 MPC
-
-```bash
-uv run aidrbench evaluate \
-  --controller mpc \
-  --split test \
-  --config configs/algorithms/mpc.yaml \
-  --save results/test/mpc
-```
-
-### 20.5 统一 benchmark
-
-```bash
-uv run aidrbench benchmark \
-  --controllers no_control threshold edf_valley mpc dqn ppo sac \
-  --split test \
-  --seeds 1 2 3 4 5 \
-  --save results/benchmark_v0
-```
-
-### 20.6 认证 reliable deliverable flexibility
-
-对多个候选削减容量运行二分搜索或网格搜索：
-
-```bash
-uv run aidrbench certify \
-  --controller ppo \
-  --split test \
-  --durations 1 2 4 6 \
-  --reliability 0.95 \
-  --confidence 0.95 \
-  --min-delivery-ratio 0.95 \
-  --max-deadline-miss-rate 0.01 \
-  --max-rebound-ratio 0.25 \
-  --min-window-peak-relief-fraction 0.50 \
-  --max-terminal-backlog-fraction 0.02 \
-  --episodes 500 \
-  --search binary \
-  --save results/certificates/ppo
-```
-
-输出至少包括：
-
-```text
-controller
-workload_dataset
-community_dataset
-duration_h
-reliability_target
-certified_reduction_kw
-certified_reduction_fraction
-success_count
-episode_count
-success_rate
-success_rate_lower_ci
-mean_delivery_ratio
-p95_deadline_miss_rate
-p95_rebound_ratio
-mean_window_peak_relief_kw
-p05_window_peak_relief_fraction
-p95_recovery_time_h
-```
-
-### 20.7 连续事件 stress test
-
-```bash
-uv run aidrbench stress-test \
-  --controllers threshold mpc ppo sac \
-  --events-per-day 1 2 3 \
-  --inter-event-gap-hours 2 4 8 12 \
-  --duration-hours 2 4 \
-  --split test \
-  --save results/repeated_events
-```
-
-输出 \(\rho_k^{\mathrm{res}}\)、exhaustion、recovery time 和 second-event failure rate。
-
-### 20.8 比较 static 与 job-derived envelope
-
-```bash
-uv run aidrbench compare-envelopes \
-  --static-fractions 0.20 0.30 0.40 \
-  --certificates results/certificates \
-  --save results/envelope_bias
-```
-
-### 20.9 画图
-
-```bash
-uv run aidrbench plot \
-  --input results \
-  --output results/figures
-```
-
-## 21. 配置文件示例
-
-`configs/base.yaml`：
-
-```yaml
-seed: 2026
-
-env:
-  timestep_hours: 1.0
-  episode_days: 7
-  clearance_tail_hours: 48
-  forecast_horizon_hours: 6
-  action_mode: continuous
-  backend_mode: bucket          # bucket | job_level
-
-community:
-  source: nrel_eulp
-  path: data/processed/community_load.parquet
-  profile_id: eulp_mixed_3a
-  target_peak_kw: 1000
-  pv_enabled: true
-
-virtual_datacenter:
-  gpus_per_node: 4
-  node_count: auto
-  target_dc_peak_share_of_community: 0.20
-  flexible_gpu_fraction: 0.50
-  target_flexible_utilization: 0.65
-  pue: 1.20
-
-workload:
-  source: alibaba2026_full
-  external_validation_source: alibaba2020
-  flexible_job_types:
-    - training
-    - offline_inference
-  flexible_priorities:
-    - LP
-  max_deadline_hours: 48
-  deadline_buckets: [0, 1, 2, 3, 6, 12, 24, 48]
-  dispatch_rule: edf
-  preemptible_fraction: 0.75
-  checkpoint_overhead_fraction: 0.00
-
-hardware:
-  calibration_file: data/processed/workload_energy.csv
-  fallback_idle_power_w_per_gpu: 80
-  fallback_active_power_w_per_gpu: 450
-  fallback_node_overhead_w: 300
-
-dr:
-  mode: event_based
-  events_per_week: [2, 5]
-  event_duration_hours: [1, 2, 4, 6]
-  reduction_fraction: [0.05, 0.40]
-  notice_hours: [0, 2, 4, 6]
-  repeated_events_enabled: true
-  inter_event_gap_hours: [2, 4, 8, 12, 24]
-  recovery_window_hours: 12
-
-reward:
-  version: firm_threshold_v2
-  min_delivery_ratio: 0.95
-  max_deadline_miss_rate: 0.01
-  max_rebound_ratio: 0.25
-  min_window_peak_relief_fraction: 0.50
-  max_terminal_backlog_fraction: 0.02
-  delivery_violation_weight: 1.0
-  feasibility_violation_weight: 1.0
-  deadline_violation_weight: 1.0
-  rebound_violation_weight: 1.0
-  window_violation_weight: 1.0
-  terminal_violation_weight: 1.0
-  excess_backlog_weight: 0.05
-  switching_weight: 0.001
-
-certification:
-  reliability_target: 0.95
-  confidence_level: 0.95
-  min_delivery_ratio: 0.95
-  max_deadline_miss_rate: 0.01
-  max_rebound_ratio: 0.25
-  min_window_peak_relief_fraction: 0.50
-  max_terminal_backlog_fraction: 0.02
-  candidate_reduction_fraction: [0.00, 0.50]
-  search_method: binary
-  test_episodes: 500
-
-splits:
-  train_fraction: 0.60
-  validation_fraction: 0.20
-  test_fraction: 0.20
-```
-
-上面的 fallback 功率只能用于 smoke test。正式实验必须由四卡服务器测量结果替换或至少以测量区间进行敏感性分析。
-
-所有科学阈值必须在查看最终 test set 之前确定，或通过预注册式配置文件冻结。不能根据 test 结果调整 `max_rebound_ratio`、`max_miss_rate` 或 reliability target。
-
-## 22. 数据切分
-
-### 22.1 Full Alibaba trace
-
-相对天数为 `day=0..184`。推荐 chronological split：
-
-```text
-train: day 0–110
-validation: day 111–147
-test: day 148–184
-```
-
-不要随机打散小时，否则同一 workload 周期可能同时进入训练和测试。
-
-### 22.2 Lite synthetic arrivals
-
-- train、validation、test 使用互不重叠的随机种子；
-- test 包含训练未见过的 arrival intensity、deadline 和 DR 强度组合；
-- 不能把同一生成 episode 同时用于调参和最终评价。
-
-正式小时实验不直接在每次reset时载入4052万行summary。仓库先流式构建分层均匀经验采样池：
-
-```bash
-conda run -n aidrbench aidrbench data make-alibaba-lite-sampler \
-  --input data/processed/jobs_summary.parquet \
-  --output data/processed/jobs_summary_sampler.parquet \
-  --job-classes training offline_inference \
-  --priorities lp \
-  --rows-per-stratum 50000 \
-  --seed 2026
-```
-
-该采样池按 `job_type_public/priority_class` 分层等概率抽样，保留每条记录内部的GPU需求、duration和GPU-h联合关系。它只降低重复环境初始化的内存和I/O开销，不把Lite数据误称为时间序列。
-
-正式协议检查：
-
-```bash
-conda run -n aidrbench aidrbench protocol-check \
-  --manifest data/manifests/hourly_experiment_protocol_v1.yaml
-```
-
-协议固定：3A训练、5A验证、3C锁定OOD测试；episode seed范围分别为10000–19999、20000–20099和30000–30499。所有正式配置均从经验采样池按seed重新生成到达，禁止使用固定一周arrival文件做统计认证。
-
-正式RL配置会在训练启动前自动验证协议和数据hash，并把协议hash、模型seed、首个episode seed及允许的episode seed范围写入 `training.json`：
-
-```bash
-conda run -n aidrbench aidrbench train \
-  --algo ppo --env continuous \
-  --config configs/algorithms/ppo_formal.yaml \
-  --seed 101 --save results/training/formal/ppo_seed101
-```
-
-DQN和SAC分别使用 `dqn_formal.yaml`、`sac_formal.yaml`。超参数和checkpoint选择只能查看20000–20099验证seed；锁定配置之后才允许在30000–30499测试seed上运行最终benchmark和certificate。
-
-DQN和SAC checkpoint由 `model.zip` 与同目录的 `replay_buffer.pkl` 共同组成；
-缺少后者时训练命令会拒绝 off-policy 续训。`training.json` 同时区分
-`requested_timesteps`、`actual_segment_timesteps` 和 `cumulative_timesteps`，因为
-PPO 会按完整 rollout batch 向上取整。当前验证进度及 checkpoint 选择记录见
-[`docs/hourly-validation-status.md`](docs/hourly-validation-status.md)。
-
-正式算法配置每 5000 个实际环境步自动保存一个可恢复 checkpoint，例如
-`checkpoints/step_000025000/`。DQN/SAC 的每个目录都包含配对 replay buffer，
-用于在 validation split 上选择 checkpoint 并审计训练退化。
-
-### 22.3 社区负荷
-
-按连续周和季节切分。若使用年度 NREL profile，确保夏季/冬季均在 test set 中有代表场景。
-
-### 22.4 外部数据集
-
-- primary dataset 用于训练、调参和内部 test；
-- external workload/community dataset 只用于最终 OOD 评价；
-- zero-shot 结果必须先报告；
-- 如做 external fine-tuning，应使用独立 adaptation split，不能使用 external final test；
-- deadline generation policy 在不同 trace 间保持同一原则，并同时报告固定 policy 与重新标定 policy。
-
----
-
-## 23. 评价指标与灵活性认证协议
-
-### 23.1 社区与事件指标
-
-- `pcc_peak_kw`；
-- event-only peak reduction，kW 和 %；
-- event delivery ratio；
-- event-hour PCC-limit compliance rate（兼容字段 `dr_success_rate`）；
-- joint firm-event success rate（`firm_event_success_rate`）；
-- capacity violation hours；
-- maximum violation，kW；
-- energy above limit，kWh；
-- requested vs delivered reduction；
-- post-event rebound peak；
-- rebound ratio；
-- delivery、deadline、rebound、window relief 和 terminal backlog failure counts；
-- window-wide peak relief；
-- secondary peak occurrence time。
-
-### 23.2 计算服务指标
-
-- completed flexible GPU-hours；
-- mean、p95、p99 delay；
-- deadline miss GPU-hours；
-- deadline miss rate；
-- mean、p95 和 maximum backlog；
-- compute debt energy；
-- unfinished terminal backlog；
-- recovery time；
-- action switching frequency；
-- optional checkpoint overhead。
-
-### 23.3 能源指标
-
-- total data-center energy；
-- rigid/flexible energy；
-- energy per completed GPU-hour；
-- optional electricity cost；
-- optional carbon emissions；
-- measured-vs-modelled energy error。
-
-负荷转移通常守恒计算工作，因此总能耗未必下降。不能将 peak shaving 自动解释为 energy saving。
-
-### 23.4 Reliable flexibility 指标
-
-对每个 controller、duration 和数据组合报告：
-
-- `F_0.90(H)`；
-- `F_0.95(H)`；
-- `F_0.99(H)`；
-- certified reduction as % of data-center peak；
-- certified reduction as % of community peak；
-- empirical success rate；
-- one-sided lower confidence bound；
-- failure decomposition：delivery、window relief、deadline、rebound、terminal backlog。
-
-### 23.5 Repeated-event 指标
-
-- first-event and second-event certified flexibility；
-- residual flexibility ratio \(\rho_k^{\mathrm{res}}\)；
-- exhaustion \(E_k\)；
-- recovery time；
-- second-event failure probability；
-- compute debt immediately before each event；
-- relation between queue slack and remaining flexibility。
-
-### 23.6 Static envelope bias
-
-比较 static-20/30/40% 与 job-derived certificate：
-
-- absolute bias，kW；
-- relative bias，%；
-- false-commitment probability；
-- dependence on event duration、deadline regime 和 arrival intensity。
-
-### 23.7 统计协议
-
-主结果建议：
-
-- 至少 5 个 RL training seeds；
-- 每个最终 controller 至少 500 个独立 test episodes 用于 certificate；
-- chronological test split；
-- paired episode comparison；
-- bootstrap 95% CI 用于连续 KPI；
-- binomial one-sided CI 用于 success probability；
-- 多场景比较时报告 effect size，而不只报告 p-value；
-- 不把多个小时当作独立样本，episode 或 event 才是统计单位。
-
-### 23.8 Rebound 定义
-
-设 DR 结束后 \(W\) 小时为 post-event window：
-
-\[
-P^{\mathrm{rebound}}
-=
-\max_{t\in W}
-\left[
-P_t^{\mathrm{PCC,control}}
--P_t^{\mathrm{PCC,no-control}}
-\right]_+.
-\]
-
-定义 rebound ratio：
-
-\[
-R^{\mathrm{rebound}}
-=
-\frac{P^{\mathrm{rebound}}}
-{\max_t\Delta P_t^{\mathrm{delivered}}+\epsilon}.
-\]
-
-必须同时报告 event-only peak reduction、rebound 和 window-wide peak relief；否则算法可能只是把峰值从 18:00 移到 22:00。
-
-## 24. 论文主实验
-
-### Experiment 1：平台与守恒 sanity check
-
-- 无 flexible workload；
-- 无 DR；
-- 无限 PCC limit；
-- 极低/极高 arrival；
-- 计算守恒；
-- bucket mode 与 job-level mode 对照。
-
-### Experiment 2：Static envelope 与 job-derived flexibility
-
-比较：
-
-```text
-static 20%
-static 30%
-static 40%
-job-derived nominal flexibility
-job-derived F_0.90(H)
-job-derived F_0.95(H)
-job-derived F_0.99(H)
-```
-
-事件持续时间：1、2、4、6 h。输出 bias 和 false-commitment probability。
-
-### Experiment 3：控制器主比较
-
-```text
-No-control
-Threshold RBC
-EDF + valley filling
-MPC
-DQN
-PPO
-SAC
-Full-future Oracle
-```
-
-所有在线方法使用相同 forecast information；Oracle 单独标记。主要比较不是总 reward，而是 certified flexibility、window-wide peak relief、deadline 和 rebound。
-
-### Experiment 4：Compute debt 与连续事件
-
-```text
-1 event/day
-2 events/day
-3 events/day
-inter-event gap = 2, 4, 8, 12, 24 h
-event duration = 2, 4 h
-```
-
-输出：
-
-- \(\rho_k^{\mathrm{res}}\)；
-- exhaustion；
-- recovery time；
-- second-event failure probability；
-- compute debt trajectory。
-
-### Experiment 5：Deadline 与任务结构
-
-```text
-flexible share: 20%, 40%, 60%, 80%
-deadline: short, medium, long
-arrival intensity: 0.5×, 1.0×, 1.5×
-preemptible fraction: 0%, 50%, 100%
-checkpoint overhead: 0%, 2%, 5%
-```
-
-### Experiment 6：社区—数据中心规模比
-
-```text
-DC peak / community peak = 10%, 20%, 30%, 40%
-```
-
-同时报告 kW flexibility 和相对 community peak relief，防止规模归一化掩盖实际效应。
-
-### Experiment 7：预测误差与通知时间
-
-```text
-community forecast error = 0%, 5%, 10%, 20%
-arrival forecast = none / historical mean / perfect
-event notice = 0, 2, 4, 6 h
-event-duration uncertainty = 0, ±1 h
-```
-
-### Experiment 8：跨数据集和跨地区外部验证
-
-最低要求：
-
-```text
-Alibaba 2026 → training/development
-Alibaba 2020 or independent GPU trace → external workload test
-NREL/OEDI community → primary community test
-Low Carbon London or SimBench → external community test
-```
-
-不要在外部测试集上重新选择 reward 或超参数；可以单独报告 zero-shot 与 fine-tuned 两种结果。
-
-### Experiment 9：小时 vs 15 min
-
-在主平台稳定后做时间分辨率敏感性，检查：
-
-- event delivery；
-- deadline miss；
-- rebound；
-- controller ranking；
-- certified flexibility
-
-是否发生方向性变化。
-
-### Experiment 10：硬件参数和规模外推
-
-使用四卡测量构造：
-
-- low-power calibration；
-- median calibration；
-- high-power calibration；
-- workload-specific calibration。
-
-进行 node aggregation 到虚拟 MW 级数据中心，并明确：
-
-- 哪些量线性缩放；
-- 哪些 overhead 非线性；
-- 结论是 trace-driven simulation + four-GPU calibration，而不是 MW 级现场实证。
-
-### Experiment 11：机制分析而非只报算法排名
-
-对所有控制器分析：
-
-- 事件前是否提前清理 backlog；
-- 事件中保留多少最低执行量；
-- 事件后恢复速度；
-- 哪些 slack bucket 被优先执行；
-- failure 来自 delivery、deadline 还是 rebound；
-- state-conditioned flexibility 与 backlog/slack 的关系。
-
-最终论文必须给出至少一个跨算法成立的机制性结论，而不是只展示某个 RL 的平均 reward 更高。
-
-## 25. 公平比较规则
-
-所有控制器必须使用：
-
-- 相同 observation；
-- 相同 action bounds；
-- 相同 workload arrivals；
-- 相同 community load；
-- 相同 DR events；
-- 相同硬件功率参数；
-- 相同 deadline policy；
-- 相同 episode tail；
-- 相同 KPI 计算代码。
-
-MPC 和 RL 的未来信息必须单独列明。Oracle 使用 perfect future，只作为参考；不能将 Oracle 与无未来信息的 RL 直接宣称为公平在线比较。
-
-超参数只能用 validation set 选择。Test set 不得用于 reward weight 或 network architecture 调参。
-
----
-
-## 26. 单元测试和物理一致性
-
-### 26.1 计算守恒
-
-对每个 episode：
-
-\[
-\sum_t A_t
-=
-\sum_t x_t
-+
-\sum_t M_t
-+B_{\mathrm{terminal}}.
-\]
-
-允许数值误差小于设定 tolerance。
-
-### 26.2 功率边界
-
-```text
-0 ≤ active_flexible_gpus ≤ N_flex
-P_DC ≥ 0
-P_PCC = P_community - P_PV + P_DC
-```
-
-### 26.3 行为测试
-
-- `action=0` 不执行柔性任务；
-- `action=1` 在有 backlog 时使用全部容量；
-- 无 arrivals 时 backlog 不会增加；
-- 无限 limit 时 No-control 应接近最小 delay；
-- 零 flexible workload 时所有控制器输出相同 PCC；
-- full-horizon oracle 的目标值不应差于 rolling MPC；
-- clearance tail 后仍有 backlog 时必须计入 terminal penalty。
-
-### 26.4 Gymnasium checker
-
-```python
-from gymnasium.utils.env_checker import check_env
-check_env(env.unwrapped)
-```
-
-### 26.5 CI
-
-```bash
-uv run pytest -q
-uv run ruff check .
-uv run mypy src/aidrbench
-```
-
----
-
-## 27. 训练建议
-
-### 27.1 DQN
-
-- discrete 5-level action；
-- replay buffer；
-- observation normalization；
-- 先用 synthetic scenarios 训练；
-- 再在 Alibaba full-trace test 上评价。
-
-### 27.2 PPO
-
-- continuous action 作为主版本；
-- 8–16 个并行环境；
-- advantage normalization；
-- 5 个随机种子；
-- 训练曲线之外必须看 constraint metrics。
-
-### 27.3 SAC
-
-- continuous Box action；
-- reward normalization；
-- 注意 replay buffer 对多种 scenario 的覆盖；
-- 与 PPO 比较 sample efficiency 和最终稳定性。
-
-### 27.4 训练资源
-
-环境为小时级数值仿真，通常 CPU 就足够。推荐：
-
-```text
-RL training: CPU
-GPU 0–3: hardware calibration or other research
-```
-
-不要为了“发挥服务器潜力”强行用四张 GPU 训练很小的 MLP policy。
-
----
-
-## 28. 四卡服务器验证
-
-第一篇不需要把 RL policy 实时控制服务器 7 天。最低可接受验证分两层。
-
-### Level A：参数标定
-
-- 运行代表性 training/offline inference workload；
-- 得到平均 power、runtime、energy；
-- 拟合 `workload_energy.csv`；
-- 在仿真中使用。
-
-### Level B：schedule replay
-
-选择若干 test schedule，按控制器给出的 active-GPU fraction 在真实四卡服务器上运行代表任务，验证：
-
-- 预测 energy 与实测 energy；
-- 计划执行 GPU-hours 与实际完成 work；
-- 不同 schedule 的总能耗排序。
-
-这可以运行 6–24 h 的缩放实验，不必实时复现完整社区一周。
-
-论文表述：
-
-> **The virtual data-center model was calibrated and independently validated using a four-GPU RTX PRO 6000 server.**
-
-不要表述为：
-
-> **A full community data center was controlled in the field.**
-
----
-
-## 29. 预期论文图表
-
-### Figure 1：概念和平台架构
-
-- community load 与 AI data center；
-- rigid/flexible workload；
+- event count；
+- recovery gap；
 - compute debt；
-- event、recovery 和 rebound；
-- Rule/MPC/RL 共用环境。
-
-### Figure 2：从真实 trace 到 job-derived flexibility
-
-- Alibaba job type、GPU request、duration、priority；
-- deadline/slack construction；
-- 4-GPU workload energy calibration；
-- static 30% envelope 与 state-dependent envelope 对比。
-
-### Figure 3：单次事件中的 nominal reduction 与真实 window relief
-
-同一 test episode 显示：
-
-- community load；
-- no-control PCC；
-- controlled PCC；
-- PCC limit/DR request；
-- backlog/compute debt；
-- event-only reduction；
-- post-event rebound。
-
-### Figure 4：Reliable flexibility duration curve
-
-横轴为 event duration，纵轴为 certified reduction：
-
-```text
-F_0.90(H)
-F_0.95(H)
-F_0.99(H)
-static 20/30/40% envelopes
-```
-
-该图应成为正文主结果之一。
-
-### Figure 5：灵活性耗尽和恢复
-
-- first/second/third event；
-- residual flexibility ratio；
-- compute debt；
-- recovery time；
-- inter-event gap sensitivity。
-
-### Figure 6：控制器比较
-
-- certified flexibility；
-- window-wide peak relief；
-- deadline miss；
-- rebound；
-- OOD failure rate。
-
-不建议仅画 reward bar chart。
-
-### Figure 7：跨数据集泛化
-
-- workload dataset；
-- community dataset；
-- season；
-- DC/community scale；
-- zero-shot vs fine-tuned。
-
-### Table 1：环境和数据定义
-
-状态、动作、时间步、约束、deadline generation、数据源和硬件标定。
-
-### Table 2：主 benchmark
-
-每个 controller 的平均 KPI、95% CI 和 certificate。
-
-### Table 3：Failure decomposition
-
-按 delivery、deadline、rebound 和 terminal backlog 分类。
-
-### Table 4：硬件标定与外推
-
-workload、GPU 数、平均功率、runtime、energy、重复次数和 uncertainty interval。
-
-## 30. 可以和不可以做出的结论
-
-### 可以说
-
-- AI workload flexibility is state-dependent and duration-dependent under the specified traces and deadline policies；
-- nominal event reduction can differ materially from rebound-adjusted community peak relief；
-- compute debt can reduce the flexibility available for subsequent events；
-- static flexibility envelopes can be tested against job-derived, statistically certified capacities；
-- Rule-based、MPC 和标准 RL 可以在同一 benchmark 中公平比较；
-- the workload-energy model is calibrated and independently checked on a four-GPU RTX PRO 6000 server；
-- Alibaba 2026 informs workload type、priority、GPU request、used GPU-hours、utilization and relative chronology。
-
-### 不能说
-
-- Alibaba trace 包含真实 deadline；
-- 四卡实验证明了 MW 级数据中心现场可行性；
-- 环境解决了配电网节点电压或线路拥塞；
-- 模型实测了完整 PUE/WUE；
-- RL 一定优于 MPC；
-- hourly scheduling 可提供 frequency regulation；
-- 本平台是第一个数据中心 RL 或 demand-response 平台；
-- empirical \(F_q\) 是无条件数学保证。
-
-### Nature Communications 风格的主结论需要满足
-
-- 结论跨至少两个 workload 数据源成立；
-- 结论跨至少两个 community profile 来源成立；
-- 结论不依赖单一 RL 算法；
-- static-vs-job-derived 差异有明确效应量；
-- repeated-event exhaustion 和 rebound 有机制解释；
-- 统计认证在完全独立 test set 上完成；
-- 数据、代码、scenario manifest 和评估协议可以复现。
-
-如果结果显示 static envelope 并未明显高估，或者 MPC 与简单规则已经达到同样 certificate，也应如实报告；这仍然可能是重要结论。
-
-## 31. 实施路线
-
-### P0：仓库和环境，1–2 天
-
-- 建立目录；
-- 安装依赖；
-- 注册空 Gymnasium env；
-- 跑 `check_env`；
-- 冻结数据和 metric schema。
-
-### P1：纯 synthetic V0，3–5 天
-
-- synthetic community；
-- synthetic arrivals；
-- deadline/slack buckets；
-- compute debt；
-- event + recovery window；
-- No-control、Threshold 和 EDF；
-- 守恒与 rebound 单元测试。
-
-### P2：Alibaba Lite，3–7 天
-
-- 下载 1.19 GB execution summary；
-- 拟合 job type、duration、GPU request 和 priority 分布；
-- 生成 trace-calibrated episodes；
-- 跑 static envelope comparison。
-
-### P3：MPC 和 RL，1–2 周
-
-- rolling LP/MPC；
-- DQN；
-- PPO；
-- SAC；
-- validation-only tuning；
-- standard benchmark。
-
-### P4：Firm-flexibility evaluator，3–7 天
-
-- implement success criterion；
-- binary/grid search over requested reduction；
-- binomial lower confidence bound；
-- duration curve \(F_q(H)\)；
-- repeated-event stress test；
-- static envelope bias。
-
-### P5：四卡标定，1 周
-
-- idle；
-- offline inference；
-- fine-tuning/training；
-- runtime、average power、energy；
-- schedule replay；
-- uncertainty interval。
-
-### P6：Alibaba Full 和 job-level mode，视下载和存储情况
-
-- 下载 pod-hourly；
-- DuckDB/Polars 聚合；
-- chronological train/val/test；
-- job reconstruction proxies；
-- bucket-vs-job validation。
-
-### P7：外部数据集，1–2 周
-
-- Alibaba 2020 或独立 GPU trace；
-- second community dataset；
-- zero-shot and fine-tuned evaluation。
-
-### P8：正式论文实验，3–6 周
-
-- 5 RL seeds；
-- 500+ independent certification episodes；
-- main mechanism plots；
-- effect sizes and confidence intervals；
-- figure/data/code audit；
-- systematic prior-art update。
-
-### Go/No-Go milestones
-
-**Milestone A：** synthetic V0 能否稳定体现 compute debt 和 rebound？
-若不能，先修环境，不训练 RL。
-
-**Milestone B：** static envelope 与 job-derived certificate 是否存在可解释差异？
-若差异极小，论文主线应改为“条件下 static envelope 足够准确”，而不是强行制造高估结论。
-
-**Milestone C：** repeated events 是否产生可重复的 exhaustion？
-若没有，应检查 deadline policy 和 scaling 是否合理，并如实报告。
-
-**Milestone D：** 结论能否跨数据集复现？
-若不能，论文应聚焦边界条件和失效机制，而不是宣称普遍性。
-
-## 32. 最小 Quick Start
-
-下面的 CLI 需要按本 README 实现。完成后，标准流程应是：
-
-```bash
-# 1. 安装
-uv sync
-
-# 2. 生成可运行的 synthetic 数据
-uv run aidrbench data make-community \
-  --source synthetic --days 365 --peak-kw 1000 --seed 2026
-
-uv run aidrbench data make-arrivals \
-  --source synthetic --days 365 --seed 2026
-
-# 3. 构建场景
-uv run aidrbench scenarios build \
-  --config configs/scenarios/synthetic_week.yaml
-
-# 4. 检查环境
-uv run aidrbench env check \
-  --config configs/env/hourly_continuous.yaml
-
-# 5. 规则控制 smoke test
-uv run aidrbench benchmark \
-  --controllers no_control threshold edf_valley \
-  --split test --seeds 1
-
-# 6. 训练标准 RL
-uv run aidrbench train --algo ppo --env continuous --seed 1
-uv run aidrbench train --algo sac --env continuous --seed 1
-uv run aidrbench train --algo dqn --env discrete --seed 1
-
-# 7. 跑统一 benchmark
-uv run aidrbench benchmark \
-  --controllers no_control threshold edf_valley mpc dqn ppo sac \
-  --split test --seeds 1 2 3 4 5 \
-  --save results/benchmark_v0
-
-# 8. 作图
-uv run aidrbench plot \
-  --input results/benchmark_v0 \
-  --output results/benchmark_v0/figures
-```
+- residual flexibility；
+- rebound。
+
+Development 与 validation 使用独立规格。Validation 固定使用 development Model A
+承诺，不在 validation 上重新选择 repeated-event 容量；规格绑定环境/controller
+SHA-256 和完整 seeds 20000--20099。
+
+### Phase 4 — 计算社区 hosting capacity
+
+- 2 × 2 × 2 portfolio；
+- DC/PV/BESS response surface；
+- complementarity/substitution analysis。
+
+Development 与独立 validation 的 100-scenario 配对矩阵均已完成。Validation
+沿用冻结的 Model A、portfolio、8 个 contrasts 和 10.05 kW practical margin，
+不读取 locked 数据，也不重新选择分析规则。
+
+### Phase 5 — 稳健性和外推
+
+- 硬件 lower/nominal/upper uncertainty bounds；
+- PUE 和 node overhead；
+- workload mix；
+- deadline distribution；
+- locked OOD communities。
+
+当前状态：power-case PI、success-criteria、sparse-workload 与 sparse
+infrastructure PI sensitivities 已完成。100 个 validation scenarios 已通过集合级 hash/service
+audit，并在提交 `5889405` 上完成 q={0.90,0.95,0.99} 的 frozen robust-MPC
+capacity selection。随后一次性生成并评估了 500 个 locked-ID episodes；授权已
+消费，500 个场景、2,000 个 payload 文件及 controller/source/git provenance
+均通过哈希审计。headline q=0.95 在 H={2,3,4,6,8}、N={0,2,6} 的 15 个
+单元达到一侧 95% Wilson 门槛；H=1 的 validation-selected 55.16 kW 候选为
+477/500、Wilson 下界 0.936，不能称为 q=0.95 certified。q=0.90 与 q=0.99
+分别有 15/18 和 9/18 个单元通过，作为 secondary sensitivity。三个 q 下同一
+duration 的 N={0,2,6} 容量均相同，zero notice gain 被保留为结构性结果。
+完整机器可读审计见 `data/manifests/nature_mainline_locked_id_results_v1.yaml`。
+
+经单独明确授权后，500 个 locked-OOD episodes 已一次性生成，500 个场景、
+2,000 个 payload 哈希、seed 范围、集合无重叠及 no-DR 服务可行性均通过审计。
+为保持固定候选的 controller/source/Git provenance，三个 q 均在原 selection
+提交 `5889405` 上重放。q={0.90,0.95,0.99} 的 validation-selected 候选在 OOD
+上均为 0/18 certified cells；headline q=0.95 各 duration 的成功数为
+H={1,2,3,4,6,8}: {437,433,445,425,398,383}/500，对应 Wilson 下界
+0.733–0.865。主要失败来自 mean/interval delivery。同一 duration 下三个 notice
+的结果仍完全相同。该结果说明主分布内证书没有在此联合分布偏移下保持，不能
+表述为“OOD firm capacity 为零”，因为协议禁止在 locked-OOD 上重新选择容量。
+完整回执见 `data/manifests/nature_mainline_locked_ood_results_v1.yaml`。
+
+### Phase 6 — 独立因果容量认证
+
+- 在 validation frozen scenarios 上冻结 robust-MPC 参数与各 H、N、q 的候选容量；
+- 在 500 个 locked-ID episodes 上一次性计算 Wilson 下界；
+- 将 locked-OOD 作为单独的外推压力测试；
+- 额外 controller/RL 比较保持可选，且不得改变主证书。
+
+正式流程先生成并审计 validation scenarios，但暂不选择容量。由于
+`causal_selection.json` 会绑定精确 Git commit，locked-ID 的一次性授权必须先
+提交；随后才在同一干净 commit 上依次完成 q=0.95 headline、q={0.90,0.99}
+secondary validation selection 和预声明 locked replay。各单元格报告 interval-wise
+Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 
 ---
 
-完成 standard benchmark 后，继续运行核心科学分析：
+## 16. 完成标准
 
-```bash
-# 9. 认证不同持续时间下的 firm flexibility
-uv run aidrbench certify \
-  --controller mpc \
-  --durations 1 2 4 6 \
-  --reliability 0.95 \
-  --episodes 500 \
-  --save results/certificates/mpc
+当以下条件满足时，主论文已经形成完整闭环，无需等待 RL 结果：
 
-uv run aidrbench certify \
-  --controller ppo \
-  --durations 1 2 4 6 \
-  --reliability 0.95 \
-  --episodes 500 \
-  --save results/certificates/ppo
+- [x] 硬件校准和 workload-class 功率定义冻结；
+- [x] 名义、PI 和受限 NA 三层规划边界可重复计算；
+- [x] 固定因果候选在独立 locked-ID 上完成一次性检验并保留全部通过/失败结果；
+- [x] duration–notice–reliability surface 完成评估（部分单元未通过认证门槛）；
+- [x] development 与独立 validation compute-debt exhaustion 机制得到量化；
+- [x] development 与独立 validation 2 × 2 × 2 hosting-capacity 分析完成；
+- [x] AI–BESS 替代关系在 validation 复现；AI–PV 的条件性边界被保留；
+- [x] 硬件校准、PUE、node overhead 与 workload development sensitivity 完成；
+- [x] locked-OOD 场景分布外推完成，固定候选未保留目标可靠性；
+- [x] 所有主线数值结果具有结果回执、provenance 和 hash；
+- [x] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
+- [x] 控制器结果未被误写成文章的核心创新。
 
-# 10. 连续事件耗尽测试
-uv run aidrbench stress-test \
-  --controllers threshold mpc ppo sac \
-  --events-per-day 1 2 3 \
-  --inter-event-gap-hours 2 4 8 12 24 \
-  --save results/repeated_events
+---
 
-# 11. static vs job-derived envelopes
-uv run aidrbench compare-envelopes \
-  --static-fractions 0.20 0.30 0.40 \
-  --certificates results/certificates \
-  --save results/envelope_bias
+## 17. 最终逻辑闭环
+
+本篇 Nature Communications 的完整逻辑应为：
+
+```text
+AI task traces and hardware measurements
+                ↓
+job-level feasible execution schedules
+                ↓
+nominal → perfect-information → non-anticipative firm flexibility
+                ↓
+fixed causal realization → independent locked-ID certificate
+                ↓
+duration–notice–reliability surface
+                ↓
+compute debt, recovery and repeated-event exhaustion
+                ↓
+community hosting-capacity value under PV and BESS
+                ↓
+robustness across hardware, workload and community uncertainty
 ```
 
-## 33. 数据、软件和相邻研究来源
+一句话概括：
 
-### 33.1 Primary workload data
-
-- Alibaba Cluster Trace Program
-  `https://github.com/alibaba/clusterdata`
-
-- Alibaba Cluster Trace GPU v2026
-  `https://github.com/alibaba/clusterdata/tree/master/cluster-trace-gpu-v2026`
-
-- Alibaba v2026 schema
-  `https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2026/docs/schema.md`
-
-- Alibaba v2026 data download
-  `https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2026/docs/data_download.md`
-
-- Alibaba GPU v2020 external workload validation
-  `https://github.com/alibaba/clusterdata/tree/master/cluster-trace-gpu-v2020`
-
-### 33.2 Community data
-
-- NREL/NLR End-Use Load Profiles
-  `https://www.nrel.gov/buildings/end-use-load-profiles`
-
-- OEDI dataset record
-  `https://data.openei.org/submissions/4520`
-
-- Low Carbon London smart-meter data
-  `https://data.london.gov.uk/dataset/smartmeter-energy-consumption-data-in-london-households-vqm0d/`
-
-- Refactored Low Carbon London dataset
-  `https://doi.org/10.4121/FBBE775B-48D8-469F-A39B-B64488BFD6FD`
-
-- SimBench time-series data
-  `https://simbench.de/en/download/datasets/`
-
-### 33.3 Software
-
-- Gymnasium custom environments
-  `https://gymnasium.farama.org/main/introduction/create_custom_env/`
-
-- Stable-Baselines3
-  `https://stable-baselines3.readthedocs.io/`
-
-- CVXPY
-  `https://www.cvxpy.org/`
-
-- HiGHS
-  `https://highs.dev/`
-
-- DuckDB
-  `https://duckdb.org/`
-
-- uv
-  `https://docs.astral.sh/uv/`
-
-### 33.4 必须讨论的相邻研究
-
-- Data center demand response and coincident peak avoidance
-  `https://doi.org/10.1016/j.peva.2013.08.014`
-
-- SustainDC benchmark
-  `https://proceedings.neurips.cc/paper_files/paper/2024/hash/b6676756f8a935e208f394a1ba47f0bc-Abstract-Datasets_and_Benchmarks_Track.html`
-
-- AI data centres as grid-interactive assets
-  `https://www.nature.com/articles/s41560-025-01927-1`
-
-- Flexibility-aware planner-initiated siting of data centers
-  `https://www.nature.com/articles/s41467-026-72324-9`
-
-在投稿前应再次做系统检索，新增 2026 年后续工作，并检查所有数据和代码的 license、citation、redistribution 和 derived-data 要求。
-
-## 34. V0 与论文级完成标准
-
-### 34.1 V0 平台完成标准
-
-- [x] `AIDRBench-Continuous-v0` 和 `AIDRBench-Discrete-v0` 通过 `check_env`；
-- [x] 计算守恒测试通过；
-- [x] deadline/slack bucket 测试通过；
-- [x] synthetic community 和 arrivals 可由 seed 完全复现；
-- [x] compute debt、event、recovery 和 rebound 逻辑通过单元测试；
-- [x] Alibaba Lite preprocessing 可运行；
-- [x] No-control、Threshold、EDF-valley 和 MPC 可运行；
-- [x] DQN、PPO、SAC 可训练并保存；
-- [x] 所有控制器使用相同 test scenarios；
-- [x] 代表周图同时显示 PCC、limit、DC power、backlog 和 compute debt。
-
-### 34.2 Firm-flexibility evaluator 完成标准
-
-- [x] `certify` CLI 可运行；
-- [x] 支持多个 event durations；
-- [x] 支持 delivery、deadline、window-wide relief、rebound、terminal backlog 联合 success criterion；
-- [x] 支持 one-sided binomial confidence bound；
-- [x] 支持 static-20/30/40% comparison；
-- [x] 支持 repeated-event stress test；
-- [x] 输出 \(F_q(H)\)、residual flexibility 和 recovery time；
-- [ ] certificate 在独立 test episodes 上计算。
-
-### 34.3 硬件标定完成标准
-
-- [ ] 至少 3 类 workload 完成四卡功率/能耗标定；
-- [ ] 每个 workload 至少 5 次重复；
-- [ ] 保存原始 telemetry 和 run-level summary；
-- [ ] 明确 GPU-only 与 node-level measurement 边界；
-- [ ] 完成至少一组 schedule replay；
-- [ ] 论文明确区分 measured GPU/node energy 与 modelled facility power。
-
-### 34.4 高水平投稿最低标准
-
-- [ ] 两个 workload 数据源；
-- [ ] 两个 community profile 来源；
-- [ ] chronological train/validation/test；
-- [ ] 5 个 RL seeds；
-- [ ] 500 个以上独立 certification episodes，或有充分 power analysis 的替代数量；
-- [ ] bucket-vs-job-level validation；
-- [ ] repeated-event exhaustion；
-- [ ] static-vs-job-derived envelope comparison；
-- [ ] OOD community/workload test；
-- [ ] paired uncertainty analysis；
-- [ ] 代码、数据 manifest、scenario seeds 和 metric implementation 全部归档；
-- [ ] 不作“first platform”、配电网潮流、frequency regulation 或 MW 级 field demonstration 的过度声明。
-
-## 35. 后续版本
-
-完成 V0 后再按顺序扩展：
-
-### V1：15 min + job-level scheduling
-
-- non-preemptive jobs；
-- checkpoint overhead；
-- gang scheduling；
-- mixed discrete-continuous actions。
-
-### V2：快速功率响应
-
-- GPU power cap；
-- throughput/power curve；
-- 秒—分钟级控制；
-- inference SLA。
-
-此时才需要更细功率和性能数据。
-
-### V3：安全强化学习
-
-- constrained RL；
-- action projection；
-- deadline and capacity guarantees；
-- sim-to-real adaptation。
-
-### V4：电网或冷却扩展
-
-- OpenDSS feeder；
-- transformer model；
-- time-varying PUE；
-- liquid cooling；
-- carbon-aware or renewable-aware scheduling。
-
-这些扩展应建立在 V0 的 workload conservation、scenario interface 和 benchmark protocol 上，不应一开始全部塞进第一篇论文。
+> **这篇论文研究的是 AI 灵活性作为一种电网资源的物理边界、可靠边界、耗尽机制和系统价值，而不是研究如何训练一个更好的控制器。**

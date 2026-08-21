@@ -11,12 +11,13 @@ community:
   source: nrel_eulp
   path: data/processed/community_load.parquet
   profile_id: eulp_mixed_5a
-  target_peak_kw: 1000
+  background_peak_kw: 800
+  pcc_capacity_kw: 1000
   pv_enabled: true
 virtual_datacenter:
   gpus_per_node: 4
   node_count: auto
-  target_dc_peak_share_of_community: 0.20
+  target_dc_peak_share_of_pcc: 0.20
   flexible_gpu_fraction: 0.50
   pue: 1.20
 workload:
@@ -40,10 +41,9 @@ workload:
       minimum_slack_h: 2
       maximum_slack_h: 24
 hardware:
-  calibration_file: data/processed/workload_energy.csv
-  fallback_idle_power_w_per_gpu: 80
-  active_power_w_per_gpu_by_class: {training: 450, offline_inference: 350, online_inference: 400}
-  fallback_node_overhead_w: 300
+  calibration_artifact: data/calibration/rtx6000pro_4gpu_v1.yaml
+  require_calibration_artifact: true
+  calibration_power_case: nominal
 dr:
   mode: capacity_limit
   source: configured

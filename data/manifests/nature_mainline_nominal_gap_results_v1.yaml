@@ -1,0 +1,81 @@
+schema_version: 1
+receipt_role: post_run_hash_receipt_not_preregistration
+evidence_scope: development_perfect_information_nominal_gap
+generated_at: "2026-08-21T14:16:17+09:00"
+analysis_git_commit: 621c3bb402b653541f59ff16b7bae2d8bf10e08a
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+reinforcement_learning_used: false
+locked_data_read: false
+
+interpretation_guardrails:
+  - nominal_flexibility_is_a_declared_engineering_proxy_not_an_observed_resource
+  - perfect_information_is_a_physical_planning_bound_not_a_causal_controller
+  - the_gap_is_attributable_to_job_and_service_constraints_within_model_a
+  - development_results_are_not_locked_certificates_or_real_world_causal_estimates
+  - q_0_99_is_not_estimable_from_100_scenarios_at_95_percent_confidence
+
+inputs:
+  protocol:
+    path: data/manifests/nature_mainline_protocol_v1.yaml
+    sha256: 4dc5a91d78603c1c9dfc953bbb2439309f505f0b8ca7f87d726528fcda8bb549
+  pi_run:
+    path: results/nature_mainline/development_v2_pi_nominal/pi_frontier.json
+    sha256: 976b56df1522473f45e000b02b63b18e0fb7abacb36bf082fb8ec9ebfd26efd0
+  scenario_frontier:
+    path: results/nature_mainline/development_v2_pi_nominal/pi_frontier.parquet
+    sha256: 1ba82a39ec881a313886ab953d02040668acaff3f420b0a5cf92445cd7aa8d68
+    row_count: 600
+  firm_boundary:
+    path: results/nature_mainline/development_v2_pi_nominal/pi_firm_boundary.parquet
+    sha256: 97ded258e644bb29b0018b7bfb4131f694fa03d58e7cad1cff8e8ddff50b529c
+    row_count: 18
+
+design:
+  independent_unit: frozen_scenario
+  scenario_count: 100
+  durations_h: [1, 2, 3, 4, 6, 8]
+  reliability_targets: [0.90, 0.95, 0.99]
+  confidence_level: 0.95
+  statistical_method: exact_binomial_nonparametric_lower_tolerance_bound
+  nominal_flexibility_fraction: 0.5
+  reference_mix_operating_peak_kw: 201.000783984030
+  nominal_flexibility_kw: 100.500391992015
+
+headline_q_0_95:
+  tolerance_order_statistic_rank: 2
+  achieved_tolerance_confidence: 0.9629187906726449
+  rows:
+    H1: {pi_firm_capacity_kw: 53.005063297871, physical_gap_kw: 47.495328694144, gap_fraction_of_reference_peak: 0.236294245986, gap_fraction_of_nominal: 0.472588491972}
+    H2: {pi_firm_capacity_kw: 44.464147077691, physical_gap_kw: 56.036244914324, gap_fraction_of_reference_peak: 0.278786200748, gap_fraction_of_nominal: 0.557572401496}
+    H3: {pi_firm_capacity_kw: 41.190816822887, physical_gap_kw: 59.309575169128, gap_fraction_of_reference_peak: 0.295071362378, gap_fraction_of_nominal: 0.590142724755}
+    H4: {pi_firm_capacity_kw: 40.146878193004, physical_gap_kw: 60.353513799011, gap_fraction_of_reference_peak: 0.300265066647, gap_fraction_of_nominal: 0.600530133293}
+    H6: {pi_firm_capacity_kw: 40.146878193004, physical_gap_kw: 60.353513799011, gap_fraction_of_reference_peak: 0.300265066647, gap_fraction_of_nominal: 0.600530133293}
+    H8: {pi_firm_capacity_kw: 37.759754048674, physical_gap_kw: 62.740637943342, gap_fraction_of_reference_peak: 0.312141259849, gap_fraction_of_nominal: 0.624282519697}
+  summary:
+    pi_capacity_range_kw: [37.759754048674, 53.005063297871]
+    nominal_overstatement_range_kw: [47.495328694144, 62.740637943342]
+    nominal_overstatement_fraction_of_nominal_range: [0.472588491972, 0.624282519697]
+    capacity_is_weakly_nonincreasing_with_duration: true
+    nominal_gap_is_weakly_nondecreasing_with_duration: true
+
+secondary_q_0_90:
+  tolerance_order_statistic_rank: 5
+  achieved_tolerance_confidence: 0.9762889173365232
+  pi_firm_capacity_kw:
+    H1: 55.976094671673
+    H2: 53.274947791035
+    H3: 44.464147077691
+    H4: 43.005129154853
+    H6: 41.679051892931
+    H8: 40.290221155267
+  capacity_is_weakly_nonincreasing_with_duration: true
+
+secondary_q_0_99:
+  estimable: false
+  sample_size_sufficient: false
+  returned_capacity: null
+  interpretation: insufficient_sample_size_not_zero_capacity
+
+paper_claim:
+  - at_q_0_95_the_declared_50_percent_nominal_proxy_is_reduced_by_47_3_to_62_4_percent_after_job_constraints
+  - the_job_derived_perfect_information_bound_declines_from_53_01_kw_at_1h_to_37_76_kw_at_8h

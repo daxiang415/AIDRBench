@@ -33,16 +33,20 @@ def test_hourly_benchmark_persists_matched_rule_episodes(tmp_path: Path) -> None
 
     summary = run_hourly_benchmark(
         config=root / "configs/env/hourly_continuous.yaml",
-        controllers=("no_control", "threshold"),
+        controllers=("no_control", "threshold", "robust_mpc"),
         seeds=(5,),
         output_directory=tmp_path,
     )
 
     episodes = pd.read_parquet(summary["episode_metrics"])
     aggregate = pd.read_parquet(summary["aggregate_metrics"])
-    assert summary["episodes"] == 2
-    assert set(episodes["controller"]) == {"no_control", "threshold"}
+    assert summary["episodes"] == 3
+    assert set(episodes["controller"]) == {"no_control", "threshold", "robust_mpc"}
     assert set(episodes["action_mode"]) == {"continuous"}
-    assert set(aggregate["controller"]) == {"no_control", "threshold"}
+    assert set(aggregate["controller"]) == {"no_control", "threshold", "robust_mpc"}
     assert set(aggregate["action_mode"]) == {"continuous"}
+    assert set(aggregate["information_structure"]) == {
+        "causal_control_state",
+        "causal_control_state_plus_6h_environment_forecast",
+    }
     assert Path(str(summary["manifest"])).is_file()

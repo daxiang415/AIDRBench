@@ -1,0 +1,155 @@
+{
+  "figures": [
+    {
+      "figure": 1,
+      "manifest": "figure_1_manifest.json",
+      "outputs": [
+        {
+          "bytes": 47244,
+          "format": "svg",
+          "path": "figure_1_nominal_job_derived_gap.svg",
+          "sha256": "e0d987c81c58b41ffe4a3c5d336f9aaaafa372ab841d679183907b905f179bda"
+        },
+        {
+          "bytes": 34530,
+          "format": "pdf",
+          "path": "figure_1_nominal_job_derived_gap.pdf",
+          "sha256": "ac61ec8d2f6d68b68fa129b987299056f90b20aad7db9391c2070edf52b521c0"
+        },
+        {
+          "bytes": 1520826,
+          "format": "tiff",
+          "path": "figure_1_nominal_job_derived_gap.tiff",
+          "sha256": "420cbe01672eb299bbffc2f97b3aa77e24ecdffc44d26221e30e1f9d0252d0da"
+        },
+        {
+          "bytes": 239535,
+          "format": "png",
+          "path": "figure_1_nominal_job_derived_gap.png",
+          "sha256": "32c49bc82207e528127b94b0e5b02e6665697458e9290a3856eea19f9c7ab2c6"
+        }
+      ]
+    },
+    {
+      "figure": 2,
+      "manifest": "figure_2_manifest.json",
+      "outputs": [
+        {
+          "bytes": 44633,
+          "format": "svg",
+          "path": "figure_2_duration_reliability_notice.svg",
+          "sha256": "e5f27ecd872091b621444ef6002577a2c42e0b4f103857322b0f472d42970e17"
+        },
+        {
+          "bytes": 29945,
+          "format": "pdf",
+          "path": "figure_2_duration_reliability_notice.pdf",
+          "sha256": "4d4376587c4e442e82fb83f401505738bcb08a405ea1c152b6206788cd2eca8c"
+        },
+        {
+          "bytes": 1280410,
+          "format": "tiff",
+          "path": "figure_2_duration_reliability_notice.tiff",
+          "sha256": "486af8c3635e7643f84b54e93ebe20d51c46683c28d4fe28ab4a1398aa3ed927"
+        },
+        {
+          "bytes": 220632,
+          "format": "png",
+          "path": "figure_2_duration_reliability_notice.png",
+          "sha256": "d988ce190cb45946be7e54bd62d59d2335a692e3028fda970d137b09468a981c"
+        }
+      ]
+    },
+    {
+      "figure": 3,
+      "manifest": "figure_3_manifest.json",
+      "outputs": [
+        {
+          "bytes": 51621,
+          "format": "svg",
+          "path": "figure_3_compute_debt_exhaustion.svg",
+          "sha256": "e9d8497538f044591fe19c9e380b52bde2ad483fa081881fb7152e4ac28e12b7"
+        },
+        {
+          "bytes": 30228,
+          "format": "pdf",
+          "path": "figure_3_compute_debt_exhaustion.pdf",
+          "sha256": "e13d582a960a5e4a1685152480fec94b49c29fa36b37bb25235d841a47875fb8"
+        },
+        {
+          "bytes": 1633678,
+          "format": "tiff",
+          "path": "figure_3_compute_debt_exhaustion.tiff",
+          "sha256": "d1abd7ea61d8d6d9558b92630666c057d9489c17a2f6cee1be47a6b051e1c13e"
+        },
+        {
+          "bytes": 233166,
+          "format": "png",
+          "path": "figure_3_compute_debt_exhaustion.png",
+          "sha256": "b09eb4a5ec09df328558525a56288c77c6cd87126df941141a354cb4e7cc217a"
+        }
+      ]
+    },
+    {
+      "figure": 4,
+      "manifest": "figure_4_manifest.json",
+      "outputs": [
+        {
+          "bytes": 48319,
+          "format": "svg",
+          "path": "figure_4_hosting_capacity_interactions.svg",
+          "sha256": "047dd1f8394314807bcafd3cfde87c58f75c41fc40a4be9429140417d665f83e"
+        },
+        {
+          "bytes": 31018,
+          "format": "pdf",
+          "path": "figure_4_hosting_capacity_interactions.pdf",
+          "sha256": "e832e24f7b5807b74cc5dad8dd104fa16e4e615a388c2bb93f34df4504f3b785"
+        },
+        {
+          "bytes": 1080214,
+          "format": "tiff",
+          "path": "figure_4_hosting_capacity_interactions.tiff",
+          "sha256": "51cb3c20c50bf9c6d98945d35b0d469bd7b34cfc114b4b7a67710b2d63e971a3"
+        },
+        {
+          "bytes": 169561,
+          "format": "png",
+          "path": "figure_4_hosting_capacity_interactions.png",
+          "sha256": "6210a3544d2bff298194b1b66c4d0ed70d218f0b6fdedc051c700ee7f8eedf97"
+        }
+      ]
+    },
+    {
+      "figure": 5,
+      "manifest": "figure_5_manifest.json",
+      "outputs": [
+        {
+          "bytes": 43746,
+          "format": "svg",
+          "path": "figure_5_robustness_generalization.svg",
+          "sha256": "586f37e7ad72e09f50ff3f82c1b0d66023e16b66da0e1a1575c308b609ad321f"
+        },
+        {
+          "bytes": 31102,
+          "format": "pdf",
+          "path": "figure_5_robustness_generalization.pdf",
+          "sha256": "a8491bae61fe701205df45e2f9736387fd7341ba9f8efabef6c659ae64f6a7e5"
+        },
+        {
+          "bytes": 1095426,
+          "format": "tiff",
+          "path": "figure_5_robustness_generalization.tiff",
+          "sha256": "09a39767882033bc63a9dcbc1534dc998cb9de0f3002bff10fa11ff422614e91"
+        },
+        {
+          "bytes": 221591,
+          "format": "png",
+          "path": "figure_5_robustness_generalization.png",
+          "sha256": "be0aac9931f5c434a21ac112b63e81c858cf2f7a649be15b4b864aa9f0cbc32f"
+        }
+      ]
+    }
+  ],
+  "schema_version": "aidrbench.nature_figure_bundle.v2.reference_style"
+}

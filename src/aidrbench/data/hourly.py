@@ -232,9 +232,7 @@ def load_hourly_community_profile(
     normalized["community_load_kw"] = pd.to_numeric(
         normalized["community_load_kw"], errors="coerce"
     )
-    normalized["pv_generation_kw"] = pd.to_numeric(
-        normalized["pv_generation_kw"], errors="coerce"
-    )
+    normalized["pv_generation_kw"] = pd.to_numeric(normalized["pv_generation_kw"], errors="coerce")
     if normalized.isna().any().any():
         raise ValueError("community profile contains invalid timestamps or power values")
     if (normalized["community_load_kw"] <= 0.0).any():
@@ -259,9 +257,9 @@ def load_hourly_community_profile(
         samples_per_hour = hour_ns // resolution_ns
         indexed = normalized.set_index("timestamp")
         hourly_power = indexed.resample("1h", closed="right", label="right").mean()
-        hourly_counts = indexed["community_load_kw"].resample(
-            "1h", closed="right", label="right"
-        ).count()
+        hourly_counts = (
+            indexed["community_load_kw"].resample("1h", closed="right", label="right").count()
+        )
         hourly_power = hourly_power.loc[hourly_counts == samples_per_hour]
         # EULP timestamps are interval-ending.  Expose conventional hourly
         # interval starts to the environment and DR event manifests.
@@ -300,6 +298,8 @@ def select_hourly_community_window(
     hours: int,
     seed: int,
     episode_start: str | None = None,
+    window_start: str | None = None,
+    window_end: str | None = None,
 ) -> pd.DataFrame:
     """Select one contiguous, reproducible episode from an hourly profile."""
 
@@ -326,12 +326,26 @@ def select_hourly_community_window(
     ]
     # Calendar-aligned weeks keep relative DR hour 17 at local 17:00 rather
     # than silently shifting event clock time with an arbitrary window offset.
+    eligible_starts = all_candidate_starts
+    if (window_start is None) != (window_end is None):
+        raise ValueError("window_start and window_end must be supplied together")
+    if window_start is not None and window_end is not None:
+        lower = pd.to_datetime(window_start, utc=True).tz_localize(None)
+        upper = pd.to_datetime(window_end, utc=True).tz_localize(None)
+        if lower >= upper:
+            raise ValueError("community window_start must be earlier than window_end")
+        eligible_starts = [
+            start
+            for start in eligible_starts
+            if pd.Timestamp(timestamps.iloc[start]) >= lower
+            and pd.Timestamp(timestamps.iloc[start + hours - 1]) + timedelta(hours=1) <= upper
+        ]
     candidate_starts = [
-        start for start in all_candidate_starts if pd.Timestamp(timestamps.iloc[start]).hour == 0
+        start for start in eligible_starts if pd.Timestamp(timestamps.iloc[start]).hour == 0
     ]
     if not candidate_starts:
         raise ValueError(
-            f"community profile has no midnight-aligned contiguous {hours}-hour episode"
+            f"community profile has no eligible midnight-aligned contiguous {hours}-hour episode"
         )
 
     if episode_start is None:
@@ -343,10 +357,8 @@ def select_hourly_community_window(
         if not matches:
             raise ValueError(f"community.episode_start is not in the profile: {episode_start}")
         start_index = int(matches[0])
-        if start_index not in all_candidate_starts:
-            raise ValueError(
-                "community.episode_start does not begin a sufficiently long contiguous window"
-            )
+        if start_index not in eligible_starts:
+            raise ValueError("community.episode_start is outside the eligible contiguous window")
     return ordered.iloc[start_index : start_index + hours].reset_index(drop=True).copy()
 
 
@@ -365,9 +377,7 @@ def load_hourly_dr_manifest(
     if missing:
         raise ValueError(f"DR event manifest is missing required columns: {missing}")
     if "community_profile_id" in frame.columns and profile_id is not None:
-        available = sorted(
-            frame["community_profile_id"].dropna().astype(str).unique().tolist()
-        )
+        available = sorted(frame["community_profile_id"].dropna().astype(str).unique().tolist())
         if profile_id not in available:
             raise ValueError(
                 f"DR manifest has no events for community profile {profile_id!r}; "
@@ -386,8 +396,8 @@ def load_hourly_dr_manifest(
     if normalized.empty:
         raise ValueError("DR event manifest contains no events for the selected profile")
     actual_duration_minutes = (
-        (normalized["end_time"] - normalized["start_time"]).dt.total_seconds() / 60.0
-    )
+        normalized["end_time"] - normalized["start_time"]
+    ).dt.total_seconds() / 60.0
     if not np.allclose(actual_duration_minutes, normalized["duration_minutes"]):
         raise ValueError("DR event duration_minutes disagrees with start_time/end_time")
     aligned_start = (
@@ -472,17 +482,19 @@ def make_synthetic_hourly_arrivals(
     *,
     hours: int,
     total_gpu_count: int,
-    target_total_utilization: float,
+    flexible_arrival_utilization: float,
     workload_mix: WorkloadMix,
     seed: int,
     deadline_ranges_h: Mapping[str, tuple[int, int]] = DEFAULT_DEADLINE_RANGES_H,
+    deadline_slack_scale: float = 1.0,
+    max_deadline_hours: int = 48,
 ) -> pd.DataFrame:
     """Generate reproducible flexible GPU-hour arrivals at hourly resolution.
 
-    ``target_total_utilization`` applies to all AI GPU-hour demand. The mix
-    then determines which part is flexible; increasing the training share can
-    therefore increase schedulable work when training has a larger flexible
-    fraction than the displaced workload.
+    ``flexible_arrival_utilization`` scales the total potential AI arrival
+    volume, after which the workload mix determines the schedulable share.
+    Unlike the legacy total-utilization field, it does not also set rigid GPU
+    power; rigid utilization is configured independently in the power model.
     """
 
     if isinstance(hours, bool) or not isinstance(hours, int) or hours <= 0:
@@ -491,7 +503,16 @@ def make_synthetic_hourly_arrivals(
         raise TypeError("total_gpu_count must be an integer")
     if total_gpu_count <= 0:
         raise ValueError("total_gpu_count must be positive")
-    utilization = _fraction(target_total_utilization, "target_total_utilization", allow_zero=False)
+    utilization = _fraction(
+        flexible_arrival_utilization,
+        "flexible_arrival_utilization",
+        allow_zero=False,
+    )
+    slack_scale = _positive_float(deadline_slack_scale, "deadline_slack_scale")
+    if isinstance(max_deadline_hours, bool) or not isinstance(max_deadline_hours, int):
+        raise TypeError("max_deadline_hours must be an integer")
+    if max_deadline_hours <= 0:
+        raise ValueError("max_deadline_hours must be positive")
     rng = np.random.default_rng(seed)
     hour_of_day = np.arange(hours, dtype="float64") % 24.0
     daily_shape = 0.82 + 0.18 * np.sin(2.0 * np.pi * (hour_of_day - 4.0) / 24.0)
@@ -519,7 +540,15 @@ def make_synthetic_hourly_arrivals(
                     "priority_class": "LP",
                     "model_type": "synthetic",
                     "arrival_gpu_h": float(total * flexible_weight),
-                    "slack_hours": int(rng.integers(minimum, maximum + 1)),
+                    "slack_hours": max(
+                        1,
+                        min(
+                            max_deadline_hours,
+                            math.ceil(
+                                int(rng.integers(minimum, maximum + 1)) * slack_scale
+                            ),
+                        ),
+                    ),
                     "source_mode": "synthetic",
                 }
             )

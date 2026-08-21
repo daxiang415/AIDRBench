@@ -1,0 +1,115 @@
+schema_version: 1
+receipt_role: post_run_hash_receipt_not_preregistration
+evidence_scope: development_infrastructure_sensitivity
+generated_at: "2026-08-20T20:17:21+09:00"
+analysis_git_commit: f3052241e184d052ed250b50496f999ce0f51367
+working_tree_dirty_during_analysis: false
+reinforcement_learning_used: false
+locked_data_read: false
+
+interpretation_guardrails:
+  - development_PI_planning_bound_only
+  - pue_values_are_engineering_sensitivity_points_not_confidence_bounds
+  - node_overhead_range_is_an_engineering_assumption_not_a_confidence_interval
+  - one_factor_at_a_time_not_a_cartesian_grid
+  - fixed_144_node_facility_and_nominal_gpu_power_in_all_cases
+  - node_overhead_hosting_effect_not_quantified_by_this_single_event_analysis
+  - not_a_causal_or_locked_generalization_certificate
+
+preregistration:
+  protocol_path: data/manifests/nature_mainline_protocol_v1.yaml
+  protocol_sha256_before_run: 6a04a88515f2b16bd2f9b2e9c6924c86b0f7d28fbff4dfbb71fe5aeb985bb5a5
+  case_specification:
+    path: configs/sensitivity/nature_infrastructure_sparse_v1.yaml
+    sha256: 8d9045357ecae08f5b3b723b5874f2dd97278cc6c42a0ba2a4ad373138690c7c
+  execution_specification:
+    path: configs/sensitivity/nature_infrastructure_pi_v1.yaml
+    sha256: f274f256b3399adc395031275cba197749565b51efe370b4a0a1850b265a1814
+  cases:
+    reference: {pue: 1.20, node_fixed_overhead_w: 300.0}
+    pue_low: {pue: 1.10, node_fixed_overhead_w: 300.0}
+    pue_high: {pue: 1.30, node_fixed_overhead_w: 300.0}
+    node_overhead_lower: {pue: 1.20, node_fixed_overhead_w: 150.0}
+    node_overhead_upper: {pue: 1.20, node_fixed_overhead_w: 450.0}
+  development_seed_range: [10000, 10099]
+  durations_h: [4, 8]
+  reliability_target: 0.95
+  confidence_level: 0.95
+
+service_gate:
+  seed_range: [10000, 10002]
+  case_count: 5
+  row_count: 15
+  all_cases_service_feasible: true
+  maximum_baseline_deadline_miss_rate: 0.0
+  maximum_baseline_terminal_backlog_fraction: 0.0
+  outputs:
+    no_dr_service_feasibility.json: 2c6eec34621e3a17b50e015da262b9c7ba6d6f546cb6976bd7078da74fadf188
+    no_dr_service_feasibility.parquet: 68dbd9017f230af906beae1205b4929504fe90d0706e1ddb1bc1a557f1054555
+
+scenario_set:
+  path: results/nature_mainline/development_infrastructure_scenarios_v1
+  index_sha256: 80fd63112953295a6ec1c5dc7ad08674aa38def8782280478647d6064c135e00
+  ordered_scenario_hash_list_sha256: 6b0bb38d67fb033552fe1d11e06b50e9e2211108cf2f9436f3b9ce28f6319c0d
+  independent_seed_count: 100
+  paired_cases_per_seed: 5
+  scenario_count: 500
+  unique_scenario_hash_count: 500
+  payload_files_checked: 2000
+  payload_hash_mismatches: 0
+  full_no_dr_service_audit_passed: true
+
+results:
+  independent_unit: frozen_scenario
+  optimization_row_count: 1000
+  optimal_row_count: 1000
+  reference_exactly_matches_existing_nominal_PI_boundary: true
+  firm_capacity_kw:
+    reference: {H4: 40.14687819300373, H8: 37.75975404867362}
+    pue_low: {H4: 36.801305010253394, H8: 34.61310787795078}
+    pue_high: {H4: 43.49245137575406, H8: 40.9064002193964}
+    node_overhead_lower: {H4: 40.14687819300373, H8: 37.75975404867359}
+    node_overhead_upper: {H4: 40.14687819300373, H8: 37.759754048673564}
+  reference_mix_operating_peak_kw:
+    reference: 201.0007839840303
+    pue_low: 184.2507186520278
+    pue_high: 217.75084931603286
+    node_overhead_lower: 175.08078398403032
+    node_overhead_upper: 226.92078398403035
+  capacity_fraction_of_reference_mix_peak:
+    reference: {H4: 0.19973493335326212, H8: 0.18785874015135018}
+    pue_low: {H4: 0.19973493335326195, H8: 0.18785874015134996}
+    pue_high: {H4: 0.19973493335326217, H8: 0.1878587401513501}
+    node_overhead_lower: {H4: 0.2293048801784304, H8: 0.21567046473882467}
+    node_overhead_upper: {H4: 0.17692023396071593, H8: 0.16640059753773337}
+  structural_effects:
+    pue_low_absolute_capacity_change_fraction: -0.0833333333333333
+    pue_high_absolute_capacity_change_fraction: 0.0833333333333333
+    pue_capacity_fraction_of_operating_peak_invariant: true
+    node_overhead_absolute_capacity_change_kw_numerically_zero: true
+    node_overhead_lower_operating_peak_change_fraction: -0.1289547209032744
+    node_overhead_upper_operating_peak_change_fraction: 0.1289547209032746
+
+reproducibility:
+  replay_worker_count: 32
+  substantive_frontier_columns_exactly_equal: true
+  volatile_frontier_columns: [objective_solve_seconds, refinement_solve_seconds]
+  raw_frontier_byte_identical: false
+  firm_boundary_exactly_equal: true
+  firm_boundary_byte_identical: true
+
+outputs:
+  infrastructure_sensitivity.json: e7fbd2f87196b75978527f79c4a83872e801c0131ad23f2af9d8f51ca3099b00
+  infrastructure_pi_frontier.parquet: c35c648adae90d111ab995bc69e07a51de2885d3e8a372576ba5e4795d76675a
+  infrastructure_pi_firm_boundary.parquet: b5fd93caccc5eca8ff557d3afd3e56e4e81070b17edc89e89936d5c00d050716
+
+source_sha256:
+  src/aidrbench/evaluation/infrastructure_sensitivity.py: 402501b37d24da5343f3ae204189def5a27f77c2ecc90ed9264e4c8a55547f84
+  src/aidrbench/envs/hourly_config.py: 111499a053cbac27b21215d20281bcf846bcfe5a55aca435e72237fd24fa6ce6
+
+interpretation:
+  - pue_scales_absolute_deliverable_kw_and_operating_peak_proportionally_in_model_a
+  - additive_node_overhead_cancels_from_baseline_relative_single_event_reduction
+  - node_overhead_changes_facility_peak_and_therefore_normalized_flexibility_and_headroom
+  - infrastructure_uncertainty_changes_absolute_or_normalized_reporting_but_not_the_duration_ordering
+  - locked_ood_scenario_distribution_uncertainty_remains_unresolved

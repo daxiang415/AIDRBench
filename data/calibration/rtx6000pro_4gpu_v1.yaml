@@ -1,0 +1,77 @@
+schema_version: aidrbench.hardware_calibration.v2
+artifact_id: rtx6000pro_4gpu_v1
+hardware:
+  identifier: NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition
+  topology_identifier: 4x_gpu_pcie_node_no_nvlink
+measurement:
+  method: 1 s nvidia-smi GPU board-power telemetry; BF16 8192x8192 training with NCCL
+    all-reduce and batched offline inference; repeats 1-2 fit, repeat 3 held out;
+    published host/GPU identifiers are redacted; node overhead is an explicit non-measured
+    assumption
+  raw_input_sha256:
+    data/calibration/rtx6000pro_4gpu_v1_raw/idle_baseline.parquet: d2f9c299f85576b353ba7b852bd2c5c9c5ba5f87985d44dd440fad4fa056d049
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_1gpu_repeat1_telemetry.parquet: c483343504192fa98d3708a7a8b590fb0d0248d556e86d3e02e0f473c6aec08d
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_1gpu_repeat1_workload.json: daa896e05bd3004ddb69a520a8089ee13f86f1b5b7ac80657c511b87f2cdb814
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_1gpu_repeat2_telemetry.parquet: cad9aecc647b2c927cc66cec38e678ffddd5943d9f2e5942c58e27ad659cc6e1
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_1gpu_repeat2_workload.json: 6df7605c24c0cb31b72f6dc4c10664774e52d655f015ba5c75015048ce946075
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_1gpu_repeat3_telemetry.parquet: 7eb69667035dd7c91a910109d7b8f893b27e699610bd9da88d628de10723206c
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_1gpu_repeat3_workload.json: 92dbbc8aedee314778e06666ddaad8589693003c2ed58fb81dc38d2069829113
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_4gpu_repeat1_telemetry.parquet: 02c4fe7f3c42c9014565e43d58130e025ecc657413e9f0f18bf2b94696739357
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_4gpu_repeat1_workload.json: d0a3ce2b71f529e12310709ea5667827dc7542ad1ea6548f4c27b0c997463758
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_4gpu_repeat2_telemetry.parquet: 74ad48efccaefad0fee69a2bbdbf31e676e188aa7a7d1c2602803f7185940470
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_4gpu_repeat2_workload.json: 2ab91fa82be071fcd3440d81959094d3f085884f7cab6dc7bba407bed340e607
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_4gpu_repeat3_telemetry.parquet: 8857e04dfdf02be0da1ec3dfb421925c1767a53484316beb4f04d80a9716082a
+    data/calibration/rtx6000pro_4gpu_v1_raw/offline_inference_4gpu_repeat3_workload.json: 6a670dc565e3abc6c897af0ccca49de4274db4fddc39294ea297165b9e006bab
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_1gpu_repeat1_telemetry.parquet: 644167eae168a1942933e8275926892c913869274295739518ec42285099d97a
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_1gpu_repeat1_workload.json: d3f4577634e986e2a69d5fecd020dfbd170e70a641f57e75aecf31012968a18d
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_1gpu_repeat2_telemetry.parquet: affffc705bc230a8952795aeb8585df0d5935c48fe43db192a3c727622b90626
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_1gpu_repeat2_workload.json: a78d95e5aa8894df125ea6ef3c50b9f3d8c460da7a2788b1746fade94b3f266d
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_1gpu_repeat3_telemetry.parquet: 6ec1f51c8a5a628b6a7f90ff1fd39dd7aa7125dede18f172c71ae611f25d4f54
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_1gpu_repeat3_workload.json: 21f3e6abd49ea494592222930fc73b207be7ce16a6216aec3043cbed4bab33e2
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_4gpu_repeat1_telemetry.parquet: ada15bb0b72267c06b7ef5f67f823f0deffae6752daf93ab38940699580d130d
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_4gpu_repeat1_workload.json: 9e50514b33cd9186c415657b77f00aa804b439d16bf298c81614725da48f4fb7
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_4gpu_repeat2_telemetry.parquet: c1dc641a0f6d5d83ad2cebe1adba84bcaeac27c69635190908dc3c974395cf3c
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_4gpu_repeat2_workload.json: d7a3be161dc0e6ba3cf6f2f60dc7508a47731eb34fba9602cbeacb0f16056f6b
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_4gpu_repeat3_telemetry.parquet: 0803024719a75998a27dfda1b7c003820dff0368cc65c469a10b29e73b293161
+    data/calibration/rtx6000pro_4gpu_v1_raw/training_4gpu_repeat3_workload.json: 420bdf88ef9ea30c353a1be2f91138ed56bdc10cce82e2e9345cd39131b1da06
+  fit_summary: data/calibration/rtx6000pro_4gpu_v1_fit/fit_summary.json
+parameters:
+  idle_power_w_per_gpu:
+    estimate_w: 13.935625
+    uncertainty_interval_w:
+    - 6.739
+    - 18.68
+    uncertainty_method: between_gpu_range_within_single_idle_run
+    statistical_unit: single_node_idle_run
+    independent_unit_count: 1
+  node_fixed_overhead_w:
+    estimate_w: 300.0
+    uncertainty_interval_w:
+    - 150.0
+    - 450.0
+    uncertainty_method: engineering_assumption_range_no_node_meter
+    statistical_unit: engineering_assumption
+    independent_unit_count: 0
+  active_power_w_per_gpu_by_class:
+    training:
+      estimate_w: 259.0824724264706
+      uncertainty_interval_w:
+      - 225.81241981750333
+      - 292.35252503543785
+      uncertainty_method: student_t_95_confidence_interval_over_run_means
+      statistical_unit: independent_four_gpu_workload_run_mean
+      independent_unit_count: 2
+      confidence_level: 0.95
+    offline_inference:
+      estimate_w: 300.0221737132353
+      uncertainty_interval_w:
+      - 299.6947670498358
+      - 300.34958037663483
+      uncertainty_method: student_t_95_confidence_interval_over_run_means
+      statistical_unit: independent_four_gpu_workload_run_mean
+      independent_unit_count: 2
+      confidence_level: 0.95
+validation:
+  held_out_power_mae_w: 3.795553768382348
+evidence_class: benchmark_anchored_synthetic
+artifact_sha256: ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193

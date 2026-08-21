@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+import math
 from typing import Any
 
 import numpy as np
 
+from aidrbench.controllers.hourly_oracle import HourlyFullHorizonOracleController
+from aidrbench.controllers.robust_mpc_spec import RobustMPCSpecification
 from aidrbench.envs.community_ai_dr_env import DISCRETE_ACTION_FRACTIONS
 
 
@@ -26,6 +29,7 @@ class HourlyNoControlController:
     """Execute all available flexible capacity every hour."""
 
     name = "no_control"
+    information_structure = "causal_control_state"
 
     def act(self, env: Any, info: dict[str, Any]) -> np.ndarray | int:
         del info
@@ -36,6 +40,7 @@ class HourlyThresholdController:
     """Use the instantaneous PCC headroom rule from README section 18.2."""
 
     name = "threshold"
+    information_structure = "causal_control_state"
 
     def act(self, env: Any, info: dict[str, Any]) -> np.ndarray | int:
         state = info["control_state"]
@@ -60,6 +65,7 @@ class HourlyEDFValleyController:
     """Serve urgent buckets, otherwise shift flexible work into load valleys."""
 
     name = "edf_valley"
+    information_structure = "causal_control_state_plus_environment_forecast"
 
     def __init__(
         self, *, valley_percentile: float = 0.40, high_load_fraction: float = 0.25
@@ -98,44 +104,74 @@ class HourlyMPCController:
 
     name = "mpc"
     forecast_assumption = "6h_environment_load_limit_forecast+historical_mean_arrivals"
+    information_structure = "causal_control_state_plus_6h_environment_forecast"
 
     def __init__(
         self,
         *,
         horizon_hours: int = 6,
+        solver: str = "HIGHS",
+        solver_threads: int = 1,
+        warm_start: bool = True,
         deadline_penalty: float = 1_000.0,
         limit_penalty: float = 20.0,
         backlog_penalty: float = 0.2,
+        backlog_normalization_hours: float = 48.0,
         switching_penalty: float = 0.02,
+        arrival_history_window_hours: int = 24,
     ) -> None:
         if horizon_hours <= 0:
             raise ValueError("horizon_hours must be positive")
         if min(deadline_penalty, limit_penalty, backlog_penalty, switching_penalty) < 0.0:
             raise ValueError("MPC penalties must be non-negative")
+        if solver != "HIGHS":
+            raise ValueError("hourly MPC currently requires solver='HIGHS'")
+        if solver_threads <= 0:
+            raise ValueError("solver_threads must be positive")
+        if not isinstance(warm_start, bool):
+            raise ValueError("warm_start must be boolean")
+        if not math.isfinite(backlog_normalization_hours) or backlog_normalization_hours <= 0.0:
+            raise ValueError("backlog_normalization_hours must be positive")
+        if arrival_history_window_hours <= 0:
+            raise ValueError("arrival_history_window_hours must be positive")
         self.horizon_hours = horizon_hours
+        self.solver = solver
+        self.solver_threads = solver_threads
+        self.warm_start = warm_start
         self.deadline_penalty = deadline_penalty
         self.limit_penalty = limit_penalty
         self.backlog_penalty = backlog_penalty
+        self.backlog_normalization_hours = backlog_normalization_hours
         self.switching_penalty = switching_penalty
+        self.arrival_history_window_hours = arrival_history_window_hours
         self._arrival_history_gpu_h: list[float] = []
-        self._previous_fraction = 0.0
+        self._previous_fraction = 1.0
 
     def reset(self) -> None:
         """Clear previous-arrival estimates between evaluation episodes."""
 
         self._arrival_history_gpu_h.clear()
-        self._previous_fraction = 0.0
+        self._previous_fraction = 1.0
 
     def _forecast_arrivals(self, env: Any, horizon: int) -> np.ndarray:
+        """Forecast arrivals strictly after the already released current hour."""
+
         if self._arrival_history_gpu_h:
-            mean_arrival = float(np.mean(self._arrival_history_gpu_h[-24:]))
+            mean_arrival = float(
+                np.mean(self._arrival_history_gpu_h[-self.arrival_history_window_hours :])
+            )
         else:
             mean_arrival = (
                 env.power_model.data_center.total_gpu_count
-                * env.config.target_total_utilization
+                * env.config.flexible_arrival_utilization
                 * env.config.workload_mix.flexible_share
             )
-        return np.full(horizon, mean_arrival, dtype="float64")
+        forecast = np.full(horizon, mean_arrival, dtype="float64")
+        # At action time the environment has already placed this hour's jobs
+        # in ``state['backlog_gpu_h']``.  A causal MPC cannot execute an
+        # estimate of the next release in the current interval.
+        forecast[0] = 0.0
+        return forecast
 
     @staticmethod
     def _deadline_requirements(
@@ -216,11 +252,15 @@ class HourlyMPCController:
                 + self.limit_penalty * cp.sum(violation)  # type: ignore[attr-defined]
                 + self.backlog_penalty
                 * cp.sum(backlog)  # type: ignore[attr-defined]
-                / max(capacity_gpu_h * 48.0, 1.0)
+                / max(capacity_gpu_h * self.backlog_normalization_hours, 1.0)
                 + self.switching_penalty * cp.sum(switching)  # type: ignore[attr-defined]
             )
             problem = cp.Problem(objective, constraints)
-            problem.solve(solver="HIGHS", warm_start=True)  # type: ignore[no-untyped-call]
+            problem.solve(  # type: ignore[no-untyped-call]
+                solver=self.solver,
+                warm_start=self.warm_start,
+                highs_options={"threads": self.solver_threads},
+            )
             if execution.value is None or problem.status not in {"optimal", "optimal_inaccurate"}:
                 return fraction_to_action(env, threshold_fraction(state))
             fraction = float(np.clip(execution.value[0] / capacity_gpu_h, 0.0, 1.0))
@@ -230,13 +270,128 @@ class HourlyMPCController:
         return fraction_to_action(env, fraction)
 
 
+class HourlyRobustMPCController(HourlyMPCController):
+    """Causal MPC with an upper envelope for unreleased future arrivals."""
+
+    name = "robust_mpc"
+    forecast_assumption = (
+        "6h_environment_load_limit_forecast+historical_mean_plus_arrival_uncertainty_envelope"
+    )
+    information_structure = "causal_control_state_plus_6h_environment_forecast"
+
+    def __init__(
+        self,
+        *,
+        arrival_safety_sigma: float = 1.0,
+        minimum_arrival_safety_fraction: float = 0.15,
+        service_envelope_enabled: bool = True,
+        **kwargs: Any,
+    ) -> None:
+        if arrival_safety_sigma < 0.0:
+            raise ValueError("arrival_safety_sigma must be non-negative")
+        if minimum_arrival_safety_fraction < 0.0:
+            raise ValueError("minimum_arrival_safety_fraction must be non-negative")
+        if not isinstance(service_envelope_enabled, bool):
+            raise ValueError("service_envelope_enabled must be boolean")
+        super().__init__(**kwargs)
+        self.arrival_safety_sigma = arrival_safety_sigma
+        self.minimum_arrival_safety_fraction = minimum_arrival_safety_fraction
+        self.service_envelope_enabled = service_envelope_enabled
+
+    @classmethod
+    def from_specification(
+        cls, specification: RobustMPCSpecification
+    ) -> HourlyRobustMPCController:
+        """Build the formal reference controller without Python defaults."""
+
+        return cls(
+            horizon_hours=specification.horizon_hours,
+            solver=specification.solver,
+            solver_threads=specification.solver_threads,
+            warm_start=specification.warm_start,
+            deadline_penalty=specification.deadline_penalty,
+            limit_penalty=specification.limit_penalty,
+            backlog_penalty=specification.backlog_penalty,
+            backlog_normalization_hours=specification.backlog_normalization_hours,
+            switching_penalty=specification.switching_penalty,
+            arrival_history_window_hours=specification.arrival_history_window_hours,
+            arrival_safety_sigma=specification.arrival_safety_sigma,
+            minimum_arrival_safety_fraction=(
+                specification.minimum_arrival_safety_fraction
+            ),
+            service_envelope_enabled=specification.service_envelope_enabled,
+        )
+
+    def _forecast_arrivals(self, env: Any, horizon: int) -> np.ndarray:
+        forecast = super()._forecast_arrivals(env, horizon)
+        baseline = float(forecast[1] if horizon > 1 else 0.0)
+        history = np.asarray(
+            self._arrival_history_gpu_h[-self.arrival_history_window_hours :],
+            dtype="float64",
+        )
+        spread = float(history.std(ddof=1)) if len(history) > 1 else 0.0
+        safety_margin = max(
+            self.arrival_safety_sigma * spread,
+            self.minimum_arrival_safety_fraction * baseline,
+        )
+        if horizon > 1:
+            forecast[1:] += safety_margin
+        return forecast
+
+    def act(self, env: Any, info: dict[str, Any]) -> np.ndarray | int:
+        """Solve the MPC, then enforce the preregistered DR/recovery envelope."""
+
+        action = super().act(env, info)
+        if not self.service_envelope_enabled:
+            return action
+        state = info["control_state"]
+        if isinstance(action, np.ndarray):
+            proposed_fraction = float(action[0])
+        else:
+            proposed_fraction = float(DISCRETE_ACTION_FRACTIONS[action])
+        request_kw = float(state["event_request_reference_kw"])
+        if request_kw <= 0.0:
+            return action
+        baseline_pcc_kw = float(state["baseline_pcc_power_current_kw"])
+        target_pcc_kw = math.inf
+        reward = env.config.reward
+        if bool(state["event_active"]):
+            target_pcc_kw = baseline_pcc_kw - reward.min_delivery_ratio * request_kw
+        elif bool(state["recovery_active"]):
+            baseline_peak_kw = max(
+                baseline_pcc_kw,
+                float(state["running_window_baseline_peak_kw"]),
+            )
+            target_pcc_kw = min(
+                baseline_pcc_kw + reward.max_rebound_ratio * request_kw,
+                baseline_peak_kw - reward.min_window_peak_relief_fraction * request_kw,
+            )
+        if not math.isfinite(target_pcc_kw):
+            return action
+        fixed_pcc_kw = float(state["community_power_kw"]) + float(state["rigid_dc_power_kw"])
+        worst_dynamic_kw = max(
+            float(state["worst_class_peak_kw"]) - float(state["rigid_dc_power_kw"]),
+            1e-9,
+        )
+        envelope_fraction = float(
+            np.clip((target_pcc_kw - fixed_pcc_kw) / worst_dynamic_kw, 0.0, 1.0)
+        )
+        fraction = min(proposed_fraction, envelope_fraction)
+        self._previous_fraction = fraction
+        return fraction_to_action(env, fraction)
+
+
 def make_hourly_controller(
     name: str,
+    *,
+    robust_mpc_specification: RobustMPCSpecification | None = None,
 ) -> (
     HourlyNoControlController
     | HourlyThresholdController
     | HourlyEDFValleyController
     | HourlyMPCController
+    | HourlyRobustMPCController
+    | HourlyFullHorizonOracleController
 ):
     """Build one of the P1 baselines by CLI-safe controller name."""
 
@@ -248,4 +403,10 @@ def make_hourly_controller(
         return HourlyEDFValleyController()
     if name == "mpc":
         return HourlyMPCController()
+    if name == "robust_mpc":
+        if robust_mpc_specification is not None:
+            return HourlyRobustMPCController.from_specification(robust_mpc_specification)
+        return HourlyRobustMPCController()
+    if name == "oracle":
+        return HourlyFullHorizonOracleController()
     raise ValueError(f"unsupported hourly controller: {name}")

@@ -1,6 +1,6 @@
 algorithm: ppo
 environment_config: configs/env/hourly_formal_train_continuous.yaml
-experiment_protocol: data/manifests/hourly_experiment_protocol_v1.yaml
+experiment_protocol: data/manifests/hourly_experiment_protocol_v2.yaml
 total_timesteps: 100000
 checkpoint_interval: 5000
 n_envs: 4

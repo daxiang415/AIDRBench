@@ -1,0 +1,241 @@
+schema_version: 1
+receipt_role: post_run_hash_receipt_not_preregistration
+evidence_scope: development_only
+locked_data_read: false
+interpretation_guardrails:
+  - not_a_locked_certificate
+  - not_a_real_world_causal_estimate
+  - hosting_values_are_planning_bounds
+  - exhaustion_values_are_fixed_capacity_mechanism_diagnostics
+
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+
+sensitivity_service_gate:
+  analysis_git_commit: 9924ea88e0f63a4b38c41107b0a5f36cfc31f9b5
+  design: sparse_factorial
+  case_count: 9
+  seed_count: 3
+  evaluation_row_count: 27
+  all_cases_service_feasible: true
+  maximum_baseline_deadline_miss_rate: 0.0
+  maximum_baseline_terminal_backlog_fraction: 0.0
+  outputs:
+    no_dr_service_feasibility.json: af8aa1366f7192710d69f4c4357846d51e286938b96f7b3d5b606cc584920c72
+    no_dr_service_feasibility.parquet: db7915eda4eff317eb81b19483255f81fda18c6a8c61d1a42c9da6e8c0821ee5
+
+workload_sensitivity:
+  analysis_git_commit: 45eeb58a32fe5ea357ada7d6b380c352ec4196bd
+  independent_unit: frozen_scenario
+  independent_scenario_count_per_case: 100
+  design: sparse_factorial_pi
+  durations_h: [4, 8]
+  workload_case_count: 9
+  frozen_scenario_count: 900
+  optimization_row_count: 1800
+  optimal_row_count: 1800
+  reliability_target: 0.95
+  confidence_level: 0.95
+  tolerance_order_statistic_rank: 2
+  achieved_tolerance_confidence: 0.9629187906726449
+  full_frozen_scenario_service_audit:
+    scenario_count: 900
+    maximum_no_dr_baseline_deadline_miss_gpu_h: 0.0
+    maximum_no_dr_baseline_terminal_backlog_gpu_h: 0.0
+  capacity_kw_by_case:
+    reference_H4: 40.14687819300373
+    reference_H8: 37.75975404867362
+    flexible_arrival_low_H4: 30.88221399461824
+    flexible_arrival_low_H8: 29.045964652825898
+    flexible_arrival_high_H4: 77.99036751873687
+    flexible_arrival_high_H8: 53.492055664610106
+    rigid_utilization_low_H4: 40.14687819300373
+    rigid_utilization_low_H8: 37.75975404867362
+    rigid_utilization_high_H4: 40.146878193003666
+    rigid_utilization_high_H8: 37.75975404867362
+    deadline_tight_H4: 40.14687819300373
+    deadline_tight_H8: 37.75975404867362
+    deadline_loose_H4: 40.14687819300373
+    deadline_loose_H8: 37.75975404867362
+    high_arrival_tight_deadline_H4: 77.99036751873687
+    high_arrival_tight_deadline_H8: 53.492055664610106
+    low_arrival_loose_deadline_H4: 30.88221399461824
+    low_arrival_loose_deadline_H8: 29.045964652825898
+  interpretation:
+    flexible_arrival_changes_capacity: true
+    rigid_utilization_changes_single_event_reduction_capacity: false
+    deadline_slack_changes_capacity_at_predeclared_points: false
+    interaction_detected_at_predeclared_combined_points: false
+    binding_boundary_metric: minimum_interval_delivery_ratio
+    rigid_zero_effect_scope: additive_rigid_load_cancels_in_baseline_relative_reduction
+    deadline_zero_effect_scope: tested_sparse_points_under_model_a_service_thresholds
+    scope: development_PI_only_not_causal_or_generalization_certificate
+  outputs:
+    scenario_index: 00ef0b7fb1473d05337fa4176b1efc6f005b0ea83914298a9e8600ff68f18a77
+    workload_sensitivity.json: c28a14682976877d3613d9e7dfc8e7336794fa138f0be118ae41c43133fd017d
+    workload_pi_frontier.parquet: 321dd1be0725f1bc5d727bc11bf7f25b4c411b8888b3fc52d021c27e1dfbb0d8
+    workload_pi_firm_boundary.parquet: 5ccd22860f8045ed00757f343135e51850b8c9c8992de640db6f1a012704be42
+  equivalence_check:
+    reference_matches_existing_nominal_capacity_rows: true
+    compared_row_count: 200
+    maximum_absolute_capacity_difference_kw: 0.0
+
+success_criteria_sensitivity:
+  analysis_git_commit: 9924ea88e0f63a4b38c41107b0a5f36cfc31f9b5
+  independent_unit: frozen_scenario
+  independent_scenario_count: 100
+  design: one_factor_at_a_time
+  durations_h: [4, 8]
+  criteria_case_count: 9
+  optimization_row_count: 1800
+  reliability_target: 0.95
+  confidence_level: 0.95
+  reference_capacity_kw:
+    H4: 40.14687819300373
+    H8: 37.75975404867362
+  capacity_kw_by_case:
+    delivery_090_H4: 42.37725783663766
+    delivery_090_H8: 39.857515831642395
+    delivery_098_H4: 38.91789337993709
+    delivery_098_H8: 36.60384438994857
+    deadline_000_H4: 40.14687819300373
+    deadline_000_H8: 37.75975404867362
+    deadline_002_H4: 40.14687819300373
+    deadline_002_H8: 37.75975404867362
+    rebound_010_H4: 40.14687819300373
+    rebound_010_H8: 37.75975404867362
+    rebound_050_H4: 40.14687819300373
+    rebound_050_H8: 37.75975404867362
+    window_relief_025_H4: 40.14687819300373
+    window_relief_025_H8: 37.75975404867362
+    window_relief_075_H4: 40.14687819300373
+    window_relief_075_H8: 37.75975404867362
+  interpretation:
+    delivery_threshold_changes_capacity: true
+    deadline_threshold_changes_capacity: false
+    rebound_threshold_changes_capacity: false
+    window_relief_threshold_changes_capacity: false
+    scope: development_PI_only_not_causal_certificate
+  outputs:
+    criteria_sensitivity.json: 00092eb02b0eeee0f02002232f8950cfaa8a979f8a3a6ab9ecfd26d5f8caaf7c
+    criteria_pi_frontier.parquet: 14949faca6e1949c55e43605021269cd9d58c48ab1035f527af6fe303ca2fc07
+    criteria_pi_firm_boundary.parquet: dcac37a451553ddc9815e9e40343f4b70f2767ab21d5b7eef74eda29b2b7f5c4
+  reproducibility_check:
+    repeated_capacity_and_status_columns_identical: true
+    boundary_artifact_byte_identical: true
+    raw_frontier_byte_identical: false
+    raw_frontier_difference: solver_timing_columns_only
+
+repeated_event_exhaustion:
+  analysis_git_commit: 532702a21a8d760dd3dd56d9b7cdfd4289080e98
+  independent_unit: frozen_scenario
+  independent_scenario_count: 100
+  paired_programs_per_scenario: 10
+  scenario_program_count: 1000
+  event_outcome_count: 4000
+  scenario_index:
+    path: results/nature_mainline/development_exhaustion_v1/repeated_scenario_index.json
+    sha256: 56568f8bd9f0451c1c0ef80f4d41083c0462294121b7867dd0722494bf712da9
+  fixed_capacity_kw:
+    duration_4h: 44.000327053605915
+    duration_8h: 41.19081682288712
+  joint_episode_success_fraction:
+    H4_G2: 0.75
+    H4_G4: 0.78
+    H4_G8: 0.94
+    H4_G12: 0.78
+    H4_G24: 0.61
+    H8_G2: 0.73
+    H8_G4: 0.85
+    H8_G8: 0.65
+    H8_G12: 0.79
+    H8_G24: 0.00
+  event4_p05_paired_residual_flexibility_ratio:
+    H4_G2: 1.0
+    H4_G4: 1.0
+    H4_G8: 1.0
+    H4_G12: 0.9994394325923697
+    H4_G24: 0.9958741499016307
+    H8_G2: 0.9910972279400773
+    H8_G4: 0.9983762055032186
+    H8_G8: 0.9939496297183199
+    H8_G12: 0.9985694933341768
+    H8_G24: 0.9896897864693988
+  event4_mean_paired_compute_debt_increment_kwh:
+    H4_G2: 578.9094029893733
+    H4_G4: 665.9456575737512
+    H4_G8: 693.1459300161094
+    H4_G12: 845.0966745553051
+    H4_G24: 1034.7187836902285
+    H8_G2: 1057.8806309038735
+    H8_G4: 1064.1053074843526
+    H8_G8: 1174.8864356282133
+    H8_G12: 1085.8436606689472
+    H8_G24: 1372.8297880541631
+  outputs:
+    repeated_event_outcomes.parquet: 4b18954edd139dd981ad4ec0cf0611099f27f41e933d17bcfd443d1d40edd595
+    repeated_episode_outcomes.parquet: 91316bac70386035ea5dcc08a25e7c3e41cce9367a3cd846201e69f0b33aabd4
+    exhaustion_summary.parquet: dd719c0dc95e298b7a1bc46cb46195ea0df4afec009307810abaf46243a1e146
+    joint_episode_summary.parquet: 477de93b7007e23a31ac1c3686aef1cf466e33f03db8581f484912278302c4ba
+    exhaustion_diagnostics.json: f7913ecd7abf9831f141c50c826cd64fd8c93fbd38f7ca99ed3c216455f9e7ee
+  reproducibility_check:
+    resumed_checkpoint_count: 1000
+    evaluated_checkpoint_count: 0
+    aggregate_artifacts_byte_identical: true
+
+hosting_capacity_2x2x2:
+  analysis_git_commit: 34e47bd221274f490364ac8bd3e7aac9aae0f928
+  independent_unit: frozen_scenario
+  independent_scenario_count: 100
+  paired_portfolios_per_scenario: 8
+  optimization_row_count: 800
+  simultaneous_feasible_capacity_kw:
+    rigid_no_pv_no_bess: 202.1463918999909
+    flexible_no_pv_no_bess: 429.7195154567936
+    rigid_no_pv_bess: 278.59733652395306
+    flexible_no_pv_bess: 592.9347170611693
+    rigid_pv_no_bess: 212.4406987176762
+    flexible_pv_no_bess: 451.60298562947844
+    rigid_pv_bess: 313.5138946676717
+    flexible_pv_bess: 658.1648927242321
+  paired_contrasts_kw:
+    ai_gain_no_pv_no_bess:
+      estimate: 282.89504895665885
+      simultaneous_ci: [270.28483965482786, 293.8672372587565]
+      interpretation: positive
+    ai_gain_no_pv_bess:
+      estimate: 235.25460465848315
+      simultaneous_ci: [225.2626194347116, 245.16522806178702]
+      interpretation: positive
+    ai_gain_pv_no_bess:
+      estimate: 346.4966137640713
+      simultaneous_ci: [330.58288130168694, 361.0294425098342]
+      interpretation: positive
+    ai_gain_pv_bess:
+      estimate: 270.47007105668104
+      simultaneous_ci: [259.40003391717, 281.2845676593161]
+      interpretation: positive
+    ai_bess_interaction_no_pv:
+      estimate: -47.64044429817567
+      simultaneous_ci: [-55.47126642351289, -38.017116676517404]
+      interpretation: substitution
+    ai_bess_interaction_pv:
+      estimate: -76.02654270739038
+      simultaneous_ci: [-87.19949929304931, -61.18059889760304]
+      interpretation: substitution
+    ai_pv_interaction_no_bess:
+      estimate: 63.601564807412544
+      simultaneous_ci: [54.35263233300052, 72.14971181039303]
+      interpretation: complementarity
+    ai_pv_interaction_bess:
+      estimate: 35.21546639819785
+      simultaneous_ci: [26.778673414083393, 43.714005819077165]
+      interpretation: complementarity
+  outputs:
+    scenario_hosting_capacity.parquet: 91d4f1dbff9dd8de8bc8447cbc39f7149d49f9c6d0742aa7ac77e03594b92823
+    hosting_capacity_summary.parquet: e3d45da4de5bfb5379a1c82ed152c23ffd0a4420530f14dded62c92ced2e4492
+    hosting_paired_contrasts.parquet: 9da4b7ed8d782cda1bc271822e323cbc0393986061e621c7e019be94fac85c68
+    hosting_ensemble.json: d73377d86d5f336d8fac88f2c3fcb29746d6225cfbbfb60354e1dd2b303974cb
+  reproducibility_check:
+    resumed_scenario_count: 100
+    solved_scenario_count: 0
+    aggregate_artifacts_byte_identical: true

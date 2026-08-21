@@ -1,0 +1,402 @@
+schema_version: aidrbench.manuscript_source_data_specification.v1
+bundle_id: nature_communications_model_a_v1
+
+tables:
+  - table_id: fig1_calibration_run_means
+    figures: [1]
+    panels: [c]
+    output: fig1_calibration_run_means.csv
+    inputs:
+      - path: data/calibration/rtx6000pro_4gpu_v1_fit/run_gpu_means.parquet
+    columns:
+      - mode
+      - gpu_count
+      - repeat
+      - gpu_index
+      - sample_count
+      - mean_power_w
+      - std_power_w
+      - mean_utilization_pct
+    sort_by: [mode, gpu_count, repeat, gpu_index]
+
+  - table_id: fig1_fig2_pi_firm_boundaries
+    figures: [1, 2]
+    panels: [fig1a, fig1b, fig2a]
+    output: fig1_fig2_pi_firm_boundaries.csv
+    inputs:
+      - path: results/nature_mainline/development_v2_pi_nominal/pi_firm_boundary.parquet
+    columns:
+      - duration_h
+      - reliability_target
+      - confidence_level
+      - scenario_count
+      - tolerance_order_statistic_rank
+      - achieved_tolerance_confidence
+      - estimable
+      - sample_size_sufficient
+      - perfect_information_firm_capacity_kw
+      - reference_mix_operating_peak_kw
+      - nominal_flexibility_fraction
+      - nominal_flexibility_kw
+      - physical_gap_kw
+      - physical_gap_fraction_of_reference_peak
+    sort_by: [reliability_target, duration_h]
+
+  - table_id: fig2_restricted_na_surface
+    figures: [2]
+    panels: [a, c]
+    output: fig2_restricted_na_surface.csv
+    inputs:
+      - path: results/nature_mainline/development_v2_na_nominal_q95_full/non_anticipative_frontier.parquet
+    columns:
+      - duration_h
+      - notice_h
+      - ensemble_success_fraction_target
+      - scenario_count
+      - required_success_count
+      - selected_success_count
+      - empirical_success_fraction
+      - non_anticipative_capacity_kw
+      - matched_pi_ensemble_capacity_kw
+      - information_restriction_gap_kw
+      - non_anticipative_status
+    sort_by: [notice_h, duration_h]
+
+  - table_id: fig2_notice_mechanism_diagnostics
+    figures: [2]
+    panels: [d]
+    output: fig2_notice_mechanism_diagnostics.csv
+    inputs:
+      - path: results/nature_mainline/development_notice_diagnostics_v2/notice_mechanism_diagnostics.parquet
+    columns:
+      - duration_h
+      - notice_h
+      - reliability_target
+      - pi_empirical_capacity_kw
+      - na_capacity_kw
+      - fixed_comparison_capacity_kw
+      - eligible_pre_execution_work_gpu_h_mean
+      - pre_event_spare_capacity_gpu_h_mean
+      - event_start_backlog_gpu_h_mean
+      - event_start_compute_debt_kwh_mean
+      - pre_event_schedule_divergence_gpu_h_mean
+      - information_node_count
+      - information_node_split_count
+      - fixed_capacity_success_fraction
+      - fixed_capacity_p05_service_margin
+      - binding_constraint_counts
+      - pi_notice_gain_kw
+      - na_notice_gain_kw
+    sort_by: [duration_h, notice_h]
+
+  - table_id: fig2_fig5_locked_id_certificates
+    figures: [2, 5]
+    panels: [fig2a, fig2b, fig2c, fig5e]
+    output: fig2_fig5_locked_id_certificates.csv
+    inputs:
+      - path: results/nature_mainline/locked_id_certificate_q90/causal_certificates.parquet
+      - path: results/nature_mainline/locked_id_certificate_q95/causal_certificates.parquet
+      - path: results/nature_mainline/locked_id_certificate_q99/causal_certificates.parquet
+    columns:
+      - duration_h
+      - notice_h
+      - reliability_target
+      - confidence_level
+      - candidate_reduction_kw
+      - candidate_fraction_of_reference_mix_peak
+      - success_count
+      - trial_count
+      - empirical_success_fraction
+      - wilson_lower_confidence_bound
+      - certified
+      - minimum_interval_delivery_ratio
+      - p95_deadline_miss_rate
+      - p95_rebound_ratio
+      - p95_terminal_backlog_fraction
+      - p05_window_peak_relief_fraction
+    sort_by: [reliability_target, notice_h, duration_h]
+
+  - table_id: fig5_locked_ood_certificates
+    figures: [5]
+    panels: [e]
+    output: fig5_locked_ood_certificates.csv
+    inputs:
+      - path: results/nature_mainline/locked_ood_certificate_q90/causal_certificates.parquet
+      - path: results/nature_mainline/locked_ood_certificate_q95/causal_certificates.parquet
+      - path: results/nature_mainline/locked_ood_certificate_q99/causal_certificates.parquet
+    columns:
+      - duration_h
+      - notice_h
+      - reliability_target
+      - confidence_level
+      - candidate_reduction_kw
+      - candidate_fraction_of_reference_mix_peak
+      - success_count
+      - trial_count
+      - empirical_success_fraction
+      - wilson_lower_confidence_bound
+      - certified
+      - minimum_interval_delivery_ratio
+      - p95_deadline_miss_rate
+      - p95_rebound_ratio
+      - p95_terminal_backlog_fraction
+      - p05_window_peak_relief_fraction
+    sort_by: [reliability_target, notice_h, duration_h]
+
+  - table_id: fig3_exhaustion_event_summary
+    figures: [3]
+    panels: [a, b]
+    output: fig3_exhaustion_event_summary.csv
+    inputs:
+      - path: results/nature_mainline/development_exhaustion_diagnostics_v1/exhaustion_summary.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/validation_exhaustion_diagnostics_v1/exhaustion_summary.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - duration_h
+      - recovery_gap_h
+      - event_ordinal
+      - scenario_count
+      - fixed_capacity_kw
+      - local_event_success_fraction
+      - fresh_local_event_success_fraction
+      - p05_delivered_reduction_kw
+      - p05_fresh_delivered_reduction_kw
+      - fixed_commitment_residual_flexibility_ratio
+      - mean_event_start_compute_debt_kwh
+      - compute_debt_growth_vs_first_kwh
+      - mean_paired_compute_debt_increment_kwh
+      - mean_event_start_backlog_gpu_h
+      - p05_minimum_local_service_margin
+      - p05_paired_local_service_margin_delta
+      - p95_rebound_ratio
+      - failure_counts
+    sort_by: [evaluation_split, duration_h, recovery_gap_h, event_ordinal]
+
+  - table_id: fig3_exhaustion_joint_episode_summary
+    figures: [3]
+    panels: [c, d]
+    output: fig3_exhaustion_joint_episode_summary.csv
+    inputs:
+      - path: results/nature_mainline/development_exhaustion_diagnostics_v1/joint_episode_summary.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/validation_exhaustion_diagnostics_v1/joint_episode_summary.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - duration_h
+      - recovery_gap_h
+      - scenario_count
+      - fixed_capacity_kw
+      - joint_episode_success_fraction
+      - mean_successful_event_count
+      - event_count
+      - episode_service_feasible_fraction
+      - mean_episode_deadline_miss_rate
+      - mean_episode_terminal_backlog_fraction
+    sort_by: [evaluation_split, duration_h, recovery_gap_h]
+
+  - table_id: fig3_exhaustion_scenario_events
+    figures: [3]
+    panels: [source_data]
+    output: fig3_exhaustion_scenario_events.csv
+    inputs:
+      - path: results/nature_mainline/development_exhaustion_diagnostics_v1/repeated_event_outcomes.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/validation_exhaustion_diagnostics_v1/repeated_event_outcomes.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - scenario_id
+      - scenario_hash
+      - episode_seed
+      - duration_h
+      - recovery_gap_h
+      - event_ordinal
+      - event_start_hour
+      - fixed_capacity_kw
+      - delivered_reduction_kw
+      - fresh_delivered_reduction_kw
+      - delivery_ratio
+      - minimum_interval_delivery_ratio
+      - event_start_backlog_gpu_h
+      - event_start_compute_debt_kwh
+      - fresh_event_start_compute_debt_kwh
+      - paired_compute_debt_increment_kwh
+      - paired_local_service_margin_delta
+      - paired_residual_flexibility_ratio
+      - local_event_success
+      - fresh_local_event_success
+      - failure_labels
+      - fresh_failure_labels
+    sort_by: [evaluation_split, duration_h, recovery_gap_h, episode_seed, event_ordinal]
+
+  - table_id: fig4_hosting_capacity_summary
+    figures: [4]
+    panels: [a]
+    output: fig4_hosting_capacity_summary.csv
+    inputs:
+      - path: results/nature_mainline/development_hosting_ensemble_v1/hosting_capacity_summary.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/validation_hosting_ensemble_v1/hosting_capacity_summary.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - dc_operation
+      - pv_enabled
+      - bess_enabled
+      - scenario_count
+      - simultaneous_feasible_hosting_dc_peak_kw
+      - mean_scenario_hosting_dc_peak_kw
+      - minimum_scenario_hosting_dc_peak_kw
+      - maximum_scenario_hosting_dc_peak_kw
+      - q05_scenario_hosting_dc_peak_kw
+      - q50_scenario_hosting_dc_peak_kw
+      - q95_scenario_hosting_dc_peak_kw
+      - hosting_gain_vs_rigid_simultaneous_kw
+    sort_by: [evaluation_split, pv_enabled, bess_enabled, dc_operation]
+
+  - table_id: fig4_hosting_paired_contrasts
+    figures: [4]
+    panels: [b, c, d]
+    output: fig4_hosting_paired_contrasts.csv
+    inputs:
+      - path: results/nature_mainline/development_hosting_ensemble_v1/hosting_paired_contrasts.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/validation_hosting_ensemble_v1/hosting_paired_contrasts.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - contrast
+      - conditioning_axis
+      - conditioning_level
+      - independent_unit
+      - scenario_count
+      - estimate_mean_kw
+      - sample_standard_deviation_kw
+      - simultaneous_ci_lower_kw
+      - simultaneous_ci_upper_kw
+      - familywise_confidence_level
+      - planned_contrast_count
+      - bootstrap_resamples
+      - equivalence_margin_kw
+      - interpretation
+    sort_by: [evaluation_split, contrast, conditioning_axis, conditioning_level]
+
+  - table_id: fig4_hosting_scenario_capacities
+    figures: [4]
+    panels: [source_data]
+    output: fig4_hosting_scenario_capacities.csv
+    inputs:
+      - path: results/nature_mainline/development_hosting_ensemble_v1/scenario_hosting_capacity.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/validation_hosting_ensemble_v1/scenario_hosting_capacity.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - scenario_id
+      - scenario_hash
+      - episode_seed
+      - dc_operation
+      - pv_enabled
+      - bess_enabled
+      - pcc_capacity_kw
+      - reference_mix_operating_peak_kw
+      - hosting_dc_peak_kw
+      - hosting_scale_of_reference_mix
+      - minimum_background_gross_headroom_kw
+      - maximum_pcc_power_kw
+      - total_pv_available_kwh
+      - total_pv_used_kwh
+      - total_pv_curtailed_kwh
+      - total_bess_charge_kwh
+      - total_bess_discharge_kwh
+      - terminal_soc_deviation_kwh
+      - hosting_status
+    sort_by: [evaluation_split, episode_seed, pv_enabled, bess_enabled, dc_operation]
+
+  - table_id: fig5_power_case_sensitivity
+    figures: [5]
+    panels: [a]
+    output: fig5_power_case_sensitivity.csv
+    inputs:
+      - path: results/nature_mainline/development_v2_pi_lower_bound/pi_firm_boundary.parquet
+        labels: {power_case: lower}
+      - path: results/nature_mainline/development_v2_pi_nominal/pi_firm_boundary.parquet
+        labels: {power_case: nominal}
+      - path: results/nature_mainline/development_v2_pi_upper_bound/pi_firm_boundary.parquet
+        labels: {power_case: upper}
+    columns:
+      - power_case
+      - duration_h
+      - reliability_target
+      - confidence_level
+      - estimable
+      - perfect_information_firm_capacity_kw
+      - reference_mix_operating_peak_kw
+      - nominal_flexibility_kw
+      - physical_gap_kw
+      - physical_gap_fraction_of_reference_peak
+    sort_by: [reliability_target, duration_h, power_case]
+
+  - table_id: fig5_workload_sensitivity
+    figures: [5]
+    panels: [b]
+    output: fig5_workload_sensitivity.csv
+    inputs:
+      - path: results/nature_mainline/development_workload_sensitivity_v1/workload_pi_firm_boundary.parquet
+    columns:
+      - workload_case
+      - flexible_arrival_utilization
+      - rigid_gpu_utilization
+      - deadline_slack_scale
+      - duration_h
+      - reliability_target
+      - confidence_level
+      - perfect_information_firm_capacity_kw
+      - reference_perfect_information_firm_capacity_kw
+      - firm_capacity_delta_from_reference_kw
+    sort_by: [workload_case, duration_h]
+
+  - table_id: fig5_success_criteria_sensitivity
+    figures: [5]
+    panels: [c]
+    output: fig5_success_criteria_sensitivity.csv
+    inputs:
+      - path: results/nature_mainline/development_criteria_sensitivity_v2/criteria_pi_firm_boundary.parquet
+    columns:
+      - criteria_case
+      - criteria_factor
+      - min_delivery_ratio
+      - min_interval_delivery_ratio
+      - max_deadline_miss_rate
+      - max_rebound_ratio
+      - min_window_peak_relief_fraction
+      - max_terminal_backlog_fraction
+      - duration_h
+      - reliability_target
+      - confidence_level
+      - perfect_information_firm_capacity_kw
+    sort_by: [criteria_case, duration_h]
+
+  - table_id: fig5_infrastructure_sensitivity
+    figures: [5]
+    panels: [d]
+    output: fig5_infrastructure_sensitivity.csv
+    inputs:
+      - path: results/nature_mainline/development_infrastructure_sensitivity_v1/infrastructure_pi_firm_boundary.parquet
+    columns:
+      - infrastructure_case
+      - pue
+      - node_fixed_overhead_power_case
+      - node_fixed_overhead_w
+      - duration_h
+      - reliability_target
+      - confidence_level
+      - perfect_information_firm_capacity_kw
+      - reference_mix_operating_peak_kw
+      - physical_gap_fraction_of_reference_peak
+      - reference_perfect_information_firm_capacity_kw
+      - firm_capacity_delta_from_reference_kw
+    sort_by: [infrastructure_case, duration_h]

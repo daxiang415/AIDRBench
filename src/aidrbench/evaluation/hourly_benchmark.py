@@ -20,7 +20,15 @@ from aidrbench.evaluation.hourly_rollout import (
 )
 
 BenchmarkControllerName = Literal[
-    "no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"
+    "no_control",
+    "threshold",
+    "edf_valley",
+    "mpc",
+    "robust_mpc",
+    "oracle",
+    "dqn",
+    "ppo",
+    "sac",
 ]
 RL_CONTROLLER_NAMES = frozenset(("dqn", "ppo", "sac"))
 
@@ -60,6 +68,7 @@ def aggregate_hourly_benchmark(episodes: pd.DataFrame) -> pd.DataFrame:
             "action_mode",
             "workload_source",
             "forecast_assumption",
+            "information_structure",
             "observation_version",
             "reward_version",
         ):
@@ -124,6 +133,15 @@ def run_hourly_benchmark(
     episodes_path = output / "episodes.parquet"
     aggregate_path = output / "aggregate.parquet"
     manifest_path = output / "benchmark.json"
+    information_structures = {
+        name: str(
+            episodes.loc[
+                episodes["controller"] == name,
+                "information_structure",
+            ].iloc[0]
+        )
+        for name in controllers
+    }
     episodes.to_parquet(episodes_path, index=False)
     aggregate.to_parquet(aggregate_path, index=False)
     manifest_path.write_text(
@@ -131,6 +149,7 @@ def run_hourly_benchmark(
             {
                 "config": str(config),
                 "controllers": list(controllers),
+                "information_structures": information_structures,
                 "seeds": list(seeds),
                 "model_paths": {name: str(path) for name, path in supplied_models.items()},
                 "episodes": str(episodes_path),

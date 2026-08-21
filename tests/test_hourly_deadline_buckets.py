@@ -55,6 +55,40 @@ def test_hourly_deadline_buckets_execute_by_earliest_deadline_first() -> None:
     assert queue.conservation_error_gpu_h() == pytest.approx(0.0)
 
 
+def test_hourly_deadline_buckets_preserve_execution_classes() -> None:
+    queue = HourlyDeadlineBuckets()
+
+    first = queue.advance(
+        [
+            HourlyArrival(gpu_hours=2.0, slack_hours=2.0, job_class="training"),
+            HourlyArrival(
+                gpu_hours=1.0,
+                slack_hours=1.0,
+                job_class="offline_inference",
+            ),
+        ],
+        requested_gpu_h=2.0,
+        capacity_gpu_h=4.0,
+    )
+
+    assert dict(first.arrived_gpu_h_by_class) == pytest.approx(
+        {"offline_inference": 1.0, "training": 2.0}
+    )
+    assert dict(first.executed_gpu_h_by_class) == pytest.approx(
+        {"offline_inference": 1.0, "training": 1.0}
+    )
+    assert dict(first.missed_gpu_h_by_class) == pytest.approx(
+        {"offline_inference": 0.0, "training": 0.0}
+    )
+    assert dict(first.backlog_gpu_h_by_class) == pytest.approx(
+        {"offline_inference": 0.0, "training": 1.0}
+    )
+    assert dict(queue.cumulative_executed_gpu_h_by_class) == pytest.approx(
+        {"offline_inference": 1.0, "training": 1.0}
+    )
+    assert queue.conservation_error_gpu_h() == pytest.approx(0.0)
+
+
 def test_hourly_deadline_buckets_expose_work_weighted_p10_slack() -> None:
     queue = HourlyDeadlineBuckets()
 

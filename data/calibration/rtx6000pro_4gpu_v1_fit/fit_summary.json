@@ -1,0 +1,26 @@
+{
+  "active_held_out_mae_w": 3.795553768382348,
+  "artifact": "data/calibration/rtx6000pro_4gpu_v1.yaml",
+  "artifact_sha256": "ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193",
+  "class_diagnostics": {
+    "offline_inference": {
+      "calibration_independent_runs": 2,
+      "four_gpu_calibration_mean_w": 300.0221737132353,
+      "gpus_observed_per_run": 4,
+      "held_out_independent_runs": 1,
+      "held_out_mae_w": 0.02654871323528596,
+      "single_gpu_mean_w": 299.9923529411765
+    },
+    "training": {
+      "calibration_independent_runs": 2,
+      "four_gpu_calibration_mean_w": 259.0824724264706,
+      "gpus_observed_per_run": 4,
+      "held_out_independent_runs": 1,
+      "held_out_mae_w": 7.56455882352941,
+      "single_gpu_mean_w": 299.9911002178649
+    }
+  },
+  "evidence_class": "benchmark_anchored_synthetic",
+  "idle_held_out_mae_w": 3.6996874999999996,
+  "node_fixed_overhead_source": "explicit assumption; no BMC/PDU/RAPL access"
+}

@@ -1,0 +1,47 @@
+{
+  "archetype": "asymmetric quantitative figure",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "The repeated-event study is a fixed-capacity mechanism diagnostic, not a repeated-event firm-capacity certificate.",
+    "Recovery gaps help only when the intervening schedule contains sufficient compute headroom."
+  ],
+  "core_conclusion": "Repeated dispatch accumulates compute debt and joint service risk before the instantaneous power-delivery ratio materially collapses.",
+  "figure": 3,
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 51621,
+      "format": "svg",
+      "path": "figure_3_compute_debt_exhaustion.svg",
+      "sha256": "e9d8497538f044591fe19c9e380b52bde2ad483fa081881fb7152e4ac28e12b7"
+    },
+    {
+      "bytes": 30228,
+      "format": "pdf",
+      "path": "figure_3_compute_debt_exhaustion.pdf",
+      "sha256": "e13d582a960a5e4a1685152480fec94b49c29fa36b37bb25235d841a47875fb8"
+    },
+    {
+      "bytes": 1633678,
+      "format": "tiff",
+      "path": "figure_3_compute_debt_exhaustion.tiff",
+      "sha256": "d1abd7ea61d8d6d9558b92630666c057d9489c17a2f6cee1be47a6b051e1c13e"
+    },
+    {
+      "bytes": 233166,
+      "format": "png",
+      "path": "figure_3_compute_debt_exhaustion.png",
+      "sha256": "b09eb4a5ec09df328558525a56288c77c6cd87126df941141a354cb4e7cc217a"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    4.9
+  ],
+  "schema_version": "aidrbench.nature_figure_manifest.v1",
+  "source_data_manifest_sha256": "cb2a7f9180d3eee505c1c61fa20019e85638ae3002ae05d45823ba0cd75869b2",
+  "source_tables": [
+    "fig3_exhaustion_event_summary",
+    "fig3_exhaustion_joint_episode_summary"
+  ]
+}

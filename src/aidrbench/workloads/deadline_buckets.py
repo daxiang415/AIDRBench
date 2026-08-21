@@ -53,6 +53,10 @@ class DeadlineBucketStep:
     mean_slack_h: float
     p10_slack_h: float
     requested_gpu_h: float
+    arrived_gpu_h_by_class: tuple[tuple[str, float], ...]
+    executed_gpu_h_by_class: tuple[tuple[str, float], ...]
+    missed_gpu_h_by_class: tuple[tuple[str, float], ...]
+    backlog_gpu_h_by_class: tuple[tuple[str, float], ...]
 
 
 class HourlyDeadlineBuckets:
@@ -61,8 +65,10 @@ class HourlyDeadlineBuckets:
     The queue stores work by remaining whole-hour deadline. At each transition
     it adds arrivals, serves the requested amount under EDF, records work due
     at the end of the current hour as missed, and then advances every remaining
-    bucket by one hour. This matches the V0 hourly approximation and makes
-    workload conservation explicit.
+    bucket by one hour. Same-deadline classes are resolved by a stable lexical
+    class-name tie break solely for accounting; aggregate EDF execution is
+    unchanged. This matches the V0 hourly approximation and makes workload
+    conservation explicit.
     """
 
     def __init__(
@@ -86,17 +92,27 @@ class HourlyDeadlineBuckets:
         self.max_deadline_hours = max_deadline_hours
         self.bucket_labels_h = bucket_labels_h
         self._due_gpu_h = np.zeros(max_deadline_hours, dtype="float64")
+        self._due_gpu_h_by_class: dict[str, np.ndarray] = {}
+        self._arrived_since_advance_gpu_h_by_class: dict[str, float] = {}
         self.cumulative_arrived_gpu_h = 0.0
         self.cumulative_executed_gpu_h = 0.0
         self.cumulative_missed_gpu_h = 0.0
+        self._cumulative_arrived_gpu_h_by_class: dict[str, float] = {}
+        self._cumulative_executed_gpu_h_by_class: dict[str, float] = {}
+        self._cumulative_missed_gpu_h_by_class: dict[str, float] = {}
 
     def reset(self) -> None:
         """Clear all remaining and cumulative work."""
 
         self._due_gpu_h.fill(0.0)
+        self._due_gpu_h_by_class.clear()
+        self._arrived_since_advance_gpu_h_by_class.clear()
         self.cumulative_arrived_gpu_h = 0.0
         self.cumulative_executed_gpu_h = 0.0
         self.cumulative_missed_gpu_h = 0.0
+        self._cumulative_arrived_gpu_h_by_class.clear()
+        self._cumulative_executed_gpu_h_by_class.clear()
+        self._cumulative_missed_gpu_h_by_class.clear()
 
     @property
     def backlog_gpu_h(self) -> float:
@@ -113,6 +129,30 @@ class HourlyDeadlineBuckets:
         """Remaining work for every whole-hour deadline, earliest first."""
 
         return tuple(float(value) for value in self._due_gpu_h)
+
+    @property
+    def backlog_gpu_h_by_class(self) -> tuple[tuple[str, float], ...]:
+        """Remaining work by execution class, ordered by class name."""
+
+        return self._class_totals(self._due_gpu_h_by_class)
+
+    @property
+    def cumulative_arrived_gpu_h_by_class(self) -> tuple[tuple[str, float], ...]:
+        """Cumulative released work by execution class."""
+
+        return self._scalar_class_totals(self._cumulative_arrived_gpu_h_by_class)
+
+    @property
+    def cumulative_executed_gpu_h_by_class(self) -> tuple[tuple[str, float], ...]:
+        """Cumulative completed work by execution class."""
+
+        return self._scalar_class_totals(self._cumulative_executed_gpu_h_by_class)
+
+    @property
+    def cumulative_missed_gpu_h_by_class(self) -> tuple[tuple[str, float], ...]:
+        """Cumulative expired work by execution class."""
+
+        return self._scalar_class_totals(self._cumulative_missed_gpu_h_by_class)
 
     @property
     def mean_slack_h(self) -> float:
@@ -132,6 +172,25 @@ class HourlyDeadlineBuckets:
         rounded_hours = math.ceil(_positive_finite(slack_hours, "slack_hours"))
         return min(max(rounded_hours - 1, 0), self.max_deadline_hours - 1)
 
+    def _due_for_class(self, job_class: str) -> np.ndarray:
+        due = self._due_gpu_h_by_class.get(job_class)
+        if due is None:
+            due = np.zeros(self.max_deadline_hours, dtype="float64")
+            self._due_gpu_h_by_class[job_class] = due
+        return due
+
+    @staticmethod
+    def _scalar_class_totals(values: dict[str, float]) -> tuple[tuple[str, float], ...]:
+        return tuple((job_class, float(values[job_class])) for job_class in sorted(values))
+
+    def _class_totals(
+        self, due_by_class: dict[str, np.ndarray]
+    ) -> tuple[tuple[str, float], ...]:
+        return tuple(
+            (job_class, float(due_by_class[job_class].sum()))
+            for job_class in sorted(due_by_class)
+        )
+
     def add(self, arrivals: tuple[HourlyArrival, ...] | list[HourlyArrival]) -> float:
         """Add arrivals and return their total GPU-hours."""
 
@@ -139,13 +198,23 @@ class HourlyDeadlineBuckets:
         for arrival in arrivals:
             index = self._deadline_index(arrival.slack_hours)
             self._due_gpu_h[index] += arrival.gpu_hours
+            self._due_for_class(arrival.job_class)[index] += arrival.gpu_hours
+            self._arrived_since_advance_gpu_h_by_class[arrival.job_class] = (
+                self._arrived_since_advance_gpu_h_by_class.get(arrival.job_class, 0.0)
+                + arrival.gpu_hours
+            )
+            self._cumulative_arrived_gpu_h_by_class[arrival.job_class] = (
+                self._cumulative_arrived_gpu_h_by_class.get(arrival.job_class, 0.0)
+                + arrival.gpu_hours
+            )
             arrived += arrival.gpu_hours
         self.cumulative_arrived_gpu_h += arrived
         return arrived
 
-    def _serve_edf(self, requested_gpu_h: float) -> float:
+    def _serve_edf(self, requested_gpu_h: float) -> tuple[float, dict[str, float]]:
         remaining_request = _non_negative_finite(requested_gpu_h, "requested_gpu_h")
         executed = 0.0
+        executed_by_class: dict[str, float] = {}
         for index in range(len(self._due_gpu_h)):
             if remaining_request <= _EPSILON:
                 break
@@ -153,7 +222,16 @@ class HourlyDeadlineBuckets:
             self._due_gpu_h[index] -= work
             remaining_request -= work
             executed += work
-        return executed
+            remaining_work = work
+            for job_class in sorted(self._due_gpu_h_by_class):
+                if remaining_work <= _EPSILON:
+                    break
+                due = self._due_gpu_h_by_class[job_class]
+                class_work = min(float(due[index]), remaining_work)
+                due[index] -= class_work
+                remaining_work -= class_work
+                executed_by_class[job_class] = executed_by_class.get(job_class, 0.0) + class_work
+        return executed, executed_by_class
 
     def _bucket_values(self) -> tuple[float, ...]:
         values: list[float] = []
@@ -200,14 +278,31 @@ class HourlyDeadlineBuckets:
         requested = _non_negative_finite(requested_gpu_h, "requested_gpu_h")
         if requested > capacity + _EPSILON:
             raise ValueError("requested_gpu_h exceeds hourly capacity_gpu_h")
-        arrived = self.add(arrivals)
-        executed = self._serve_edf(min(requested, capacity))
+        self.add(arrivals)
+        arrived_by_class = self._scalar_class_totals(self._arrived_since_advance_gpu_h_by_class)
+        arrived = sum(value for _, value in arrived_by_class)
+        self._arrived_since_advance_gpu_h_by_class.clear()
+        executed, executed_by_class = self._serve_edf(min(requested, capacity))
         missed = float(self._due_gpu_h[0])
+        missed_by_class = {
+            job_class: float(due[0]) for job_class, due in self._due_gpu_h_by_class.items()
+        }
         self._due_gpu_h[0] = 0.0
         self.cumulative_executed_gpu_h += executed
         self.cumulative_missed_gpu_h += missed
+        for job_class, value in executed_by_class.items():
+            self._cumulative_executed_gpu_h_by_class[job_class] = (
+                self._cumulative_executed_gpu_h_by_class.get(job_class, 0.0) + value
+            )
+        for job_class, value in missed_by_class.items():
+            self._cumulative_missed_gpu_h_by_class[job_class] = (
+                self._cumulative_missed_gpu_h_by_class.get(job_class, 0.0) + value
+            )
         self._due_gpu_h[:-1] = self._due_gpu_h[1:]
         self._due_gpu_h[-1] = 0.0
+        for due in self._due_gpu_h_by_class.values():
+            due[:-1] = due[1:]
+            due[-1] = 0.0
         backlog = self.backlog_gpu_h
         return DeadlineBucketStep(
             arrived_gpu_h=arrived,
@@ -218,6 +313,10 @@ class HourlyDeadlineBuckets:
             mean_slack_h=self._mean_slack_hours(),
             p10_slack_h=self._slack_quantile_hours(0.10),
             requested_gpu_h=requested,
+            arrived_gpu_h_by_class=arrived_by_class,
+            executed_gpu_h_by_class=self._scalar_class_totals(executed_by_class),
+            missed_gpu_h_by_class=self._scalar_class_totals(missed_by_class),
+            backlog_gpu_h_by_class=self.backlog_gpu_h_by_class,
         )
 
     def conservation_error_gpu_h(self) -> float:

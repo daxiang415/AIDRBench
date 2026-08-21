@@ -1,0 +1,50 @@
+{
+  "archetype": "asymmetric quantitative figure",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "PI tolerance, restricted NA and locked-ID causal layers have different statistical interpretations.",
+    "Certification is interval-wise rather than simultaneous over the complete surface.",
+    "The q=0.95 H=1 candidate remains visibly not certified."
+  ],
+  "core_conclusion": "Duration and reliability shape firm capacity, whereas advance notice reveals eligible work but yields zero capacity gain under Model A.",
+  "figure": 2,
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 44633,
+      "format": "svg",
+      "path": "figure_2_duration_reliability_notice.svg",
+      "sha256": "e5f27ecd872091b621444ef6002577a2c42e0b4f103857322b0f472d42970e17"
+    },
+    {
+      "bytes": 29945,
+      "format": "pdf",
+      "path": "figure_2_duration_reliability_notice.pdf",
+      "sha256": "4d4376587c4e442e82fb83f401505738bcb08a405ea1c152b6206788cd2eca8c"
+    },
+    {
+      "bytes": 1280410,
+      "format": "tiff",
+      "path": "figure_2_duration_reliability_notice.tiff",
+      "sha256": "486af8c3635e7643f84b54e93ebe20d51c46683c28d4fe28ab4a1398aa3ed927"
+    },
+    {
+      "bytes": 220632,
+      "format": "png",
+      "path": "figure_2_duration_reliability_notice.png",
+      "sha256": "d988ce190cb45946be7e54bd62d59d2335a692e3028fda970d137b09468a981c"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    4.65
+  ],
+  "schema_version": "aidrbench.nature_figure_manifest.v1",
+  "source_data_manifest_sha256": "cb2a7f9180d3eee505c1c61fa20019e85638ae3002ae05d45823ba0cd75869b2",
+  "source_tables": [
+    "fig1_fig2_pi_firm_boundaries",
+    "fig2_restricted_na_surface",
+    "fig2_notice_mechanism_diagnostics",
+    "fig2_fig5_locked_id_certificates"
+  ]
+}

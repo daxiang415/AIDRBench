@@ -1,8 +1,11 @@
-schema_version: 1
+schema_version: 2
 seed: 42
-policy: profile_level_climate_ood
+policy: reference_profile_temporal_holdout_plus_profile_ood
 selection_is_configurable: true
 profile_catalog: data/manifests/community_profiles.yaml
+primary_reference_profile: eulp_mixed_3a
+# Compatibility memberships for the legacy controller protocol. The Nature
+# mainline uses the explicit scenario_sets mapping below.
 train:
   - eulp_resstock_3a_single_family_detached
   - eulp_comstock_3a_smalloffice
@@ -15,7 +18,27 @@ test_ood:
   - eulp_resstock_3c_single_family_detached
   - eulp_comstock_3c_smalloffice
   - eulp_mixed_3c
+scenario_sets:
+  development: [eulp_mixed_3a]
+  validation: [eulp_mixed_3a]
+  locked_id: [eulp_mixed_3a]
+  locked_ood: [eulp_mixed_3c]
+supplementary_profile_strata:
+  climate_3a:
+    - eulp_resstock_3a_single_family_detached
+    - eulp_comstock_3a_smalloffice
+    - eulp_mixed_3a
+  climate_5a:
+    - eulp_resstock_5a_single_family_detached
+    - eulp_comstock_5a_smalloffice
+    - eulp_mixed_5a
+  climate_3c:
+    - eulp_resstock_3c_single_family_detached
+    - eulp_comstock_3c_smalloffice
+    - eulp_mixed_3c
 notes:
-  - The three-zone matrix is the initial paper default, not a hard-coded benchmark limit.
+  - The primary estimand holds the 3A mixed profile fixed and uses chronological windows.
+  - The 3C mixed profile plus block arrivals is a separate OOD stress test, not the primary q certificate.
+  - The full building-type and climate matrix is a preregistered supplementary sensitivity.
   - Any profiles present in the catalog can be selected through configs or CLI.
   - Temporal 60/20/20 partitions are recorded separately in split_v1.yaml.

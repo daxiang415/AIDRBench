@@ -141,7 +141,27 @@ def validate_hourly_experiment_protocol(path: str | Path) -> dict[str, object]:
                 configs_valid = False
                 config_rows.append({"path": str(config_path), "exists": False})
                 continue
-            config = load_hourly_environment_config(config_path)
+            try:
+                config = load_hourly_environment_config(config_path)
+            except (FileNotFoundError, ValueError) as exc:
+                # Protocol inspection must be usable on a clean checkout, but
+                # formal execution remains fail-closed. A missing calibration
+                # artifact or malformed config is therefore an explicit failed
+                # readiness check rather than an uncaught validator exception.
+                configs_valid = False
+                config_rows.append(
+                    {
+                        "path": str(config_path),
+                        "exists": True,
+                        "loadable": False,
+                        "config_error": str(exc),
+                    }
+                )
+                continue
+            power_model = config.make_power_model()
+            actual_dc_peak_kw = power_model.predict(
+                power_model.flexible_capacity_gpu_h
+            ).dc_power_kw
             profile_matches = config.community_profile_id in configured_profiles
             seed_range_matches = config.episode_seed_range == expected_seed_range
             uses_trace_sampler = (
@@ -168,6 +188,7 @@ def validate_hourly_experiment_protocol(path: str | Path) -> dict[str, object]:
                 {
                     "path": str(config_path),
                     "exists": True,
+                    "loadable": True,
                     "action_mode": config.action_mode,
                     "community_profile_id": config.community_profile_id,
                     "profile_matches": profile_matches,
@@ -176,6 +197,14 @@ def validate_hourly_experiment_protocol(path: str | Path) -> dict[str, object]:
                     "independent_arrivals": uses_trace_sampler,
                     "reward_version": config.reward.version,
                     "reward_thresholds_match": reward_matches,
+                    "background_community_peak_kw": config.background_community_peak_kw,
+                    "pcc_capacity_kw": config.pcc_capacity_kw,
+                    "target_dc_peak_kw": config.target_dc_peak_kw,
+                    "actual_dc_peak_kw": actual_dc_peak_kw,
+                    "actual_dc_peak_fraction_of_pcc": (
+                        actual_dc_peak_kw / config.pcc_capacity_kw
+                    ),
+                    "dc_peak_sizing_error_kw": actual_dc_peak_kw - config.target_dc_peak_kw,
                 }
             )
         split_details[split_name] = {

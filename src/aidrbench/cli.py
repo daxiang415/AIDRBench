@@ -138,6 +138,12 @@ def _add_calibration_parsers(subparsers: Any) -> None:
     make_plan.add_argument("--output", required=True)
     make_plan.add_argument("--design", default="full-factorial")
 
+    validate_artifact = commands.add_parser(
+        "validate-artifact",
+        help="verify a hardware calibration artifact's schema, checksum, and provenance",
+    )
+    validate_artifact.add_argument("--artifact", required=True)
+
     telemetry = commands.add_parser(
         "collect-telemetry", help="collect read-only nvidia-smi telemetry to Parquet"
     )
@@ -244,7 +250,9 @@ def _add_hourly_environment_parsers(subparsers: Any) -> None:
 
     rollout = subparsers.add_parser("rollout", help="run one V0 hourly baseline episode")
     rollout.add_argument(
-        "--controller", choices=("no_control", "threshold", "edf_valley", "mpc"), required=True
+        "--controller",
+        choices=("no_control", "threshold", "edf_valley", "mpc", "robust_mpc", "oracle"),
+        required=True,
     )
     rollout.add_argument(
         "--scenario",
@@ -256,11 +264,227 @@ def _add_hourly_environment_parsers(subparsers: Any) -> None:
     rollout.add_argument("--save", required=True)
 
 
+def _add_scenario_parsers(subparsers: Any) -> None:
+    scenario = subparsers.add_parser(
+        "scenario", help="freeze and inspect immutable hourly exogenous scenarios"
+    )
+    commands = scenario.add_subparsers(dest="scenario_command")
+    freeze = commands.add_parser(
+        "freeze",
+        help="materialize hash-verified community, workload, event, and baseline artifacts",
+    )
+    freeze.add_argument("--config", required=True)
+    freeze.add_argument("--seeds", nargs="+", type=int, required=True)
+    freeze.add_argument(
+        "--calibration-power-case",
+        choices=("lower_bound", "nominal", "upper_bound"),
+        help="override only the declared calibration uncertainty case before freezing",
+    )
+    freeze.add_argument("--preregistration-manifest")
+    freeze.add_argument("--unlock-locked-ood", action="store_true")
+    freeze.add_argument("--acknowledge-one-time-locked-use", action="store_true")
+    freeze.add_argument("--output", required=True)
+    freeze_exhaustion = commands.add_parser(
+        "freeze-exhaustion",
+        help="freeze preregistered development/validation repeated-event programs",
+    )
+    freeze_exhaustion.add_argument("--specification", required=True)
+    freeze_exhaustion.add_argument("--seeds", nargs="+", type=int, required=True)
+    freeze_exhaustion.add_argument("--output", required=True)
+    inspect = commands.add_parser(
+        "inspect", help="verify one frozen scenario and display its provenance"
+    )
+    inspect.add_argument("--input", required=True)
+    sensitivity_check = commands.add_parser(
+        "check-sensitivities",
+        help="gate a sparse sensitivity design on no-DR service feasibility",
+    )
+    sensitivity_check.add_argument("--specification", required=True)
+    sensitivity_check.add_argument("--seeds", nargs="+", type=int, required=True)
+    sensitivity_check.add_argument("--output", required=True)
+    infrastructure_check = commands.add_parser(
+        "check-infrastructure-sensitivities",
+        help="gate sparse PUE/node-overhead cases on no-DR service feasibility",
+    )
+    infrastructure_check.add_argument("--specification", required=True)
+    infrastructure_check.add_argument("--seeds", nargs="+", type=int, required=True)
+    infrastructure_check.add_argument("--output", required=True)
+    freeze_sensitivities = commands.add_parser(
+        "freeze-sensitivities",
+        help="freeze paired development scenarios for a sparse workload design",
+    )
+    freeze_sensitivities.add_argument("--specification", required=True)
+    freeze_sensitivities.add_argument("--output", required=True)
+    freeze_infrastructure = commands.add_parser(
+        "freeze-infrastructure-sensitivities",
+        help="freeze paired development scenarios for sparse infrastructure cases",
+    )
+    freeze_infrastructure.add_argument("--specification", required=True)
+    freeze_infrastructure.add_argument("--output", required=True)
+
+
+def _add_optimization_parsers(subparsers: Any) -> None:
+    optimize = subparsers.add_parser(
+        "optimize", help="compute auditable planning bounds on frozen scenarios"
+    )
+    commands = optimize.add_subparsers(dest="optimization_command")
+    frontier = commands.add_parser(
+        "pi-frontier",
+        help="compute a single-event perfect-information power-duration frontier",
+    )
+    frontier.add_argument("--scenarios", required=True)
+    frontier.add_argument("--durations", nargs="+", type=int, required=True)
+    frontier.add_argument("--event-id", type=int, default=0)
+    frontier.add_argument("--reliabilities", nargs="+", type=float, default=[])
+    frontier.add_argument("--confidence-level", type=float, default=0.95)
+    frontier.add_argument("--nominal-flexibility-fraction", type=float, default=0.50)
+    frontier.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to solve concurrently (default: 1)",
+    )
+    frontier.add_argument("--output", required=True)
+    criteria_sensitivity = commands.add_parser(
+        "criteria-sensitivity",
+        help="solve a predeclared one-factor-at-a-time PI success-criteria sensitivity",
+    )
+    criteria_sensitivity.add_argument("--scenarios", required=True)
+    criteria_sensitivity.add_argument("--specification", required=True)
+    criteria_sensitivity.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to solve concurrently (default: 1)",
+    )
+    criteria_sensitivity.add_argument("--output", required=True)
+    workload_sensitivity = commands.add_parser(
+        "workload-sensitivity",
+        help="solve a predeclared paired sparse workload PI sensitivity",
+    )
+    workload_sensitivity.add_argument("--scenarios", required=True)
+    workload_sensitivity.add_argument("--specification", required=True)
+    workload_sensitivity.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to solve concurrently (default: 1)",
+    )
+    workload_sensitivity.add_argument("--output", required=True)
+    infrastructure_sensitivity = commands.add_parser(
+        "infrastructure-sensitivity",
+        help="solve predeclared sparse PUE/node-overhead PI sensitivity",
+    )
+    infrastructure_sensitivity.add_argument("--scenarios", required=True)
+    infrastructure_sensitivity.add_argument("--specification", required=True)
+    infrastructure_sensitivity.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to solve concurrently (default: 1)",
+    )
+    infrastructure_sensitivity.add_argument("--output", required=True)
+    non_anticipative = commands.add_parser(
+        "non-anticipative-firm",
+        help="compute a restricted finite-scenario causal non-anticipative bound",
+    )
+    non_anticipative.add_argument("--scenarios", required=True)
+    non_anticipative.add_argument("--durations", nargs="+", type=int, required=True)
+    non_anticipative.add_argument("--notice-hours", nargs="+", type=int, default=[0])
+    non_anticipative.add_argument("--event-id", type=int, default=0)
+    non_anticipative.add_argument(
+        "--ensemble-success-fraction-target",
+        "--reliability-target",
+        dest="reliability_target",
+        type=float,
+        default=1.0,
+        help="finite optimization-ensemble success fraction; not an OOD certificate",
+    )
+    non_anticipative.add_argument(
+        "--information-structure",
+        choices=("common_open_loop", "coarse_observation_partition_tree"),
+        default="coarse_observation_partition_tree",
+        help=(
+            "causal policy restriction; the default bins current net load, a limited "
+            "forecast, arrivals and notified DR events"
+        ),
+    )
+    non_anticipative.add_argument("--forecast-horizon-hours", type=int, default=6)
+    non_anticipative.add_argument("--power-bin-width-pu", type=float, default=0.10)
+    non_anticipative.add_argument("--arrival-bin-width-fraction", type=float, default=0.10)
+    non_anticipative.add_argument("--minimum-shared-node-size", type=int, default=2)
+    non_anticipative.add_argument(
+        "--matched-pi-frontier",
+        help=(
+            "optional matched PI frontier parquet used only for the same-ensemble "
+            "empirical information-restriction gap"
+        ),
+    )
+    non_anticipative.add_argument("--output", required=True)
+    merge_non_anticipative = commands.add_parser(
+        "merge-non-anticipative",
+        help="merge independently solved non-anticipative grid partitions",
+    )
+    merge_non_anticipative.add_argument("--inputs", nargs="+", required=True)
+    merge_non_anticipative.add_argument("--output", required=True)
+    notice_diagnostics = commands.add_parser(
+        "notice-diagnostics",
+        help="combine existing PI/NA bounds with development-only frozen-spec robust MPC",
+    )
+    notice_diagnostics.add_argument("--scenarios", required=True)
+    notice_diagnostics.add_argument("--pi-frontier", required=True)
+    notice_diagnostics.add_argument("--na-frontier", required=True)
+    notice_diagnostics.add_argument("--na-policies", required=True)
+    notice_diagnostics.add_argument("--controller-config", required=True)
+    notice_diagnostics.add_argument("--durations", nargs="+", type=int, default=[4, 8])
+    notice_diagnostics.add_argument("--notices", nargs="+", type=int, default=[0, 6])
+    notice_diagnostics.add_argument("--reliability", type=float, default=0.95)
+    notice_diagnostics.add_argument("--workers", type=int, default=1)
+    notice_diagnostics.add_argument("--output", required=True)
+    exhaustion = commands.add_parser(
+        "exhaustion-diagnostics",
+        help="evaluate frozen Model A over development/validation repeated-event chains",
+    )
+    exhaustion.add_argument("--scenarios", required=True)
+    exhaustion.add_argument("--specification", required=True)
+    exhaustion.add_argument("--workers", type=int, default=1)
+    exhaustion.add_argument("--output", required=True)
+    hosting = commands.add_parser(
+        "hosting-capacity",
+        help="compute frozen-scenario absolute-PCC hosting-capacity planning bounds",
+    )
+    hosting.add_argument("--scenarios", required=True)
+    hosting.add_argument("--portfolio", required=True)
+    hosting.add_argument(
+        "--dc-operation",
+        choices=("rigid", "flexible", "matrix"),
+        default="matrix",
+        help="matrix evaluates the 2 x 2 x 2 rigid/flexible x PV x BESS comparison",
+    )
+    hosting.add_argument("--output", required=True)
+    hosting_ensemble = commands.add_parser(
+        "hosting-ensemble",
+        help="solve the preregistered scenario-level 2 x 2 x 2 hosting ensemble",
+    )
+    hosting_ensemble.add_argument("--scenarios", required=True)
+    hosting_ensemble.add_argument("--specification", required=True)
+    hosting_ensemble.add_argument("--workers", type=int, default=1)
+    hosting_ensemble.add_argument("--output", required=True)
+
+
 def _add_training_parsers(subparsers: Any) -> None:
     protocol = subparsers.add_parser(
-        "protocol-check", help="validate the locked hourly experiment protocol"
+        "protocol-check", help="validate a declared experiment protocol"
     )
-    protocol.add_argument("--manifest", default="data/manifests/hourly_experiment_protocol_v1.yaml")
+    protocol.add_argument(
+        "--manifest",
+        default="data/manifests/nature_mainline_protocol_v1.yaml",
+    )
+    protocol.add_argument(
+        "--require-execution-ready",
+        action="store_true",
+        help="also require external datasets, hashes, and optimization dependencies",
+    )
 
     train = subparsers.add_parser(
         "train", help="train a standard RL policy on the hourly environment"
@@ -291,7 +515,17 @@ def _add_training_parsers(subparsers: Any) -> None:
     benchmark.add_argument(
         "--controllers",
         nargs="+",
-        choices=("no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"),
+        choices=(
+            "no_control",
+            "threshold",
+            "edf_valley",
+            "mpc",
+            "robust_mpc",
+            "oracle",
+            "dqn",
+            "ppo",
+            "sac",
+        ),
         required=True,
     )
     benchmark.add_argument("--config", default="configs/env/hourly_continuous.yaml")
@@ -305,15 +539,23 @@ def _add_training_parsers(subparsers: Any) -> None:
     )
     benchmark.add_argument("--save", required=True)
 
-    plot = subparsers.add_parser(
-        "plot", help="plot representative hourly benchmark episodes"
-    )
+    plot = subparsers.add_parser("plot", help="plot representative hourly benchmark episodes")
     plot.add_argument("--input", required=True)
     plot.add_argument("--output", required=True)
     plot.add_argument(
         "--controllers",
         nargs="+",
-        choices=("no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"),
+        choices=(
+            "no_control",
+            "threshold",
+            "edf_valley",
+            "mpc",
+            "robust_mpc",
+            "oracle",
+            "dqn",
+            "ppo",
+            "sac",
+        ),
         help="default: every controller in episodes.parquet",
     )
     plot.add_argument("--seed", type=int, help="default: minimum available seed per controller")
@@ -325,31 +567,73 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
         "certify", help="certify rebound-aware reliable hourly flexibility"
     )
     certify.add_argument(
+        "certification_command",
+        nargs="?",
+        choices=("select", "locked-test", "frozen-select", "frozen-test"),
+        help=(
+            "select on validation or evaluate an already frozen selection on the locked test split"
+        ),
+    )
+    certify.add_argument(
         "--controller",
-        choices=("no_control", "threshold", "edf_valley", "mpc", "dqn", "ppo", "sac"),
-        required=True,
+        choices=(
+            "no_control",
+            "threshold",
+            "edf_valley",
+            "mpc",
+            "robust_mpc",
+            "dqn",
+            "ppo",
+            "sac",
+        ),
     )
     certify.add_argument("--model", help="required when controller is DQN, PPO, or SAC")
     certify.add_argument("--config", default="configs/env/hourly_continuous.yaml")
-    certify.add_argument("--durations", type=int, nargs="+", required=True)
-    certify.add_argument("--episodes", type=int, required=True)
+    certify.add_argument(
+        "--controller-config",
+        help="complete validated controller specification required by frozen-select/test",
+    )
+    certify.add_argument("--durations", type=int, nargs="+")
+    certify.add_argument(
+        "--notices",
+        type=int,
+        nargs="+",
+        help="notice-hour certificate keys; select defaults to the validation config choices",
+    )
+    certify.add_argument("--episodes", type=int)
     certify.add_argument(
         "--candidate-fractions",
         type=float,
         nargs="+",
-        default=(0.0, 0.1, 0.2, 0.3, 0.4, 0.5),
+        default=(0.0, 1.0),
         help="grid points, or lower/upper bounds when --search binary",
     )
-    certify.add_argument("--search", choices=("grid", "binary"), default="grid")
+    certify.add_argument("--search", choices=("grid", "binary"), default="binary")
     certify.add_argument("--binary-iterations", type=int, default=8)
     certify.add_argument("--reliability", type=float, default=0.95)
     certify.add_argument("--confidence", type=float, default=0.95)
     certify.add_argument("--min-delivery-ratio", type=float, default=0.95)
+    certify.add_argument("--min-interval-delivery-ratio", type=float, default=0.95)
     certify.add_argument("--max-deadline-miss-rate", type=float, default=0.01)
     certify.add_argument("--max-rebound-ratio", type=float, default=0.25)
     certify.add_argument("--min-window-peak-relief-fraction", type=float, default=0.50)
     certify.add_argument("--max-terminal-backlog-fraction", type=float, default=0.02)
-    certify.add_argument("--save", required=True)
+    certify.add_argument("--save")
+    certify.add_argument(
+        "--protocol-manifest", default="data/manifests/hourly_experiment_protocol_v2.yaml"
+    )
+    certify.add_argument("--selection", help="frozen validation selection for certify locked-test")
+    certify.add_argument(
+        "--scenarios",
+        help="frozen validation or locked-ID scenario directory for frozen certification",
+    )
+    certify.add_argument("--output", help="output directory for certify select or locked-test")
+    certify.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios to replay concurrently (default: 1)",
+    )
 
     compare_envelopes = subparsers.add_parser(
         "compare-envelopes", help="compare static planning envelopes with certificates"
@@ -387,11 +671,53 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
     stress_test.add_argument("--reliability", type=float, default=0.95)
     stress_test.add_argument("--confidence", type=float, default=0.95)
     stress_test.add_argument("--min-delivery-ratio", type=float, default=0.95)
+    stress_test.add_argument("--min-interval-delivery-ratio", type=float, default=0.95)
     stress_test.add_argument("--max-deadline-miss-rate", type=float, default=0.01)
     stress_test.add_argument("--max-rebound-ratio", type=float, default=0.25)
     stress_test.add_argument("--min-window-peak-relief-fraction", type=float, default=0.50)
     stress_test.add_argument("--max-terminal-backlog-fraction", type=float, default=0.02)
     stress_test.add_argument("--save", required=True)
+
+
+def _add_paper_parsers(subparsers: Any) -> None:
+    paper = subparsers.add_parser(
+        "paper", help="export manuscript source data and generate frozen mainline figures"
+    )
+    commands = paper.add_subparsers(dest="paper_command")
+
+    source_data = commands.add_parser(
+        "export-source-data",
+        help="export hash-bound manuscript source-data CSV files",
+    )
+    source_data.add_argument(
+        "--specification",
+        default="configs/paper/nature_source_data_v1.yaml",
+    )
+    source_data.add_argument(
+        "--output",
+        default="results/nature_mainline/source_data_v1",
+    )
+    source_data.add_argument("--repository-root", default=".")
+
+    figures = commands.add_parser(
+        "figures",
+        help="generate publication figures from a verified source-data bundle",
+    )
+    figures.add_argument(
+        "--source-data",
+        default="results/nature_mainline/source_data_v1",
+    )
+    figures.add_argument(
+        "--output",
+        default="results/figures/nature_mainline_v1",
+    )
+    figures.add_argument("--figures", nargs="+", type=int, default=[1, 2, 3, 4, 5])
+    figures.add_argument(
+        "--formats",
+        nargs="+",
+        choices=("svg", "pdf", "tiff", "png"),
+        default=["svg", "pdf", "tiff", "png"],
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -407,8 +733,11 @@ def build_parser() -> argparse.ArgumentParser:
     _add_fleet_parsers(subparsers)
     _add_hil_parsers(subparsers)
     _add_hourly_environment_parsers(subparsers)
+    _add_scenario_parsers(subparsers)
+    _add_optimization_parsers(subparsers)
     _add_training_parsers(subparsers)
     _add_firm_flexibility_parsers(subparsers)
+    _add_paper_parsers(subparsers)
     return parser
 
 
@@ -568,11 +897,13 @@ def _run_data(args: argparse.Namespace) -> int:
             args.output,
             hours=args.hours or config.main_hours,
             total_gpu_count=config.make_power_model().data_center.total_gpu_count,
-            target_total_utilization=config.target_total_utilization,
+            flexible_arrival_utilization=config.flexible_arrival_utilization,
             workload_shares=config.workload_mix.shares,
             flexible_fractions=config.workload_mix.flexible_fractions,
             flexible_priorities=config.flexible_priorities,
             deadline_policy=config.deadline_policy,
+            deadline_slack_scale=config.deadline_slack_scale,
+            max_deadline_hours=config.max_deadline_hours,
             arrival_process=config.alibaba_arrival_process,
             seed=args.seed,
         )
@@ -655,6 +986,12 @@ def _run_data(args: argparse.Namespace) -> int:
 
 
 def _run_calibration(args: argparse.Namespace) -> int:
+    if args.calibration_command == "validate-artifact":
+        from aidrbench.calibration.artifact import load_hardware_calibration_artifact
+
+        artifact = load_hardware_calibration_artifact(args.artifact)
+        _print_summary(artifact.summary())
+        return 0
     if args.calibration_command == "make-plan":
         from aidrbench.calibration.plan import make_calibration_plan, summary_dict
 
@@ -906,6 +1243,282 @@ def _run_rollout(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_scenario(args: argparse.Namespace) -> int:
+    if args.scenario_command == "freeze":
+        from aidrbench.data.frozen_scenarios import freeze_hourly_scenarios
+        from aidrbench.evaluation.locked_ood import (
+            consume_locked_ood_authorization,
+            prepare_locked_ood_freeze,
+        )
+
+        authorization = prepare_locked_ood_freeze(
+            args.config,
+            output_directory=args.output,
+            preregistration_manifest=args.preregistration_manifest,
+            unlock_locked_ood=args.unlock_locked_ood,
+            acknowledge_one_time_locked_use=args.acknowledge_one_time_locked_use,
+        )
+        config: str | dict[str, Any] = args.config
+        if args.calibration_power_case is not None:
+            loaded = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
+            if not isinstance(loaded, dict) or not isinstance(loaded.get("hardware"), dict):
+                raise ValueError("scenario config must contain a hardware mapping")
+            loaded["hardware"]["calibration_power_case"] = args.calibration_power_case
+            config = loaded
+        scenarios = freeze_hourly_scenarios(
+            config,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        receipt = (
+            consume_locked_ood_authorization(
+                authorization,
+                output_directory=args.output,
+                scenario_hashes=[str(scenario["scenario_hash"]) for scenario in scenarios],
+            )
+            if authorization is not None
+            else None
+        )
+        _print_summary(
+            {
+                "scenario_count": len(scenarios),
+                "scenarios": scenarios,
+                "locked_ood_receipt": str(receipt) if receipt is not None else None,
+            }
+        )
+        return 0
+    if args.scenario_command == "freeze-exhaustion":
+        from aidrbench.evaluation.exhaustion import freeze_repeated_event_scenarios
+
+        summary = freeze_repeated_event_scenarios(
+            args.specification,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.scenario_command == "inspect":
+        from aidrbench.data.frozen_scenarios import load_frozen_hourly_scenario
+
+        scenario = load_frozen_hourly_scenario(args.input)
+        _print_summary(
+            {
+                "scenario_id": scenario.scenario_id,
+                "scenario_hash": scenario.scenario_hash,
+                "episode_seed": scenario.episode_seed,
+                "community_hours": len(scenario.community),
+                "arrival_rows": len(scenario.arrivals),
+                "baseline_hours": len(scenario.baseline),
+                "events": list(scenario.events),
+                "scenario_bases": scenario.metadata["scenario_bases"],
+                "power_model": scenario.metadata["power_model"],
+            }
+        )
+        return 0
+    if args.scenario_command == "check-sensitivities":
+        from aidrbench.evaluation.sensitivity import (
+            check_sparse_sensitivity_no_dr_feasibility,
+        )
+
+        summary = check_sparse_sensitivity_no_dr_feasibility(
+            args.specification,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.scenario_command == "check-infrastructure-sensitivities":
+        from aidrbench.evaluation.infrastructure_sensitivity import (
+            check_infrastructure_no_dr_feasibility,
+        )
+
+        summary = check_infrastructure_no_dr_feasibility(
+            args.specification,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.scenario_command == "freeze-sensitivities":
+        from aidrbench.evaluation.workload_sensitivity import (
+            freeze_workload_sensitivity_scenarios,
+        )
+
+        summary = freeze_workload_sensitivity_scenarios(
+            args.specification,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.scenario_command == "freeze-infrastructure-sensitivities":
+        from aidrbench.evaluation.infrastructure_sensitivity import (
+            freeze_infrastructure_sensitivity_scenarios,
+        )
+
+        summary = freeze_infrastructure_sensitivity_scenarios(
+            args.specification,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    raise ValueError("a scenario subcommand is required")
+
+
+def _run_optimization(args: argparse.Namespace) -> int:
+    if args.optimization_command == "pi-frontier":
+        from aidrbench.evaluation.pi_frontier import compute_and_save_pi_frontier
+
+        summary = compute_and_save_pi_frontier(
+            args.scenarios,
+            durations_h=args.durations,
+            output_directory=args.output,
+            event_id=args.event_id,
+            reliability_targets=args.reliabilities,
+            confidence_level=args.confidence_level,
+            nominal_flexibility_fraction=args.nominal_flexibility_fraction,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "criteria-sensitivity":
+        from aidrbench.evaluation.criteria_sensitivity import (
+            compute_and_save_criteria_sensitivity,
+        )
+
+        summary = compute_and_save_criteria_sensitivity(
+            args.scenarios,
+            specification=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "workload-sensitivity":
+        from aidrbench.evaluation.workload_sensitivity import (
+            compute_and_save_workload_sensitivity,
+        )
+
+        summary = compute_and_save_workload_sensitivity(
+            args.scenarios,
+            specification=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "infrastructure-sensitivity":
+        from aidrbench.evaluation.infrastructure_sensitivity import (
+            compute_and_save_infrastructure_sensitivity,
+        )
+
+        summary = compute_and_save_infrastructure_sensitivity(
+            args.scenarios,
+            specification=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "non-anticipative-firm":
+        from aidrbench.evaluation.non_anticipative import (
+            ObservationPartitionSpecification,
+            compute_and_save_non_anticipative_frontier,
+        )
+
+        observation_specification = (
+            ObservationPartitionSpecification(
+                forecast_horizon_hours=args.forecast_horizon_hours,
+                power_bin_width_pu=args.power_bin_width_pu,
+                arrival_bin_width_fraction=args.arrival_bin_width_fraction,
+                minimum_shared_node_size=args.minimum_shared_node_size,
+            )
+            if args.information_structure == "coarse_observation_partition_tree"
+            else None
+        )
+        summary = compute_and_save_non_anticipative_frontier(
+            args.scenarios,
+            durations_h=args.durations,
+            notice_hours=args.notice_hours,
+            output_directory=args.output,
+            event_id=args.event_id,
+            reliability_target=args.reliability_target,
+            information_structure=args.information_structure,
+            observation_specification=observation_specification,
+            matched_pi_frontier_path=args.matched_pi_frontier,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "merge-non-anticipative":
+        from aidrbench.evaluation.non_anticipative import (
+            merge_non_anticipative_frontier_partitions,
+        )
+
+        summary = merge_non_anticipative_frontier_partitions(
+            args.inputs,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "notice-diagnostics":
+        from aidrbench.evaluation.notice_diagnostics import (
+            compute_notice_mechanism_diagnostics,
+        )
+
+        summary = compute_notice_mechanism_diagnostics(
+            args.scenarios,
+            pi_frontier_path=args.pi_frontier,
+            na_frontier_path=args.na_frontier,
+            na_policies_path=args.na_policies,
+            controller_config=args.controller_config,
+            output_directory=args.output,
+            durations_h=args.durations,
+            notices_h=args.notices,
+            reliability_target=args.reliability,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "exhaustion-diagnostics":
+        from aidrbench.evaluation.exhaustion import (
+            compute_repeated_event_exhaustion_diagnostics,
+        )
+
+        summary = compute_repeated_event_exhaustion_diagnostics(
+            args.scenarios,
+            specification_path=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "hosting-capacity":
+        from aidrbench.evaluation.hosting_capacity import (
+            compute_and_save_hosting_capacity,
+            load_community_portfolio,
+        )
+
+        summary = compute_and_save_hosting_capacity(
+            args.scenarios,
+            portfolio=load_community_portfolio(args.portfolio),
+            output_directory=args.output,
+            dc_operation=args.dc_operation,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "hosting-ensemble":
+        from aidrbench.evaluation.hosting_ensemble import compute_hosting_ensemble
+
+        summary = compute_hosting_ensemble(
+            args.scenarios,
+            specification_path=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    raise ValueError("an optimize subcommand is required")
+
+
 def _run_train(args: argparse.Namespace) -> int:
     from aidrbench.training import train_hourly_rl
 
@@ -923,11 +1536,26 @@ def _run_train(args: argparse.Namespace) -> int:
 
 
 def _run_protocol_check(args: argparse.Namespace) -> int:
-    from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+    manifest_path = Path(args.manifest)
+    document = yaml.safe_load(manifest_path.read_text(encoding="utf-8"))
+    if (
+        isinstance(document, dict)
+        and document.get("study_type") == "nature_communications_mechanism_mainline"
+    ):
+        from aidrbench.evaluation.nature_protocol import validate_nature_mainline_protocol
 
-    report = validate_hourly_experiment_protocol(args.manifest)
+        report = validate_nature_mainline_protocol(manifest_path)
+    else:
+        from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+
+        report = validate_hourly_experiment_protocol(manifest_path)
     _print_summary(report)
-    return 0 if bool(report["valid"]) else 1
+    readiness_key = (
+        "execution_ready"
+        if args.require_execution_ready and "execution_ready" in report
+        else "valid"
+    )
+    return 0 if bool(report[readiness_key]) else 1
 
 
 def _run_evaluate(args: argparse.Namespace) -> int:
@@ -991,6 +1619,100 @@ def _run_plot(args: argparse.Namespace) -> int:
 
 
 def _run_certify(args: argparse.Namespace) -> int:
+    if args.certification_command == "frozen-select":
+        if (
+            args.scenarios is None
+            or args.controller_config is None
+            or not args.durations
+            or args.output is None
+        ):
+            raise ValueError(
+                "certify frozen-select requires --scenarios, --controller-config, "
+                "--durations, and --output"
+            )
+        from aidrbench.evaluation.frozen_causal_certificate import (
+            select_frozen_causal_capacities,
+        )
+
+        criteria = _firm_criteria_from_args(args)
+        summary = select_frozen_causal_capacities(
+            args.scenarios,
+            controller_config=args.controller_config,
+            durations_h=args.durations,
+            notices_h=args.notices or (0,),
+            candidate_fractions=args.candidate_fractions,
+            search=args.search,
+            binary_iterations=args.binary_iterations,
+            criteria=criteria,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.certification_command == "frozen-test":
+        if (
+            args.scenarios is None
+            or args.selection is None
+            or args.controller_config is None
+            or args.output is None
+        ):
+            raise ValueError(
+                "certify frozen-test requires --scenarios, --selection, "
+                "--controller-config, and --output"
+            )
+        from aidrbench.evaluation.frozen_causal_certificate import (
+            certify_selected_frozen_causal_capacities,
+        )
+
+        summary = certify_selected_frozen_causal_capacities(
+            args.scenarios,
+            selection_path=args.selection,
+            controller_config=args.controller_config,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.certification_command == "select":
+        if args.controller is None or not args.durations or args.output is None:
+            raise ValueError("certify select requires --controller, --durations, and --output")
+        from aidrbench.evaluation.certification import select_firm_capacity_on_validation
+        from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+
+        protocol = validate_hourly_experiment_protocol(args.protocol_manifest)
+        if not protocol["valid"]:
+            raise ValueError("protocol manifest is invalid; cannot select a capacity")
+        summary = select_firm_capacity_on_validation(
+            protocol_manifest=args.protocol_manifest,
+            controller=args.controller,
+            model_path=args.model,
+            durations_h=args.durations,
+            notices_h=args.notices,
+            candidate_reduction_fractions=args.candidate_fractions,
+            output_directory=args.output,
+            search_method=args.search,
+            binary_iterations=args.binary_iterations,
+        )
+        _print_summary(summary)
+        return 0
+    if args.certification_command == "locked-test":
+        if args.selection is None or args.output is None:
+            raise ValueError("certify locked-test requires --selection and --output")
+        from aidrbench.evaluation.certification import evaluate_selected_capacity_on_locked_test
+        from aidrbench.evaluation.protocol import validate_hourly_experiment_protocol
+
+        protocol = validate_hourly_experiment_protocol(args.protocol_manifest)
+        if not protocol["valid"]:
+            raise ValueError("protocol manifest is invalid; cannot evaluate the locked test split")
+        summary = evaluate_selected_capacity_on_locked_test(
+            selection_path=args.selection,
+            output_directory=args.output,
+            expected_protocol_manifest=args.protocol_manifest,
+        )
+        _print_summary(summary)
+        return 0
+    if args.controller is None or not args.durations or args.episodes is None or args.save is None:
+        raise ValueError("certify requires --controller, --durations, --episodes, and --save")
     from aidrbench.evaluation.certification import (
         certify_firm_flexibility,
         save_flexibility_certificate,
@@ -1003,6 +1725,7 @@ def _run_certify(args: argparse.Namespace) -> int:
         reliability_target=args.reliability,
         confidence_level=args.confidence,
         min_delivery_ratio=args.min_delivery_ratio,
+        min_interval_delivery_ratio=args.min_interval_delivery_ratio,
         max_deadline_miss_rate=args.max_deadline_miss_rate,
         max_rebound_ratio=args.max_rebound_ratio,
         min_window_peak_relief_fraction=args.min_window_peak_relief_fraction,
@@ -1011,27 +1734,31 @@ def _run_certify(args: argparse.Namespace) -> int:
     output = Path(args.save)
     certificate_rows: list[dict[str, object]] = []
     saved_paths: dict[str, dict[str, str]] = {}
+    notices_h = args.notices or (0,)
     for duration_h in args.durations:
-        certificate, candidates, outcomes = certify_firm_flexibility(
-            config=args.config,
-            controller=args.controller,
-            model_path=args.model,
-            duration_h=duration_h,
-            candidate_reduction_fractions=args.candidate_fractions,
-            seeds=tuple(range(1, args.episodes + 1)),
-            criteria=criteria,
-            search_method=args.search,
-            binary_iterations=args.binary_iterations,
-        )
-        duration_key = f"duration_{duration_h}h"
-        saved_paths[duration_key] = save_flexibility_certificate(
-            certificate,
-            candidates,
-            outcomes,
-            criteria,
-            output / duration_key,
-        )
-        certificate_rows.append(asdict(certificate))
+        for notice_h in notices_h:
+            certificate, candidates, outcomes = certify_firm_flexibility(
+                config=args.config,
+                controller=args.controller,
+                model_path=args.model,
+                duration_h=duration_h,
+                notice_h=notice_h,
+                candidate_reduction_fractions=args.candidate_fractions,
+                seeds=tuple(range(1, args.episodes + 1)),
+                criteria=criteria,
+                search_method=args.search,
+                binary_iterations=args.binary_iterations,
+            )
+            event_sequence = "-".join(str(value) for value in certificate.event_start_hours)
+            certificate_key = f"duration_{duration_h}h_notice_{notice_h}h_events_{event_sequence}"
+            saved_paths[certificate_key] = save_flexibility_certificate(
+                certificate,
+                candidates,
+                outcomes,
+                criteria,
+                output / certificate_key,
+            )
+            certificate_rows.append(asdict(certificate))
     output.mkdir(parents=True, exist_ok=True)
     summary_path = output / "certificates.parquet"
     pd.DataFrame.from_records(certificate_rows).to_parquet(summary_path, index=False)
@@ -1093,6 +1820,7 @@ def _firm_criteria_from_args(args: argparse.Namespace) -> FirmFlexibilityCriteri
         reliability_target=args.reliability,
         confidence_level=args.confidence,
         min_delivery_ratio=args.min_delivery_ratio,
+        min_interval_delivery_ratio=args.min_interval_delivery_ratio,
         max_deadline_miss_rate=args.max_deadline_miss_rate,
         max_rebound_ratio=args.max_rebound_ratio,
         min_window_peak_relief_fraction=args.min_window_peak_relief_fraction,
@@ -1174,6 +1902,33 @@ def _run_stress_test(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_paper(args: argparse.Namespace) -> int:
+    if args.paper_command == "export-source-data":
+        from aidrbench.evaluation.source_data import export_manuscript_source_data
+
+        summary = export_manuscript_source_data(
+            args.specification,
+            args.output,
+            repository_root=args.repository_root,
+        )
+        _print_summary(summary)
+        return 0
+    if args.paper_command == "figures":
+        from aidrbench.evaluation.nature_figures_reference import (
+            plot_nature_mainline_figures,
+        )
+
+        summary = plot_nature_mainline_figures(
+            args.source_data,
+            args.output,
+            figures=args.figures,
+            formats=args.formats,
+        )
+        _print_summary(summary)
+        return 0
+    raise ValueError("paper subcommand is required")
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -1209,6 +1964,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "env":
         try:
             return _run_env(args)
+        except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
+            parser.error(str(error))
+    if args.command == "scenario":
+        try:
+            return _run_scenario(args)
+        except (FileExistsError, FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
+            parser.error(str(error))
+    if args.command == "optimize":
+        try:
+            return _run_optimization(args)
         except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
             parser.error(str(error))
     if args.command == "rollout":
@@ -1254,6 +2019,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "stress-test":
         try:
             return _run_stress_test(args)
+        except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
+            parser.error(str(error))
+    if args.command == "paper":
+        try:
+            return _run_paper(args)
         except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
             parser.error(str(error))
     parser.print_help()

@@ -10,6 +10,10 @@ from typing import Any, Literal, cast
 
 import yaml
 
+from aidrbench.calibration.artifact import (
+    HardwareCalibrationArtifact,
+    load_hardware_calibration_artifact,
+)
 from aidrbench.data.alibaba2026 import AlibabaDeadlinePolicy
 from aidrbench.data.hourly import WorkloadMix
 from aidrbench.models.power import HourlyDataCenterPowerModel, VirtualDataCenter
@@ -169,13 +173,21 @@ class HourlyEnvironmentConfig:
     community_path: Path | None
     community_profile_id: str | None
     community_episode_start: str | None
-    community_peak_kw: float
+    community_window_start: str | None
+    community_window_end: str | None
+    frozen_scenario_path: Path | None
+    frozen_event_ids: tuple[int, ...] | None
+    frozen_event_notice_hours: int | None
+    background_community_peak_kw: float
+    pcc_capacity_kw: float
     pv_enabled: bool
     gpus_per_node: int
     node_count: int | Literal["auto"]
-    target_dc_peak_share_of_community: float
+    target_dc_peak_share_of_pcc: float
     flexible_gpu_fraction: float
-    target_total_utilization: float
+    flexible_arrival_utilization: float
+    rigid_gpu_utilization: float
+    deadline_slack_scale: float
     workload_mix: WorkloadMix
     workload_source: Literal["synthetic", "alibaba2026_lite"]
     alibaba_summary_path: Path | None
@@ -186,10 +198,14 @@ class HourlyEnvironmentConfig:
     idle_power_w_per_gpu: float
     active_power_w_by_class: dict[str, float]
     node_fixed_overhead_w: float
+    calibration_artifact: HardwareCalibrationArtifact | None
+    calibration_power_case: Literal["lower_bound", "nominal", "upper_bound"]
+    node_fixed_overhead_power_case: Literal["lower_bound", "nominal", "upper_bound"]
     pue: float
     dr_source: Literal["configured", "manifest"]
     dr_manifest_path: Path | None
     event_start_hours: tuple[int, ...]
+    event_start_hour_choices: tuple[int, ...] | None
     event_duration_hours: int
     event_notice_hours: int
     event_reduction_fraction: float
@@ -210,6 +226,31 @@ class HourlyEnvironmentConfig:
     def total_hours(self) -> int:
         return self.main_hours + int(round(self.clearance_tail_hours / self.timestep_hours))
 
+    @property
+    def community_peak_kw(self) -> float:
+        """Legacy alias for the background-community gross-demand peak.
+
+        ``community_peak_kw`` formerly overloaded the background-load scale
+        and the PCC base.  New configurations should use
+        ``background_community_peak_kw`` and ``pcc_capacity_kw`` explicitly.
+        The alias keeps third-party V0 configurations readable while ensuring
+        the environment itself no longer treats the two quantities as equal.
+        """
+
+        return self.background_community_peak_kw
+
+    @property
+    def target_dc_peak_share_of_community(self) -> float:
+        """Legacy alias retained for code written against the V0 schema."""
+
+        return self.target_dc_peak_share_of_pcc
+
+    @property
+    def target_dc_peak_kw(self) -> float:
+        """Requested full-pool data-centre facility peak on the PCC base."""
+
+        return self.pcc_capacity_kw * self.target_dc_peak_share_of_pcc
+
     def _average_active_power(self, *, flexible: bool) -> float:
         weights: dict[str, float] = {}
         for name, share in self.workload_mix.shares.items():
@@ -228,45 +269,72 @@ class HourlyEnvironmentConfig:
             / total_weight
         )
 
-    def make_power_model(self) -> HourlyDataCenterPowerModel:
-        """Derive virtual cluster size and average class-weighted power inputs."""
+    def _rigid_utilization(self) -> float:
+        """Return the fixed rigid-pool utilization used in every node candidate."""
+
+        return self.rigid_gpu_utilization
+
+    def _power_model_for_node_count(self, node_count: int) -> HourlyDataCenterPowerModel:
+        """Build the final model used to evaluate a particular node count."""
 
         flexible_active = self._average_active_power(flexible=True)
         rigid_active = self._average_active_power(flexible=False)
-        if self.node_count == "auto":
-            per_node_peak_kw = (
-                self.pue
-                * (self.node_fixed_overhead_w + self.gpus_per_node * flexible_active)
-                / 1_000.0
-            )
-            target_peak_kw = self.community_peak_kw * self.target_dc_peak_share_of_community
-            node_count = max(1, math.ceil(target_peak_kw / per_node_peak_kw))
-        else:
-            node_count = self.node_count
         data_center = VirtualDataCenter(
             gpus_per_node=self.gpus_per_node,
             node_count=node_count,
             flexible_gpu_fraction=self.flexible_gpu_fraction,
         )
-        rigid_physical_share = 1.0 - self.flexible_gpu_fraction
-        if rigid_physical_share <= 0.0:
-            rigid_utilization = 0.0
-        else:
-            rigid_utilization = min(
-                self.target_total_utilization
-                * self.workload_mix.rigid_share
-                / rigid_physical_share,
-                1.0,
-            )
         return HourlyDataCenterPowerModel(
             data_center=data_center,
             idle_power_w_per_gpu=self.idle_power_w_per_gpu,
             flexible_active_power_w_per_gpu=flexible_active,
             rigid_active_power_w_per_gpu=rigid_active,
             node_fixed_overhead_w=self.node_fixed_overhead_w,
-            rigid_gpu_utilization=rigid_utilization,
+            rigid_gpu_utilization=self._rigid_utilization(),
             pue=self.pue,
+            flexible_active_power_w_per_gpu_by_class=tuple(
+                sorted(self.active_power_w_by_class.items())
+            ),
         )
+
+    def make_power_model(self) -> HourlyDataCenterPowerModel:
+        """Derive a virtual cluster whose *final-model* peak meets the target.
+
+        Auto sizing searches the exact discrete node model, including the
+        configured workload mix, flexible-pool rounding, rigid utilization,
+        idle draw, node overhead and PUE.  It therefore avoids the old
+        per-node approximation that could materially undershoot the requested
+        DC penetration.
+        """
+
+        if self.node_count != "auto":
+            return self._power_model_for_node_count(self.node_count)
+
+        target_peak_kw = self.target_dc_peak_kw
+
+        def full_pool_peak(node_count: int) -> float:
+            model = self._power_model_for_node_count(node_count)
+            return model.predict(model.flexible_capacity_gpu_h).dc_power_kw
+
+        lower = 1
+        if full_pool_peak(lower) >= target_peak_kw:
+            return self._power_model_for_node_count(lower)
+        upper = lower
+        # A monotone bracket plus binary search gives the smallest feasible
+        # node count without relying on an approximate watts-per-node formula.
+        for _ in range(64):
+            upper *= 2
+            if full_pool_peak(upper) >= target_peak_kw:
+                break
+        else:
+            raise ValueError("could not bracket automatic virtual data-center sizing")
+        while lower + 1 < upper:
+            midpoint = (lower + upper) // 2
+            if full_pool_peak(midpoint) >= target_peak_kw:
+                upper = midpoint
+            else:
+                lower = midpoint
+        return self._power_model_for_node_count(upper)
 
 
 def load_hourly_environment_config(
@@ -284,9 +352,23 @@ def load_hourly_environment_config(
     root = _mapping(document, "hourly environment config")
     env = _mapping(root.get("env"), "env")
     community = _mapping(root.get("community"), "community")
+    scenario = _mapping(root.get("scenario", {}), "scenario")
     virtual_dc = _mapping(root.get("virtual_datacenter"), "virtual_datacenter")
     workload = _mapping(root.get("workload"), "workload")
     hardware = _mapping(root.get("hardware"), "hardware")
+    allowed_hardware_keys = {
+        "active_power_w_per_gpu_by_class",
+        "calibration_artifact",
+        "calibration_power_case",
+        "node_fixed_overhead_power_case",
+        "fallback_idle_power_w_per_gpu",
+        "fallback_node_overhead_w",
+        "require_calibration_artifact",
+        "require_all_workload_class_power",
+    }
+    unknown_hardware_keys = sorted(set(hardware) - allowed_hardware_keys)
+    if unknown_hardware_keys:
+        raise ValueError(f"hardware contains unknown fields: {unknown_hardware_keys}")
     dr = _mapping(root.get("dr"), "dr")
     reward = _mapping(root.get("reward"), "reward")
     configured_mode = str(env.get("action_mode", "continuous"))
@@ -297,17 +379,106 @@ def load_hourly_environment_config(
     raw_node_count = virtual_dc.get("node_count", "auto")
     if raw_node_count != "auto":
         raw_node_count = _positive_int(raw_node_count, "virtual_datacenter.node_count")
-    power_by_class = _mapping(
-        hardware.get(
-            "active_power_w_per_gpu_by_class",
-            {
-                "training": 450.0,
-                "offline_inference": 350.0,
-                "online_inference": 400.0,
-            },
-        ),
-        "hardware.active_power_w_per_gpu_by_class",
-    )
+    require_calibration_artifact = hardware.get("require_calibration_artifact", False)
+    if not isinstance(require_calibration_artifact, bool):
+        raise ValueError("hardware.require_calibration_artifact must be boolean")
+    require_all_workload_class_power = hardware.get("require_all_workload_class_power", False)
+    if not isinstance(require_all_workload_class_power, bool):
+        raise ValueError("hardware.require_all_workload_class_power must be boolean")
+    raw_calibration_artifact = hardware.get("calibration_artifact")
+    raw_calibration_power_case = str(hardware.get("calibration_power_case", "nominal")).strip()
+    calibration_power_case = {
+        "lower_ci": "lower_bound",
+        "upper_ci": "upper_bound",
+    }.get(raw_calibration_power_case, raw_calibration_power_case)
+    if calibration_power_case not in {"lower_bound", "nominal", "upper_bound"}:
+        raise ValueError(
+            "hardware.calibration_power_case must be 'lower_bound', 'nominal', or 'upper_bound'"
+        )
+    raw_node_overhead_power_case = str(
+        hardware.get("node_fixed_overhead_power_case", calibration_power_case)
+    ).strip()
+    node_fixed_overhead_power_case = {
+        "lower_ci": "lower_bound",
+        "upper_ci": "upper_bound",
+    }.get(raw_node_overhead_power_case, raw_node_overhead_power_case)
+    if node_fixed_overhead_power_case not in {
+        "lower_bound",
+        "nominal",
+        "upper_bound",
+    }:
+        raise ValueError(
+            "hardware.node_fixed_overhead_power_case must be "
+            "'lower_bound', 'nominal', or 'upper_bound'"
+        )
+    if raw_calibration_artifact is None:
+        calibration_artifact = None
+        if require_calibration_artifact:
+            raise ValueError("formal hardware configuration requires calibration_artifact")
+    elif isinstance(raw_calibration_artifact, str) and raw_calibration_artifact.strip():
+        calibration_artifact = load_hardware_calibration_artifact(raw_calibration_artifact)
+    else:
+        raise ValueError("hardware.calibration_artifact must be a non-empty path when supplied")
+    if calibration_artifact is None and calibration_power_case != "nominal":
+        raise ValueError("hardware.calibration_power_case requires calibration_artifact")
+    if calibration_artifact is None and node_fixed_overhead_power_case != "nominal":
+        raise ValueError(
+            "hardware.node_fixed_overhead_power_case requires calibration_artifact"
+        )
+    fallback_hardware_keys = {
+        "active_power_w_per_gpu_by_class",
+        "fallback_idle_power_w_per_gpu",
+        "fallback_node_overhead_w",
+    }
+    ambiguous_hardware_keys = sorted(set(hardware) & fallback_hardware_keys)
+    if calibration_artifact is not None and ambiguous_hardware_keys:
+        raise ValueError(
+            "hardware calibration_artifact cannot be combined with fallback fields: "
+            f"{ambiguous_hardware_keys}"
+        )
+    power_by_class: Mapping[str, object]
+    if calibration_artifact is not None:
+        if calibration_power_case == "nominal":
+            power_by_class = calibration_artifact.active_power_by_class
+            idle_power_w_per_gpu = calibration_artifact.idle_power_w_per_gpu
+        else:
+            interval_index = 0 if calibration_power_case == "lower_bound" else 1
+            power_by_class = {
+                name: interval[interval_index]
+                for name, interval in calibration_artifact.active_power_intervals_by_class.items()
+            }
+            idle_power_w_per_gpu = calibration_artifact.idle_power_uncertainty_interval_w[
+                interval_index
+            ]
+        if node_fixed_overhead_power_case == "nominal":
+            node_fixed_overhead_w = calibration_artifact.node_fixed_overhead_w
+        else:
+            node_interval_index = (
+                0 if node_fixed_overhead_power_case == "lower_bound" else 1
+            )
+            node_fixed_overhead_w = calibration_artifact.node_fixed_overhead_uncertainty_interval_w[
+                node_interval_index
+            ]
+    else:
+        power_by_class = _mapping(
+            hardware.get(
+                "active_power_w_per_gpu_by_class",
+                {
+                    "training": 450.0,
+                    "offline_inference": 350.0,
+                    "online_inference": 400.0,
+                },
+            ),
+            "hardware.active_power_w_per_gpu_by_class",
+        )
+        idle_power_w_per_gpu = _positive_float(
+            hardware.get("fallback_idle_power_w_per_gpu", 80.0),
+            "hardware.fallback_idle_power_w_per_gpu",
+        )
+        node_fixed_overhead_w = _positive_float(
+            hardware.get("fallback_node_overhead_w", 300.0),
+            "hardware.fallback_node_overhead_w",
+        )
     max_deadline_hours = _positive_int(
         workload.get("max_deadline_hours", 48), "workload.max_deadline_hours"
     )
@@ -375,6 +546,101 @@ def load_hourly_environment_config(
         not isinstance(raw_episode_start, str) or not raw_episode_start.strip()
     ):
         raise ValueError("community.episode_start must be a timestamp string when supplied")
+    raw_window_start = community.get("window_start")
+    raw_window_end = community.get("window_end")
+    for value, name in (
+        (raw_window_start, "community.window_start"),
+        (raw_window_end, "community.window_end"),
+    ):
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            raise ValueError(f"{name} must be a timestamp string when supplied")
+    if (raw_window_start is None) != (raw_window_end is None):
+        raise ValueError(
+            "community.window_start and community.window_end must be supplied together"
+        )
+    raw_frozen_scenario_path = scenario.get("frozen_path")
+    if raw_frozen_scenario_path is None:
+        frozen_scenario_path = None
+    elif isinstance(raw_frozen_scenario_path, str) and raw_frozen_scenario_path.strip():
+        frozen_scenario_path = Path(raw_frozen_scenario_path)
+    else:
+        raise ValueError("scenario.frozen_path must be a non-empty path when supplied")
+    frozen_event_ids = (
+        _non_negative_int_list(scenario["frozen_event_ids"], "scenario.frozen_event_ids")
+        if scenario.get("frozen_event_ids") is not None
+        else None
+    )
+    if frozen_event_ids is not None and frozen_scenario_path is None:
+        raise ValueError("scenario.frozen_event_ids requires scenario.frozen_path")
+    frozen_event_notice_hours = (
+        _non_negative_int(
+            scenario["frozen_event_notice_hours"],
+            "scenario.frozen_event_notice_hours",
+        )
+        if scenario.get("frozen_event_notice_hours") is not None
+        else None
+    )
+    if frozen_event_notice_hours is not None and frozen_scenario_path is None:
+        raise ValueError("scenario.frozen_event_notice_hours requires scenario.frozen_path")
+
+    # ``target_peak_kw`` and ``target_dc_peak_share_of_community`` were the
+    # original V0 schema.  Keep them as strict aliases so external smoke
+    # configurations remain usable, but reject ambiguity when both names are
+    # supplied with different values.
+    if "background_peak_kw" in community and "target_peak_kw" in community:
+        explicit_background_peak_kw = _positive_float(
+            community["background_peak_kw"], "community.background_peak_kw"
+        )
+        legacy_background_peak_kw = _positive_float(
+            community["target_peak_kw"], "community.target_peak_kw"
+        )
+        if not math.isclose(
+            explicit_background_peak_kw,
+            legacy_background_peak_kw,
+            rel_tol=0.0,
+            abs_tol=1e-9,
+        ):
+            raise ValueError("community.background_peak_kw and community.target_peak_kw disagree")
+    background_community_peak_kw = _positive_float(
+        community.get("background_peak_kw", community.get("target_peak_kw", 1_000.0)),
+        "community.background_peak_kw",
+    )
+    pcc_capacity_kw = _positive_float(
+        community.get("pcc_capacity_kw", background_community_peak_kw),
+        "community.pcc_capacity_kw",
+    )
+    if (
+        "target_dc_peak_share_of_pcc" in virtual_dc
+        and "target_dc_peak_share_of_community" in virtual_dc
+    ):
+        explicit_dc_share = _fraction(
+            virtual_dc["target_dc_peak_share_of_pcc"],
+            "virtual_datacenter.target_dc_peak_share_of_pcc",
+            allow_zero=False,
+        )
+        legacy_dc_share = _fraction(
+            virtual_dc["target_dc_peak_share_of_community"],
+            "virtual_datacenter.target_dc_peak_share_of_community",
+            allow_zero=False,
+        )
+        if not math.isclose(explicit_dc_share, legacy_dc_share, rel_tol=0.0, abs_tol=1e-12):
+            raise ValueError(
+                "virtual_datacenter.target_dc_peak_share_of_pcc and "
+                "virtual_datacenter.target_dc_peak_share_of_community disagree"
+            )
+    target_dc_peak_share_of_pcc = _fraction(
+        virtual_dc.get(
+            "target_dc_peak_share_of_pcc",
+            virtual_dc.get("target_dc_peak_share_of_community", 0.20),
+        ),
+        "virtual_datacenter.target_dc_peak_share_of_pcc",
+        allow_zero=False,
+    )
+    flexible_gpu_fraction = _fraction(
+        virtual_dc.get("flexible_gpu_fraction", 0.50),
+        "virtual_datacenter.flexible_gpu_fraction",
+        allow_zero=False,
+    )
     configured_dr_source = str(dr.get("source", "configured")).strip().lower()
     if configured_dr_source not in {"configured", "manifest"}:
         raise ValueError("dr.source must be 'configured' or 'manifest'")
@@ -387,10 +653,101 @@ def load_hourly_environment_config(
         dr_manifest_path = Path(raw_dr_manifest_path)
     else:
         dr_manifest_path = None
+    workload_mix = WorkloadMix.from_mapping(workload.get("workload_mix", {}))
+    explicit_flexible_utilization = workload.get("flexible_arrival_utilization")
+    explicit_rigid_utilization = virtual_dc.get("rigid_gpu_utilization")
+    has_legacy_utilization = "target_total_utilization" in workload or any(
+        key in virtual_dc
+        for key in ("target_total_utilization", "target_flexible_utilization")
+    )
+    if (explicit_flexible_utilization is None) != (explicit_rigid_utilization is None):
+        raise ValueError(
+            "workload.flexible_arrival_utilization and "
+            "virtual_datacenter.rigid_gpu_utilization must be supplied together"
+        )
+    if explicit_flexible_utilization is not None:
+        if has_legacy_utilization:
+            raise ValueError(
+                "split utilization fields cannot be combined with target_total_utilization"
+            )
+        flexible_arrival_utilization = _fraction(
+            explicit_flexible_utilization,
+            "workload.flexible_arrival_utilization",
+            allow_zero=False,
+        )
+        rigid_gpu_utilization = _fraction(
+            explicit_rigid_utilization,
+            "virtual_datacenter.rigid_gpu_utilization",
+        )
+    else:
+        legacy_total_utilization = _fraction(
+            workload.get(
+                "target_total_utilization",
+                virtual_dc.get(
+                    "target_total_utilization",
+                    virtual_dc.get("target_flexible_utilization", 0.65),
+                ),
+            ),
+            "workload.target_total_utilization",
+            allow_zero=False,
+        )
+        flexible_arrival_utilization = legacy_total_utilization
+        rigid_physical_share = 1.0 - flexible_gpu_fraction
+        rigid_gpu_utilization = (
+            min(
+                legacy_total_utilization
+                * workload_mix.rigid_share
+                / rigid_physical_share,
+                1.0,
+            )
+            if rigid_physical_share > 0.0
+            else 0.0
+        )
+    deadline_slack_scale = _positive_float(
+        workload.get("deadline_slack_scale", 1.0),
+        "workload.deadline_slack_scale",
+    )
+    if calibration_artifact is not None:
+        required_classes = {
+            name
+            for name, share in workload_mix.shares.items()
+            if share > 0.0
+            and (require_all_workload_class_power or workload_mix.flexible_fractions[name] > 0.0)
+        }
+        missing_classes = sorted(required_classes - set(power_by_class))
+        if missing_classes:
+            scope = "all configured" if require_all_workload_class_power else "flexible"
+            raise ValueError(
+                f"hardware calibration artifact has no active-power estimate for {scope} "
+                f"workload classes: {missing_classes}"
+            )
+    timestep_hours = _positive_float(env.get("timestep_hours", 1.0), "env.timestep_hours")
+    if not math.isclose(timestep_hours, 1.0, rel_tol=0.0, abs_tol=1e-12):
+        raise ValueError("current hourly environment requires env.timestep_hours == 1.0")
+    event_start_jitter_hours = _non_negative_int(
+        dr.get("event_start_jitter_hours", 0), "dr.event_start_jitter_hours"
+    )
+    raw_event_start_choices = dr.get("event_start_hour_choices")
+    if raw_event_start_choices is None:
+        event_start_hour_choices = None
+        event_start_hours = _int_list(
+            dr.get("event_start_hours", [17, 65, 113]), "dr.event_start_hours"
+        )
+    else:
+        if "event_start_hours" in dr:
+            raise ValueError(
+                "dr.event_start_hour_choices cannot be combined with dr.event_start_hours"
+            )
+        if event_start_jitter_hours != 0:
+            raise ValueError(
+                "dr.event_start_hour_choices cannot be combined with event_start_jitter_hours"
+            )
+        event_start_hour_choices = _int_list(raw_event_start_choices, "dr.event_start_hour_choices")
+        event_start_hours = ()
     return HourlyEnvironmentConfig(
         seed=int(root.get("seed", 2026)),
         action_mode=action_mode,
-        timestep_hours=_positive_float(env.get("timestep_hours", 1.0), "env.timestep_hours"),
+        timestep_hours=timestep_hours,
         episode_days=_positive_int(env.get("episode_days", 7), "env.episode_days"),
         clearance_tail_hours=_positive_int(
             env.get("clearance_tail_hours", 24), "env.clearance_tail_hours"
@@ -412,36 +769,26 @@ def load_hourly_environment_config(
         community_episode_start=(
             raw_episode_start.strip() if isinstance(raw_episode_start, str) else None
         ),
-        community_peak_kw=_positive_float(
-            community.get("target_peak_kw", 1_000.0), "community.target_peak_kw"
+        community_window_start=(
+            raw_window_start.strip() if isinstance(raw_window_start, str) else None
         ),
+        community_window_end=(raw_window_end.strip() if isinstance(raw_window_end, str) else None),
+        frozen_scenario_path=frozen_scenario_path,
+        frozen_event_ids=frozen_event_ids,
+        frozen_event_notice_hours=frozen_event_notice_hours,
+        background_community_peak_kw=background_community_peak_kw,
+        pcc_capacity_kw=pcc_capacity_kw,
         pv_enabled=bool(community.get("pv_enabled", False)),
         gpus_per_node=_positive_int(
             virtual_dc.get("gpus_per_node", 4), "virtual_datacenter.gpus_per_node"
         ),
         node_count=raw_node_count,
-        target_dc_peak_share_of_community=_fraction(
-            virtual_dc.get("target_dc_peak_share_of_community", 0.20),
-            "virtual_datacenter.target_dc_peak_share_of_community",
-            allow_zero=False,
-        ),
-        flexible_gpu_fraction=_fraction(
-            virtual_dc.get("flexible_gpu_fraction", 0.50),
-            "virtual_datacenter.flexible_gpu_fraction",
-            allow_zero=False,
-        ),
-        target_total_utilization=_fraction(
-            workload.get(
-                "target_total_utilization",
-                virtual_dc.get(
-                    "target_total_utilization",
-                    virtual_dc.get("target_flexible_utilization", 0.65),
-                ),
-            ),
-            "workload.target_total_utilization",
-            allow_zero=False,
-        ),
-        workload_mix=WorkloadMix.from_mapping(workload.get("workload_mix", {})),
+        target_dc_peak_share_of_pcc=target_dc_peak_share_of_pcc,
+        flexible_gpu_fraction=flexible_gpu_fraction,
+        flexible_arrival_utilization=flexible_arrival_utilization,
+        rigid_gpu_utilization=rigid_gpu_utilization,
+        deadline_slack_scale=deadline_slack_scale,
+        workload_mix=workload_mix,
         workload_source=cast(Literal["synthetic", "alibaba2026_lite"], workload_source),
         alibaba_summary_path=summary_path,
         alibaba_arrivals_path=arrivals_path,
@@ -450,24 +797,25 @@ def load_hourly_environment_config(
             workload.get("flexible_priorities", ["LP"]), "workload.flexible_priorities"
         ),
         deadline_policy=AlibabaDeadlinePolicy.from_mapping(workload.get("deadline_policy")),
-        idle_power_w_per_gpu=_positive_float(
-            hardware.get("fallback_idle_power_w_per_gpu", 80.0),
-            "hardware.fallback_idle_power_w_per_gpu",
-        ),
+        idle_power_w_per_gpu=idle_power_w_per_gpu,
         active_power_w_by_class={
             name: _positive_float(value, f"active power for {name}")
             for name, value in power_by_class.items()
         },
-        node_fixed_overhead_w=_positive_float(
-            hardware.get("fallback_node_overhead_w", 300.0),
-            "hardware.fallback_node_overhead_w",
+        node_fixed_overhead_w=node_fixed_overhead_w,
+        calibration_artifact=calibration_artifact,
+        calibration_power_case=cast(
+            Literal["lower_bound", "nominal", "upper_bound"], calibration_power_case
+        ),
+        node_fixed_overhead_power_case=cast(
+            Literal["lower_bound", "nominal", "upper_bound"],
+            node_fixed_overhead_power_case,
         ),
         pue=_positive_float(virtual_dc.get("pue", 1.20), "virtual_datacenter.pue"),
         dr_source=cast(Literal["configured", "manifest"], configured_dr_source),
         dr_manifest_path=dr_manifest_path,
-        event_start_hours=_int_list(
-            dr.get("event_start_hours", [17, 65, 113]), "dr.event_start_hours"
-        ),
+        event_start_hours=event_start_hours,
+        event_start_hour_choices=event_start_hour_choices,
         event_duration_hours=_positive_int(
             dr.get("event_duration_hours", 3), "dr.event_duration_hours"
         ),
@@ -492,9 +840,7 @@ def load_hourly_environment_config(
             dr.get("recovery_backlog_tolerance_fraction", 0.02),
             "dr.recovery_backlog_tolerance_fraction",
         ),
-        event_start_jitter_hours=_non_negative_int(
-            dr.get("event_start_jitter_hours", 0), "dr.event_start_jitter_hours"
-        ),
+        event_start_jitter_hours=event_start_jitter_hours,
         event_duration_choices=(
             _int_list(dr["event_duration_choices"], "dr.event_duration_choices")
             if dr.get("event_duration_choices") is not None

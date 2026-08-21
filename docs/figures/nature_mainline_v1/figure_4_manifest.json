@@ -1,0 +1,47 @@
+{
+  "archetype": "asymmetric quantitative figure",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "Hosting calculations are planning-result ensembles rather than real-world causal effects.",
+    "AI–BESS substitution replicates; with BESS, the validation AI–PV interaction is directionally positive but practically indeterminate."
+  ],
+  "core_conclusion": "Workload flexibility increases community data-centre hosting capacity, while its value interacts non-additively with photovoltaic generation and batteries.",
+  "figure": 4,
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 48319,
+      "format": "svg",
+      "path": "figure_4_hosting_capacity_interactions.svg",
+      "sha256": "047dd1f8394314807bcafd3cfde87c58f75c41fc40a4be9429140417d665f83e"
+    },
+    {
+      "bytes": 31018,
+      "format": "pdf",
+      "path": "figure_4_hosting_capacity_interactions.pdf",
+      "sha256": "e832e24f7b5807b74cc5dad8dd104fa16e4e615a388c2bb93f34df4504f3b785"
+    },
+    {
+      "bytes": 1080214,
+      "format": "tiff",
+      "path": "figure_4_hosting_capacity_interactions.tiff",
+      "sha256": "51cb3c20c50bf9c6d98945d35b0d469bd7b34cfc114b4b7a67710b2d63e971a3"
+    },
+    {
+      "bytes": 169561,
+      "format": "png",
+      "path": "figure_4_hosting_capacity_interactions.png",
+      "sha256": "6210a3544d2bff298194b1b66c4d0ed70d218f0b6fdedc051c700ee7f8eedf97"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    5.0
+  ],
+  "schema_version": "aidrbench.nature_figure_manifest.v1",
+  "source_data_manifest_sha256": "cb2a7f9180d3eee505c1c61fa20019e85638ae3002ae05d45823ba0cd75869b2",
+  "source_tables": [
+    "fig4_hosting_capacity_summary",
+    "fig4_hosting_paired_contrasts"
+  ]
+}

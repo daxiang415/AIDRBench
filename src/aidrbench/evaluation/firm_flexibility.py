@@ -49,6 +49,73 @@ def wilson_lower_bound(successes: int, trials: int, confidence_level: float) -> 
     return max(0.0, (centre - radius) / denominator)
 
 
+def minimum_successes_for_wilson(
+    trials: int,
+    reliability_target: float,
+    confidence_level: float,
+) -> int | None:
+    """Return the fewest successes whose one-sided Wilson bound reaches ``q``.
+
+    ``None`` means that even an all-success sample is too small to establish
+    the requested reliability at the declared confidence level.
+    """
+
+    if isinstance(trials, bool) or not isinstance(trials, int) or trials <= 0:
+        raise ValueError("trials must be a positive integer")
+    if not 0.0 < reliability_target < 1.0:
+        raise ValueError("reliability_target must be in (0, 1)")
+    if not 0.0 < confidence_level < 1.0:
+        raise ValueError("confidence_level must be in (0, 1)")
+    for successes in range(trials + 1):
+        if (
+            wilson_lower_bound(successes, trials, confidence_level)
+            + _EPSILON
+            >= reliability_target
+        ):
+            return successes
+    return None
+
+
+def lower_tolerance_order_statistic_rank(
+    trials: int,
+    coverage_target: float,
+    confidence_level: float,
+) -> tuple[int, float] | None:
+    """Return a distribution-free one-sided lower tolerance-limit rank.
+
+    For ascending order statistics ``X_(1), ..., X_(n)``, the returned
+    one-based rank ``r`` is the largest rank for which ``X_(r)`` covers at
+    least ``coverage_target`` of the population with at least
+    ``confidence_level`` confidence. The confidence is the exact binomial
+    probability ``P[Binomial(n, 1-coverage_target) >= r]``. ``None`` means the
+    requested coverage/confidence pair is not estimable with ``trials``.
+
+    Unlike applying a Bernoulli interval after choosing a threshold from the
+    same sample, this order-statistic construction accounts for threshold
+    selection directly.
+    """
+
+    if isinstance(trials, bool) or not isinstance(trials, int) or trials <= 0:
+        raise ValueError("trials must be a positive integer")
+    if not 0.0 < coverage_target < 1.0:
+        raise ValueError("coverage_target must be in (0, 1)")
+    if not 0.0 < confidence_level < 1.0:
+        raise ValueError("confidence_level must be in (0, 1)")
+    lower_tail_probability = 1.0 - coverage_target
+    selected: tuple[int, float] | None = None
+    for rank in range(1, trials + 1):
+        achieved_confidence = sum(
+            math.comb(trials, count)
+            * lower_tail_probability**count
+            * coverage_target ** (trials - count)
+            for count in range(rank, trials + 1)
+        )
+        if achieved_confidence + _EPSILON < confidence_level:
+            break
+        selected = (rank, achieved_confidence)
+    return selected
+
+
 @dataclass(frozen=True, slots=True)
 class FirmFlexibilityCriteria:
     """Frozen joint success definition for one reliable-flexibility certificate."""
@@ -56,6 +123,7 @@ class FirmFlexibilityCriteria:
     reliability_target: float = 0.95
     confidence_level: float = 0.95
     min_delivery_ratio: float = 0.95
+    min_interval_delivery_ratio: float = 0.95
     max_deadline_miss_rate: float = 0.01
     max_rebound_ratio: float = 0.25
     min_window_peak_relief_fraction: float = 0.50
@@ -70,6 +138,7 @@ class FirmFlexibilityCriteria:
                 raise ValueError(f"{name} must be in (0, 1)")
         for name, value in (
             ("min_delivery_ratio", self.min_delivery_ratio),
+            ("min_interval_delivery_ratio", self.min_interval_delivery_ratio),
             ("min_window_peak_relief_fraction", self.min_window_peak_relief_fraction),
         ):
             if not 0.0 <= value <= 1.0:
@@ -95,6 +164,7 @@ class EventOutcome:
     duration_h: int
     requested_reduction_kw: float
     delivery_ratio: float
+    minimum_interval_delivery_ratio: float
     deadline_miss_rate: float
     rebound_peak_kw: float
     rebound_ratio: float
@@ -107,14 +177,21 @@ class EventOutcome:
         """Return the joint certificate decision and auditable failure labels."""
 
         failures: list[str] = []
-        if self.delivery_ratio + _EPSILON < criteria.min_delivery_ratio:
-            failures.append("delivery")
+        mean_delivery_failed = self.delivery_ratio + _EPSILON < criteria.min_delivery_ratio
+        interval_delivery_failed = (
+            self.minimum_interval_delivery_ratio + _EPSILON
+            < criteria.min_interval_delivery_ratio
+        )
+        if mean_delivery_failed:
+            failures.append("mean_delivery")
+        if interval_delivery_failed:
+            failures.append("interval_delivery")
         if self.deadline_miss_rate - _EPSILON > criteria.max_deadline_miss_rate:
-            failures.append("deadline")
+            failures.append("deadline_miss")
         if self.rebound_ratio - _EPSILON > criteria.max_rebound_ratio:
             failures.append("rebound")
         if self.window_peak_relief_fraction + _EPSILON < criteria.min_window_peak_relief_fraction:
-            failures.append("window_relief")
+            failures.append("window_peak_relief")
         if self.terminal_backlog_fraction - _EPSILON > criteria.max_terminal_backlog_fraction:
             failures.append("terminal_backlog")
         return not failures, tuple(failures)
@@ -168,6 +245,15 @@ def derive_event_outcomes(
         delivery_ratio = (
             float(delivered.sum() / requested_total) if requested_total > _EPSILON else 1.0
         )
+        interval_requested = event_rows["requested_reduction_kw"]
+        interval_delivery_ratios = delivered.divide(
+            interval_requested.where(interval_requested > 0)
+        )
+        minimum_interval_delivery_ratio = (
+            float(interval_delivery_ratios.min())
+            if requested_total > _EPSILON
+            else 1.0
+        )
         rebound_peak_kw = (
             float(
                 (post_rows["pcc_power_kw"] - post_rows["baseline_pcc_power_kw"])
@@ -178,7 +264,11 @@ def derive_event_outcomes(
             else 0.0
         )
         peak_delivered_kw = float(event_rows["delivered_reduction_kw"].clip(lower=0.0).max())
-        rebound_ratio = rebound_peak_kw / peak_delivered_kw if peak_delivered_kw > _EPSILON else 0.0
+        rebound_ratio = (
+            rebound_peak_kw / peak_delivered_kw
+            if event.requested_reduction_kw > _EPSILON and peak_delivered_kw > _EPSILON
+            else 0.0
+        )
         window_peak_relief_kw = float(
             window_rows["baseline_pcc_power_kw"].max() - window_rows["pcc_power_kw"].max()
         )
@@ -205,6 +295,7 @@ def derive_event_outcomes(
                 duration_h=event.stop_hour - event.start_hour,
                 requested_reduction_kw=event.requested_reduction_kw,
                 delivery_ratio=delivery_ratio,
+                minimum_interval_delivery_ratio=minimum_interval_delivery_ratio,
                 deadline_miss_rate=deadline_miss_rate,
                 rebound_peak_kw=rebound_peak_kw,
                 rebound_ratio=rebound_ratio,
