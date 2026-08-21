@@ -679,6 +679,47 @@ def _add_firm_flexibility_parsers(subparsers: Any) -> None:
     stress_test.add_argument("--save", required=True)
 
 
+def _add_paper_parsers(subparsers: Any) -> None:
+    paper = subparsers.add_parser(
+        "paper", help="export manuscript source data and generate frozen mainline figures"
+    )
+    commands = paper.add_subparsers(dest="paper_command")
+
+    source_data = commands.add_parser(
+        "export-source-data",
+        help="export hash-bound manuscript source-data CSV files",
+    )
+    source_data.add_argument(
+        "--specification",
+        default="configs/paper/nature_source_data_v1.yaml",
+    )
+    source_data.add_argument(
+        "--output",
+        default="results/nature_mainline/source_data_v1",
+    )
+    source_data.add_argument("--repository-root", default=".")
+
+    figures = commands.add_parser(
+        "figures",
+        help="generate publication figures from a verified source-data bundle",
+    )
+    figures.add_argument(
+        "--source-data",
+        default="results/nature_mainline/source_data_v1",
+    )
+    figures.add_argument(
+        "--output",
+        default="results/figures/nature_mainline_v1",
+    )
+    figures.add_argument("--figures", nargs="+", type=int, default=[1, 2, 3, 4, 5])
+    figures.add_argument(
+        "--formats",
+        nargs="+",
+        choices=("svg", "pdf", "tiff", "png"),
+        default=["svg", "pdf", "tiff", "png"],
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="aidrbench", description=__doc__)
     parser.add_argument("--version", action="version", version=__version__)
@@ -696,6 +737,7 @@ def build_parser() -> argparse.ArgumentParser:
     _add_optimization_parsers(subparsers)
     _add_training_parsers(subparsers)
     _add_firm_flexibility_parsers(subparsers)
+    _add_paper_parsers(subparsers)
     return parser
 
 
@@ -1860,6 +1902,31 @@ def _run_stress_test(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_paper(args: argparse.Namespace) -> int:
+    if args.paper_command == "export-source-data":
+        from aidrbench.evaluation.source_data import export_manuscript_source_data
+
+        summary = export_manuscript_source_data(
+            args.specification,
+            args.output,
+            repository_root=args.repository_root,
+        )
+        _print_summary(summary)
+        return 0
+    if args.paper_command == "figures":
+        from aidrbench.evaluation.nature_figures import plot_nature_mainline_figures
+
+        summary = plot_nature_mainline_figures(
+            args.source_data,
+            args.output,
+            figures=args.figures,
+            formats=args.formats,
+        )
+        _print_summary(summary)
+        return 0
+    raise ValueError("paper subcommand is required")
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -1950,6 +2017,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "stress-test":
         try:
             return _run_stress_test(args)
+        except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
+            parser.error(str(error))
+    if args.command == "paper":
+        try:
+            return _run_paper(args)
         except (FileNotFoundError, KeyError, ValueError, RuntimeError) as error:
             parser.error(str(error))
     parser.print_help()

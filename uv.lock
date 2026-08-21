@@ -39,6 +39,7 @@ analysis = [
 ]
 control = [
     { name = "cvxpy" },
+    { name = "highspy" },
     { name = "osqp" },
 ]
 dev = [
@@ -58,6 +59,7 @@ rl = [
 requires-dist = [
     { name = "cvxpy", marker = "extra == 'control'", specifier = ">=1.6,<2" },
     { name = "gymnasium", specifier = ">=1.0,<2" },
+    { name = "highspy", marker = "extra == 'control'", specifier = ">=1.8,<2" },
     { name = "joblib", marker = "extra == 'analysis'", specifier = ">=1.4,<2" },
     { name = "matplotlib", marker = "extra == 'analysis'", specifier = ">=3.9,<4" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.14,<2" },
