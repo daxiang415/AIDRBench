@@ -26,6 +26,7 @@ from matplotlib.axes import Axes
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.figure import Figure
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+from matplotlib.ticker import NullFormatter, StrMethodFormatter
 
 _COLORS = {
     "neutral": "#5B6065",
@@ -635,6 +636,8 @@ def plot_nature_mainline_figure2(
     if np.any(eligible <= 0) or np.any(spare <= 0):
         raise ValueError("notice-mechanism quantities must be strictly positive on a log axis")
     ax_d.set_xscale("log")
+    ax_d.xaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+    ax_d.xaxis.set_minor_formatter(NullFormatter())
     ax_d.set_yticks(
         y_positions,
         [f"H={int(value)} h" for value in _numeric(notice, "duration_h")],
