@@ -1,5 +1,5 @@
 {
-  "archetype": "asymmetric mixed-modality figure",
+  "archetype": "asymmetric quantitative figure",
   "backend": "python_matplotlib",
   "claim_boundaries": [
     "Sensitivity results are development PI planning bounds rather than causal certificates.",
@@ -11,18 +11,36 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 333048,
+      "bytes": 43746,
+      "format": "svg",
+      "path": "figure_5_robustness_generalization.svg",
+      "sha256": "586f37e7ad72e09f50ff3f82c1b0d66023e16b66da0e1a1575c308b609ad321f"
+    },
+    {
+      "bytes": 31102,
+      "format": "pdf",
+      "path": "figure_5_robustness_generalization.pdf",
+      "sha256": "a8491bae61fe701205df45e2f9736387fd7341ba9f8efabef6c659ae64f6a7e5"
+    },
+    {
+      "bytes": 1095426,
+      "format": "tiff",
+      "path": "figure_5_robustness_generalization.tiff",
+      "sha256": "09a39767882033bc63a9dcbc1534dc998cb9de0f3002bff10fa11ff422614e91"
+    },
+    {
+      "bytes": 221591,
       "format": "png",
       "path": "figure_5_robustness_generalization.png",
-      "sha256": "b70515b340560e58d26300654936f43882a64f7a875821234aab55b5b4ea76ea"
+      "sha256": "be0aac9931f5c434a21ac112b63e81c858cf2f7a649be15b4b864aa9f0cbc32f"
     }
   ],
   "physical_size_inches": [
     7.204724409448819,
-    7.0
+    4.9
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "340277f7e547d7e5acb65a0856c4e2713322a8c0c10fa87d20c8ef51a29ddfd6",
+  "source_data_manifest_sha256": "cb2a7f9180d3eee505c1c61fa20019e85638ae3002ae05d45823ba0cd75869b2",
   "source_tables": [
     "fig5_power_case_sensitivity",
     "fig5_workload_sensitivity",

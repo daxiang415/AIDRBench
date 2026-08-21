@@ -10,18 +10,36 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 237592,
+      "bytes": 47244,
+      "format": "svg",
+      "path": "figure_1_nominal_job_derived_gap.svg",
+      "sha256": "e0d987c81c58b41ffe4a3c5d336f9aaaafa372ab841d679183907b905f179bda"
+    },
+    {
+      "bytes": 34530,
+      "format": "pdf",
+      "path": "figure_1_nominal_job_derived_gap.pdf",
+      "sha256": "ac61ec8d2f6d68b68fa129b987299056f90b20aad7db9391c2070edf52b521c0"
+    },
+    {
+      "bytes": 1520826,
+      "format": "tiff",
+      "path": "figure_1_nominal_job_derived_gap.tiff",
+      "sha256": "420cbe01672eb299bbffc2f97b3aa77e24ecdffc44d26221e30e1f9d0252d0da"
+    },
+    {
+      "bytes": 239535,
       "format": "png",
       "path": "figure_1_nominal_job_derived_gap.png",
-      "sha256": "90aff40fde70a7f504dd3a28454b6d94b6965ddb034fed1d98ce78ba162c56a4"
+      "sha256": "32c49bc82207e528127b94b0e5b02e6665697458e9290a3856eea19f9c7ab2c6"
     }
   ],
   "physical_size_inches": [
     7.204724409448819,
-    4.55
+    5.25
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "340277f7e547d7e5acb65a0856c4e2713322a8c0c10fa87d20c8ef51a29ddfd6",
+  "source_data_manifest_sha256": "cb2a7f9180d3eee505c1c61fa20019e85638ae3002ae05d45823ba0cd75869b2",
   "source_tables": [
     "fig1_fig2_pi_firm_boundaries",
     "fig1_calibration_run_means"

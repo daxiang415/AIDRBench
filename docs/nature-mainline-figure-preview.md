@@ -1,12 +1,12 @@
-# Nature Communications mainline figure previews
+# Nature Communications reference-led mainline figure previews
 
-> **Status:** manuscript-review previews generated from the hash-verified Source Data bundle. These PNG files are for rapid review on GitHub; the reproducible PDF, SVG and 600-dpi TIFF exports remain release artifacts rather than tracked repository files.
+> **Status:** reference-led manuscript-review previews generated from the hash-verified Source Data bundle. These PNG files are for rapid review on GitHub; the reproducible PDF, SVG and 600-dpi TIFF exports remain release artifacts rather than tracked repository files.
 
-The figures below report planning bounds, causal certification and mechanism diagnostics under different evidentiary meanings. They should be interpreted together with the claim boundaries shown under each figure.
+The figures below use an asymmetric Nature Communications visual grammar: one dominant narrative or quantitative panel, compact supporting evidence, low-saturation colour, direct labels and explicit white space. They report planning bounds, causal certification and mechanism diagnostics under different evidentiary meanings and should be interpreted together with the claim boundaries shown under each figure.
 
 ## Figure 1 | Nominal flexibility versus the job-derived boundary
 
-![Figure 1: nominal flexibility, job-derived firm boundary, hardware calibration and evidence layers](figures/nature_mainline_v1/figure_1_nominal_job_derived_gap.png)
+![Figure 1: schematic-led nominal flexibility, job-derived scheduling, firm boundary, hardware anchor and evidence layers](figures/nature_mainline_v1/figure_1_nominal_job_derived_gap.png)
 
 **Main claim:** A fixed nominal flexibility fraction substantially overstates the job-derived firm boundary across all tested event durations.
 
@@ -30,7 +30,7 @@ The figures below report planning bounds, causal certification and mechanism dia
 
 ## Figure 4 | Community hosting capacity and resource interactions
 
-![Figure 4: hosting capacity gains and interactions among AI flexibility, PV and battery storage](figures/nature_mainline_v1/figure_4_hosting_capacity_interactions.png)
+![Figure 4: validation hosting-capacity dumbbell, independent paired gains and interactions among AI flexibility, PV and battery storage](figures/nature_mainline_v1/figure_4_hosting_capacity_interactions.png)
 
 **Main claim:** Workload flexibility increases simulated community hosting capacity, but its interaction with PV and battery storage is non-additive.
 
