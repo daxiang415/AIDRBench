@@ -470,6 +470,17 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     hosting_ensemble.add_argument("--specification", required=True)
     hosting_ensemble.add_argument("--workers", type=int, default=1)
     hosting_ensemble.add_argument("--output", required=True)
+    renewable_integration = commands.add_parser(
+        "renewable-integration",
+        help=(
+            "solve the preregistered fixed-DC PV-hosting envelope and "
+            "fixed-capacity PV-utilisation study"
+        ),
+    )
+    renewable_integration.add_argument("--scenarios", required=True)
+    renewable_integration.add_argument("--specification", required=True)
+    renewable_integration.add_argument("--workers", type=int, default=1)
+    renewable_integration.add_argument("--output", required=True)
 
 
 def _add_training_parsers(subparsers: Any) -> None:
@@ -1509,6 +1520,19 @@ def _run_optimization(args: argparse.Namespace) -> int:
         from aidrbench.evaluation.hosting_ensemble import compute_hosting_ensemble
 
         summary = compute_hosting_ensemble(
+            args.scenarios,
+            specification_path=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "renewable-integration":
+        from aidrbench.evaluation.renewable_ensemble import (
+            compute_renewable_integration_ensemble,
+        )
+
+        summary = compute_renewable_integration_ensemble(
             args.scenarios,
             specification_path=args.specification,
             output_directory=args.output,

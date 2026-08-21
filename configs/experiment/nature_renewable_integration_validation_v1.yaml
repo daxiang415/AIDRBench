@@ -1,0 +1,39 @@
+schema_version: 1
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+dataset_role: validation_renewable_replication
+independent_unit: frozen_scenario
+expected_scenario_count: 100
+expected_episode_seed_range: [20000, 20099]
+
+portfolio:
+  path: configs/community/pv_bess.yaml
+  sha256: e4bc9dead9494906e3ab042cf2b653022e1e73e97e04468831ee273000d56d04
+
+solver:
+  name: HIGHS
+  threads_per_process: 1
+  bess_dispatch_mode: milp_exclusive
+
+pv_hosting:
+  envelope_dc_scales: [0.5, 1.0, 2.0, 3.0]
+  headline_max_curtailment_fraction: 0.05
+  sensitivity_max_curtailment_fractions: [0.0, 0.10, 0.20]
+  fixed_comparison_dc_scale: 1.0
+
+fixed_capacity_operation:
+  dc_scale_of_reference_mix: 1.0
+  pv_rated_kw: 500.0
+  near_pcc_limit_fraction: 0.95
+  lexicographic_tolerance_kwh: 0.00001
+
+paired_inference:
+  confidence_level: 0.95
+  familywise_method: bonferroni
+  hosting_planned_contrast_count: 2
+  operation_planned_contrast_count: 10
+  bootstrap_resamples: 10000
+  bootstrap_seed: 260823
+
+capacity_aggregation:
+  headline: simultaneous_scenario_feasible_minimum
+  descriptive_quantiles: [0.05, 0.50, 0.95]

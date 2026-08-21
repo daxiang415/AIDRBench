@@ -1,0 +1,98 @@
+schema_version: 1
+protocol_id: aidrbench_nature_renewable_integration_consequence_v1
+status: analysis_plan_fixed_during_development_before_validation
+registered_at: "2026-08-21T21:20:00+09:00"
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+reinforcement_learning_used: false
+locked_id_or_ood_permitted: false
+
+scientific_role:
+  primary_question: actual_reliable_repeatable_ai_data_centre_demand_response
+  downstream_system_consequence:
+    - curtailment_constrained_community_pv_hosting_capacity
+    - fixed_capacity_pv_utilisation_and_curtailment
+  relationship_to_existing_hosting_analysis: orthogonal_slice_of_joint_dc_pv_feasible_set
+
+evidence_scope:
+  optimization_layer: perfect_information_renewable_planning_bound
+  independent_unit: frozen_scenario
+  development:
+    scenario_path: results/nature_mainline/development_v2_nominal
+    seed_range: [10000, 10099]
+    scenario_count: 100
+    specification:
+      path: configs/experiment/nature_renewable_integration_development_v1.yaml
+      normalized_sha256: ca2204e39cd612cb4619add758acb9a771e70da3c5397011d66670750ecffc04
+  validation:
+    scenario_path: results/nature_mainline/validation_nominal
+    seed_range: [20000, 20099]
+    scenario_count: 100
+    specification:
+      path: configs/experiment/nature_renewable_integration_validation_v1.yaml
+      normalized_sha256: 454a9f77b47ad31ca94c9433ac09b386c64b259872a273757c41be03eff10895
+  portfolio:
+    path: configs/community/pv_bess.yaml
+    sha256: e4bc9dead9494906e3ab042cf2b653022e1e73e97e04468831ee273000d56d04
+
+pv_hosting_design:
+  estimand: maximum_pv_nameplate_kw_subject_to_curtailment_and_service_constraints
+  headline_maximum_curtailment_fraction: 0.05
+  sensitivity_maximum_curtailment_fractions: [0.0, 0.10, 0.20]
+  dc_scales_of_reference_mix: [0.5, 1.0, 2.0, 3.0]
+  fixed_paired_comparison_dc_scale: 1.0
+  conditions:
+    dc_operation: [rigid, flexible]
+    bess_enabled: [false, true]
+  headline_aggregation: simultaneous_scenario_feasible_minimum
+
+fixed_capacity_operation_design:
+  dc_scale_of_reference_mix: 1.0
+  pv_rated_kw: 500.0
+  conditions:
+    dc_operation: [rigid, flexible]
+    bess_enabled: [false, true]
+  lexicographic_objectives:
+    - maximize_pv_used_energy
+    - minimize_grid_import_energy_within_pv_tolerance
+    - minimize_bess_throughput_within_grid_import_tolerance
+  metrics:
+    - pv_available_kwh
+    - pv_used_kwh
+    - pv_curtailed_kwh
+    - pv_utilisation_fraction
+    - renewable_demand_share
+    - grid_import_kwh
+    - maximum_pcc_import_kw
+    - hours_near_pcc_limit
+    - bess_charge_and_discharge_throughput_kwh
+    - deadline_miss_fraction
+    - terminal_backlog_fraction
+
+physical_constraints:
+  pcc_import_upper_bound: frozen_scenario_pcc_capacity
+  reverse_power_flow: prohibited
+  workload_model: class_aware_gpu_hour_conservation_with_release_and_deadline
+  service_thresholds: frozen_model_a_reward_specification
+  bess_dispatch: milp_exclusive_charge_or_discharge
+  bess_terminal_soc: fixed_to_declared_fraction
+  solver: HIGHS
+  threads_per_process: 1
+
+paired_inference:
+  confidence_level: 0.95
+  familywise_method: bonferroni
+  pv_hosting_planned_contrast_count: 2
+  fixed_operation_planned_contrast_count: 10
+  bootstrap_resamples: 10000
+  development_bootstrap_seed: 260822
+  validation_bootstrap_seed: 260823
+
+interpretation_guardrails:
+  - development_may_describe_mechanism_but_not_independent_replication
+  - validation_uses_identical_dc_pv_bess_conditions_without_reselection
+  - planning_bounds_are_not_deployed_causal_effects
+  - a_single_event_locked_certificate_is_not_a_renewable_integration_certificate
+  - pv_used_must_be_reported_with_renewable_demand_share_and_grid_import
+  - infeasible_joint_envelope_points_remain_missing_not_zero
+  - no_locked_id_or_locked_ood_data_may_be_read
+  - existing_fixed_pv_maximum_dc_results_are_retained_as_an_orthogonal_slice
