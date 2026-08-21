@@ -192,7 +192,16 @@ def _format_outputs(
     for extension in normalized:
         path = output_directory / f"{stem}.{extension}"
         dpi = 600 if extension == "tiff" else 300
-        figure.savefig(path, dpi=dpi, metadata={"Creator": "AIDRBench"})
+        if extension in {"svg", "pdf"}:
+            figure.savefig(path, dpi=dpi, metadata={"Creator": "AIDRBench"})
+        elif extension == "tiff":
+            figure.savefig(
+                path,
+                dpi=dpi,
+                pil_kwargs={"compression": "tiff_lzw"},
+            )
+        else:
+            figure.savefig(path, dpi=dpi)
         records.append(
             {
                 "format": extension,

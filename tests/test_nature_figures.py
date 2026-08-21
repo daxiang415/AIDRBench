@@ -379,3 +379,21 @@ def test_plot_nature_mainline_figure2_rejects_source_hash_mismatch(
             tmp_path / "figures",
             formats=("svg",),
         )
+
+
+def test_plot_nature_mainline_figure2_writes_all_submission_formats(
+    tmp_path: Path,
+) -> None:
+    source_data = tmp_path / "source_data"
+    _write_bundle(source_data)
+
+    result = plot_nature_mainline_figure2(
+        source_data,
+        tmp_path / "figures",
+        formats=("svg", "pdf", "tiff", "png"),
+    )
+
+    outputs = {str(item["format"]): Path(str(item["path"])) for item in result["outputs"]}
+    assert set(outputs) == {"svg", "pdf", "tiff", "png"}
+    assert all(path.stat().st_size > 10_000 for path in outputs.values())
+    assert outputs["tiff"].stat().st_size < 10_000_000
