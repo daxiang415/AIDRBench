@@ -1,0 +1,29 @@
+{
+  "archetype": "schematic-led composite",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "PI is a perfect-information planning upper bound, not an independently certified capacity.",
+    "The four-GPU measurements anchor class-aware board power; they do not directly represent a megawatt-scale data centre."
+  ],
+  "core_conclusion": "A fixed nominal flexibility fraction substantially overstates the job-derived firm boundary across all tested event durations.",
+  "figure": 1,
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 237592,
+      "format": "png",
+      "path": "figure_1_nominal_job_derived_gap.png",
+      "sha256": "90aff40fde70a7f504dd3a28454b6d94b6965ddb034fed1d98ce78ba162c56a4"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    4.55
+  ],
+  "schema_version": "aidrbench.nature_figure_manifest.v1",
+  "source_data_manifest_sha256": "340277f7e547d7e5acb65a0856c4e2713322a8c0c10fa87d20c8ef51a29ddfd6",
+  "source_tables": [
+    "fig1_fig2_pi_firm_boundaries",
+    "fig1_calibration_run_means"
+  ]
+}

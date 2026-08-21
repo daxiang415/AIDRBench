@@ -1,0 +1,65 @@
+{
+  "figures": [
+    {
+      "figure": 1,
+      "manifest": "figure_1_manifest.json",
+      "outputs": [
+        {
+          "bytes": 237592,
+          "format": "png",
+          "path": "figure_1_nominal_job_derived_gap.png",
+          "sha256": "90aff40fde70a7f504dd3a28454b6d94b6965ddb034fed1d98ce78ba162c56a4"
+        }
+      ]
+    },
+    {
+      "figure": 2,
+      "manifest": "figure_2_manifest.json",
+      "outputs": [
+        {
+          "bytes": 302037,
+          "format": "png",
+          "path": "figure_2_duration_reliability_notice.png",
+          "sha256": "ca9787451ba752f0cd3778a10f60be4e6b5aa175250da38fe1ae3af825df085e"
+        }
+      ]
+    },
+    {
+      "figure": 3,
+      "manifest": "figure_3_manifest.json",
+      "outputs": [
+        {
+          "bytes": 270703,
+          "format": "png",
+          "path": "figure_3_compute_debt_exhaustion.png",
+          "sha256": "31862835a9319dc449db38e4a2827112ce0029ff619261d9ec236b361e8c9732"
+        }
+      ]
+    },
+    {
+      "figure": 4,
+      "manifest": "figure_4_manifest.json",
+      "outputs": [
+        {
+          "bytes": 252713,
+          "format": "png",
+          "path": "figure_4_hosting_capacity_interactions.png",
+          "sha256": "bc3b01ebc151d4d337267416d9262fa1fa9fd33c18df48d9c487fd9da95227f7"
+        }
+      ]
+    },
+    {
+      "figure": 5,
+      "manifest": "figure_5_manifest.json",
+      "outputs": [
+        {
+          "bytes": 333048,
+          "format": "png",
+          "path": "figure_5_robustness_generalization.png",
+          "sha256": "b70515b340560e58d26300654936f43882a64f7a875821234aab55b5b4ea76ea"
+        }
+      ]
+    }
+  ],
+  "schema_version": "aidrbench.nature_figure_bundle.v1"
+}

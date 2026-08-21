@@ -3,7 +3,7 @@
 > **文档定位**：本文件定义 AIDRBench 面向 *Nature Communications* 的主论文科学主线。它是系统与机制研究方案，不是控制算法论文，也不是强化学习 benchmark 论文。
 > **核心原则**：先建立物理与统计意义上的灵活性边界，再解释计算债务、恢复反弹和社区接入价值；PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
 
-论文 Source Data 与 Figure 1–5 的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
+论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
 
 ---
 

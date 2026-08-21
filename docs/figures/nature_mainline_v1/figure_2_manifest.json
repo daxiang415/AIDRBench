@@ -1,0 +1,32 @@
+{
+  "archetype": "quantitative grid",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "PI tolerance, restricted NA and locked-ID causal layers have different statistical interpretations.",
+    "Certification is interval-wise rather than simultaneous over the complete surface.",
+    "The q=0.95 H=1 candidate remains visibly not certified."
+  ],
+  "core_conclusion": "Duration and reliability shape firm capacity, whereas advance notice alters available scheduling information but produces zero capacity gain under Model A.",
+  "figure": 2,
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 302037,
+      "format": "png",
+      "path": "figure_2_duration_reliability_notice.png",
+      "sha256": "ca9787451ba752f0cd3778a10f60be4e6b5aa175250da38fe1ae3af825df085e"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    5.2
+  ],
+  "schema_version": "aidrbench.nature_figure_manifest.v1",
+  "source_data_manifest_sha256": "340277f7e547d7e5acb65a0856c4e2713322a8c0c10fa87d20c8ef51a29ddfd6",
+  "source_tables": [
+    "fig1_fig2_pi_firm_boundaries",
+    "fig2_restricted_na_surface",
+    "fig2_notice_mechanism_diagnostics",
+    "fig2_fig5_locked_id_certificates"
+  ]
+}

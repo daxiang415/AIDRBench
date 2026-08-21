@@ -1,0 +1,29 @@
+{
+  "archetype": "quantitative grid",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "The repeated-event study is a fixed-capacity mechanism diagnostic, not a repeated-event firm-capacity certificate.",
+    "Recovery gaps help only when the intervening schedule contains sufficient compute headroom."
+  ],
+  "core_conclusion": "Repeated dispatch accumulates compute debt and joint service risk before the instantaneous power-delivery ratio materially collapses.",
+  "figure": 3,
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 270703,
+      "format": "png",
+      "path": "figure_3_compute_debt_exhaustion.png",
+      "sha256": "31862835a9319dc449db38e4a2827112ce0029ff619261d9ec236b361e8c9732"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    4.75
+  ],
+  "schema_version": "aidrbench.nature_figure_manifest.v1",
+  "source_data_manifest_sha256": "340277f7e547d7e5acb65a0856c4e2713322a8c0c10fa87d20c8ef51a29ddfd6",
+  "source_tables": [
+    "fig3_exhaustion_event_summary",
+    "fig3_exhaustion_joint_episode_summary"
+  ]
+}
