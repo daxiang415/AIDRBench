@@ -558,15 +558,21 @@ def _pv_hosting_summary(
         "dc_operation",
         "bess_enabled",
         "dc_scale_of_reference_mix",
-        "target_dc_peak_kw",
         "maximum_pv_curtailment_fraction",
     ]
+    reference_peaks = rows["reference_mix_operating_peak_kw"].dropna().astype(float).unique()
+    if len(reference_peaks) != 1:
+        raise ValueError("renewable ensemble must use one reference-mix operating peak")
+    reference_peak_kw = float(reference_peaks[0])
     summaries: list[dict[str, Any]] = []
     for raw_key, selected in rows.groupby(group_columns, sort=True, dropna=False):
         key = cast(tuple[Any, ...], raw_key)
         feasible = selected[selected["status"].isin(["optimal", "optimal_inaccurate"])]
         values = feasible["pv_rated_kw"].astype(float)
         row = dict(zip(group_columns, key, strict=True))
+        row["target_dc_peak_kw"] = (
+            float(row["dc_scale_of_reference_mix"]) * reference_peak_kw
+        )
         row.update(
             {
                 "scenario_count": len(selected),
