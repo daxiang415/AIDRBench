@@ -183,6 +183,74 @@ def _hosting_contrast_records() -> list[dict[str, object]]:
     return records
 
 
+def _pv_hosting_records() -> list[dict[str, object]]:
+    records: list[dict[str, object]] = []
+    for split in ("development", "validation"):
+        split_offset = 20.0 if split == "validation" else 0.0
+        for scale in (0.5, 1.0, 2.0, 3.0):
+            for operation in ("rigid", "flexible"):
+                for bess in (False, True):
+                    firm = not (scale >= 2.0 and operation == "rigid" and not bess)
+                    value = (
+                        300.0
+                        + 175.0 * scale
+                        + 55.0 * (operation == "flexible")
+                        + 45.0 * bess
+                        + split_offset
+                    )
+                    records.append(
+                        {
+                            "evaluation_split": split,
+                            "analysis_variant": "headline_pv_hosting_envelope",
+                            "dc_operation": operation,
+                            "bess_enabled": bess,
+                            "dc_scale_of_reference_mix": scale,
+                            "target_dc_peak_kw": 201.0 * scale,
+                            "all_scenarios_feasible": firm,
+                            "feasible_scenario_count": 100 if firm else 88,
+                            "simultaneous_feasible_pv_hosting_kw": value if firm else float("nan"),
+                            "minimum_scenario_pv_hosting_kw": value,
+                        }
+                    )
+    return records
+
+
+def _pv_hosting_gain_records() -> list[dict[str, object]]:
+    return [
+        {
+            "evaluation_split": split,
+            "conditioning_level": str(bess),
+            "estimate_mean": 48.0 - 5.0 * bess + (2.0 if split == "validation" else 0.0),
+            "simultaneous_ci_lower": 40.0 - 5.0 * bess,
+            "simultaneous_ci_upper": 56.0 - 5.0 * bess,
+        }
+        for split in ("development", "validation")
+        for bess in (False, True)
+    ]
+
+
+def _pv_operation_contrast_records() -> list[dict[str, object]]:
+    values = {
+        "total_pv_curtailed_kwh": (-190.0, -90.0),
+        "pv_utilisation_fraction": (0.0075, 0.0035),
+        "total_grid_import_kwh": (-345.0, -260.0),
+    }
+    return [
+        {
+            "evaluation_split": split,
+            "conditioning_level": str(bess),
+            "metric": metric,
+            "estimate_mean": estimate
+            + (5.0 if split == "validation" and abs(estimate) > 1 else 0.0),
+            "simultaneous_ci_lower": estimate - abs(estimate) * 0.25 - 0.001,
+            "simultaneous_ci_upper": estimate + abs(estimate) * 0.25 + 0.001,
+        }
+        for split in ("development", "validation")
+        for metric, estimates in values.items()
+        for bess, estimate in zip((False, True), estimates, strict=True)
+    ]
+
+
 def _write_bundle(root: Path) -> None:
     root.mkdir()
     records: list[dict[str, object]] = []
@@ -258,6 +326,17 @@ def _write_bundle(root: Path) -> None:
     records.append(_write_table(root, "fig3_exhaustion_joint_episode_summary", _joint_records()))
     records.append(_write_table(root, "fig4_hosting_capacity_summary", _hosting_summary_records()))
     records.append(_write_table(root, "fig4_hosting_paired_contrasts", _hosting_contrast_records()))
+    records.append(_write_table(root, "fig4_pv_hosting_summary", _pv_hosting_records()))
+    records.append(
+        _write_table(root, "fig4_pv_hosting_contrasts", _pv_hosting_gain_records())
+    )
+    records.append(
+        _write_table(
+            root,
+            "fig4_pv_operation_contrasts",
+            _pv_operation_contrast_records(),
+        )
+    )
     records.append(
         _write_table(
             root,

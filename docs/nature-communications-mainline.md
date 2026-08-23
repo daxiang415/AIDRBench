@@ -427,6 +427,59 @@ independent replication of a planning bound, not a locked or deployed causal
 hosting-capacity certificate. The complete receipt is
 `data/manifests/nature_mainline_validation_hosting_results_v1.yaml`.
 
+That fixed-PV/max-DC result is retained as one slice of the joint feasible set,
+but it cannot by itself answer the downstream renewable-integration question.
+The complementary analysis fixes data-centre scale and either maximizes
+curtailment-constrained PV nameplate capacity or evaluates a fixed PV
+installation. Its design is frozen in
+`data/manifests/nature_renewable_integration_protocol_v1.yaml`:
+
+```bash
+python -m aidrbench optimize renewable-integration \
+  --scenarios results/nature_mainline/development_v2_nominal \
+  --specification configs/experiment/nature_renewable_integration_development_v1.yaml \
+  --workers 32 \
+  --output results/nature_mainline/renewable_integration_development_v1
+
+python -m aidrbench optimize renewable-integration \
+  --scenarios results/nature_mainline/validation_nominal \
+  --specification configs/experiment/nature_renewable_integration_validation_v1.yaml \
+  --workers 32 \
+  --output results/nature_mainline/renewable_integration_validation_v1
+```
+
+The headline PV-hosting definition limits curtailment to 5% of available PV
+energy; 0%, 10% and 20% are fixed sensitivity levels. The joint envelope uses
+0.5×, 1×, 2× and 3× the reference data-centre mix. The orthogonal operating
+analysis fixes a 1× data centre and 500 kW PV, then maximizes local PV use,
+minimizes grid imports and minimizes battery throughput lexicographically.
+Battery charge and discharge are mutually exclusive MILP states, so storage
+losses cannot be used as an artificial PV sink. Every output remains a
+perfect-information renewable-planning bound, not a causal certificate; no
+locked-ID or locked-OOD scenario is read.
+
+Both preregistered ensembles are complete. At 1× reference data-centre scale
+and a 5% curtailment ceiling, the independent validation simultaneous PV
+capacity increased from 584.69 to 617.52 kW without BESS and from 653.39 to
+686.77 kW with BESS. The paired mean workload-flexibility gains were 44.85 kW
+(Bonferroni 95% simultaneous CI 41.68--48.08 kW) and 43.20 kW
+(39.99--46.46 kW), respectively. At 3× scale both flexible conditions remained
+feasible in 100/100 scenarios, whereas rigid operation was feasible in only
+31/100 scenarios without BESS and 96/100 with BESS; those partially feasible
+cells remain missing simultaneous-boundary values rather than zero-capacity
+observations.
+
+At fixed 1× data-centre scale and 500 kW PV, the validation PV-use gain was
+18.37 kWh (3.73--40.03 kWh) without BESS and 5.76 kWh
+(0.000003--15.86 kWh) with BESS. The corresponding PV-utilisation changes were
+0.0720 and 0.0227 percentage points. Thus the direction replicated, but the
+operating effect was small and nearly null at the lower simultaneous bound
+with BESS. Flexible schedules used the declared 1% deadline-miss budget, and
+the analysis did not establish a general PCC-peak reduction; PV use, grid
+energy, capacity and service costs therefore remain separate outcomes. The
+post-run integrity and hash receipt is
+`data/manifests/nature_renewable_integration_results_v1.yaml`.
+
 Without `--require-execution-ready`, `protocol-check` validates only the
 committed preregistration structure and is therefore suitable for a clean CI
 checkout. Formal data-server runs must use the flag so missing/hash-mismatched

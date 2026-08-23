@@ -316,6 +316,159 @@ tables:
       - hosting_status
     sort_by: [evaluation_split, episode_seed, pv_enabled, bess_enabled, dc_operation]
 
+  - table_id: fig4_pv_hosting_summary
+    figures: [4]
+    panels: [a, b]
+    output: fig4_pv_hosting_summary.csv
+    inputs:
+      - path: results/nature_mainline/renewable_integration_development_v1/pv_hosting_summary.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/renewable_integration_validation_v1/pv_hosting_summary.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - analysis_variant
+      - dc_operation
+      - bess_enabled
+      - dc_scale_of_reference_mix
+      - target_dc_peak_kw
+      - maximum_pv_curtailment_fraction
+      - scenario_count
+      - feasible_scenario_count
+      - all_scenarios_feasible
+      - simultaneous_feasible_pv_hosting_kw
+      - mean_scenario_pv_hosting_kw
+      - minimum_scenario_pv_hosting_kw
+      - maximum_scenario_pv_hosting_kw
+      - q05_scenario_pv_hosting_kw
+      - q50_scenario_pv_hosting_kw
+      - q95_scenario_pv_hosting_kw
+    sort_by: [evaluation_split, analysis_variant, maximum_pv_curtailment_fraction, dc_scale_of_reference_mix, bess_enabled, dc_operation]
+
+  - table_id: fig4_pv_hosting_contrasts
+    figures: [4]
+    panels: [b]
+    output: fig4_pv_hosting_contrasts.csv
+    inputs:
+      - path: results/nature_mainline/renewable_integration_development_v1/pv_hosting_contrasts.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/renewable_integration_validation_v1/pv_hosting_contrasts.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - contrast
+      - conditioning_axis
+      - conditioning_level
+      - dc_scale_of_reference_mix
+      - maximum_pv_curtailment_fraction
+      - unit
+      - independent_unit
+      - scenario_count
+      - estimate_mean
+      - sample_standard_deviation
+      - simultaneous_ci_lower
+      - simultaneous_ci_upper
+      - familywise_confidence_level
+      - planned_contrast_count
+      - bootstrap_resamples
+    sort_by: [evaluation_split, conditioning_level]
+
+  - table_id: fig4_pv_operation_summary
+    figures: [4]
+    panels: [c]
+    output: fig4_pv_operation_summary.csv
+    inputs:
+      - path: results/nature_mainline/renewable_integration_development_v1/pv_operation_summary.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/renewable_integration_validation_v1/pv_operation_summary.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - dc_operation
+      - bess_enabled
+      - scenario_count
+      - metric
+      - mean
+      - minimum
+      - maximum
+      - q05
+      - q50
+      - q95
+    sort_by: [evaluation_split, metric, bess_enabled, dc_operation]
+
+  - table_id: fig4_pv_operation_contrasts
+    figures: [4]
+    panels: [c]
+    output: fig4_pv_operation_contrasts.csv
+    inputs:
+      - path: results/nature_mainline/renewable_integration_development_v1/pv_operation_contrasts.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/renewable_integration_validation_v1/pv_operation_contrasts.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - contrast
+      - conditioning_axis
+      - conditioning_level
+      - metric
+      - unit
+      - independent_unit
+      - scenario_count
+      - estimate_mean
+      - sample_standard_deviation
+      - simultaneous_ci_lower
+      - simultaneous_ci_upper
+      - familywise_confidence_level
+      - planned_contrast_count
+      - bootstrap_resamples
+    sort_by: [evaluation_split, metric, conditioning_level]
+
+  - table_id: fig4_renewable_scenario_results
+    figures: [4]
+    panels: [source_data]
+    output: fig4_renewable_scenario_results.csv
+    inputs:
+      - path: results/nature_mainline/renewable_integration_development_v1/scenario_renewable_integration.parquet
+        labels: {evaluation_split: development}
+      - path: results/nature_mainline/renewable_integration_validation_v1/scenario_renewable_integration.parquet
+        labels: {evaluation_split: validation}
+    columns:
+      - evaluation_split
+      - scenario_id
+      - scenario_hash
+      - episode_seed
+      - analysis_variant
+      - dc_operation
+      - bess_enabled
+      - dc_scale_of_reference_mix
+      - maximum_pv_curtailment_fraction
+      - status
+      - target_dc_peak_kw
+      - reference_mix_operating_peak_kw
+      - pcc_capacity_kw
+      - pv_rated_kw
+      - total_community_load_kwh
+      - total_dc_energy_kwh
+      - total_pv_available_kwh
+      - total_pv_used_kwh
+      - total_pv_curtailed_kwh
+      - pv_utilisation_fraction
+      - renewable_demand_share
+      - total_grid_import_kwh
+      - maximum_pcc_import_kw
+      - hours_near_pcc_limit
+      - near_pcc_limit_fraction
+      - total_bess_charge_kwh
+      - total_bess_discharge_kwh
+      - total_bess_throughput_kwh
+      - maximum_simultaneous_bess_charge_discharge_kw
+      - terminal_soc_deviation_kwh
+      - deadline_miss_gpu_h
+      - deadline_miss_fraction
+      - terminal_backlog_gpu_h
+      - terminal_backlog_fraction
+    sort_by: [evaluation_split, episode_seed, analysis_variant, maximum_pv_curtailment_fraction, dc_scale_of_reference_mix, bess_enabled, dc_operation]
+
   - table_id: fig5_power_case_sensitivity
     figures: [5]
     panels: [a]

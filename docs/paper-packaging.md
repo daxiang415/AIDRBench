@@ -22,9 +22,10 @@ identifiers, output path traversal, or label collisions. `source_data_manifest.j
 - the SHA-256, columns, and row count of every exported CSV;
 - the Git commit and whether the working tree was dirty during export.
 
-The current bundle includes development and independent validation exhaustion and hosting results,
-locked-ID and locked-OOD certificates at q={0.90, 0.95, 0.99}, and the predeclared power, workload,
-success-criterion, and infrastructure sensitivities.
+The current bundle includes development and independent validation exhaustion, joint DC–PV
+hosting, fixed-capacity PV-operation and the earlier fixed-PV/max-DC hosting results; locked-ID and
+locked-OOD certificates at q={0.90, 0.95, 0.99}; and the predeclared power, workload,
+success-criterion and infrastructure sensitivities.
 
 ## 2. Generate the five main figures
 
@@ -45,14 +46,17 @@ provided for rapid review.
 The production renderer uses a reference-led Nature Communications visual contract rather than an
 equal-sized dashboard grid:
 
+- every main figure is rendered at the journal's 180-mm double-column width;
+
 - Figure 1 is a schematic-led composite in which the nominal-to-job-derived mechanism is the hero
   panel and the quantitative gap, hardware anchor, and evidence hierarchy are subordinate;
 - Figure 2 gives most of the page width to the duration-dependent capacity layers, while reliability
   and notice diagnostics remain compact supporting panels;
 - Figure 3 makes compute-debt accumulation the dominant mechanism and pairs the development and
   validation service heatmaps below it;
-- Figure 4 uses a validation hosting-capacity dumbbell as the hero panel and keeps replication and
-  AI–DER interaction contrasts as supporting evidence;
+- Figure 4 uses the validation joint DC–PV hosting envelope as the hero panel, followed by the
+  fixed-201-kW PV-hosting gain, fixed-500-kW PV operation and the orthogonal AI–DER interaction
+  contrasts;
 - Figure 5 places the locked-ID versus locked-OOD generalization boundary across the full lower row,
   above compact predeclared sensitivity summaries.
 
@@ -87,6 +91,9 @@ same tagged commit.
 - The locked-ID q=0.95 H=1 candidate remains not certified and must stay visible.
 - Repeated-event results are fixed-capacity mechanism diagnostics, not repeated-event capacity
   certificates.
-- Hosting validation is an independent planning-result replication, not a real-world causal effect.
+- Renewable-integration and hosting validation are independent planning-result replications, not
+  real-world causal effects; partially feasible envelope cells are not zero-capacity points.
+- Fixed-PV energy benefits do not imply lower PCC peak, and the declared 1% flexible deadline-miss
+  budget remains visible.
 - Locked-OOD replays fixed validation-selected candidates. Zero certified OOD cells does not mean
   that OOD firm capacity is zero, because OOD capacity reselection was prohibited.

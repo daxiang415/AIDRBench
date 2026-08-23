@@ -28,13 +28,13 @@ The figures below use an asymmetric Nature Communications visual grammar: one do
 
 **Boundary:** This is a fixed-capacity mechanism diagnostic, not a repeated-event firm-capacity certificate.
 
-## Figure 4 | Community hosting capacity and resource interactions
+## Figure 4 | Firm demand response as a community renewable-integration resource
 
-![Figure 4: validation hosting-capacity dumbbell, independent paired gains and interactions among AI flexibility, PV and battery storage](figures/nature_mainline_v1/figure_4_hosting_capacity_interactions.png)
+![Figure 4: joint data-centre–PV hosting envelope, paired PV-hosting gains, fixed-capacity PV operation and interactions among workload flexibility, PV and battery storage](figures/nature_mainline_v1/figure_4_hosting_capacity_interactions.png)
 
-**Main claim:** Workload flexibility increases simulated community hosting capacity, but its interaction with PV and battery storage is non-additive.
+**Main claim:** Job-feasible workload flexibility expands the curtailment-constrained community DC–PV feasible set; its effect on utilisation of an already installed PV system is reported separately and may be profile- and storage-dependent.
 
-**Boundary:** These are planning-result ensembles rather than real-world causal effects. The AI–BESS substitution pattern replicates; the validation AI–PV interaction with BESS is directionally positive but practically indeterminate.
+**Boundary:** These are job-feasible planning ensembles rather than deployed causal effects. Partially feasible envelope cells are not zero-capacity points, fixed-PV energy effects do not imply lower PCC peak, and the allowed 1% flexible deadline-miss budget remains visible.
 
 ## Figure 5 | Sensitivity and out-of-distribution limits
 

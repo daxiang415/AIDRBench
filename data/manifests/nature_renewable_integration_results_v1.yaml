@@ -1,0 +1,173 @@
+schema_version: 1
+receipt_role: post_run_hash_receipt_not_preregistration
+evidence_scope: development_and_independent_validation_renewable_planning_result
+generated_at: "2026-08-23T02:42:08+09:00"
+model_a_git_commit: d03b44090b2c7ca6a5ae73bb2eb7a611f36a71e9
+reinforcement_learning_used: false
+locked_data_read: false
+
+interpretation_guardrails:
+  - renewable_results_are_perfect_information_planning_bounds_not_causal_certificates
+  - the_single_event_locked_certificate_is_not_transferred_to_the_pv_planner
+  - infeasible_joint_envelope_cells_are_missing_not_zero
+  - fixed_pv_energy_benefits_do_not_imply_a_lower_pcc_peak
+  - flexible_operation_uses_the_declared_one_percent_deadline_miss_budget
+  - community_or_workload_distribution_changes_require_local_revalidation
+
+preregistration:
+  protocol:
+    path: data/manifests/nature_renewable_integration_protocol_v1.yaml
+    sha256: 8e4d290cc4a7c36e11a7ef4bf46746c8622038172bb08e51ced81cf45c843e11
+  portfolio:
+    path: configs/community/pv_bess.yaml
+    sha256: e4bc9dead9494906e3ab042cf2b653022e1e73e97e04468831ee273000d56d04
+  development_specification:
+    path: configs/experiment/nature_renewable_integration_development_v1.yaml
+    sha256: b64fa0bce4955f617583150a8be84de498bf68036fff95e5c8b88817698064f7
+    normalized_sha256: ca2204e39cd612cb4619add758acb9a771e70da3c5397011d66670750ecffc04
+  validation_specification:
+    path: configs/experiment/nature_renewable_integration_validation_v1.yaml
+    sha256: 9583c10ce1b3da624ccb691453f0b80adf32ca18e45966a64299f814c2f26b57
+    normalized_sha256: 454a9f77b47ad31ca94c9433ac09b386c64b259872a273757c41be03eff10895
+  validation_scenario_receipt:
+    path: data/manifests/nature_mainline_validation_scenarios_v1.yaml
+    sha256: b891bb16cb667298e8c1b51b1f3680889e9a5b456645a0819489fa0f29462f6f
+
+execution:
+  development:
+    seed_range: [10000, 10099]
+    scenario_count: 100
+    raw_analysis_git_commit: 6d6f15b0ebd11d6007454161aa5e00b0b10744a1
+    summary_reaggregation_git_commit: c4e3499d14586be8b1114241c8944420e7d136cc
+    reaggregation_receipt:
+      path: results/nature_mainline/renewable_integration_development_v1/renewable_reaggregation.json
+      sha256: abc09ba57e886a8f9373de21e599d389b72c73849765bcd23ffde10e23736f8c
+  validation:
+    seed_range: [20000, 20099]
+    scenario_count: 100
+    analysis_git_commit: c4e3499d14586be8b1114241c8944420e7d136cc
+    run_state_sha256: 2d259aba66564ecb53fd235a937bda76ffe5204c0d786e5e462881c9d401742b
+
+design:
+  independent_unit: frozen_scenario
+  rows_per_scenario: 36
+  rows_per_split: 3600
+  headline_maximum_pv_curtailment_fraction: 0.05
+  sensitivity_maximum_pv_curtailment_fractions: [0.0, 0.10, 0.20]
+  dc_scales_of_reference_mix: [0.5, 1.0, 2.0, 3.0]
+  fixed_operation_dc_scale: 1.0
+  fixed_operation_pv_rated_kw: 500.0
+  familywise_method: bonferroni
+  bootstrap_resamples: 10000
+
+integrity_audit:
+  development:
+    partition_count: 100
+    row_count: 3600
+    optimal_rows: 3530
+    infeasible_rows: 70
+    maximum_simultaneous_bess_charge_discharge_kw: 1.6320278396527802e-07
+    maximum_absolute_terminal_soc_deviation_kwh: 0.0
+    maximum_curtailment_constraint_residual: 3.1722346971463367e-11
+    maximum_pcc_constraint_residual_kw: 1.0231815394945443e-11
+  validation:
+    partition_count: 100
+    row_count: 3600
+    optimal_rows: 3527
+    infeasible_rows: 73
+    maximum_simultaneous_bess_charge_discharge_kw: 2.1876254445499505e-07
+    maximum_absolute_terminal_soc_deviation_kwh: 0.0
+    maximum_curtailment_constraint_residual: 1.1868867000330852e-11
+    maximum_pcc_constraint_residual_kw: 2.5011104298755527e-12
+  numerical_interpretation: bess_exclusivity_and_physical_constraints_hold_within_solver_tolerance
+
+reproducibility_check:
+  resumed_scenario_count: 100
+  solved_scenario_count: 0
+  aggregate_artifacts_byte_identical: true
+
+headline_pv_hosting_at_one_x_dc_kw:
+  development:
+    no_bess:
+      rigid_simultaneous: 430.448294
+      flexible_simultaneous: 525.741229
+      paired_mean_gain: 45.664313
+      simultaneous_ci: [42.239079, 49.478897]
+    bess:
+      rigid_simultaneous: 482.654684
+      flexible_simultaneous: 585.913605
+      paired_mean_gain: 43.346290
+      simultaneous_ci: [39.758258, 47.317807]
+  validation:
+    no_bess:
+      rigid_simultaneous: 584.693635
+      flexible_simultaneous: 617.518963
+      paired_mean_gain: 44.854054
+      simultaneous_ci: [41.682148, 48.080847]
+    bess:
+      rigid_simultaneous: 653.391963
+      flexible_simultaneous: 686.768909
+      paired_mean_gain: 43.199029
+      simultaneous_ci: [39.987059, 46.464782]
+
+joint_envelope_feasibility_at_five_percent_curtailment:
+  development:
+    half_x: {rigid_no_bess: 100, flexible_no_bess: 100, rigid_bess: 100, flexible_bess: 100}
+    one_x: {rigid_no_bess: 100, flexible_no_bess: 100, rigid_bess: 100, flexible_bess: 100}
+    two_x: {rigid_no_bess: 95, flexible_no_bess: 100, rigid_bess: 96, flexible_bess: 100}
+    three_x: {rigid_no_bess: 57, flexible_no_bess: 93, rigid_bess: 89, flexible_bess: 100}
+  validation:
+    half_x: {rigid_no_bess: 100, flexible_no_bess: 100, rigid_bess: 100, flexible_bess: 100}
+    one_x: {rigid_no_bess: 100, flexible_no_bess: 100, rigid_bess: 100, flexible_bess: 100}
+    two_x: {rigid_no_bess: 100, flexible_no_bess: 100, rigid_bess: 100, flexible_bess: 100}
+    three_x: {rigid_no_bess: 31, flexible_no_bess: 100, rigid_bess: 96, flexible_bess: 100}
+
+fixed_500_kw_pv_flexible_minus_rigid:
+  development:
+    no_bess:
+      pv_used_kwh: {estimate: 182.687847, simultaneous_ci: [112.433420, 264.184458]}
+      pv_curtailed_kwh: {estimate: -182.687847, simultaneous_ci: [-259.247419, -114.509549]}
+      pv_utilisation_fraction: {estimate: 0.007335, simultaneous_ci: [0.004697, 0.010422]}
+      renewable_demand_share: {estimate: 0.002612, simultaneous_ci: [0.001728, 0.003593]}
+      grid_import_kwh: {estimate: -344.639377, simultaneous_ci: [-424.362914, -274.622992]}
+    bess:
+      pv_used_kwh: {estimate: 87.481422, simultaneous_ci: [42.219211, 141.285107]}
+      pv_curtailed_kwh: {estimate: -87.481422, simultaneous_ci: [-143.743695, -40.640130]}
+      pv_utilisation_fraction: {estimate: 0.003518, simultaneous_ci: [0.001683, 0.005809]}
+      renewable_demand_share: {estimate: 0.001505, simultaneous_ci: [0.000933, 0.002208]}
+      grid_import_kwh: {estimate: -260.421554, simultaneous_ci: [-319.345387, -211.815330]}
+  validation:
+    no_bess:
+      pv_used_kwh: {estimate: 18.366444, simultaneous_ci: [3.728551, 40.032326]}
+      pv_curtailed_kwh: {estimate: -18.366444, simultaneous_ci: [-40.642380, -3.844458]}
+      pv_utilisation_fraction: {estimate: 0.000720, simultaneous_ci: [0.000154, 0.001610]}
+      renewable_demand_share: {estimate: 0.000577, simultaneous_ci: [0.000409, 0.000828]}
+      grid_import_kwh: {estimate: -180.317970, simultaneous_ci: [-201.033000, -165.972211]}
+    bess:
+      pv_used_kwh: {estimate: 5.764986, simultaneous_ci: [0.000003, 15.855652]}
+      pv_curtailed_kwh: {estimate: -5.764986, simultaneous_ci: [-15.312060, -0.000003]}
+      pv_utilisation_fraction: {estimate: 0.000227, simultaneous_ci: [1.039564e-10, 0.000609]}
+      renewable_demand_share: {estimate: 0.000443, simultaneous_ci: [0.000371, 0.000563]}
+      grid_import_kwh: {estimate: -168.981354, simultaneous_ci: [-179.573000, -162.336190]}
+
+result_interpretation:
+  pv_hosting: positive_paired_gain_replicated_with_and_without_bess
+  joint_envelope: flexible_operation_is_the_only_operation_firmly_feasible_at_three_x_dc_in_validation
+  fixed_pv_operation: direction_replicates_but_validation_pv_use_gain_is_small_and_near_zero_with_bess
+  grid_import: reduction_is_not_attributed_only_to_rescheduling_because_flexible_solutions_use_the_one_percent_miss_budget
+  pcc_peak: no_general_peak_reduction_claim
+
+outputs:
+  development:
+    scenario_renewable_integration.parquet: 300c96b917bcc2bab33c35df6e74dc5cbf19b4f38e26a7e90dd53293ffbb47fd
+    pv_hosting_summary.parquet: aab401757dccdac603b31f3744f2bd466319823d438e7b172b8432deee0df095
+    pv_hosting_contrasts.parquet: f6d5a3c86987c784e59bd22009a08240555c902ed430b67ec6229d99aff18d4c
+    pv_operation_summary.parquet: fa1d0d44b88a911a19f3e54c633f82a3b4a178dad3ffa7b9e3ae7024fa2d5bb5
+    pv_operation_contrasts.parquet: e89deee2062b2efdaa6dc8bdffc80f1424acc4dcfa4cc5456c9d880b77d6661a
+  validation:
+    renewable_integration.json: 711f688408da120d8f898850ebd16d490a978d6ee7812b0bd2bf21d871e06aca
+    scenario_renewable_integration.parquet: b4e3cdca5be34b83b46b855da67352849ab45e83484180cc5edaf2334f6da209
+    pv_hosting_summary.parquet: 1a24d6dd3374fb5d60bf8000e7b408f119dfe63bbf8b8f93d01fc68b40e88f58
+    pv_hosting_contrasts.parquet: 1fb4765c36026d37a7f2d68c6cf7b33050ae88478b2b4fa49a448eb808f39a56
+    pv_operation_summary.parquet: 8281c972bd0b2be279a822312ed5986ca9a7600f95be4541eb8470f10f71602a
+    pv_operation_contrasts.parquet: 059ebcb844ab1334634867337ba2af36531d3190b4a8845a483cbe13f645b15d

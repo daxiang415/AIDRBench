@@ -1,7 +1,7 @@
-# AIDRBench：Nature Communications 主线研究方案
+# AIDRBench：Job-derived firm DR 与社区光伏系统价值
 
 > **文档定位**：本文件定义 AIDRBench 面向 *Nature Communications* 的主论文科学主线。它是系统与机制研究方案，不是控制算法论文，也不是强化学习 benchmark 论文。
-> **核心原则**：先建立物理与统计意义上的灵活性边界，再解释计算债务、恢复反弹和社区接入价值；PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
+> **核心原则**：全文只有一个主问题——AI 数据中心究竟能提供多少真实、可靠、可重复调用的需求响应；社区能够多安装和多利用多少光伏，是这部分 job-derived firm DR 的系统后果。PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
 
 论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
 
@@ -9,7 +9,7 @@
 
 ## 1. 一句话科学命题
 
-**AI 数据中心的可移位负荷并不等于可向电网承诺的可靠灵活性。真正可交付的灵活性取决于任务期限、事件持续时间、提前通知、未来信息、既往调度历史以及恢复阶段产生的计算债务和功率反弹。**
+**AI 数据中心需求响应是一种受任务约束的有限资源；任务期限、可靠性要求和计算债务决定 firm DR capacity，而剩余的真实柔性进一步决定社区能够容纳并有效利用多少光伏。**
 
 论文要回答的不是：
 
@@ -17,7 +17,19 @@
 
 而是：
 
-> AI 工作负荷中名义上“可以延迟”的部分，到底有多少能够在服务质量、恢复和可靠性约束下转化为真实的电网资源；这种资源为何会随持续时间和连续调用而衰减；它能为社区电网和数据中心接入带来多大价值？
+> AI 工作负荷中名义上“可以延迟”的部分，到底有多少能够在服务质量、恢复和可靠性约束下转化为真实的电网资源；这种资源为何会随持续时间和连续调用而衰减；经过这些筛选后，它能否扩大社区的 DC–PV 联合接入边界、提高已安装光伏的利用并减少弃光？
+
+全文的因果链固定为：
+
+\[
+\text{deferrable AI jobs}
+\rightarrow
+\text{job-derived firm DR}
+\rightarrow
+\text{duration/reliability/debt limits}
+\rightarrow
+\text{community PV hosting and utilisation value}.
+\]
 
 ---
 
@@ -85,7 +97,11 @@ AIDRBench 的贡献应围绕这些缺口展开，而不是围绕算法排名展�
 
 ---
 
-## 4. 核心科学问题与假设
+## 4. 一个主问题及其系统后果
+
+### 主问题：AI 数据中心实际能够提供多少 firm DR？
+
+下列 Q1–Q3 不是三条并列研究主线，而是同一主问题的容量折损、状态依赖和重复调用机制。
 
 ### Q1. 名义可移负荷会高估多少可靠灵活性？
 
@@ -127,21 +143,29 @@ F_q(H,N).
 \text{rebound}.
 \]
 
-### Q4. AI 柔性能够增加多少数据中心接入容量？
+### 系统后果：firm DR 如何改变社区光伏接入与利用？
 
-**假设 H4**：在同一 PCC 或变压器容量下，柔性 AI 负荷可以提高可接入数据中心规模，但增益取决于社区峰值形态、光伏、储能和 deadline 分布。
+### Q4a. 在固定数据中心容量下，社区能够多安装多少光伏？
 
-### Q5. AI 柔性与 PV/BESS 是互补还是替代？
+**假设 H4a**：在相同 PCC、数据中心规模和服务约束下，workload-flexible 运行能够提高弃光约束下的 PV hosting capacity；该增益取决于社区负荷、PV 时序、BESS 和 deadline 分布。
 
-**假设 H5**：
+### Q4b. 在固定光伏装机下，社区能够多利用多少光伏？
+
+**假设 H4b**：在相同数据中心、PV、BESS、community profile 和 workload arrivals 下，workload-flexible 运行能够增加本地 PV 使用并减少弃光；但因数据中心同时增加总需求，grid-import energy 和 renewable demand share 必须单独报告，不能由“PV used 增加”直接推断。
+
+### Q4c. AI 柔性与 PV/BESS 是互补还是替代？
+
+**假设 H4c**：
 
 - AI 柔性与 PV 在部分场景中互补，因为任务可在光伏富余时提前执行；
 - AI 柔性与短时 BESS 可能部分替代，因为二者均可覆盖短峰值；
 - 在长持续时间事件或恢复约束下，AI 柔性与 BESS 可能再次表现为互补。
 
-### Q6. 硬件和工作负荷不确定性是否改变机制结论？
+固定 500 kW PV 时最大化 DC capacity 的既有 2 × 2 × 2 结果不删除；它与固定 DC 时最大化 PV capacity 的新结果是同一 joint DC–PV feasible set 的两个正交切片。
 
-**假设 H6**：硬件功率参数会显著改变绝对 kW 和接入容量，但“名义灵活性高估、持续时间效应和计算债务耗尽”这些机制结论应在合理不确定性范围内保持稳定。
+### Q5. 硬件和工作负荷不确定性是否改变机制结论？
+
+**假设 H5**：硬件功率参数会显著改变绝对 kW 和接入容量，但“名义灵活性高估、持续时间效应和计算债务耗尽”这些机制结论应在合理不确定性范围内保持稳定。若 firm DR 不能迁移到新的社区 profile 与任务分布，其 PV hosting/utilisation benefit 也不得直接迁移。
 
 ---
 
@@ -608,100 +632,143 @@ H=8 的 1.14 MWh。四事件 joint success 为 0.00–0.97；只有 H=4、gap=8 
 
 ---
 
-## Result 4 — AI 柔性增加社区数据中心接入容量并改变分布式能源价值
+## Result 4 — Firm demand response expands community photovoltaic hosting and utilisation
 
-### 科学问题
+### 科学问题与证据逻辑
 
-在同一 PCC 容量下，任务柔性能够使社区多接入多少 AI 数据中心？
+经过任务约束、可靠性和重复调用检验后，剩余的数据中心柔性对社区可再生能源
+系统有什么价值？本节只回答两个相互衔接的后果：
 
-### 核心 2 × 2 × 2 设计
+1. **规划后果**：在固定 DC、PCC 和 BESS 下，社区能够多安装多少具有实际利用
+   价值的 PV；
+2. **运行后果**：在固定 DC 和 PV 装机下，社区能够多使用多少 PV、少弃多少光，
+   并怎样改变购电、PCC 峰值和可再生能源占比。
 
-| 组合维度 | 水平 1 | 水平 2 |
-|---|---|---|
-| 数据中心 | rigid | workload-flexible |
-| 光伏 | without PV | with PV |
-| 储能 | without BESS | with BESS |
+这不是另起一条 PV benchmark 主线。所有 renewable-integration 结果都由同一
+job-derived workload/service model 推导，是 DR 主问题的下游系统后果。
 
-对每个组合求：
+### Result 4.1 — 弃光约束下的 PV 接入容量
 
-\[
-C_{\mathrm{DC,max}}.
-\]
-
-并报告：
+在给定 DC scale 与 BESS 条件下定义：
 
 \[
-\Delta C_{\mathrm{hosting}}
-=
-C_{\mathrm{flex}}-C_{\mathrm{rigid}},
+P_{\mathrm{PV,host}}(\epsilon)=
+\max P_{\mathrm{PV,rated}}
+\quad\text{s.t.}\quad
+\frac{E_{\mathrm{PV,curtailed}}}{E_{\mathrm{PV,available}}}\leq\epsilon.
 \]
+
+优化同时满足 PCC import 上限、禁止反向潮流、GPU-hour 守恒、deadline miss 与
+terminal backlog 阈值以及 BESS terminal SOC。Headline 固定
+\(\epsilon=5\%\)，并预声明 \(0\%\)、\(10\%\)、\(20\%\) 敏感性。Rigid 与
+flexible 使用完全相同的 arrivals 和 community profile，比较：
 
 \[
-M_{\mathrm{hosting}}
-=
-\frac{C_{\mathrm{flex}}}{C_{\mathrm{rigid}}}.
+\Delta P_{\mathrm{PV}}^{\mathrm{DR}}
+=P_{\mathrm{PV,host}}^{\mathrm{flexible}}
+-P_{\mathrm{PV,host}}^{\mathrm{rigid}}.
 \]
 
-独立统计单位是 frozen scenario，8 个 portfolio 是同一场景内的配对条件。
-每个场景分别求解后，共同可行的 headline hosting capacity 取场景最优值的
-最小值；该分解与共享一个 capacity scale 的联合优化完全等价。场景内的
-flexible–rigid 差值和 AI–DER difference-in-differences 使用 10,000 次确定性
-bootstrap，并对 8 个预声明 contrasts 构造 Bonferroni 95% family-wise
-simultaneous intervals。
+DC 取 reference mix 的 0.5、1、2、3 倍，形成四条 joint DC–PV hosting
+envelopes：rigid/flexible × BESS off/on。独立单位仍为 frozen scenario；共同
+可行 headline 是 100 个场景最优 PV capacity 的最小值，场景内
+flexible–rigid contrasts 使用预声明的 Bonferroni simultaneous intervals。
 
-### 当前 development 结果
+**Development 结果（100 scenarios）**：在 1× DC 下，5% 弃光 headline 的
+simultaneous PV capacity 为 430.45→525.74 kW（无 BESS）和
+482.65→585.91 kW（有 BESS）。相应的场景内 paired mean gains 为 45.66 kW
+（Bonferroni 95% simultaneous CI [42.24, 49.48]）和 43.35 kW
+（[39.76, 47.32]）。这两个 estimands 不可混用：前者是两个 ensemble minima
+的差，后者是先做场景内差值再取均值。
 
-100 个 frozen scenarios（而非 800 个 portfolio 行）构成独立样本。共同可行
-容量和同场景配对结果如下；这些是 development planning bounds，不是 locked
-certificate 或现实因果效应：
+**独立 validation 复现（100 scenarios）**：1× DC 的 simultaneous PV capacity
+为 584.69→617.52 kW（无 BESS）和 653.39→686.77 kW（有 BESS）；paired mean
+gains 分别为 44.85 kW（[41.68, 48.08]）和 43.20 kW
+（[39.99, 46.46]）。因此正的 PV-hosting gain 在两个 BESS strata 上独立复现，
+但绝对 simultaneous capacity 随 validation community profiles 改变，不能把
+development 的容量值直接迁移过去。
 
-| PV | BESS | rigid / kW | flexible / kW | simultaneous gain / kW |
-|---|---:|---:|---:|---:|
-| 无 | 无 | 202.15 | 429.72 | 227.57 |
-| 无 | 有 | 278.60 | 592.93 | 314.34 |
-| 有 | 无 | 212.44 | 451.60 | 239.16 |
-| 有 | 有 | 313.51 | 658.16 | 344.65 |
+联合边界也揭示了 feasibility transition：2× DC 时 flexible 的两个 BESS
+条件均为 100/100 可行，而 rigid 仅为 95/100 和 96/100；3× DC 时只有
+flexible+BESS 达到 100/100。部分可行条件只作为描述性 `n/100` 点，不报告
+simultaneous capacity。0/10/20% 弃光 sensitivity 均已保留，不能由 5%
+headline 代替。
 
-四个场景内平均 AI hosting gains 的 Bonferroni 95% simultaneous intervals
-均完全高于零。按预注册的 10.05 kW practical-equivalence margin，AI–BESS 在
-有/无 PV 条件下均表现为替代，AI–PV 在有/无 BESS 条件下均表现为互补。
-两组 development 主实验的精确数值、输入/输出 SHA-256 和复跑状态统一记录在
-[`data/manifests/nature_mainline_development_results_v1.yaml`](data/manifests/nature_mainline_development_results_v1.yaml)；
-该文件是 post-run receipt，不会反向修改预注册协议。
+Validation 的 transition 更清楚：0.5×、1× 和 2× 的四种运行条件均为
+100/100 可行；3× 时 flexible 在无/有 BESS 下仍为 100/100，而 rigid 仅为
+31/100 和 96/100。这里的 `31/100` 与 `96/100` 是部分可行计数，不是 0 kW
+capacity。3× validation simultaneous PV capacity 只对 flexible 条件定义，
+分别为 1,120.85 kW 和 1,190.87 kW。
 
-### 独立 validation 复现
+### Result 4.2 — 固定装机下的 PV 利用与弃光
 
-在不重新选择模型、portfolio 或统计规则的条件下，同一 2 × 2 × 2 分析已在
-100 个独立 validation scenarios（seeds 20000--20099）上完成，800/800 个
-优化均为 optimal，未读取 locked-ID/OOD。四个平均 paired AI hosting gains
-分别为 326.02、273.71、370.61 和 282.07 kW，其 Bonferroni 95%
-simultaneous intervals 均高于 0。AI–BESS 在两个 PV strata 中仍为 substitution。
-AI–PV 在无 BESS 时仍达到 practical complementarity；有 BESS 时估计为
-+8.36 kW，区间 [1.05, 15.74] kW 虽保留正方向，却跨过预声明的 10.05 kW
-practical margin，因此必须标为实际幅度不确定，而不能宣称强互补。
+固定 1× reference DC（约 201 kW）、500 kW PV、同一 BESS、community profile
+和 workload arrivals，只改变 rigid/flexible 调度。采用显式词典序目标：先最大化
+PV use，再最小化 grid import，最后最小化 BESS throughput；BESS 使用二进制
+互斥约束，禁止通过同时充放电人为消纳 PV。必须同时报告：
 
-该 validation 分析复现的是 planning result，不是 causal hosting certificate。
-预注册测试、所有容量、区间和输出哈希见
+- PV available、used 和 curtailed energy；
+- PV utilisation fraction 与 renewable demand share；
+- grid-import energy、maximum PCC import 和 near-limit hours；
+- BESS charge/discharge throughput；
+- deadline miss 与 terminal backlog。
+
+不能只凭 PV used 增加就声称可再生能源占比提高，因为数据中心本身也增加总需求。
+
+**Development 结果（固定 500 kW PV）**：平均 available PV 为约 27.40 MWh。
+无 BESS 时 flexible 相比 rigid 多使用 182.69 kWh、少弃 182.69 kWh，PV
+utilisation 增加 0.7335 percentage points，renewable demand share 增加
+0.2612 points，grid import 减少 344.64 kWh；有 BESS 时相应变化为
++87.48 kWh、−87.48 kWh、+0.3518 points、+0.1505 points 和 −260.42 kWh。
+10 个预声明 contrasts 的 simultaneous intervals 对上述五项方向均不跨零。
+
+**Validation 复现（固定 500 kW PV）**：无 BESS 时 flexible 多使用 18.37 kWh
+PV（[3.73, 40.03]）、少弃 18.37 kWh，utilisation 增加 0.0720 percentage
+points（[0.0154, 0.1610]）；有 BESS 时只多使用 5.76 kWh
+（[0.000003, 15.86]），utilisation 增加 0.0227 points，区间下界接近 0。
+方向与 development 一致，但效应量显著变小，说明固定装机 PV benefit 强烈依赖
+community profile 与既有 BESS，而不能只报告符号。Validation 的 renewable
+demand share 分别增加 0.0577 和 0.0443 points；grid import 分别减少 180.32
+和 168.98 kWh，但后者不能全部归因于时间转移，因为 flexible 解同时使用了允许的
+1% deadline-miss budget。
+
+该收益不能改写成“PCC peak 同时下降”：development mean maximum PCC import
+反而从 618.08 增至 624.62 kW（无 BESS）和 625.17 kW（有 BESS）。此外，
+flexible 解使用了允许的 1% deadline-miss budget，rigid baseline 为 0%；两者
+terminal backlog 均为 0。主文必须把 energy benefit、capacity effect 和 service
+budget 分开陈述。
+
+### Result 4.3 — 同一联合可行域的正交切片与资源交互
+
+既有 2 × 2 × 2 结果固定 500 kW PV、最大化 DC capacity；新结果固定 DC、
+最大化 PV capacity。二者是同一 feasible set
+\(\mathcal{F}=\{(P_{\mathrm{DC}},P_{\mathrm{PV}})\}\) 的正交切片，原结果保留为
+Figure 4 交互机制证据，不再单独承担 renewable-integration headline。
+
+既有独立 validation 显示，AI×PV 在无 BESS 时为 +44.59 kW
+（95% simultaneous CI [36.57, 52.63] kW）；有 BESS 时为 +8.36 kW
+（[1.05, 15.74] kW），方向为正但实际幅度不确定。AI×BESS 在无/有 PV 时
+分别为 −52.31 与 −88.54 kW，支持 workload flexibility 与电池部分替代。
+完整旧切片回执见
 [`data/manifests/nature_mainline_validation_hosting_results_v1.yaml`](data/manifests/nature_mainline_validation_hosting_results_v1.yaml)。
 
-### AI–DER 交互与预期结论
+### 证据边界
 
-同一 2 × 2 × 2 配对设计同时识别 hosting gain 和分布式能源交互，不再将它们
-拆成两个 Results。AI–BESS 和 AI–PV 均使用预声明的场景内
-difference-in-differences；只有不确定性区间与 practical-equivalence margin
-共同支持时，才标记为互补、替代或近似独立。
-
-AI 柔性可以转化为社区接入容量，但价值高度依赖社区峰值时刻、光伏富余和
-储能时长；它与 PV/BESS 的价值不能按各自独立增益简单相加。
+新增 PV hosting/utilisation 是 development 与独立 validation planning-result
+ensembles，不是 deployed causal effect，也不把单事件 locked-ID certificate
+自动外推成 renewable-integration certificate。若社区 profile 与任务分布改变，
+必须先重新验证当地 firm DR envelope，再解释 PV benefit。
+完整设计与运行后哈希回执见
+[`data/manifests/nature_renewable_integration_results_v1.yaml`](data/manifests/nature_renewable_integration_results_v1.yaml)。
 
 ### 对应主图
 
-**Figure 4：Community hosting capacity and distributed-energy interactions**
+**Figure 4：Firm DR as a community renewable-integration resource**
 
-- a：八种 portfolio 的 hosting capacity；
-- b：柔性带来的绝对增益；
-- c：AI–PV 与 AI–BESS 的交互及 simultaneous intervals；
-- d：不同社区 headroom 下的 regime map。
+- a：joint DC–PV hosting envelope（主面板）；
+- b：固定约 201 kW DC 时的 curtailment-constrained PV capacity；
+- c：固定 500 kW PV 时的 utilisation、curtailment 和 grid import；
+- d：既有 AI×PV 与 AI×BESS interaction estimates。
 
 ---
 
@@ -1006,13 +1073,13 @@ solver and tolerances
 
 ### 工作标题
 
-**Job-derived flexibility envelopes reveal compute-debt limits and community hosting value of AI data centres**
+**Job-derived firm demand response expands community photovoltaic hosting and utilisation**
 
 ### 三句话贡献
 
 > First, we replace exogenous flexible-load fractions with job-derived firm-flexibility envelopes that jointly account for interval delivery, workload deadlines, recovery and rebound.
 
-> Second, we separate nominal, perfect-information and non-anticipative capacities to quantify physical and information losses, and translate reliable AI flexibility into community data-centre hosting capacity under photovoltaic and battery portfolios.
+> Second, we separate nominal, perfect-information and non-anticipative capacities to quantify physical and information losses, then map the remaining job-feasible flexibility to curtailment-constrained photovoltaic hosting and utilisation under fixed community and battery conditions.
 
 > Third, we reveal compute debt as the mechanism that makes AI flexibility exhaustible and recovery-dependent under repeated grid dispatch.
 
@@ -1068,15 +1135,17 @@ Development 与 validation 使用独立规格。Validation 固定使用 developm
 承诺，不在 validation 上重新选择 repeated-event 容量；规格绑定环境/controller
 SHA-256 和完整 seeds 20000--20099。
 
-### Phase 4 — 计算社区 hosting capacity
+### Phase 4 — 将 firm DR 映射为社区光伏系统价值
 
-- 2 × 2 × 2 portfolio；
-- DC/PV/BESS response surface；
-- complementarity/substitution analysis。
+- joint DC–PV hosting envelope；
+- curtailment-constrained PV hosting capacity；
+- fixed-capacity PV utilisation、curtailment、grid import 与 PCC peak；
+- 保留既有 2 × 2 × 2 DC-hosting slice，统一解释 PV/BESS interaction。
 
-Development 与独立 validation 的 100-scenario 配对矩阵均已完成。Validation
-沿用冻结的 Model A、portfolio、8 个 contrasts 和 10.05 kW practical margin，
-不读取 locked 数据，也不重新选择分析规则。
+既有固定 PV、求最大 DC 的 development/validation 100-scenario 配对矩阵已经
+完成。固定 DC、求最大 PV 与固定 DC/PV、求实际利用的正交分析使用冻结的
+Model A 和独立 development/validation 规格运行；不读取 locked 数据，也不在
+validation 上重新选择 DC/PV/BESS 条件。
 
 ### Phase 5 — 稳健性和外推
 
@@ -1134,6 +1203,8 @@ Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 - [x] duration–notice–reliability surface 完成评估（部分单元未通过认证门槛）；
 - [x] development 与独立 validation compute-debt exhaustion 机制得到量化；
 - [x] development 与独立 validation 2 × 2 × 2 hosting-capacity 分析完成；
+- [x] development 的 joint DC–PV hosting envelope 与弃光约束 PV capacity 已完成；
+- [x] 独立 validation 的 joint DC–PV hosting 与固定装机 PV utilisation 完成、审计并写入结果回执；
 - [x] AI–BESS 替代关系在 validation 复现；AI–PV 的条件性边界被保留；
 - [x] 硬件校准、PUE、node overhead 与 workload development sensitivity 完成；
 - [x] locked-OOD 场景分布外推完成，固定候选未保留目标可靠性；
@@ -1160,7 +1231,7 @@ duration–notice–reliability surface
                 ↓
 compute debt, recovery and repeated-event exhaustion
                 ↓
-community hosting-capacity value under PV and BESS
+joint DC–PV hosting and fixed-capacity PV utilisation under BESS
                 ↓
 robustness across hardware, workload and community uncertainty
 ```

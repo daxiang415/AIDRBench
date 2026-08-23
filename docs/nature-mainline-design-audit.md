@@ -1,11 +1,13 @@
 # Nature mainline design audit
 
-Date: 2026-08-19
+Date: 2026-08-22
 
-Scope: bounded, single-context design and statistics review of the active README,
-protocol, calibration artifact, scenario generator, PI/NA optimizers, causal
-controller interface, and locked evaluation route. This is not a mutually blind
-multi-review and it is not a journal acceptance prediction.
+Scope: current retrospective design and statistics audit of the active README,
+protocols, calibration artifact, scenario generator, PI/NA optimizers, causal
+controller route, repeated-event diagnostics and renewable-integration planners.
+This is not a preregistration, a mutually blind multi-review or a journal
+acceptance prediction. Exact post-run hashes remain authoritative in the result
+receipts rather than this narrative file.
 
 ## Evidence-chain matrix
 
@@ -15,8 +17,8 @@ multi-review and it is not a journal acceptance prediction.
 | Duration, notice and reliability shape usable capacity | H × N × q surface | random peak-window DR anchor, EULP-modeled community profile, synthetic deadline policy | one single-event episode | development / validation | locked-ID causal certificate |
 | Non-anticipativity creates an information loss | matched empirical PI order statistic minus restricted scenario NA | same frozen ensemble and allowed-failure count | independent frozen episode inside one ensemble optimization point | development / validation | descriptive same-ensemble gap; no confidence-bound or certificate claim |
 | A causal scheduler can deliver a committed capacity | robust-MPC fixed candidate | released jobs, queue state, short community forecast, announced DR request | one locked-ID episode | candidate selected on validation | one-sided Wilson lower bound on 500 disjoint locked-ID episodes |
-| Repeated dispatch exhausts flexibility | residual capacity, compute debt and rebound versus event index/gap | separate repeated-event scenarios | joint multi-event episode | development / validation | locked-ID exhaustion set to be added before formal run |
-| Flexibility raises community hosting capacity | maximum DC capacity under PCC/PV/BESS constraints | EULP-modeled community profiles plus class-aware DC power | frozen episode / declared portfolio | development | held temporal/profile sensitivities; currently pending |
+| Repeated dispatch exhausts flexibility | residual capacity, compute debt and rebound versus event index/gap | separate repeated-event scenarios | joint multi-event episode | development / validation | independent validation mechanism replication; not a repeated-event certificate |
+| Firm DR changes renewable-integration value | joint DC–PV hosting envelope plus fixed-capacity PV use, curtailment, grid import and PCC peak | EULP-modeled community profiles, trace-calibrated class-aware workload and PV/BESS/PCC model | frozen scenario / declared portfolio | development / validation | independent validation planning-result replication; not a deployed causal effect |
 | Results generalize to other GPUs | power-and-throughput-normalized sensitivity | measured RTX PRO 6000 power plus declared external hardware assumptions | independent hardware run for measurement | calibration fit / held-out | not yet supported for H100/H200 compute throughput |
 
 ## Resolved design blockers
@@ -61,28 +63,37 @@ multi-review and it is not a journal acceptance prediction.
     does not support a monotone gap-only recovery law because recovery also
     requires spare compute headroom. A zero-evaluation checkpoint rerun is
     byte-for-byte reproducible.
+11. The complementary renewable-integration analysis is complete on 100
+    development and 100 independent validation scenarios. All 200 scenario
+    partitions contain the declared 36 rows; BESS exclusivity, terminal SOC,
+    curtailment and PCC constraints pass numerical-residual audit. Validation
+    reproduced positive 1×-DC paired PV-hosting gains with and without BESS,
+    while the fixed-500-kW PV-use gain was much smaller than in development and
+    nearly null at the lower simultaneous bound with BESS. A checkpoint-only
+    validation rerun resumed 100/100 scenarios, solved zero new programs and
+    reproduced all aggregate hashes byte-for-byte. The authoritative receipt
+    is `data/manifests/nature_renewable_integration_results_v1.yaml`.
 
-## Remaining blockers before formal locked runs
+## Boundaries that remain after formal evaluation
 
-- Corrected matched development scenarios and PI frontiers are complete for all
-  three calibration power cases. Pre-audit `development_*` artifacts remain
-  historical and cannot be reused as formal evidence.
-- Run success-criterion sensitivities. The 0.95 delivery, 0.25 rebound, 0.50
-  window-relief, 0.01 miss, and 0.02 terminal-backlog values are operational
-  definitions, not fitted reward weights; all headline surfaces need the
-  predeclared threshold sensitivity table.
-- Expand community sensitivities beyond the mixed profile before claiming
-  generality across residential/commercial community types.
-- H100/H200 conversion and gang/non-preemptive/checkpoint models are outside
-  the current mainline and are not blockers for freezing Model A.
-- Repeat the hosting analysis only for predeclared validation/profile
-  sensitivities before claiming community-wide generality. The nominal
-  100-scenario development ensemble is complete; locked data remain closed.
+- Locked-ID and locked-OOD one-time evaluations are complete and their
+  authorization is consumed. They must not be reopened to tune candidates or
+  improve the reported outcome.
+- Repeated-event exhaustion remains a fixed-capacity mechanism diagnostic; the
+  single-event locked-ID certificate cannot be relabelled as a repeated-event
+  capacity certificate.
+- Renewable-integration results are class-aware perfect-information planning
+  ensembles. They test the downstream system consequence of job feasibility,
+  but do not transfer the single-event controller certificate to a PV planner.
+- Community profile or workload-distribution changes require a new local DR
+  envelope before the PV hosting or utilisation effect is transferred.
+- H100/H200 conversion, gang/non-preemptive scheduling and checkpoint overhead
+  remain outside Model A and are not required to close the current mainline.
 
-## Run gate
+## Closed run gate
 
-Formal locked data stay closed until the analysis plan is frozen, code and data
-hashes are committed, all validation selections are complete, and the relevant
-one-time status is explicitly changed from `not_run` to
-`approved_for_one_time_run`. Development runs may resume after corrected
-scenarios are regenerated.
+The validation selections, locked-ID replay and separately authorized
+locked-OOD replay were executed only after their specifications and relevant
+source hashes were frozen. Further work is limited to non-locked analysis,
+source-data packaging, figure generation and manuscript writing unless the
+authors explicitly define a new study rather than modifying the completed one.

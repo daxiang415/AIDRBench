@@ -569,140 +569,131 @@ def plot_nature_mainline_figure4_reference_style(
     *,
     formats: Sequence[str] = ("svg", "pdf", "tiff", "png"),
 ) -> dict[str, object]:
-    """Plot hosting value as one dominant paired-capacity comparison."""
+    """Plot PV hosting, fixed-PV operation and orthogonal DER interactions."""
 
     _publication_style()
     manifest_path, manifest = _load_manifest(source_data_directory)
-    summary = _verified_table(source_data_directory, manifest, "fig4_hosting_capacity_summary")
-    contrasts = _verified_table(source_data_directory, manifest, "fig4_hosting_paired_contrasts")
+    pv_hosting = _verified_table(source_data_directory, manifest, "fig4_pv_hosting_summary")
+    pv_gains = _verified_table(source_data_directory, manifest, "fig4_pv_hosting_contrasts")
+    operation = _verified_table(source_data_directory, manifest, "fig4_pv_operation_contrasts")
+    interactions = _verified_table(
+        source_data_directory,
+        manifest,
+        "fig4_hosting_paired_contrasts",
+    )
 
-    validation = summary[summary["evaluation_split"] == "validation"].copy()
-    portfolio_keys = [(False, False), (False, True), (True, False), (True, True)]
-    labels = [_portfolio_compact_label(pv, bess) for pv, bess in portfolio_keys]
+    figure = plt.figure(figsize=(_FIGURE_WIDTH_IN, 6.05), constrained_layout=False)
+    grid = figure.add_gridspec(
+        2,
+        14,
+        height_ratios=(1.38, 1.0),
+        hspace=0.62,
+        wspace=1.10,
+    )
+    ax_a = figure.add_subplot(grid[0, :])
+    ax_b = figure.add_subplot(grid[1, :4])
+    operation_grid = grid[1, 4:10].subgridspec(1, 3, wspace=0.95)
+    operation_axes = [figure.add_subplot(operation_grid[0, index]) for index in range(3)]
+    ax_d = figure.add_subplot(grid[1, 10:])
 
-    figure = plt.figure(figsize=(_FIGURE_WIDTH_IN, 5.0), constrained_layout=False)
-    grid = figure.add_gridspec(2, 12, hspace=0.70, wspace=1.10)
-    ax_a = figure.add_subplot(grid[:, :7])
-    ax_b = figure.add_subplot(grid[0, 7:])
-    ax_c = figure.add_subplot(grid[1, 7:])
-
-    y_positions = np.arange(len(portfolio_keys), dtype=float)
-    for y_value, ((pv, bess), label) in enumerate(zip(portfolio_keys, labels, strict=True)):
-        rigid = validation[
-            (validation["dc_operation"] == "rigid")
-            & (_bool_series(validation["pv_enabled"]) == pv)
-            & (_bool_series(validation["bess_enabled"]) == bess)
-        ].iloc[0]
-        flexible = validation[
-            (validation["dc_operation"] == "flexible")
-            & (_bool_series(validation["pv_enabled"]) == pv)
-            & (_bool_series(validation["bess_enabled"]) == bess)
-        ].iloc[0]
-        rigid_mean = _float(rigid["mean_scenario_hosting_dc_peak_kw"])
-        flexible_mean = _float(flexible["mean_scenario_hosting_dc_peak_kw"])
+    envelope = pv_hosting[
+        (pv_hosting["evaluation_split"] == "validation")
+        & (pv_hosting["analysis_variant"] == "headline_pv_hosting_envelope")
+    ].copy()
+    line_specs = (
+        ("rigid", False, _COLORS["neutral"], "o", (0, (2, 2)), "Rigid · no BESS"),
+        ("flexible", False, _COLORS["flex"], "o", "solid", "Flexible · no BESS"),
+        ("rigid", True, _COLORS["purple"], "s", (0, (2, 2)), "Rigid · BESS"),
+        ("flexible", True, _COLORS["blue"], "s", "solid", "Flexible · BESS"),
+    )
+    for operation_name, bess_enabled, color, marker, linestyle, label in line_specs:
+        subset = envelope[
+            (envelope["dc_operation"] == operation_name)
+            & (_bool_series(envelope["bess_enabled"]) == bess_enabled)
+        ].sort_values("dc_scale_of_reference_mix")
+        feasible = _bool_series(subset["all_scenarios_feasible"]).to_numpy(dtype=bool)
+        x_values = _numeric(subset, "target_dc_peak_kw").to_numpy(dtype=float)
+        firm_values = _numeric(
+            subset,
+            "simultaneous_feasible_pv_hosting_kw",
+        ).to_numpy(dtype=float)
+        # Keep partially feasible cells as genuine gaps in the simultaneous
+        # envelope.  Subsetting the feasible points would incorrectly draw a
+        # line across an intervening cell that failed the 100/100 criterion.
         ax_a.plot(
-            [rigid_mean, flexible_mean],
-            [y_value, y_value],
-            color=_COLORS["grid"],
-            linewidth=4.0,
-            solid_capstyle="round",
-            zorder=1,
+            x_values,
+            np.where(feasible, firm_values, np.nan),
+            color=color,
+            marker=marker,
+            markersize=4.8,
+            linewidth=1.8,
+            linestyle=linestyle,
+            label=label,
         )
-        ax_a.errorbar(
-            rigid_mean,
-            y_value,
-            xerr=np.array(
-                [
-                    [rigid_mean - _float(rigid["q05_scenario_hosting_dc_peak_kw"])],
-                    [_float(rigid["q95_scenario_hosting_dc_peak_kw"]) - rigid_mean],
-                ]
-            ),
-            fmt="o",
-            color=_COLORS["neutral"],
-            capsize=2,
-            markersize=5,
-            zorder=3,
-        )
-        ax_a.errorbar(
-            flexible_mean,
-            y_value,
-            xerr=np.array(
-                [
-                    [flexible_mean - _float(flexible["q05_scenario_hosting_dc_peak_kw"])],
-                    [_float(flexible["q95_scenario_hosting_dc_peak_kw"]) - flexible_mean],
-                ]
-            ),
-            fmt="o",
-            color=_COLORS["flex"],
-            capsize=2,
-            markersize=5,
-            zorder=3,
-        )
-        ax_a.text(
-            flexible_mean - 12,
-            y_value,
-            f"+{flexible_mean - rigid_mean:.0f} kW",
-            fontsize=6.6,
-            color=_COLORS["flex"],
-            fontweight="bold",
-            ha="right",
-            va="center",
-        )
-        ax_a.text(
-            0.0,
-            y_value,
-            label,
-            transform=ax_a.get_yaxis_transform(),
-            fontsize=6.6,
-            ha="right",
-            va="center",
-            color=_COLORS["ink"],
-        )
-    ax_a.set_yticks([])
-    ax_a.invert_yaxis()
-    ax_a.set_xlabel("Validation hosting capacity (kW; mean and q05–q95)")
-    ax_a.grid(axis="x", color=_COLORS["grid"], linewidth=0.55)
+        if (~feasible).any():
+            partial = subset.iloc[np.flatnonzero(~feasible)]
+            partial_x = _numeric(partial, "target_dc_peak_kw").to_numpy(dtype=float)
+            partial_y = _numeric(
+                partial,
+                "minimum_scenario_pv_hosting_kw",
+            ).to_numpy(dtype=float)
+            counts = _numeric(partial, "feasible_scenario_count").to_numpy(dtype=int)
+            ax_a.scatter(
+                partial_x,
+                partial_y,
+                facecolors="white",
+                edgecolors=color,
+                marker=marker,
+                linewidths=0.9,
+                s=27,
+                zorder=4,
+            )
+            for x_value, y_value, count in zip(partial_x, partial_y, counts, strict=True):
+                ax_a.text(
+                    x_value,
+                    y_value + 35.0,
+                    f"{count}/100",
+                    color=color,
+                    fontsize=5.8,
+                    ha="center",
+                    va="bottom",
+                )
+    ax_a.set_xlabel("Installed data-centre capacity (kW)")
+    ax_a.set_ylabel("PV hosting capacity at ≤5% curtailment (kW)")
+    ax_a.grid(axis="y", color=_COLORS["grid"], linewidth=0.55)
+    ax_a.legend(loc="upper left", ncol=2, fontsize=6.2)
     ax_a.text(
-        0.02,
+        0.99,
         0.04,
-        "● rigid",
+        "open markers: partially feasible; label = scenarios feasible",
         transform=ax_a.transAxes,
+        fontsize=5.9,
         color=_COLORS["neutral"],
-        fontsize=6.4,
+        ha="right",
         va="bottom",
     )
-    ax_a.text(
-        0.14,
-        0.04,
-        "● workload-flexible",
-        transform=ax_a.transAxes,
-        color=_COLORS["flex"],
-        fontsize=6.4,
-        va="bottom",
-    )
-    _short_heading(ax_a, "Workload flexibility expands community hosting capacity")
-    _panel_label(ax_a, "a", x=-0.12, y=1.07)
+    _short_heading(ax_a, "Workload flexibility shifts the joint DC–PV feasibility boundary")
+    _panel_label(ax_a, "a", x=-0.055, y=1.08)
 
-    hosting = contrasts[contrasts["contrast"] == "AI_HOSTING_GAIN"].copy()
-    x_positions = np.arange(len(portfolio_keys), dtype=float)
+    gain_positions = np.arange(2, dtype=float)
     for offset, split, color, marker in (
-        (-0.09, "development", _COLORS["muted"], "o"),
-        (0.09, "validation", _COLORS["blue"], "s"),
+        (-0.10, "development", _COLORS["muted"], "o"),
+        (0.10, "validation", _COLORS["blue"], "s"),
     ):
-        subset = hosting[hosting["evaluation_split"] == split]
-        values: list[float] = []
-        lower: list[float] = []
-        upper: list[float] = []
-        for pv, bess in portfolio_keys:
-            row = subset[subset["conditioning_level"] == f"pv={pv},bess={bess}"].iloc[0]
-            estimate = _float(row["estimate_mean_kw"])
-            values.append(estimate)
-            lower.append(estimate - _float(row["simultaneous_ci_lower_kw"]))
-            upper.append(_float(row["simultaneous_ci_upper_kw"]) - estimate)
+        subset = pv_gains[pv_gains["evaluation_split"] == split]
+        records = [
+            subset[subset["conditioning_level"].astype(str) == level].iloc[0]
+            for level in ("False", "True")
+        ]
+        estimates = np.asarray([_float(row["estimate_mean"]) for row in records])
+        lower = estimates - np.asarray(
+            [_float(row["simultaneous_ci_lower"]) for row in records]
+        )
+        upper = np.asarray([_float(row["simultaneous_ci_upper"]) for row in records]) - estimates
         ax_b.errorbar(
-            x_positions + offset,
-            values,
-            yerr=np.array([lower, upper]),
+            estimates,
+            gain_positions + offset,
+            xerr=np.asarray([lower, upper]),
             fmt=marker,
             color=color,
             capsize=2,
@@ -710,14 +701,61 @@ def plot_nature_mainline_figure4_reference_style(
             linewidth=1.0,
             label=split.capitalize(),
         )
-    ax_b.set_xticks(x_positions, ["P0B0", "P0B1", "P1B0", "P1B1"])
-    ax_b.set_ylabel("Paired gain (kW)")
-    ax_b.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
-    ax_b.legend(loc="lower left", ncol=2)
-    _short_heading(ax_b, "Independent replication")
-    _panel_label(ax_b, "b", x=-0.20, y=1.10)
+    ax_b.axvline(0.0, color=_COLORS["neutral"], linewidth=0.7)
+    ax_b.set_yticks(gain_positions, ["No BESS", "BESS"])
+    ax_b.invert_yaxis()
+    ax_b.set_xlabel("Paired PV hosting gain (kW)")
+    ax_b.grid(axis="x", color=_COLORS["grid"], linewidth=0.5)
+    ax_b.legend(loc="lower right", fontsize=5.8)
+    _short_heading(ax_b, "Gain at a 201-kW data centre")
+    _panel_label(ax_b, "b", x=-0.22, y=1.11)
 
-    interactions = contrasts[contrasts["contrast"] != "AI_HOSTING_GAIN"].copy()
+    metric_specs = (
+        ("total_pv_curtailed_kwh", "Curtailment", "Δ kWh"),
+        ("pv_utilisation_fraction", "PV utilisation", "Δ percentage points"),
+        ("total_grid_import_kwh", "Grid import", "Δ kWh"),
+    )
+    validation_operation = operation[operation["evaluation_split"] == "validation"]
+    for metric_index, (axis, (metric, heading, xlabel)) in enumerate(
+        zip(operation_axes, metric_specs, strict=True)
+    ):
+        subset = validation_operation[validation_operation["metric"] == metric]
+        records = [
+            subset[subset["conditioning_level"].astype(str) == level].iloc[0]
+            for level in ("False", "True")
+        ]
+        scale = 100.0 if metric == "pv_utilisation_fraction" else 1.0
+        estimates = scale * np.asarray([_float(row["estimate_mean"]) for row in records])
+        lower = scale * np.asarray(
+            [_float(row["simultaneous_ci_lower"]) for row in records]
+        )
+        upper = scale * np.asarray(
+            [_float(row["simultaneous_ci_upper"]) for row in records]
+        )
+        positions = np.arange(2, dtype=float)
+        axis.axvline(0.0, color=_COLORS["neutral"], linewidth=0.65)
+        for position, estimate, low, high, color in zip(
+            positions,
+            estimates,
+            lower,
+            upper,
+            (_COLORS["flex"], _COLORS["blue"]),
+            strict=True,
+        ):
+            axis.plot([low, high], [position, position], color=color, linewidth=1.0)
+            axis.plot(estimate, position, marker="o", color=color, markersize=3.8)
+        axis.set_yticks(positions)
+        if metric_index == 0:
+            axis.set_yticklabels(["No BESS", "BESS"])
+        else:
+            axis.set_yticklabels([])
+        axis.invert_yaxis()
+        axis.set_xlabel(xlabel, fontsize=6.0)
+        axis.grid(axis="x", color=_COLORS["grid"], linewidth=0.45)
+        _short_heading(axis, heading)
+    _panel_label(operation_axes[0], "c", x=-0.34, y=1.11)
+
+    interactions = interactions[interactions["contrast"] != "AI_HOSTING_GAIN"].copy()
     interaction_order = (
         ("AI_BESS_INTERACTION", "False", "BESS | PV off"),
         ("AI_BESS_INTERACTION", "True", "BESS | PV on"),
@@ -726,7 +764,7 @@ def plot_nature_mainline_figure4_reference_style(
     )
     y_positions = np.arange(len(interaction_order), dtype=float)
     margin = _float(_numeric(interactions, "equivalence_margin_kw").max())
-    ax_c.axvspan(-margin, margin, color=_COLORS["light"], alpha=0.95)
+    ax_d.axvspan(-margin, margin, color=_COLORS["light"], alpha=0.95)
     for offset, split, color, marker in (
         (-0.09, "development", _COLORS["muted"], "o"),
         (0.09, "validation", _COLORS["blue"], "s"),
@@ -741,14 +779,20 @@ def plot_nature_mainline_figure4_reference_style(
                 & (interactions["contrast"] == contrast_name)
                 & (interactions["conditioning_level"].astype(str) == level)
             ].iloc[0]
-            estimate = _float(row["estimate_mean_kw"])
-            ax_c.errorbar(
-                estimate,
+            interaction_estimate = _float(row["estimate_mean_kw"])
+            ax_d.errorbar(
+                interaction_estimate,
                 interaction_y + offset,
                 xerr=np.array(
                     [
-                        [estimate - _float(row["simultaneous_ci_lower_kw"])],
-                        [_float(row["simultaneous_ci_upper_kw"]) - estimate],
+                        [
+                            interaction_estimate
+                            - _float(row["simultaneous_ci_lower_kw"])
+                        ],
+                        [
+                            _float(row["simultaneous_ci_upper_kw"])
+                            - interaction_estimate
+                        ],
                     ]
                 ),
                 fmt=marker,
@@ -757,40 +801,47 @@ def plot_nature_mainline_figure4_reference_style(
                 markersize=4,
                 linewidth=1.0,
             )
-    ax_c.axvline(0, color=_COLORS["neutral"], linewidth=0.7)
-    ax_c.set_yticks(y_positions, [label for _, _, label in interaction_order])
-    ax_c.invert_yaxis()
-    ax_c.set_xlabel("Difference-in-differences (kW)")
-    ax_c.grid(axis="x", color=_COLORS["grid"], linewidth=0.5)
-    ax_c.text(
+    ax_d.axvline(0, color=_COLORS["neutral"], linewidth=0.7)
+    ax_d.set_yticks(y_positions, [label for _, _, label in interaction_order])
+    ax_d.invert_yaxis()
+    ax_d.set_xlabel("Difference-in-differences (kW)")
+    ax_d.grid(axis="x", color=_COLORS["grid"], linewidth=0.5)
+    ax_d.text(
         0.98,
         0.04,
         "grey band: ± practical margin",
-        transform=ax_c.transAxes,
+        transform=ax_d.transAxes,
         fontsize=6.0,
         color=_COLORS["neutral"],
         ha="right",
         va="bottom",
     )
-    _short_heading(ax_c, "AI–DER interaction")
-    _panel_label(ax_c, "c", x=-0.20, y=1.10)
+    _short_heading(ax_d, "Orthogonal resource interactions")
+    _panel_label(ax_d, "d", x=-0.22, y=1.11)
 
-    figure.subplots_adjust(left=0.12, right=0.97, bottom=0.10, top=0.94)
+    figure.subplots_adjust(left=0.075, right=0.975, bottom=0.09, top=0.95)
     return _finalize_figure(
         figure,
         figure_number=4,
         source_manifest_path=manifest_path,
-        source_tables=("fig4_hosting_capacity_summary", "fig4_hosting_paired_contrasts"),
+        source_tables=(
+            "fig4_pv_hosting_summary",
+            "fig4_pv_hosting_contrasts",
+            "fig4_pv_operation_contrasts",
+            "fig4_hosting_paired_contrasts",
+        ),
         output_directory=output_directory,
         stem="figure_4_hosting_capacity_interactions",
         formats=formats,
         core_conclusion=(
-            "Workload flexibility increases community data-centre hosting capacity, while "
-            "its value interacts non-additively with photovoltaic generation and batteries."
+            "Job-feasible workload flexibility expands curtailment-constrained PV hosting "
+            "and increases the local use of installed PV; the fixed-PV operating gain is "
+            "small in validation, especially under BESS."
         ),
         claim_boundaries=(
-            "Hosting calculations are planning-result ensembles rather than real-world causal effects.",
-            "AI–BESS substitution replicates; with BESS, the validation AI–PV interaction is directionally positive but practically indeterminate.",
+            "Renewable-integration calculations are planning-result ensembles rather than deployed causal effects.",
+            "Open markers are partially feasible descriptive cells and never firm zero-capacity points.",
+            "Flexible fixed-PV schedules use the declared 1% deadline-miss budget, and PV-use gains do not imply lower PCC peak.",
         ),
         archetype="asymmetric quantitative figure",
     )
