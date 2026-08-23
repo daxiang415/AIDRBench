@@ -36,6 +36,8 @@ The figures below use an asymmetric Nature Communications visual grammar: one do
 
 **Boundary:** These are job-feasible planning ensembles rather than deployed causal effects. Partially feasible envelope cells are not zero-capacity points, fixed-PV energy effects do not imply lower PCC peak, and the allowed 1% flexible deadline-miss budget remains visible.
 
+**QA:** The final-size panel audit, PDF glyph-floor check and output hashes are recorded in [figure4-renewable-integration-qa.md](figure4-renewable-integration-qa.md).
+
 ## Figure 5 | Sensitivity and out-of-distribution limits
 
 ![Figure 5: power, workload, criterion and infrastructure sensitivities plus locked OOD replay](figures/nature_mainline_v1/figure_5_robustness_generalization.png)

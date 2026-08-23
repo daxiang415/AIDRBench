@@ -2,46 +2,49 @@
   "archetype": "asymmetric quantitative figure",
   "backend": "python_matplotlib",
   "claim_boundaries": [
-    "Hosting calculations are planning-result ensembles rather than real-world causal effects.",
-    "AI–BESS substitution replicates; with BESS, the validation AI–PV interaction is directionally positive but practically indeterminate."
+    "Renewable-integration calculations are planning-result ensembles rather than deployed causal effects.",
+    "Open markers are partially feasible descriptive cells and never firm zero-capacity points.",
+    "Flexible fixed-PV schedules use the declared 1% deadline-miss budget, and PV-use gains do not imply lower PCC peak."
   ],
-  "core_conclusion": "Workload flexibility increases community data-centre hosting capacity, while its value interacts non-additively with photovoltaic generation and batteries.",
+  "core_conclusion": "Job-feasible workload flexibility expands curtailment-constrained PV hosting and increases the local use of installed PV; the fixed-PV operating gain is small in validation, especially under BESS.",
   "figure": 4,
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 48319,
+      "bytes": 59195,
       "format": "svg",
       "path": "figure_4_hosting_capacity_interactions.svg",
-      "sha256": "047dd1f8394314807bcafd3cfde87c58f75c41fc40a4be9429140417d665f83e"
+      "sha256": "de0b56d8c839513d3e840c68feebba787e3ad94a3d405582648f0eb7d1193fa3"
     },
     {
-      "bytes": 31018,
+      "bytes": 33192,
       "format": "pdf",
       "path": "figure_4_hosting_capacity_interactions.pdf",
-      "sha256": "e832e24f7b5807b74cc5dad8dd104fa16e4e615a388c2bb93f34df4504f3b785"
+      "sha256": "d319b1fb602136b9dc1d99f079ea6e103ea45f5a9e6a4aa2fc45ecde2c84b58e"
     },
     {
-      "bytes": 1080214,
+      "bytes": 1313224,
       "format": "tiff",
       "path": "figure_4_hosting_capacity_interactions.tiff",
-      "sha256": "51cb3c20c50bf9c6d98945d35b0d469bd7b34cfc114b4b7a67710b2d63e971a3"
+      "sha256": "ef52340f8ebced40b4ee9e25c46793a0b9f9f7826124f853e604afbf40ec5cea"
     },
     {
-      "bytes": 169561,
+      "bytes": 258372,
       "format": "png",
       "path": "figure_4_hosting_capacity_interactions.png",
-      "sha256": "6210a3544d2bff298194b1b66c4d0ed70d218f0b6fdedc051c700ee7f8eedf97"
+      "sha256": "6dbd46b234f966c4f8778fc39d3c18d645e84e9e7f918e48e99a9c159f16dd58"
     }
   ],
   "physical_size_inches": [
-    7.204724409448819,
-    5.0
+    7.086614173228347,
+    6.05
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "cb2a7f9180d3eee505c1c61fa20019e85638ae3002ae05d45823ba0cd75869b2",
+  "source_data_manifest_sha256": "ef92306befe815026c8ce3271c912c78dcd8c58b5c84e161744edfb9ad92f3b2",
   "source_tables": [
-    "fig4_hosting_capacity_summary",
+    "fig4_pv_hosting_summary",
+    "fig4_pv_hosting_contrasts",
+    "fig4_pv_operation_contrasts",
     "fig4_hosting_paired_contrasts"
   ]
 }
