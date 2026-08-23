@@ -706,7 +706,7 @@ def plot_nature_mainline_figure4_reference_style(
     ax_b.invert_yaxis()
     ax_b.set_xlabel("Paired PV hosting gain (kW)")
     ax_b.grid(axis="x", color=_COLORS["grid"], linewidth=0.5)
-    ax_b.legend(loc="lower right", fontsize=5.8)
+    ax_b.legend(loc="upper left", fontsize=5.8)
     _short_heading(ax_b, "Gain at a 201-kW data centre")
     _panel_label(ax_b, "b", x=-0.22, y=1.11)
 
@@ -817,7 +817,7 @@ def plot_nature_mainline_figure4_reference_style(
         va="bottom",
     )
     _short_heading(ax_d, "Orthogonal resource interactions")
-    _panel_label(ax_d, "d", x=-0.22, y=1.11)
+    _panel_label(ax_d, "d", x=-0.04, y=1.19)
 
     figure.subplots_adjust(left=0.075, right=0.975, bottom=0.09, top=0.95)
     return _finalize_figure(
