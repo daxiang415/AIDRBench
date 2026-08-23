@@ -27,6 +27,7 @@ Official guidance:
 ## Current files
 
 - `nature_communications_article.md`: English working manuscript v0.1.
+- `supplementary_information.md`: Supplementary Methods/Results working draft; methods and principal result-detail sections are drafted, while supplementary figures remain to be generated.
 - `terminology-ledger.md`: canonical terms that must remain stable across the manuscript and Supplementary Information.
 - `results-evidence-allocation.md`: main-text versus Supplementary evidence decisions.
 

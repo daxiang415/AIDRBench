@@ -1,6 +1,6 @@
 # RTX PRO 6000 four-GPU calibration v1
 
-Updated: 2026-08-17.
+Updated: 2026-08-23.
 
 ## Scope
 
@@ -29,13 +29,15 @@ Workloads:
 
 | Parameter | Nominal | 95% t interval |
 | --- | ---: | ---: |
-| GPU idle power | 13.94 W/GPU | 5.86–22.01 W/GPU |
-| Four-GPU training active power | 259.08 W/GPU | 249.22–268.94 W/GPU |
-| Four-GPU offline-inference active power | 300.02 W/GPU | 299.96–300.09 W/GPU |
+| GPU idle power | 13.94 W/GPU | 6.74–18.68 W/GPU (within-run GPU range; not a confidence interval) |
+| Four-GPU training active power | 259.08 W/GPU | 225.81–292.35 W/GPU |
+| Four-GPU offline-inference active power | 300.02 W/GPU | 299.69–300.35 W/GPU |
 | Node fixed overhead | 300 W/node | 150–450 W/node |
 
-The combined active-power held-out MAE is 4.47 W/GPU. Training held-out MAE is
-8.91 W/GPU, while offline inference held-out MAE is 0.03 W/GPU.
+The combined active-power held-out MAE is 3.80 W/GPU. Training held-out MAE is
+7.56 W/GPU, while offline inference held-out MAE is 0.03 W/GPU. The active-power
+intervals use the two independent four-GPU run means as their statistical units;
+the four GPUs observed within one run are not treated as independent repeats.
 
 The training result captures a material topology effect: single-GPU training
 reaches approximately 300 W, while four-GPU training averages approximately
