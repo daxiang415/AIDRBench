@@ -1,8 +1,11 @@
 # Figure 4 renewable-integration QA receipt
 
-Date: 2026-08-23  
-Backend: Python/matplotlib  
-Final width: 180 mm (double column)  
+Date: 2026-08-23
+
+Backend: Python/matplotlib
+
+Final width: 180 mm (double column)
+
 Source Data manifest SHA-256:
 `ef92306befe815026c8ce3271c912c78dcd8c58b5c84e161744edfb9ad92f3b2`
 
