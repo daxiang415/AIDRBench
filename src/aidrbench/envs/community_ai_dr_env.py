@@ -1482,7 +1482,7 @@ class ContinuousCommunityAIDemandResponseEnv(HourlyCommunityAIDemandResponseEnv)
 
 
 class DiscreteCommunityAIDemandResponseEnv(HourlyCommunityAIDemandResponseEnv):
-    """Five-level discrete action specialization for DQN and rule baselines."""
+    """Five-level discrete specialization retained for interface smoke tests."""
 
     def __init__(self, config: str | Path | Mapping[str, Any]) -> None:
         super().__init__(config, action_mode="discrete")

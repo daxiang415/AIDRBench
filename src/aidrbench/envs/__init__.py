@@ -1,6 +1,5 @@
-"""Environment interfaces and action definitions."""
+"""Hourly community--AI data-centre environment interfaces."""
 
-from aidrbench.envs.actions import ACTION_COUNT, ActionComponents, decode_action, encode_action
 from aidrbench.envs.community_ai_dr_env import (
     ContinuousCommunityAIDemandResponseEnv,
     DiscreteCommunityAIDemandResponseEnv,
@@ -11,11 +10,7 @@ from aidrbench.envs.registration import register_environments
 register_environments()
 
 __all__ = [
-    "ACTION_COUNT",
-    "ActionComponents",
     "ContinuousCommunityAIDemandResponseEnv",
     "DiscreteCommunityAIDemandResponseEnv",
     "HourlyCommunityAIDemandResponseEnv",
-    "decode_action",
-    "encode_action",
 ]

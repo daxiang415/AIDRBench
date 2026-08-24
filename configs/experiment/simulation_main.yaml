@@ -1,7 +1,0 @@
-experiment: simulation_main
-phase: P4
-backend: emulator
-split: test
-controllers: [no_control, rule_based, mpc, dqn, a2c, ppo]
-seeds: [1, 2, 3, 4, 5]
-paired_episodes: true

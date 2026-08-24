@@ -1,4 +1,0 @@
-controller: rule_based
-phase: P3
-thresholds_status: tune_on_validation_only
-post_event_restore_interval_minutes: 10

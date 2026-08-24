@@ -72,8 +72,8 @@ Final manuscript artifacts should be generated from a committed, clean tree:
 git status --short
 uv lock --check
 ruff check .
-mypy src --exclude 'src/aidrbench/training.py'
-pytest --ignore=tests/test_training.py
+mypy src
+pytest
 
 aidrbench paper export-source-data
 aidrbench paper figures

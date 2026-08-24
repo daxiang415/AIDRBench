@@ -5,15 +5,17 @@ import unittest
 
 
 class ImportSmokeTests(unittest.TestCase):
-    def test_p0_modules_import_without_third_party_packages(self) -> None:
+    def test_formal_mainline_modules_import(self) -> None:
         modules = (
             "aidrbench",
             "aidrbench.cli",
+            "aidrbench.calibration",
             "aidrbench.controllers",
-            "aidrbench.datacenter",
-            "aidrbench.envs.actions",
+            "aidrbench.data.frozen_scenarios",
+            "aidrbench.envs",
             "aidrbench.evaluation",
-            "aidrbench.hil",
+            "aidrbench.evaluation.frozen_causal_certificate",
+            "aidrbench.evaluation.hosting_capacity",
             "aidrbench.telemetry",
             "aidrbench.workloads",
         )

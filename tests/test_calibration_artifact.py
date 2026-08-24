@@ -158,14 +158,14 @@ def test_hourly_config_rejects_unknown_and_ambiguous_hardware_fields(
 
 
 def test_formal_config_fails_closed_when_declared_artifact_is_missing(tmp_path: Path) -> None:
-    document = yaml.safe_load((ROOT / "configs/env/hourly_formal_validation.yaml").read_text())
+    document = yaml.safe_load((ROOT / "configs/env/nature_mainline_validation.yaml").read_text())
     document["hardware"]["calibration_artifact"] = str(tmp_path / "missing.yaml")
     with pytest.raises(FileNotFoundError, match="missing.yaml"):
         load_hourly_environment_config(document)
 
 
 def test_repository_formal_config_uses_verified_gpu_measurement_anchor() -> None:
-    config = load_hourly_environment_config(ROOT / "configs/env/hourly_formal_validation.yaml")
+    config = load_hourly_environment_config(ROOT / "configs/env/nature_mainline_validation.yaml")
 
     assert config.calibration_artifact is not None
     assert config.calibration_artifact.artifact_id == "rtx6000pro_4gpu_v1"

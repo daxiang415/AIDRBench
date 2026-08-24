@@ -26,11 +26,7 @@ data/interim/*
 data/processed/*.parquet
 data/processed/*.csv
 
-# Models and experiment artifacts
-models/hardware_surrogates/*
-!models/hardware_surrogates/.gitkeep
-models/rl_checkpoints/*
-!models/rl_checkpoints/.gitkeep
+# Experiment artifacts
 results/**
 !results/**/
 !results/**/.gitkeep

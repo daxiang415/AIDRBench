@@ -1,0 +1,117 @@
+TY  - RPRT
+TI  - End-Use Load Profiles for the U.S. Building Stock: Methodology and Results of Model Calibration, Validation, and Uncertainty Quantification
+AU  - Wilson, Eric
+AU  - Parker, Andrew
+AU  - Fontanini, Anthony
+AU  - Present, Elaina
+AU  - Reyna, Janet
+AU  - Adhikari, Rajendra
+AU  - Bianchi, Carlo
+AU  - CaraDonna, Christopher
+AU  - Dahlhausen, Matthew
+AU  - Kim, Janghyun
+AU  - LeBar, Amy
+AU  - Liu, Lixi
+AU  - Praprost, Marlena
+AU  - Zhang, Liang
+AU  - DeWitt, Peter
+AU  - Merket, Noel
+AU  - Speake, Andrew
+AU  - Hong, Tianzhen
+AU  - Li, Han
+AU  - Mims Frick, Natalie
+AU  - Wang, Zhe
+AU  - Blair, Aileen
+AU  - Horsey, Henry
+AU  - Roberts, David
+AU  - Trenbath, Kim
+AU  - Adekanye, Oluwatobi
+AU  - Bonnema, Eric
+AU  - El Kontar, Rawad
+AU  - Gonzalez, Jonathan
+AU  - Horowitz, Scott
+AU  - Jones, Dalton
+AU  - Muehleisen, Ralph
+AU  - Platthotam, Siby
+AU  - Reynolds, Matthew
+AU  - Robertson, Joseph
+AU  - Sayers, Kevin
+AU  - Li, Qu
+PY  - 2022
+PB  - National Renewable Energy Laboratory
+CY  - Golden, Colorado
+M3  - NREL/TP-5500-80889
+DO  - 10.2172/1854582
+UR  - https://doi.org/10.2172/1854582
+N1  - Verified against the official NLR/NREL publication record.
+ER  -
+
+TY  - RPRT
+TI  - ComStock Reference Documentation: Version 1
+AU  - Parker, Andrew
+AU  - Horsey, Henry
+AU  - Dahlhausen, Matthew
+AU  - Praprost, Marlena
+AU  - CaraDonna, Christopher
+AU  - LeBar, Amy
+AU  - Klun, Lauren
+PY  - 2023
+PB  - National Renewable Energy Laboratory
+CY  - Golden, Colorado
+M3  - NREL/TP-5500-83819
+DO  - 10.2172/1967948
+UR  - https://doi.org/10.2172/1967948
+N1  - Verified against the official NLR/NREL publication record.
+ER  -
+
+TY  - CONF
+TI  - Heterogeneity at Hyperscale: Characterization and Scheduling of Large Production AI Clusters at Alibaba
+AU  - Li, Suyi
+AU  - Yang, Lingyun
+AU  - Yu, Haoxuan
+AU  - Yao, Sheng
+AU  - Wu, Tianyuan
+AU  - Jiang, Xiaoxiao
+AU  - Lu, Hanfeng
+AU  - Wang, Kangjin
+AU  - Wang, Chenhao
+AU  - Xu, Shenglin
+AU  - Wang, Lun
+AU  - Duan, Qingyang
+AU  - Liang, Shenghao
+AU  - Lin, Xiu
+AU  - Zhang, Meng
+AU  - Wu, Wenchao
+AU  - Yu, Yinghao
+AU  - Yang, Guodong
+AU  - Zhang, Liping
+AU  - Wang, Wei
+T2  - 20th USENIX Symposium on Operating Systems Design and Implementation (OSDI 26)
+PY  - 2026
+SP  - 2187
+EP  - 2203
+PB  - USENIX Association
+UR  - https://www.usenix.org/conference/osdi26/presentation/li-suyi
+N1  - Verified against the official USENIX proceedings page.
+ER  -
+
+TY  - CONF
+TI  - MLaaS in the Wild: Workload Analysis and Scheduling in Large-Scale Heterogeneous GPU Clusters
+AU  - Weng, Qizhen
+AU  - Xiao, Wencong
+AU  - Yu, Yinghao
+AU  - Wang, Wei
+AU  - Wang, Cheng
+AU  - He, Jian
+AU  - Li, Yong
+AU  - Zhang, Liping
+AU  - Lin, Wei
+AU  - Ding, Yu
+T2  - 19th USENIX Symposium on Networked Systems Design and Implementation (NSDI 22)
+PY  - 2022
+SP  - 945
+EP  - 960
+PB  - USENIX Association
+UR  - https://www.usenix.org/conference/nsdi22/presentation/weng
+N1  - Verified against the official USENIX proceedings page.
+ER  -

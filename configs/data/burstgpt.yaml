@@ -1,7 +1,0 @@
-dataset: burstgpt
-phase: P1
-source_release: https://github.com/HPMLL/BurstGPT/releases/tag/v2.0
-input_glob: data/raw/burstgpt/BurstGPT_without_fails_*.csv
-output: data/processed/inference_requests.parquet
-time_scale: 1.0
-preserve_time_order: true

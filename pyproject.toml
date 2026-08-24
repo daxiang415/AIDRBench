@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "aidrbench"
 version = "0.1.0.dev0"
-description = "Hardware-calibrated benchmark for demand-responsive AI data centers"
+description = "Job-derived firm demand response and community PV benchmark"
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "License not yet selected" }
@@ -23,7 +23,6 @@ dependencies = [
 
 [project.optional-dependencies]
 control = ["cvxpy>=1.6,<2", "highspy>=1.8,<2", "osqp>=0.6,<2"]
-rl = ["stable-baselines3[extra]>=2.5,<3", "sb3-contrib>=2.5,<3"]
 analysis = [
   "joblib>=1.4,<2",
   "matplotlib>=3.9,<4",
@@ -62,7 +61,3 @@ python_version = "3.12"
 strict = true
 packages = ["aidrbench"]
 mypy_path = "src"
-
-[[tool.mypy.overrides]]
-module = ["stable_baselines3", "stable_baselines3.*", "sb3_contrib", "sb3_contrib.*"]
-ignore_missing_imports = true

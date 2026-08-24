@@ -1,0 +1,10 @@
+Rapid growth in artificial-intelligence computing is increasing data-centre electricity demand and creating new generation, network-connection and local grid-operability challenges.
+Temporal shifting of computing workloads can change electricity use and associated emissions, but its grid value depends on when and where the work is executed.
+Credible data-centre flexibility depends on workload release times, computational requirements, service classes and deadlines rather than only on an assumed fixed flexible fraction of peak load.
+Deferring computational work creates a future service and energy obligation, so successful power delivery during one event does not by itself establish recovery or repeatability.
+Advance notice can increase demand-response capacity only when eligible work can be executed before the event using available compute and power headroom.
+Flexible electricity demand can reduce renewable curtailment and expand the feasible integration of variable photovoltaic generation.
+Flexible demand and battery energy storage can be complementary or substitutive because both act on a shared network- and energy-constrained feasible region.
+Photovoltaic hosting capacity is jointly constrained by local demand, network limits, curtailment requirements and the timing flexibility of connected resources.
+Coordinating heterogeneous demand-side resources across community units can mitigate city-scale generation-demand mismatches and influence grid-upgrade pathways.
+Operational flexibility selected under one workload and community distribution requires independent local validation before transfer to a shifted operating distribution.

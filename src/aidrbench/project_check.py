@@ -7,20 +7,24 @@ from pathlib import Path
 
 REQUIRED_PATHS = (
     "README.md",
+    "MAINLINE_FILES.md",
     "pyproject.toml",
-    "configs/env/v0_discrete.yaml",
-    "configs/hardware/four_gpu_node.yaml",
-    "configs/hardware/gpu_profiles/h100_sxm_80gb.yaml",
-    "configs/hardware/gpu_profiles/h200_sxm_141gb.yaml",
+    "configs/env/nature_mainline_development.yaml",
+    "configs/env/nature_mainline_validation.yaml",
+    "configs/env/nature_mainline_locked_id.yaml",
+    "configs/env/nature_mainline_locked_ood.yaml",
+    "configs/controller/nature_robust_mpc_v1.yaml",
+    "configs/paper/nature_source_data_v1.yaml",
+    "data/calibration/rtx6000pro_4gpu_v1.yaml",
+    "data/manifests/nature_mainline_protocol_v1.yaml",
+    "manuscript/nature_communications_article.md",
+    "manuscript/supplementary_information.md",
     "scripts/check_system.sh",
-    "scripts/restore_gpu_power.py",
-    "scripts/restore_gpu_power.sh",
     "src/aidrbench/__init__.py",
-    "src/aidrbench/envs/actions.py",
-    "src/aidrbench/datacenter/hardware.py",
-    "src/aidrbench/datacenter/scaling.py",
-    "src/aidrbench/hil/backend.py",
-    "tests/test_actions.py",
+    "src/aidrbench/envs/community_ai_dr_env.py",
+    "src/aidrbench/evaluation/frozen_causal_certificate.py",
+    "src/aidrbench/evaluation/hosting_capacity.py",
+    "tests/test_nature_protocol.py",
 )
 
 
@@ -42,7 +46,7 @@ def check_project(root: str | Path) -> ProjectCheckReport:
 
 def format_report(report: ProjectCheckReport) -> str:
     if report.ok:
-        return f"P0 project check passed: {report.root}"
-    lines = [f"P0 project check failed: {report.root}", "Missing files:"]
+        return f"Nature mainline project check passed: {report.root}"
+    lines = [f"Nature mainline project check failed: {report.root}", "Missing files:"]
     lines.extend(f"  - {path}" for path in report.missing)
     return "\n".join(lines)

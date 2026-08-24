@@ -1,9 +1,0 @@
-controller: oracle
-phase: P3
-solver: HIGHS
-horizon: full_episode
-arrival_forecast: perfect_future
-community_and_event_forecast: perfect_future
-workload_model: preemptible_fluid_gpu_hours
-global_optimum_for_declared_model: true
-online_controller: false

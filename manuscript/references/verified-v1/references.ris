@@ -1,0 +1,600 @@
+TY  - JOUR
+TI  - AI data centres as grid-interactive assets
+AU  - Colangelo, Philip
+AU  - Coskun, Ayse K.
+AU  - Megrue, Jack
+AU  - Roberts, Ciaran
+AU  - Sengupta, Shayan
+AU  - Sivaram, Varun
+AU  - Tiao, Ethan
+AU  - Vijaykar, Aroon
+AU  - Williams, Chris
+AU  - Wilson, Daniel C.
+AU  - Records, Brandon
+AU  - MacFarland, Zack
+AU  - Dreiling, Daniel
+AU  - Morey, Nathan
+AU  - Ratnayake, Anuja
+AU  - Vairamohan, Baskar
+T2  - Nature Energy
+JO  - Nature Energy
+PY  - 2025
+Y1  - 2025/12/05
+VL  - 11
+IS  - 2
+SP  - 254
+EP  - 261
+DO  - 10.1038/s41560-025-01927-1
+UR  - https://doi.org/10.1038/s41560-025-01927-1
+SN  - 2058-7546
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Exploding AI Power Use: an Opportunity to Rethink Grid Planning and Management
+AU  - Lin, Liuzixuan
+AU  - Wijayawardana, Rajini
+AU  - Rao, Varsha
+AU  - Nguyen, Hai
+AU  - GNIBGA, Emmanuel Wedan
+AU  - Chien, Andrew A.
+T2  - The 15th ACM International Conference on Future and Sustainable Energy Systems
+JO  - The 15th ACM International Conference on Future and Sustainable Energy Systems
+PY  - 2024
+Y1  - 2024/06/04
+SP  - 434
+EP  - 441
+DO  - 10.1145/3632775.3661959
+UR  - https://doi.org/10.1145/3632775.3661959
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Opportunities and challenges for data center demand response
+AU  - Wierman, Adam
+AU  - Liu, Zhenhua
+AU  - Liu, Iris
+AU  - Mohsenian-Rad, Hamed
+T2  - International Green Computing Conference
+JO  - International Green Computing Conference
+PY  - 2014
+Y1  - 2014/11/01
+SP  - 1
+EP  - 10
+DO  - 10.1109/igcc.2014.7039172
+UR  - https://doi.org/10.1109/igcc.2014.7039172
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Carbon-Aware Computing for Datacenters
+AU  - Radovanović, Ana
+AU  - Koningstein, Ross
+AU  - Schneider, Ian
+AU  - Chen, Bokan
+AU  - Duarte, Alexandre
+AU  - Roy, Binz
+AU  - Xiao, Diyue
+AU  - Haridasan, Maya
+AU  - Hung, Patrick
+AU  - Care, Nick
+AU  - Talukdar, Saurav
+AU  - Mullen, Eric
+AU  - Smith, Kendal
+AU  - Cottman, MariEllen
+AU  - Cirne, Walfredo
+T2  - IEEE Transactions on Power Systems
+JO  - IEEE Transactions on Power Systems
+PY  - 2023
+Y1  - 2023/03/01
+VL  - 38
+IS  - 2
+SP  - 1270
+EP  - 1280
+DO  - 10.1109/tpwrs.2022.3173250
+UR  - https://doi.org/10.1109/tpwrs.2022.3173250
+SN  - 0885-8950
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Spatio-temporal load shifting for truly clean computing
+AU  - Riepin, Iegor
+AU  - Brown, Tom
+AU  - Zavala, Victor M.
+T2  - Advances in Applied Energy
+JO  - Advances in Applied Energy
+PY  - 2025
+Y1  - 2025/03/01
+VL  - 17
+SP  - 100202
+DO  - 10.1016/j.adapen.2024.100202
+UR  - https://doi.org/10.1016/j.adapen.2024.100202
+SN  - 2666-7924
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - HPC Data Center Participation in Demand Response: An Adaptive Policy With QoS Assurance
+AU  - Zhang, Yijia
+AU  - Wilson, Daniel Curtis
+AU  - Paschalidis, Ioannis Ch.
+AU  - Coskun, Ayse K.
+T2  - IEEE Transactions on Sustainable Computing
+JO  - IEEE Transactions on Sustainable Computing
+PY  - 2022
+Y1  - 2022/01/01
+VL  - 7
+IS  - 1
+SP  - 157
+EP  - 171
+DO  - 10.1109/tsusc.2021.3077254
+UR  - https://doi.org/10.1109/tsusc.2021.3077254
+SN  - 2377-3782
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - A Data Center Demand Response Policy for Real-World Workload Scenarios in HPC
+AU  - Zhang, Yijia
+AU  - Wilson, Daniel C.
+AU  - Paschalidis, Ioannis Ch.
+AU  - Coskun, Ayse K.
+T2  - 2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)
+JO  - 2021 Design, Automation &amp; Test in Europe Conference &amp; Exhibition (DATE)
+PY  - 2021
+Y1  - 2021/02/01
+SP  - 282
+EP  - 287
+DO  - 10.23919/date51398.2021.9474075
+UR  - https://doi.org/10.23919/date51398.2021.9474075
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Data center demand response: Avoiding the coincident peak via workload shifting and local generation
+AU  - Liu, Zhenhua
+AU  - Wierman, Adam
+AU  - Chen, Yuan
+AU  - Razon, Benjamin
+AU  - Chen, Niangjun
+T2  - Performance Evaluation
+JO  - Performance Evaluation
+PY  - 2013
+Y1  - 2013/10/01
+VL  - 70
+IS  - 10
+SP  - 770
+EP  - 791
+DO  - 10.1016/j.peva.2013.08.014
+UR  - https://doi.org/10.1016/j.peva.2013.08.014
+SN  - 0166-5316
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Modeling Demand Response Capability by Internet Data Centers Processing Batch Computing Jobs
+AU  - Li, Jie
+AU  - Bao, Zhen
+AU  - Li, Zuyi
+T2  - IEEE Transactions on Smart Grid
+JO  - IEEE Transactions on Smart Grid
+PY  - 2015
+Y1  - 2015/03/01
+VL  - 6
+IS  - 2
+SP  - 737
+EP  - 747
+DO  - 10.1109/tsg.2014.2363583
+UR  - https://doi.org/10.1109/tsg.2014.2363583
+SN  - 1949-3053
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - The Online Pause and Resume Problem: Optimal Algorithms and An Application to Carbon-Aware Load Shifting
+AU  - Lechowicz, Adam
+AU  - Christianson, Nicolas
+AU  - Zuo, Jinhang
+AU  - Bashir, Noman
+AU  - Hajiesmaili, Mohammad
+AU  - Wierman, Adam
+AU  - Shenoy, Prashant
+T2  - Proceedings of the ACM on Measurement and Analysis of Computing Systems
+JO  - Proceedings of the ACM on Measurement and Analysis of Computing Systems
+PY  - 2023
+Y1  - 2023/12/07
+VL  - 7
+IS  - 3
+SP  - 1
+EP  - 32
+DO  - 10.1145/3626776
+UR  - https://doi.org/10.1145/3626776
+SN  - 2476-1249
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Mitigating Curtailment and Carbon Emissions through Load Migration between Data Centers
+AU  - Zheng, Jiajia
+AU  - Chien, Andrew A.
+AU  - Suh, Sangwon
+T2  - Joule
+JO  - Joule
+PY  - 2020
+Y1  - 2020/10/01
+VL  - 4
+IS  - 10
+SP  - 2208
+EP  - 2222
+DO  - 10.1016/j.joule.2020.08.001
+UR  - https://doi.org/10.1016/j.joule.2020.08.001
+SN  - 2542-4351
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Parasol and GreenSwitch
+AU  - Goiri, Íñigo
+AU  - Katsak, William
+AU  - Le, Kien
+AU  - Nguyen, Thu D.
+AU  - Bianchini, Ricardo
+T2  - Proceedings of the eighteenth international conference on Architectural support for programming languages and operating systems
+JO  - Proceedings of the eighteenth international conference on Architectural support for programming languages and operating systems
+PY  - 2013
+Y1  - 2013/03/16
+SP  - 51
+EP  - 64
+DO  - 10.1145/2451116.2451123
+UR  - https://doi.org/10.1145/2451116.2451123
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Sustainable Supercomputing for AI
+AU  - Zhao, Dan
+AU  - Samsi, Siddharth
+AU  - McDonald, Joseph
+AU  - Li, Baolin
+AU  - Bestor, David
+AU  - Jones, Michael
+AU  - Tiwari, Devesh
+AU  - Gadepally, Vijay
+T2  - Proceedings of the 2023 ACM Symposium on Cloud Computing
+JO  - Proceedings of the 2023 ACM Symposium on Cloud Computing
+PY  - 2023
+Y1  - 2023/10/30
+SP  - 588
+EP  - 596
+DO  - 10.1145/3620678.3624793
+UR  - https://doi.org/10.1145/3620678.3624793
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Optimized flexibility management enacting Data Centres participation in Smart Demand Response programs
+AU  - Cioara, Tudor
+AU  - Anghel, Ionut
+AU  - Bertoncini, Massimo
+AU  - Salomie, Ioan
+AU  - Arnone, Diego
+AU  - Mammina, Marzia
+AU  - Velivassaki, Terpsichori-Helen
+AU  - Antal, Marcel
+T2  - Future Generation Computer Systems
+JO  - Future Generation Computer Systems
+PY  - 2018
+Y1  - 2018/01/01
+VL  - 78
+SP  - 330
+EP  - 342
+DO  - 10.1016/j.future.2016.05.010
+UR  - https://doi.org/10.1016/j.future.2016.05.010
+SN  - 0167-739X
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Frequency regulation service provision in data center with computational flexibility
+AU  - Wang, Wei
+AU  - Abdolrashidi, Amirali
+AU  - Yu, Nanpeng
+AU  - Wong, Daniel
+T2  - Applied Energy
+JO  - Applied Energy
+PY  - 2019
+Y1  - 2019/10/01
+VL  - 251
+SP  - 113304
+DO  - 10.1016/j.apenergy.2019.05.107
+UR  - https://doi.org/10.1016/j.apenergy.2019.05.107
+SN  - 0306-2619
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Multiobjective distribution system operation with demand response to optimize solar hosting capacity, voltage deviation index and network loss
+AU  - Loji, Kabulo
+AU  - Sharma, Sachin
+AU  - Sharma, Gulshan
+AU  - Rawat, Tanuj
+T2  - Scientific Reports
+JO  - Scientific Reports
+PY  - 2025
+Y1  - 2025/01/02
+VL  - 15
+IS  - 1
+SP  - 300
+DO  - 10.1038/s41598-024-82379-7
+UR  - https://doi.org/10.1038/s41598-024-82379-7
+SN  - 2045-2322
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Optimal configuration method of demand-side flexible resources for enhancing renewable energy integration
+AU  - Fu, Yu
+AU  - Bai, Hao
+AU  - Cai, Yongxiang
+AU  - Yang, Weichen
+AU  - Li, Yue
+T2  - Scientific Reports
+JO  - Scientific Reports
+PY  - 2024
+Y1  - 2024/04/01
+VL  - 14
+IS  - 1
+SP  - 7658
+DO  - 10.1038/s41598-024-58266-6
+UR  - https://doi.org/10.1038/s41598-024-58266-6
+SN  - 2045-2322
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Combined economic and technological evaluation of battery energy storage for grid applications
+AU  - Davies, D. M.
+AU  - Verde, M. G.
+AU  - Mnyshenko, O.
+AU  - Chen, Y. R.
+AU  - Rajeev, R.
+AU  - Meng, Y. S.
+AU  - Elliott, G.
+T2  - Nature Energy
+JO  - Nature Energy
+PY  - 2018
+Y1  - 2018/12/03
+VL  - 4
+IS  - 1
+SP  - 42
+EP  - 50
+DO  - 10.1038/s41560-018-0290-1
+UR  - https://doi.org/10.1038/s41560-018-0290-1
+SN  - 2058-7546
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Facilitating megacity electricity decarbonization via grid-interactive demand-side resource management
+AU  - Li, Kaisan
+AU  - Tao, Shengyu
+AU  - Xiong, Zuxun
+AU  - Ren, Ruojun
+AU  - Zhang, Yuhang
+AU  - Miao, Rui
+AU  - Qi, He
+AU  - Lin, Borong
+AU  - Kang, Jian
+AU  - Jiang, Yi
+AU  - Zhang, Yi
+T2  - Nature Communications
+JO  - Nature Communications
+PY  - 2026
+Y1  - 2026/08/17
+DO  - 10.1038/s41467-026-76799-4
+UR  - https://doi.org/10.1038/s41467-026-76799-4
+SN  - 2041-1723
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Grid-enhancing technologies for clean energy systems
+AU  - Su, Tong
+AU  - Zhao, Junbo
+AU  - Gomez-Exposito, Antonio
+AU  - Chen, Yousu
+AU  - Terzija, Vladimir
+AU  - Gentle, Jake P.
+T2  - Nature Reviews Clean Technology
+JO  - Nature Reviews Clean Technology
+PY  - 2025
+Y1  - 2025/01/15
+VL  - 1
+IS  - 1
+SP  - 16
+EP  - 31
+DO  - 10.1038/s44359-024-00001-5
+UR  - https://doi.org/10.1038/s44359-024-00001-5
+SN  - 3005-0685
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Data center workload flexibility for power system demand response: Evidence from Alibaba traces
+AU  - Caprara, Adriano
+AU  - Yu, Ying
+AU  - Teng, Fei
+AU  - Junyent-Ferré, Adrià
+AU  - Bullich-Massagué, Eduard
+AU  - Aragüés-Peñalba, Mònica
+T2  - International Journal of Electrical Power &amp; Energy Systems
+JO  - International Journal of Electrical Power &amp; Energy Systems
+PY  - 2026
+Y1  - 2026/05/01
+VL  - 178
+SP  - 111940
+DO  - 10.1016/j.ijepes.2026.111940
+UR  - https://doi.org/10.1016/j.ijepes.2026.111940
+SN  - 0142-0615
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - To Defer or To Shift? The Role of AI Data Center Flexibility on Grid Interconnection
+AU  - Chen, Yize
+AU  - Zheng, Xiaogui
+T2  - Proceedings of the 2026 ACM Sustainability Week
+JO  - Proceedings of the 2026 ACM Sustainability Week
+PY  - 2026
+Y1  - 2026/06/22
+SP  - 322
+EP  - 327
+DO  - 10.1145/3765611.3815593
+UR  - https://doi.org/10.1145/3765611.3815593
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Workload and energy management of geo-distributed datacenters considering demand response programs
+AU  - Zhao, Mengmeng
+AU  - Wang, Xiaoying
+AU  - Mo, Junrong
+T2  - Sustainable Energy Technologies and Assessments
+JO  - Sustainable Energy Technologies and Assessments
+PY  - 2023
+Y1  - 2023/02/01
+VL  - 55
+SP  - 102851
+DO  - 10.1016/j.seta.2022.102851
+UR  - https://doi.org/10.1016/j.seta.2022.102851
+SN  - 2213-1388
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Let's wait awhile
+AU  - Wiesner, Philipp
+AU  - Behnke, Ilja
+AU  - Scheinert, Dominik
+AU  - Gontarska, Kordian
+AU  - Thamsen, Lauritz
+T2  - Proceedings of the 22nd International Middleware Conference
+JO  - Proceedings of the 22nd International Middleware Conference
+PY  - 2021
+Y1  - 2021/12/06
+SP  - 260
+EP  - 272
+DO  - 10.1145/3464298.3493399
+UR  - https://doi.org/10.1145/3464298.3493399
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Framework for capacity credit assessment of electrical energy storage and demand response
+AU  - Zhou, Yutian
+AU  - Mancarella, Pierluigi
+AU  - Mutale, Joseph
+T2  - IET Generation, Transmission &amp; Distribution
+JO  - IET Generation, Transmission &amp; Distribution
+PY  - 2016
+Y1  - 2016/06/01
+VL  - 10
+IS  - 9
+SP  - 2267
+EP  - 2276
+DO  - 10.1049/iet-gtd.2015.0458
+UR  - https://doi.org/10.1049/iet-gtd.2015.0458
+SN  - 1751-8687
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Evaluating Demand Response Impacts on Capacity Credit of Renewable Distributed Generation in Smart Distribution Systems
+AU  - Feng, Jiahuan
+AU  - Zeng, Bo
+AU  - Zhao, Dongbo
+AU  - Wu, Geng
+AU  - Liu, Zongqi
+AU  - Zhang, Jianhua
+T2  - IEEE Access
+JO  - IEEE Access
+PY  - 2018
+Y1  - 2018/01/01
+VL  - 6
+SP  - 14307
+EP  - 14317
+DO  - 10.1109/access.2017.2745198
+UR  - https://doi.org/10.1109/access.2017.2745198
+SN  - 2169-3536
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - One-sided nonparametric tolerance limits
+AU  - Vangel, Mark G.
+T2  - Communications in Statistics - Simulation and Computation
+JO  - Communications in Statistics - Simulation and Computation
+PY  - 1994
+Y1  - 1994/01/01
+VL  - 23
+IS  - 4
+SP  - 1137
+EP  - 1154
+DO  - 10.1080/03610919408813222
+UR  - https://doi.org/10.1080/03610919408813222
+SN  - 0361-0918
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Probable Inference, the Law of Succession, and Statistical Inference
+AU  - Wilson, Edwin B.
+T2  - Journal of the American Statistical Association
+JO  - Journal of the American Statistical Association
+PY  - 1927
+Y1  - 1927/06/01
+VL  - 22
+IS  - 158
+SP  - 209
+EP  - 212
+DO  - 10.1080/01621459.1927.10502953
+UR  - https://doi.org/10.1080/01621459.1927.10502953
+SN  - 0162-1459
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Interval Estimation for a Binomial Proportion
+AU  - Brown, Lawrence D.
+AU  - Cai, T. Tony
+AU  - DasGupta, Anirban
+T2  - Statistical Science
+JO  - Statistical Science
+PY  - 2001
+Y1  - 2001/05/01
+VL  - 16
+IS  - 2
+DO  - 10.1214/ss/1009213286
+UR  - https://doi.org/10.1214/ss/1009213286
+SN  - 0883-4237
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -
+
+TY  - JOUR
+TI  - Parallelizing the dual revised simplex method
+AU  - Huangfu, Q.
+AU  - Hall, J. A. J.
+T2  - Mathematical Programming Computation
+JO  - Mathematical Programming Computation
+PY  - 2018
+Y1  - 2018/03/01
+VL  - 10
+IS  - 1
+SP  - 119
+EP  - 142
+DO  - 10.1007/s12532-017-0130-5
+UR  - https://doi.org/10.1007/s12532-017-0130-5
+SN  - 1867-2949
+N1  - Metadata-only candidate. Inspect abstract or publisher page before citing as support.
+ER  -

@@ -1,1 +1,1 @@
-"""P1 data ingestion and manifest modules."""
+"""Formal data ingestion, manifests and frozen-scenario support."""

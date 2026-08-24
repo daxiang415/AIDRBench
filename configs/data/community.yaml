@@ -1,8 +1,0 @@
-dataset: community
-phase: P1
-mode: synthetic_smoke
-days: 30
-resolution_seconds: 900
-peak_kw: 100
-seed: 42
-output: data/processed/community_synthetic.parquet

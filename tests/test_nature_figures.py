@@ -21,6 +21,21 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def test_repository_web_preview_manifests_match_tracked_pngs() -> None:
+    """Keep the GitHub preview bundle consistent after a figure is revised."""
+
+    root = Path(__file__).resolve().parents[1] / "docs/figures/nature_mainline_v1"
+    bundle = json.loads((root / "nature_mainline_figure_manifest.json").read_text())
+
+    for figure in bundle["figures"]:
+        per_figure = json.loads((root / figure["manifest"]).read_text())
+        assert figure["outputs"] == per_figure["outputs"]
+        png = next(output for output in figure["outputs"] if output["format"] == "png")
+        png_path = root / png["path"]
+        assert png_path.stat().st_size == png["bytes"]
+        assert _sha256(png_path) == png["sha256"]
+
+
 def _write_table(
     root: Path,
     table_id: str,

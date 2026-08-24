@@ -1,1 +1,1 @@
-"""P3 inference and deadline-aware workload models."""
+"""Deadline-aware hourly workload models."""

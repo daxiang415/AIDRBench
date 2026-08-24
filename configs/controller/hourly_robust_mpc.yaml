@@ -1,8 +1,0 @@
-controller: robust_mpc
-phase: P7
-horizon_hours: 6
-solver: HIGHS
-arrival_forecast: historical_mean_plus_uncertainty_envelope
-community_and_limit_forecast: environment_provided_6h
-information_structure: causal_control_state_plus_6h_environment_forecast
-full_horizon_oracle: false

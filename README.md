@@ -3,7 +3,7 @@
 > **文档定位**：本文件定义 AIDRBench 面向 *Nature Communications* 的主论文科学主线。它是系统与机制研究方案，不是控制算法论文，也不是强化学习 benchmark 论文。
 > **核心原则**：全文只有一个主问题——AI 数据中心究竟能提供多少真实、可靠、可重复调用的需求响应；社区能够多安装和多利用多少光伏，是这部分 job-derived firm DR 的系统后果。PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
 
-论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
+正式仓库边界与权威文件顺序见 [`MAINLINE_FILES.md`](MAINLINE_FILES.md)。论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
 
 ---
 
@@ -67,7 +67,7 @@
 - 一个只展示“AI 数据中心可以削峰”的案例研究；
 - 一个把四卡服务器直接等同于 MW 级数据中心的硬件论文。
 
-强化学习、CMDP、安全层和硬件在环控制可以保留在代码库中，但应作为后续控制论文或 Supplementary extension，而不是决定本篇 NC 主线。
+强化学习、CMDP、安全层和硬件在环控制不属于本篇 NC 主线，已从正式 `main` 移除；需要时可从 Git 历史恢复到独立分支，不与正式证据共存。
 
 ---
 
@@ -854,7 +854,7 @@ OOD 容量。
 | NC 主线任务 | 所需代码模块 | 是否属于主论文 |
 |---|---|---:|
 | 硬件功率校准 | calibration artifact、power model | 是 |
-| 任务 arrival/deadline 建模 | workload sampler、deadline queue | 是 |
+| 任务 arrival/deadline 建模 | Alibaba 2026 sampler、hourly deadline buckets | 是 |
 | Frozen scenario | scenario freeze、hash/provenance | 是 |
 | PI frontier | perfect-information optimizer | 是 |
 | 非前视 firm frontier | non-anticipative optimization | 是 |
@@ -863,9 +863,6 @@ OOD 容量。
 | Hosting capacity | PV/BESS/PCC optimization | 是 |
 | 参数不确定性 | lower/nominal/upper uncertainty bounds | 是 |
 | Rule/MPC smoke test | software validation | 否，最多补充材料 |
-| DQN/PPO/SAC benchmark | online-control extension | 否 |
-| CMDP v1–v5 reward | control-algorithm development | 否 |
-| Hardware-in-the-loop | future extension | 否 |
 
 **重要区分**：非前视优化给出受限场景规划边界；只有独立 locked-ID 上的固定因果候选才能称为容量证书。这一验证不等于控制器竞赛。
 
@@ -1012,7 +1009,7 @@ solver and tolerances
 
 ### 12.3 不进入本篇主线的内容
 
-以下内容移动到单独文档或后续论文：
+以下内容不进入正式 `main`，旧实现仅由 Git 历史保存：
 
 - DQN、PPO、SAC；
 - CMDP reward v1–v5；
@@ -1027,45 +1024,11 @@ solver and tolerances
 
 ---
 
-## 13. 仓库文档建议
+## 13. 正式仓库边界
 
-### `README.md`
+`main` 只包含可复现本篇论文所需的协议、校准证据、冻结场景逻辑、优化与因果认证、论文、Source Data 合同、图件和测试。精确索引见 [`MAINLINE_FILES.md`](MAINLINE_FILES.md)。
 
-只保留：
-
-- 项目核心命题；
-- 已实现功能；
-- 可运行的主要 CLI；
-- 当前协议和校准状态；
-- 哪些结果是历史诊断；
-- 指向各专题文档的链接。
-
-### `docs/nature-communications-mainline.md`
-
-保存本文件，定义 NC 主线。
-
-### `docs/online-control-extension.md`
-
-保存：
-
-- rule/MPC/RL；
-- CMDP reward；
-- controller diagnostics；
-- future safe-control paper。
-
-### `docs/hourly-validation-status.md`
-
-只记录真实运行状态：
-
-- 哪些场景已冻结；
-- 哪些 seed 已运行；
-- 哪些模型已废弃；
-- locked OOD 是否开启；
-- failure decomposition。
-
-### `docs/historical-results.md`
-
-保存旧版 63.52 kW、68.86 kW、firm_v4 和早期 reward 结果，避免再次混入当前结论。
+旧版 63.52 kW、68.86 kW、firm_v4、RL/CMDP、HIL 与跨 GPU 型号外推不再以并行文档或配置保留在工作树中，避免旧结论再次混入当前证据；它们仍可从 Git 历史审计和恢复。
 
 ---
 
@@ -1106,7 +1069,7 @@ solver and tolerances
 ### Phase 0 — 冻结论文范围
 
 - 明确本篇 NC 不以控制器为主线；
-- 将 RL/CMDP 内容移到 control extension；
+- 从正式主线移除 RL/CMDP/HIL 与跨 GPU 型号外推；
 - 修正 README 与当前实现不一致的问题。
 
 ### Phase 1 — 冻结物理与数据模型

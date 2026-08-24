@@ -95,28 +95,28 @@
       "manifest": "figure_4_manifest.json",
       "outputs": [
         {
-          "bytes": 48319,
+          "bytes": 59195,
           "format": "svg",
           "path": "figure_4_hosting_capacity_interactions.svg",
-          "sha256": "047dd1f8394314807bcafd3cfde87c58f75c41fc40a4be9429140417d665f83e"
+          "sha256": "de0b56d8c839513d3e840c68feebba787e3ad94a3d405582648f0eb7d1193fa3"
         },
         {
-          "bytes": 31018,
+          "bytes": 33192,
           "format": "pdf",
           "path": "figure_4_hosting_capacity_interactions.pdf",
-          "sha256": "e832e24f7b5807b74cc5dad8dd104fa16e4e615a388c2bb93f34df4504f3b785"
+          "sha256": "d319b1fb602136b9dc1d99f079ea6e103ea45f5a9e6a4aa2fc45ecde2c84b58e"
         },
         {
-          "bytes": 1080214,
+          "bytes": 1313224,
           "format": "tiff",
           "path": "figure_4_hosting_capacity_interactions.tiff",
-          "sha256": "51cb3c20c50bf9c6d98945d35b0d469bd7b34cfc114b4b7a67710b2d63e971a3"
+          "sha256": "ef52340f8ebced40b4ee9e25c46793a0b9f9f7826124f853e604afbf40ec5cea"
         },
         {
-          "bytes": 169561,
+          "bytes": 258372,
           "format": "png",
           "path": "figure_4_hosting_capacity_interactions.png",
-          "sha256": "6210a3544d2bff298194b1b66c4d0ed70d218f0b6fdedc051c700ee7f8eedf97"
+          "sha256": "6dbd46b234f966c4f8778fc39d3c18d645e84e9e7f918e48e99a9c159f16dd58"
         }
       ]
     },

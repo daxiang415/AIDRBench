@@ -22,7 +22,6 @@ from aidrbench.workloads.deadline_buckets import HourlyArrival
 ROOT = Path(__file__).resolve().parents[1]
 CONTINUOUS_CONFIG = ROOT / "configs/env/hourly_continuous.yaml"
 DISCRETE_CONFIG = ROOT / "configs/env/hourly_discrete.yaml"
-TRAIN_CONFIG = ROOT / "configs/env/hourly_continuous_train.yaml"
 
 
 def test_random_event_start_choices_create_one_event_without_forecast_leakage() -> None:
@@ -334,32 +333,6 @@ def test_explicit_seed_is_reproducible_but_auto_reset_samples_new_training_episo
 
     assert np.array_equal(seeded_a, seeded_b)
     assert not np.array_equal(automatic_a, automatic_b)
-
-
-def test_training_distribution_samples_dr_duration_and_request_by_seed() -> None:
-    env = ContinuousCommunityAIDemandResponseEnv(TRAIN_CONFIG)
-
-    env.reset(seed=1)
-    events_a = env.event_manifest
-    env.reset(seed=2)
-    events_b = env.event_manifest
-
-    assert all(1 <= event.stop_hour - event.start_hour <= 4 for event in events_a)
-    assert all(1 <= event.stop_hour - event.start_hour <= 4 for event in events_b)
-    assert all(event.notice_hours in {0.0, 2.0, 4.0, 6.0} for event in events_a + events_b)
-    assert events_a != events_b
-
-
-def test_training_notice_is_observable_before_configured_event() -> None:
-    env = ContinuousCommunityAIDemandResponseEnv(TRAIN_CONFIG)
-    env.reset(seed=1)
-    noticed_event = next(event for event in env.event_manifest if event.notice_hours > 0.0)
-    info: dict[str, object] = {}
-    for _ in range(noticed_event.start_hour - int(noticed_event.notice_hours) + 1):
-        _, _, _, _, info = env.step(np.asarray((1.0,), dtype=np.float32))
-
-    assert not info["event_active"]
-    assert info["event_notice_remaining_hours"] == pytest.approx(noticed_event.notice_hours)
 
 
 def test_configured_episode_seed_range_is_enforced() -> None:

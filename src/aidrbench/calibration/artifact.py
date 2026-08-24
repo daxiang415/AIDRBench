@@ -12,7 +12,7 @@ from typing import Any
 
 import yaml
 
-from aidrbench.datacenter.hardware import EvidenceClass
+from aidrbench.calibration.evidence import EvidenceClass
 
 HARDWARE_CALIBRATION_SCHEMA_VERSION = "aidrbench.hardware_calibration.v2"
 

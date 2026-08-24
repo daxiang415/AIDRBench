@@ -1,5 +1,0 @@
-controller: mpc
-phase: P4
-horizon_minutes: 60
-solver: OSQP
-perfect_forecast: false
