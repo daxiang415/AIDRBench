@@ -17,7 +17,7 @@ must reflect this difference in practical magnitude.
 
 - **Archetype:** asymmetric quantitative figure with one hero panel.
 - **Target/output:** *Nature Communications* main figure; Python/matplotlib;
-  180 mm wide; editable SVG/PDF plus 600-dpi TIFF and review PNG.
+  183 mm wide; editable SVG/PDF plus 600-dpi TIFF and review PNG.
 - **Independent unit:** frozen scenario; development and validation each
   contain 100 scenarios.
 - **Uncertainty:** paired within-scenario mean contrasts with predeclared
@@ -69,8 +69,10 @@ the manuscript Source Data bundle.
    renewable-integration effects.
 2. A single-event locked-ID DR certificate cannot be transferred automatically
    to a PV planner or a different community/workload distribution.
-3. Flexible fixed-PV schedules use the Model A permitted 1% deadline-miss
-   budget; rigid baselines have zero miss. Both values must remain visible.
+3. Headline flexible fixed-PV schedules use the Model A permitted 1%
+   deadline-miss budget; rigid baselines have zero miss. Both values must
+   remain visible, together with the separate zero-miss sensitivity showing
+   that the reported hosting and PV-use gains are preserved.
 4. PV utilisation can rise while maximum PCC import fails to fall; energy and
    capacity claims must remain separate.
 5. BESS charge and discharge are mutually exclusive; simultaneous dispatch

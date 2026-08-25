@@ -46,8 +46,8 @@ _COLORS = {
     "grid": "#DCE2E6",
 }
 _ALLOWED_FORMATS = frozenset({"svg", "pdf", "tiff", "png"})
-# Nature Communications specifies 180 mm for a double-column figure.
-_FIGURE_WIDTH_MM = 180.0
+# Project-wide final-size contract for Nature-family double-column figures.
+_FIGURE_WIDTH_MM = 183.0
 _FIGURE_WIDTH_IN = _FIGURE_WIDTH_MM / 25.4
 # Export contract: figure.svg, figure.pdf, figure.tiff, and figure.png.
 _MIN_FONT_PT = 6.5

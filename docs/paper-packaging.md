@@ -46,7 +46,8 @@ provided for rapid review.
 The production renderer uses a reference-led Nature Communications visual contract rather than an
 equal-sized dashboard grid:
 
-- every main figure is rendered at the journal's 180-mm double-column width;
+- every main figure is rendered to the project's 183-mm Nature-family
+  double-column contract;
 
 - Figure 1 is a schematic-led composite in which the nominal-to-job-derived mechanism is the hero
   panel and the quantitative gap, hardware anchor, and evidence hierarchy are subordinate;
@@ -64,7 +65,24 @@ The shared visual system uses low-saturation colours, direct labels, short panel
 panel areas, and explicit white space. It deliberately avoids decorative cards, repeated long titles,
 redundant legends, and duplicate panels that do not add a distinct claim.
 
-## 3. Clean provenance workflow
+## 3. Generate the four supplementary figures
+
+```bash
+aidrbench paper supplementary-figures \
+  --specification configs/paper/nature_supplementary_figures_v1.yaml \
+  --output results/figures/nature_supplementary_v1 \
+  --figures 1 2 3 4 \
+  --formats svg pdf tiff png
+```
+
+The supplementary specification is explicitly non-locked. It binds the environment-flow sources,
+four-GPU calibration artifact, frozen robust-MPC specification and a deterministic minimum-seed
+validation episode. The loader rejects locked scenario paths. Per-figure manifests record every
+input and Source Data hash; the representative-trajectory receipt records its scenario hash,
+selected capacity and service outcomes. These figures document implementation and mechanism and do
+not add another locked-test analysis.
+
+## 4. Clean provenance workflow
 
 Final manuscript artifacts should be generated from a committed, clean tree:
 
@@ -77,6 +95,7 @@ pytest
 
 aidrbench paper export-source-data
 aidrbench paper figures
+aidrbench paper supplementary-figures
 ```
 
 After export, confirm that `software.git.working_tree_dirty` is `false` in
@@ -84,7 +103,7 @@ After export, confirm that `software.git.working_tree_dirty` is `false` in
 by Git; release copies should be deposited with the manuscript source data and archived under the
 same tagged commit.
 
-## 4. Interpretation boundaries
+## 5. Interpretation boundaries
 
 - PI is a perfect-information planning upper bound, not a causal certificate.
 - Restricted NA is a finite-scenario information bound, not an unseen-scenario reliability claim.
@@ -93,7 +112,7 @@ same tagged commit.
   certificates.
 - Renewable-integration and hosting validation are independent planning-result replications, not
   real-world causal effects; partially feasible envelope cells are not zero-capacity points.
-- Fixed-PV energy benefits do not imply lower PCC peak, and the declared 1% flexible deadline-miss
-  budget remains visible.
+- Fixed-PV energy benefits do not imply lower PCC peak. The declared 1% flexible deadline-miss
+  budget remains visible, and its separate zero-miss sensitivity is supporting planning evidence.
 - Locked-OOD replays fixed validation-selected candidates. Zero certified OOD cells does not mean
   that OOD firm capacity is zero, because OOD capacity reselection was prohibited.

@@ -1,0 +1,73 @@
+{
+  "episode_seed": 20000,
+  "events": [
+    {
+      "event_id": 0,
+      "notice_hours": 0.0,
+      "requested_reduction_kw": 21.490205141911762,
+      "source_event_id": "configured_0",
+      "start_hour": 115,
+      "stop_hour": 116
+    }
+  ],
+  "exogenous_random_stream_seeds": {
+    "community": 7720770771443302936,
+    "events": 11210586252911595515,
+    "workload": 7154788311475788687
+  },
+  "files": {
+    "arrivals.parquet": "21b4584a5a682afc3265177d42dbc879c62fc80047397b035480205ecd956f23",
+    "baseline.parquet": "0a5e9fd101f8fdb8ef13592e022eab22eee289f193764a9c01a4bc8481f66174",
+    "community.parquet": "3ac8bdea039344b0e17276bebb2568fd92fc4bfad699bb8402f5588acea386f6",
+    "environment_config.yaml": "1bc41058d970d1cda989723e4106cd20d7759eed02fa2ad9469cbebc27f9b0bc"
+  },
+  "horizon": {
+    "forecast_horizon_hours": 6,
+    "main_hours": 168,
+    "total_hours": 216
+  },
+  "initial_bess_soc_fraction": null,
+  "no_dr_baseline": {
+    "deadline_miss_gpu_h": 0.0,
+    "terminal_backlog_gpu_h": 0.0
+  },
+  "power_model": {
+    "calibration_artifact_sha256": "ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193",
+    "calibration_power_case": "nominal",
+    "parameters": {
+      "data_center": {
+        "flexible_gpu_fraction": 0.6,
+        "gpus_per_node": 4,
+        "node_count": 144
+      },
+      "flexible_active_power_w_per_gpu": 272.7290395220588,
+      "flexible_active_power_w_per_gpu_by_class": [
+        [
+          "offline_inference",
+          300.0221737132353
+        ],
+        [
+          "training",
+          259.0824724264706
+        ]
+      ],
+      "idle_power_w_per_gpu": 13.935625,
+      "node_fixed_overhead_w": 300.0,
+      "pue": 1.2,
+      "rigid_active_power_w_per_gpu": 300.0221737132353,
+      "rigid_gpu_utilization": 0.40625
+    },
+    "sha256": "e392ea26657466e184b024c92e95747a58889cfc5dad0c21d8d653f596cd9369"
+  },
+  "scenario_bases": {
+    "actual_dc_peak_kw": 201.0007839840303,
+    "background_community_peak_kw": 800.0,
+    "pcc_capacity_kw": 1000.0,
+    "reference_mix_operating_peak_kw": 201.0007839840303,
+    "target_dc_peak_kw": 200.0,
+    "worst_class_peak_kw": 212.3328933002068
+  },
+  "scenario_hash": "c53ae573b0664487ef9674ac8f746f47e59c1e10b31f872f34607fdfd247e7e8",
+  "scenario_id": "hourly_seed_20000",
+  "schema_version": 1
+}

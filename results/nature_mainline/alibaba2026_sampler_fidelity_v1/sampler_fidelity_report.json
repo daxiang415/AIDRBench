@@ -1,0 +1,46 @@
+{
+  "audit_role": "non_locked_marginal_sampler_representativeness_diagnostic",
+  "diagnostic_thresholds": {
+    "maximum_categorical_total_variation": 0.05,
+    "maximum_ks_statistic": 0.02,
+    "maximum_normalized_wasserstein": 0.1,
+    "maximum_q50_relative_error": 0.05,
+    "maximum_q95_relative_error": 0.1
+  },
+  "diagnostic_thresholds_met": false,
+  "formal_sampler": {
+    "path": "data/processed/jobs_summary_sampler.parquet",
+    "sha256": "67e5cc0878e246e9de547cc838c6b0e3df5a25fcd52f043624235873ca2a0d66"
+  },
+  "full_summary": {
+    "path": "data/processed/jobs_summary.parquet",
+    "sha256": "95c91a8035197e15f29e9c1d15a9147d07b2a6959b2bb08322cb9f033b029124"
+  },
+  "independent_reference_sampler": {
+    "path": "results/nature_mainline/alibaba2026_sampler_fidelity_v1/independent_reference_sampler.parquet",
+    "rows_per_stratum": 50000,
+    "sampling_method": "streaming_uniform_random_key_top_k_per_stratum",
+    "seed": 20260824,
+    "sha256": "1ee05dc135825d1e4155b2bdd86ce26d9a48a33cab94b06e001994873c93fffe"
+  },
+  "interpretation_guardrails": [
+    "thresholds_are_engineering_diagnostics_not_a_formal_equivalence_test",
+    "ks_pvalues_are_descriptive_and_not_used_for_acceptance",
+    "audit_covers_marginal_job_shape_distributions_only",
+    "audit_does_not_validate_pod_hourly_temporal_correlations",
+    "audit_does_not_open_locked_id_or_locked_ood_scenarios"
+  ],
+  "metrics": {
+    "path": "results/nature_mainline/alibaba2026_sampler_fidelity_v1/sampler_fidelity_metrics.csv",
+    "row_count": 10,
+    "sha256": "b2a22980b1dcd46b324d31e4be7777baf3342085885b41853dd6670674d0d758"
+  },
+  "observed_maxima": {
+    "maximum_categorical_total_variation": 0.006560000000000033,
+    "maximum_ks_statistic": 0.007739999999999969,
+    "maximum_normalized_wasserstein": 0.21824890625003313,
+    "maximum_q50_relative_error": 0.016949152542372822,
+    "maximum_q95_relative_error": 0.009894212818922565
+  },
+  "schema_version": 1
+}

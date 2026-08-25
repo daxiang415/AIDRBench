@@ -50,6 +50,16 @@ def _add_data_parsers(subparsers: Any) -> None:
     alibaba_sampler.add_argument("--rows-per-stratum", type=int, default=50_000)
     alibaba_sampler.add_argument("--seed", type=int, default=2026)
 
+    alibaba_fidelity = commands.add_parser(
+        "audit-alibaba-lite-sampler",
+        help="compare the formal sampler with an independent full-summary reservoir",
+    )
+    alibaba_fidelity.add_argument("--full-summary", required=True)
+    alibaba_fidelity.add_argument("--formal-sampler", required=True)
+    alibaba_fidelity.add_argument("--output", required=True)
+    alibaba_fidelity.add_argument("--rows-per-stratum", type=int, default=50_000)
+    alibaba_fidelity.add_argument("--reference-seed", type=int, default=20_260_824)
+
     community = commands.add_parser(
         "make-synthetic-community", help="create a deterministic smoke profile"
     )
@@ -368,6 +378,13 @@ def _add_optimization_parsers(subparsers: Any) -> None:
     renewable_integration.add_argument("--specification", required=True)
     renewable_integration.add_argument("--workers", type=int, default=1)
     renewable_integration.add_argument("--output", required=True)
+    renewable_zero_miss = commands.add_parser(
+        "renewable-zero-miss",
+        help="run the non-locked development/validation zero-miss renewable sensitivity",
+    )
+    renewable_zero_miss.add_argument("--specification", required=True)
+    renewable_zero_miss.add_argument("--workers", type=int, default=1)
+    renewable_zero_miss.add_argument("--output", required=True)
 
 
 def _add_protocol_parser(subparsers: Any) -> None:
@@ -485,6 +502,26 @@ def _add_paper_parsers(subparsers: Any) -> None:
     )
     figures.add_argument("--figures", nargs="+", type=int, default=[1, 2, 3, 4, 5])
     figures.add_argument(
+        "--formats",
+        nargs="+",
+        choices=("svg", "pdf", "tiff", "png"),
+        default=["svg", "pdf", "tiff", "png"],
+    )
+
+    supplementary = commands.add_parser(
+        "supplementary-figures",
+        help="generate the four reproducibility and supporting-evidence figures",
+    )
+    supplementary.add_argument(
+        "--specification",
+        default="configs/paper/nature_supplementary_figures_v1.yaml",
+    )
+    supplementary.add_argument(
+        "--output",
+        default="results/figures/nature_supplementary_v1",
+    )
+    supplementary.add_argument("--figures", nargs="+", type=int, default=[1, 2, 3, 4])
+    supplementary.add_argument(
         "--formats",
         nargs="+",
         choices=("svg", "pdf", "tiff", "png"),
@@ -647,6 +684,16 @@ def _run_data(args: argparse.Namespace) -> int:
             priorities=args.priorities,
             rows_per_stratum=args.rows_per_stratum,
             seed=args.seed,
+        )
+    elif args.data_command == "audit-alibaba-lite-sampler":
+        from aidrbench.data.alibaba2026 import audit_alibaba_lite_sampler_fidelity
+
+        summary = audit_alibaba_lite_sampler_fidelity(
+            args.full_summary,
+            args.formal_sampler,
+            args.output,
+            rows_per_stratum=args.rows_per_stratum,
+            reference_seed=args.reference_seed,
         )
     elif args.data_command == "make-synthetic-community":
         from aidrbench.data.community import make_synthetic_community
@@ -1098,6 +1145,18 @@ def _run_optimization(args: argparse.Namespace) -> int:
         )
         _print_summary(summary)
         return 0
+    if args.optimization_command == "renewable-zero-miss":
+        from aidrbench.evaluation.renewable_service_sensitivity import (
+            compute_zero_miss_renewable_sensitivity,
+        )
+
+        zero_miss_summary = compute_zero_miss_renewable_sensitivity(
+            args.specification,
+            args.output,
+            workers=args.workers,
+        )
+        _print_summary(zero_miss_summary)
+        return 0
     raise ValueError("an optimize subcommand is required")
 
 
@@ -1226,6 +1285,19 @@ def _run_paper(args: argparse.Namespace) -> int:
 
         summary = plot_nature_mainline_figures(
             args.source_data,
+            args.output,
+            figures=args.figures,
+            formats=args.formats,
+        )
+        _print_summary(summary)
+        return 0
+    if args.paper_command == "supplementary-figures":
+        from aidrbench.evaluation.supplementary_figures import (
+            plot_nature_supplementary_figures,
+        )
+
+        summary = plot_nature_supplementary_figures(
+            args.specification,
             args.output,
             figures=args.figures,
             formats=args.formats,

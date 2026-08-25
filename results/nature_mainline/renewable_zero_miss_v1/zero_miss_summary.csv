@@ -1,0 +1,17 @@
+dataset_role,analysis_variant,bess_enabled,dc_operation,scenario_count,feasible_scenario_count,simultaneous_pv_hosting_kw,mean_pv_rated_kw,mean_total_pv_used_kwh,maximum_deadline_miss_gpu_h
+development,zero_miss_fixed_pv_operation,False,flexible,100,100,,500.0,27279.63627177212,0.0
+development,zero_miss_fixed_pv_operation,False,rigid,100,100,,500.0,27096.94842602206,0.0
+development,zero_miss_fixed_pv_operation,True,flexible,100,100,,500.0,27377.512832679502,0.0
+development,zero_miss_fixed_pv_operation,True,rigid,100,100,,500.0,27290.052086899694,0.0
+development,zero_miss_pv_hosting,False,flexible,100,100,525.7412292057048,731.1622250803161,38766.39620971878,0.0
+development,zero_miss_pv_hosting,False,rigid,100,100,430.44829429612844,685.5008847255642,36429.953588809796,0.0
+development,zero_miss_pv_hosting,True,flexible,100,100,585.9136052870355,791.5897311248946,41868.364410715694,0.0
+development,zero_miss_pv_hosting,True,rigid,100,100,482.6546838887347,748.2433199479319,39647.24214800918,0.0
+validation,zero_miss_fixed_pv_operation,False,flexible,100,100,,500.0,27892.317361655612,0.0
+validation,zero_miss_fixed_pv_operation,False,rigid,100,100,,500.0,27873.950918777777,0.0
+validation,zero_miss_fixed_pv_operation,True,flexible,100,100,,500.0,27901.74947321551,0.0
+validation,zero_miss_fixed_pv_operation,True,rigid,100,100,,500.0,27895.98449309805,0.0
+validation,zero_miss_pv_hosting,False,flexible,100,100,617.5189634529199,860.4002424802169,45721.12149379186,0.0
+validation,zero_miss_pv_hosting,False,rigid,100,100,584.6936351301922,815.5462677710443,43358.39313395951,0.0
+validation,zero_miss_pv_hosting,True,flexible,100,100,686.7689092388287,922.5165506739961,48997.26768221205,0.0
+validation,zero_miss_pv_hosting,True,rigid,100,100,653.3919629376654,879.318552386762,46720.37988035677,0.0

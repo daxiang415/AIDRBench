@@ -1,0 +1,36 @@
+schema_version: 1
+evidence_scope: non_locked_reproducibility_and_supporting_evidence
+locked_sets_used: false
+
+environment_flow:
+  protocol: data/manifests/nature_mainline_protocol_v1.yaml
+  source_manifest: data/manifests/sources.yaml
+  validation_environment: configs/env/nature_mainline_validation.yaml
+
+calibration:
+  artifact: data/calibration/rtx6000pro_4gpu_v1.yaml
+  run_gpu_means: data/calibration/rtx6000pro_4gpu_v1_fit/run_gpu_means.parquet
+  fit_repeats: [1, 2]
+  held_out_repeats: [3]
+
+observation_and_trajectory:
+  scenario_set: data/examples/nature_supplementary_validation_v1
+  representative_rule: minimum_episode_seed
+  expected_episode_seed: 20000
+  expected_scenario_hash: c53ae573b0664487ef9674ac8f746f47e59c1e10b31f872f34607fdfd247e7e8
+  event_id: 0
+  duration_h: 4
+  notice_h: 0
+  reliability_target: 0.95
+  selection: data/examples/nature_supplementary_validation_v1/causal_selection_q95.json
+  selection_sha256: ddd0094907e34f7f137856169c5fd6b84a33cf37cfc48e5158ceb5502fdd470b
+  controller: configs/controller/nature_robust_mpc_v1.yaml
+  controller_sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
+  pre_event_hours: 12
+  post_event_hours: 24
+
+export:
+  width_mm: 183.0
+  formats: [svg, pdf, tiff, png]
+  tiff_dpi: 600
+  minimum_font_pt: 6.5

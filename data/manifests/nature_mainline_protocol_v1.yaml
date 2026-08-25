@@ -168,6 +168,9 @@ causal_certificate:
       - wilson_lower_confidence_bound
       - certified
     outcome_failure_field: failure_reasons
+  locked_id_result_receipt:
+    path: data/manifests/nature_mainline_locked_id_results_v1.yaml
+    sha256: e8c2b0d60a2ba1f06e5fef53853054883986451c81363df6bef4e3063a36a039
   interpretation: deployable_reference_not_controller_comparison
 
 sensitivity_design:

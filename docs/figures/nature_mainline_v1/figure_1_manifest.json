@@ -39,7 +39,7 @@
     5.25
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "cb2a7f9180d3eee505c1c61fa20019e85638ae3002ae05d45823ba0cd75869b2",
+  "source_data_manifest_sha256": "0cda495b49a22357454d97ca66153579ed9d89e4957540ca86d63b45bce3ef13",
   "source_tables": [
     "fig1_fig2_pi_firm_boundaries",
     "fig1_calibration_run_means"

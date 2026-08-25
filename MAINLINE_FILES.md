@@ -29,16 +29,21 @@ must never silently change their meaning, controller hash or scenario hash.
 - `configs/experiment/nature_*.yaml`, `configs/sensitivity/nature_*.yaml` and
   `configs/community/pv_bess.yaml`: exhaustion, hosting, renewable-integration
   and sparse sensitivity specifications.
-- `configs/paper/nature_source_data_v1.yaml`: paper source-data contract.
+- `configs/paper/nature_source_data_v1.yaml` and
+  `configs/paper/nature_supplementary_figures_v1.yaml`: paper Source Data and
+  supplementary-figure contracts.
 - `data/calibration/`: measured four-GPU power evidence and the validated
   calibration artifact.
+- `data/examples/nature_supplementary_validation_v1/`: the deterministic,
+  non-locked validation example needed to regenerate Supplementary Figures 3–4.
 - `data/manifests/nature_*.yaml`: preregistration and hash-bound execution
   receipts. Downloaded data and generated Parquet results remain outside Git.
 - `src/aidrbench/`: the hourly environment, causal controllers, optimisation,
   certification, statistics and paper-export implementation.
 - `tests/` and `.github/workflows/ci.yml`: independent executable checks.
-- `docs/figures/nature_mainline_v1/`: web-review previews generated from the
-  verified Source Data bundle.
+- `docs/figures/nature_mainline_v1/` and
+  `docs/figures/nature_supplementary_v1/`: web-review previews and output
+  manifests generated from the verified inputs.
 
 The generic `configs/env/hourly_{continuous,discrete}.yaml` fixtures are kept
 only to exercise the public environment interface in unit tests. They are not

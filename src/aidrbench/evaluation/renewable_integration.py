@@ -166,6 +166,7 @@ def _build_problem(
     dc_operation: Literal["rigid", "flexible"],
     dc_scale_of_reference_mix: float,
     pv_rated_kw: float | None,
+    max_deadline_miss_rate: float | None = None,
 ) -> _RenewableProblem:
     if dc_operation not in {"rigid", "flexible"}:
         raise ValueError("dc_operation must be 'rigid' or 'flexible'")
@@ -181,6 +182,16 @@ def _build_problem(
         ) from exc
 
     snapshot, reward = _snapshot_for(artifact, duration_h=1, event_id=0)
+    allowed_deadline_miss_rate = (
+        reward.max_deadline_miss_rate
+        if max_deadline_miss_rate is None
+        else float(max_deadline_miss_rate)
+    )
+    _validate_fraction(
+        allowed_deadline_miss_rate,
+        "max_deadline_miss_rate",
+        allow_one=True,
+    )
     _assert_common_physics([snapshot])
     horizon = snapshot.total_hours
     timestep_h = 1.0
@@ -246,6 +257,8 @@ def _build_problem(
         }
         missed: Any = float(snapshot.baseline_deadline_miss_gpu_h) * scale
         terminal_backlog: Any = float(snapshot.baseline_terminal_backlog_gpu_h) * scale
+        if missed > allowed_deadline_miss_rate * snapshot.total_arrival_gpu_h * scale + _TOLERANCE:
+            raise ValueError("rigid baseline exceeds the requested deadline-miss allowance")
     else:
         edge_groups: list[int] = []
         edge_hours: list[int] = []
@@ -293,7 +306,7 @@ def _build_problem(
                 execution <= snapshot.capacity_gpu_h * scale,
                 group_incidence @ served + missed + terminal_backlog == group_work * scale,
                 cp.sum(missed)  # type: ignore[attr-defined]
-                <= reward.max_deadline_miss_rate * snapshot.total_arrival_gpu_h * scale,
+                <= allowed_deadline_miss_rate * snapshot.total_arrival_gpu_h * scale,
                 cp.sum(terminal_backlog)  # type: ignore[attr-defined]
                 <= (
                     snapshot.baseline_terminal_backlog_gpu_h
@@ -437,6 +450,7 @@ def solve_curtailment_constrained_pv_hosting(
     dc_scale_of_reference_mix: float,
     maximum_pv_curtailment_fraction: float,
     near_pcc_limit_fraction: float = 0.95,
+    max_deadline_miss_rate: float | None = None,
 ) -> RenewableIntegrationSolution | None:
     """Maximize PV nameplate subject to an energy-curtailment ceiling."""
 
@@ -448,6 +462,7 @@ def solve_curtailment_constrained_pv_hosting(
         dc_operation=dc_operation,
         dc_scale_of_reference_mix=dc_scale_of_reference_mix,
         pv_rated_kw=None,
+        max_deadline_miss_rate=max_deadline_miss_rate,
     )
     model.constraints.append(
         model.cp.sum(model.pv_available_kw - model.pv_used_kw)
@@ -481,6 +496,7 @@ def solve_fixed_capacity_pv_operation(
     pv_rated_kw: float,
     near_pcc_limit_fraction: float = 0.95,
     lexicographic_tolerance_kwh: float = 1e-5,
+    max_deadline_miss_rate: float | None = None,
 ) -> RenewableIntegrationSolution:
     """Optimize fixed-capacity PV use, grid import and BESS throughput in order."""
 
@@ -493,6 +509,7 @@ def solve_fixed_capacity_pv_operation(
         dc_operation=dc_operation,
         dc_scale_of_reference_mix=dc_scale_of_reference_mix,
         pv_rated_kw=pv_rated_kw,
+        max_deadline_miss_rate=max_deadline_miss_rate,
     )
     start = time.monotonic()
     primary = model.cp.Problem(model.cp.Maximize(model.cp.sum(model.pv_used_kw)), model.constraints)

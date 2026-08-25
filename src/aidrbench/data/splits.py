@@ -229,11 +229,13 @@ def _collect_source_files(node: object) -> list[tuple[str, str, int | None]]:
 
 
 def validate_source_manifest(manifest_path: str | Path) -> dict[str, object]:
-    """Verify every downloaded raw file carrying a hash in the source manifest."""
+    """Verify source files and their binding to the formal protocol inputs."""
 
     path = Path(manifest_path)
     with path.open(encoding="utf-8") as handle:
         document = yaml.safe_load(handle)
+    if not isinstance(document, dict):
+        raise ValueError("source manifest must be a mapping")
     files = _collect_source_files(document)
     if not files:
         raise ValueError("source manifest contains no hashed local files")
@@ -255,7 +257,64 @@ def validate_source_manifest(manifest_path: str | Path) -> dict[str, object]:
             "sha256": actual_hash,
             "bytes": actual_bytes,
         }
-    return {"valid": valid, "manifest": str(path), "files": results}
+    binding = document.get("formal_mainline_binding")
+    binding_valid = isinstance(binding, dict)
+    binding_rows: dict[str, object] = {}
+    if isinstance(binding, dict):
+        protocol_path = Path(str(binding.get("protocol_path", "")))
+        inputs = binding.get("inputs")
+        sources = document.get("sources")
+        binding_valid = (
+            protocol_path.is_file()
+            and isinstance(inputs, dict)
+            and isinstance(sources, dict)
+        )
+        protocol_data: object = None
+        if protocol_path.is_file():
+            protocol_document = yaml.safe_load(protocol_path.read_text(encoding="utf-8"))
+            if isinstance(protocol_document, dict):
+                protocol_data = protocol_document.get("data")
+        for name in ("community", "workload_sampler", "hardware_calibration"):
+            entry = inputs.get(name) if isinstance(inputs, dict) else None
+            protocol_entry = protocol_data.get(name) if isinstance(protocol_data, dict) else None
+            source_id = entry.get("source_id") if isinstance(entry, dict) else None
+            source_entry = sources.get(source_id) if isinstance(sources, dict) else None
+            matches = (
+                isinstance(entry, dict)
+                and isinstance(protocol_entry, dict)
+                and isinstance(source_entry, dict)
+                and source_entry.get("used_in_formal_mainline") is True
+                and entry.get("path") == protocol_entry.get("path")
+                and entry.get("sha256") == protocol_entry.get("sha256")
+            )
+            binding_valid = binding_valid and matches
+            binding_rows[name] = {
+                "source_id": source_id,
+                "source_declared_for_formal_mainline": (
+                    isinstance(source_entry, dict)
+                    and source_entry.get("used_in_formal_mainline") is True
+                ),
+                "protocol_path_matches": (
+                    isinstance(entry, dict)
+                    and isinstance(protocol_entry, dict)
+                    and entry.get("path") == protocol_entry.get("path")
+                ),
+                "protocol_hash_matches": (
+                    isinstance(entry, dict)
+                    and isinstance(protocol_entry, dict)
+                    and entry.get("sha256") == protocol_entry.get("sha256")
+                ),
+            }
+    valid = valid and binding_valid
+    return {
+        "valid": valid,
+        "manifest": str(path),
+        "files": results,
+        "formal_mainline_binding": {
+            "valid": binding_valid,
+            "inputs": binding_rows,
+        },
+    }
 
 
 def _validate_semantics(name: str, frame: pd.DataFrame) -> bool:

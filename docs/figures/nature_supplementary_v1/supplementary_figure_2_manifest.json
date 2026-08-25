@@ -1,0 +1,73 @@
+{
+  "archetype": "quantitative grid",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "GPU observations within a run are repeated measurements; independent run means are the uncertainty unit.",
+    "The measurements anchor board power and do not measure whole-facility cooling or node overhead."
+  ],
+  "core_conclusion": "Four-GPU measurements identify class-specific active board-power parameters and a held-out prediction error for the benchmark power model.",
+  "figure": "S2",
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 26435,
+      "format": "svg",
+      "path": "supplementary_figure_2.svg",
+      "sha256": "2209cdc73b63bf8bbcbaf6bf9d6ff948ea7b70a22435101b902304f2c30fd5b8"
+    },
+    {
+      "bytes": 28032,
+      "format": "pdf",
+      "path": "supplementary_figure_2.pdf",
+      "sha256": "141d4fcf6b5d016d7c51d102ac7a87ace15dbeeddb14e277369292c318513388"
+    },
+    {
+      "bytes": 570364,
+      "format": "tiff",
+      "path": "supplementary_figure_2.tiff",
+      "sha256": "a6d60bb0fa54cbfedd97b77150459b2f3084b07ee197bafcb312249b52c11460"
+    },
+    {
+      "bytes": 122662,
+      "format": "png",
+      "path": "supplementary_figure_2.png",
+      "sha256": "a0931c9a8b658cbf9396bd09e7579c154c9f987d6680590e62ebf0ec0cfe9319"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    3.45
+  ],
+  "schema_version": "aidrbench.supplementary_figure_specification.v1",
+  "source_data": [
+    {
+      "columns": [
+        "mode",
+        "gpu_count",
+        "repeat",
+        "gpu_index",
+        "sample_count",
+        "mean_power_w",
+        "std_power_w",
+        "mean_utilization_pct",
+        "mean_temperature_c",
+        "mean_sm_clock_mhz"
+      ],
+      "path": "supplementary_figure_2_calibration.csv",
+      "rows": 30,
+      "sha256": "d80c99386b110aa3f0856b31d17dd1c771d59d4a5fdf9526cc74d0228d4c099e"
+    }
+  ],
+  "sources": [
+    {
+      "bytes": 5764,
+      "path": "data/calibration/rtx6000pro_4gpu_v1.yaml",
+      "sha256": "92eae659e628ed3bd76e07f9667235de96a3672bd9dd2a931b9617932ac1d856"
+    },
+    {
+      "bytes": 7499,
+      "path": "data/calibration/rtx6000pro_4gpu_v1_fit/run_gpu_means.parquet",
+      "sha256": "b4dcc5d6e2b65d700b54ec5096c1f5da5d02c3600ded3a2eb35a49cb61b7b010"
+    }
+  ]
+}

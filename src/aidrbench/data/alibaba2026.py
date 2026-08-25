@@ -7,6 +7,7 @@ as a chronological replay of the production trace.
 
 from __future__ import annotations
 
+import json
 import math
 from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -444,6 +445,192 @@ def make_alibaba_lite_sampler_pool(
         },
         "sampling_method": "streaming_uniform_random_key_top_k_per_stratum",
     }
+
+
+def audit_alibaba_lite_sampler_fidelity(
+    full_summary_path: str | Path,
+    formal_sampler_path: str | Path,
+    output_directory: str | Path,
+    *,
+    rows_per_stratum: int = 50_000,
+    reference_seed: int = 20_260_824,
+) -> dict[str, object]:
+    """Compare the formal sampler with an independent full-summary reservoir.
+
+    This is a marginal-distribution audit, not evidence that a job summary
+    reproduces the temporal correlations of Alibaba's pod-hourly archive.
+    """
+
+    from scipy.stats import ks_2samp, wasserstein_distance  # type: ignore[import-untyped]
+
+    from aidrbench.data.splits import sha256_file
+
+    full_summary = Path(full_summary_path)
+    formal_sampler = Path(formal_sampler_path)
+    if not full_summary.is_file():
+        raise FileNotFoundError(f"full Alibaba summary does not exist: {full_summary}")
+    if not formal_sampler.is_file():
+        raise FileNotFoundError(f"formal Alibaba sampler does not exist: {formal_sampler}")
+    output = Path(output_directory)
+    output.mkdir(parents=True, exist_ok=True)
+    reference_path = output / "independent_reference_sampler.parquet"
+    sampling_summary = make_alibaba_lite_sampler_pool(
+        full_summary,
+        reference_path,
+        rows_per_stratum=rows_per_stratum,
+        seed=reference_seed,
+    )
+    formal = pd.read_parquet(formal_sampler, columns=list(SUMMARY_OUTPUT_COLUMNS))
+    reference = pd.read_parquet(reference_path, columns=list(SUMMARY_OUTPUT_COLUMNS))
+    numeric_columns = ("gpu_request", "duration_hours", "requested_work_gpu_h")
+    categorical_columns = ("gpu_spec_public", "model_type_public")
+    quantiles = (0.50, 0.90, 0.95, 0.99)
+    rows: list[dict[str, object]] = []
+    strata = sorted(
+        {
+            (str(job_class), str(priority))
+            for job_class, priority in reference[
+                ["job_type_public", "priority_class"]
+            ].itertuples(index=False, name=None)
+        }
+    )
+    if not strata:
+        raise ValueError("independent Alibaba reference sampler contains no strata")
+    for job_class, priority in strata:
+        formal_stratum = formal.loc[
+            (formal["job_type_public"] == job_class)
+            & (formal["priority_class"] == priority)
+        ]
+        reference_stratum = reference.loc[
+            (reference["job_type_public"] == job_class)
+            & (reference["priority_class"] == priority)
+        ]
+        if formal_stratum.empty or reference_stratum.empty:
+            raise ValueError(f"missing formal/reference stratum: {job_class}/{priority}")
+        for column in numeric_columns:
+            formal_values = formal_stratum[column].to_numpy(dtype="float64")
+            reference_values = reference_stratum[column].to_numpy(dtype="float64")
+            if not np.isfinite(formal_values).all() or not np.isfinite(reference_values).all():
+                raise ValueError(f"non-finite values in fidelity metric {column}")
+            ks_result = ks_2samp(formal_values, reference_values, method="auto")
+            reference_scale = max(float(np.median(np.abs(reference_values))), _EPSILON)
+            row: dict[str, object] = {
+                "job_class": job_class,
+                "priority_class": priority,
+                "metric_type": "numeric",
+                "metric": column,
+                "formal_rows": len(formal_values),
+                "reference_rows": len(reference_values),
+                "ks_statistic": float(ks_result.statistic),
+                "ks_pvalue_descriptive_only": float(ks_result.pvalue),
+                "wasserstein_distance": float(
+                    wasserstein_distance(formal_values, reference_values)
+                ),
+                "normalized_wasserstein_by_reference_median": float(
+                    wasserstein_distance(formal_values, reference_values) / reference_scale
+                ),
+            }
+            for quantile in quantiles:
+                label = f"q{round(100 * quantile):02d}"
+                formal_quantile = float(np.quantile(formal_values, quantile))
+                reference_quantile = float(np.quantile(reference_values, quantile))
+                row[f"formal_{label}"] = formal_quantile
+                row[f"reference_{label}"] = reference_quantile
+                row[f"absolute_relative_error_{label}"] = abs(
+                    formal_quantile - reference_quantile
+                ) / max(abs(reference_quantile), _EPSILON)
+            rows.append(row)
+        for column in categorical_columns:
+            formal_share = formal_stratum[column].value_counts(normalize=True)
+            reference_share = reference_stratum[column].value_counts(normalize=True)
+            categories = formal_share.index.union(reference_share.index)
+            total_variation = 0.5 * float(
+                np.abs(
+                    formal_share.reindex(categories, fill_value=0.0).to_numpy()
+                    - reference_share.reindex(categories, fill_value=0.0).to_numpy()
+                ).sum()
+            )
+            rows.append(
+                {
+                    "job_class": job_class,
+                    "priority_class": priority,
+                    "metric_type": "categorical",
+                    "metric": column,
+                    "formal_rows": len(formal_stratum),
+                    "reference_rows": len(reference_stratum),
+                    "total_variation_distance": total_variation,
+                    "category_count_union": len(categories),
+                }
+            )
+    metrics = pd.DataFrame.from_records(rows)
+    metrics_path = output / "sampler_fidelity_metrics.csv"
+    metrics.to_csv(metrics_path, index=False)
+    numeric = metrics.loc[metrics["metric_type"] == "numeric"]
+    categorical = metrics.loc[metrics["metric_type"] == "categorical"]
+    thresholds = {
+        "maximum_ks_statistic": 0.02,
+        "maximum_normalized_wasserstein": 0.10,
+        "maximum_q50_relative_error": 0.05,
+        "maximum_q95_relative_error": 0.10,
+        "maximum_categorical_total_variation": 0.05,
+    }
+    observed = {
+        "maximum_ks_statistic": float(numeric["ks_statistic"].max()),
+        "maximum_normalized_wasserstein": float(
+            numeric["normalized_wasserstein_by_reference_median"].max()
+        ),
+        "maximum_q50_relative_error": float(
+            numeric["absolute_relative_error_q50"].max()
+        ),
+        "maximum_q95_relative_error": float(
+            numeric["absolute_relative_error_q95"].max()
+        ),
+        "maximum_categorical_total_variation": float(
+            categorical["total_variation_distance"].max()
+        ),
+    }
+    diagnostic_thresholds_met = all(
+        observed[name] <= limit for name, limit in thresholds.items()
+    )
+    report: dict[str, object] = {
+        "schema_version": 1,
+        "audit_role": "non_locked_marginal_sampler_representativeness_diagnostic",
+        "full_summary": {
+            "path": str(full_summary),
+            "sha256": sha256_file(full_summary),
+        },
+        "formal_sampler": {
+            "path": str(formal_sampler),
+            "sha256": sha256_file(formal_sampler),
+        },
+        "independent_reference_sampler": {
+            "path": str(reference_path),
+            "sha256": sha256_file(reference_path),
+            "seed": reference_seed,
+            "rows_per_stratum": rows_per_stratum,
+            "sampling_method": sampling_summary["sampling_method"],
+        },
+        "metrics": {
+            "path": str(metrics_path),
+            "sha256": sha256_file(metrics_path),
+            "row_count": len(metrics),
+        },
+        "diagnostic_thresholds": thresholds,
+        "observed_maxima": observed,
+        "diagnostic_thresholds_met": diagnostic_thresholds_met,
+        "interpretation_guardrails": [
+            "thresholds_are_engineering_diagnostics_not_a_formal_equivalence_test",
+            "ks_pvalues_are_descriptive_and_not_used_for_acceptance",
+            "audit_covers_marginal_job_shape_distributions_only",
+            "audit_does_not_validate_pod_hourly_temporal_correlations",
+            "audit_does_not_open_locked_id_or_locked_ood_scenarios",
+        ],
+    }
+    report_path = output / "sampler_fidelity_report.json"
+    report_path.write_text(
+        json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    return {**report, "report_path": str(report_path)}
 
 
 @lru_cache(maxsize=2)

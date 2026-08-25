@@ -11,6 +11,7 @@ from aidrbench.data.alibaba2026 import (
     ARRIVAL_OUTPUT_COLUMNS,
     SUMMARY_OUTPUT_COLUMNS,
     AlibabaDeadlinePolicy,
+    audit_alibaba_lite_sampler_fidelity,
     make_alibaba_lite_hourly_arrivals,
     make_alibaba_lite_sampler_pool,
     preprocess_alibaba_summary,
@@ -171,6 +172,40 @@ def test_alibaba2026_sampler_pool_is_bounded_stratified_and_reproducible(
     assert tuple(sampled.columns) == SUMMARY_OUTPUT_COLUMNS
     assert set(sampled["job_type_public"]) == {"training", "offline_inference"}
     assert sampled.groupby(["job_type_public", "priority_class"]).size().eq(1).all()
+
+
+def test_alibaba2026_sampler_fidelity_audit_is_independent_and_bounded(
+    tmp_path: Path,
+) -> None:
+    source = tmp_path / "summary.parquet"
+    normalized = tmp_path / "jobs_summary.parquet"
+    formal = tmp_path / "formal.parquet"
+    output = tmp_path / "audit"
+    _write_summary(source)
+    preprocess_alibaba_summary(source, normalized, winsorize_quantile=None)
+    make_alibaba_lite_sampler_pool(
+        normalized,
+        formal,
+        rows_per_stratum=1,
+        seed=17,
+        batch_size=2,
+    )
+
+    report = audit_alibaba_lite_sampler_fidelity(
+        normalized,
+        formal,
+        output,
+        rows_per_stratum=1,
+        reference_seed=23,
+    )
+
+    assert report["audit_role"] == "non_locked_marginal_sampler_representativeness_diagnostic"
+    assert report["independent_reference_sampler"]["seed"] == 23
+    assert report["metrics"]["row_count"] == 10
+    assert (output / "sampler_fidelity_report.json").is_file()
+    assert "audit_does_not_validate_pod_hourly_temporal_correlations" in report[
+        "interpretation_guardrails"
+    ]
 
 
 def test_alibaba2026_lite_requires_matching_flexible_samples(tmp_path: Path) -> None:

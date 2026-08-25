@@ -1,0 +1,103 @@
+{
+  "archetype": "schematic-led composite",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "Compute debt is an audit diagnostic and is not a separately named policy-observation feature.",
+    "Future workload arrivals are not revealed to the causal controller."
+  ],
+  "core_conclusion": "The 63-dimensional firm_v5 observation exposes bounded causal information while retaining compute debt and full class state only for audit.",
+  "figure": "S3",
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 20724,
+      "format": "svg",
+      "path": "supplementary_figure_3.svg",
+      "sha256": "bc8978111b31417b758434032ee89184c148b8899dba90823fdd956cf945425b"
+    },
+    {
+      "bytes": 25346,
+      "format": "pdf",
+      "path": "supplementary_figure_3.pdf",
+      "sha256": "5516934b644d3683a64506db7ab05eae61bd1c6116eae27f06e91a11862643e7"
+    },
+    {
+      "bytes": 1837798,
+      "format": "tiff",
+      "path": "supplementary_figure_3.tiff",
+      "sha256": "b1f722f5daf018fe22c093b2aea6678072b9b73f854dfe01373bc722530263c9"
+    },
+    {
+      "bytes": 192522,
+      "format": "png",
+      "path": "supplementary_figure_3.png",
+      "sha256": "9490db7c1dac7a1c712779ee243f9aaa5729b47f64a578be27cfba6fa9b9682c"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    4.15
+  ],
+  "schema_version": "aidrbench.supplementary_figure_specification.v1",
+  "source_data": [
+    {
+      "columns": [
+        "feature_index",
+        "feature_name",
+        "observation_group",
+        "lower_bound",
+        "upper_bound"
+      ],
+      "path": "supplementary_figure_3_observation.csv",
+      "rows": 63,
+      "sha256": "e64f1630977fee900e1f0592c54977aad34d7d0316113d4ae2c131b13f845738"
+    }
+  ],
+  "sources": [
+    {
+      "bytes": 25645,
+      "path": "data/examples/nature_supplementary_validation_v1/causal_selection_q95.json",
+      "sha256": "ddd0094907e34f7f137856169c5fd6b84a33cf37cfc48e5158ceb5502fdd470b"
+    },
+    {
+      "bytes": 604,
+      "path": "configs/controller/nature_robust_mpc_v1.yaml",
+      "sha256": "73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf"
+    },
+    {
+      "bytes": 2314,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/metadata.json",
+      "sha256": "2e4fd279c5c6279b734278134248c69bab949bb29f1fae3751b951ee7d72b47b"
+    },
+    {
+      "bytes": 2328,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/environment_config.yaml",
+      "sha256": "1bc41058d970d1cda989723e4106cd20d7759eed02fa2ad9469cbebc27f9b0bc"
+    },
+    {
+      "bytes": 11475,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/community.parquet",
+      "sha256": "3ac8bdea039344b0e17276bebb2568fd92fc4bfad699bb8402f5588acea386f6"
+    },
+    {
+      "bytes": 566605,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/arrivals.parquet",
+      "sha256": "21b4584a5a682afc3265177d42dbc879c62fc80047397b035480205ecd956f23"
+    },
+    {
+      "bytes": 6663,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/baseline.parquet",
+      "sha256": "0a5e9fd101f8fdb8ef13592e022eab22eee289f193764a9c01a4bc8481f66174"
+    },
+    {
+      "bytes": 71931,
+      "path": "/home/user/projects/AIDRBench/src/aidrbench/envs/community_ai_dr_env.py",
+      "sha256": "5db556f7103e803f71dbbff4452c096ce7d5eba9cf98614033caef96552336e9"
+    },
+    {
+      "bytes": 14595,
+      "path": "/home/user/projects/AIDRBench/src/aidrbench/evaluation/hourly_rollout.py",
+      "sha256": "8f9eb0592a3fdd117c96ccad633c1b415c26ced7bd936838e92c5166b2daaa2b"
+    }
+  ]
+}

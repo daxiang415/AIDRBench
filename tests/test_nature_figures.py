@@ -454,6 +454,7 @@ def test_plot_all_nature_mainline_figures_write_editable_svg(tmp_path: Path) -> 
         assert "<text" in svg_path.read_text(encoding="utf-8")
         figure_manifest = json.loads(Path(str(record["manifest"])).read_text())
         assert figure_manifest["minimum_configured_font_pt"] >= 6.5
+        assert figure_manifest["physical_size_inches"][0] == pytest.approx(183.0 / 25.4)
         assert figure_manifest["source_data_manifest_sha256"] == _sha256(
             source_data / "source_data_manifest.json"
         )

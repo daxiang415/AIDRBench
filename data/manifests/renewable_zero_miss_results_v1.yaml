@@ -1,0 +1,75 @@
+schema_version: 1
+receipt_role: post_run_non_locked_zero_deadline_miss_sensitivity
+generated_at: "2026-08-24"
+evidence_scope: development_and_validation_renewable_planning_sensitivity
+locked_sets_used: false
+reinforcement_learning_used: false
+
+configuration:
+  path: configs/sensitivity/nature_renewable_zero_miss_v1.yaml
+  sha256: 8cee3220c7e8200cd6031ca11feca45d5be8e657522ca8eb2526a1fe3edb186a
+
+implementation:
+  runner:
+    path: src/aidrbench/evaluation/renewable_service_sensitivity.py
+    sha256: 05d8f5c6375d33f52a43bd3b0a5f7e455f588246521d4d9e41692f7207858287
+  optimization_model:
+    path: src/aidrbench/evaluation/renewable_integration.py
+    sha256: 271fbddf0b119cd4211ec9e42a02610ca1ede64f827c8a4aa969cefab5f0962b
+
+inputs:
+  development_rigid_baseline:
+    path: results/nature_mainline/renewable_integration_development_v1/scenario_renewable_integration.parquet
+    sha256: 300c96b917bcc2bab33c35df6e74dc5cbf19b4f38e26a7e90dd53293ffbb47fd
+  validation_rigid_baseline:
+    path: results/nature_mainline/renewable_integration_validation_v1/scenario_renewable_integration.parquet
+    sha256: b4e3cdca5be34b83b46b855da67352849ab45e83484180cc5edaf2334f6da209
+
+outputs:
+  run_manifest:
+    path: results/nature_mainline/renewable_zero_miss_v1/zero_miss_manifest.json
+    sha256: 5ea752c45e72e16a624161673fe0069d745a734850b22dfddffe286da828007d
+  scenario_results:
+    path: results/nature_mainline/renewable_zero_miss_v1/zero_miss_scenario_results.parquet
+    sha256: ace56d8a1e55baaca78115d28241a2ca8aafc5a3a4204da655ff3652ba63c33f
+  summary:
+    path: results/nature_mainline/renewable_zero_miss_v1/zero_miss_summary.csv
+    sha256: c8ed33706632f72462933ef588f22889d754d181897d67177d7711c13ab58727
+  contrasts:
+    path: results/nature_mainline/renewable_zero_miss_v1/zero_miss_contrasts.csv
+    sha256: fe08946daf226eec45e4c0e3392ff3bf440f2d8b11e74b2506cf4d2136c8bfd8
+
+integrity:
+  scenario_count: 200
+  development_scenario_count: 100
+  validation_scenario_count: 100
+  result_row_count: 1600
+  all_solver_statuses_optimal: true
+  maximum_deadline_miss_gpu_h: 0.0
+  locked_id_read: false
+  locked_ood_read: false
+
+validation_results:
+  simultaneous_pv_hosting_gain_kw:
+    without_bess: 32.82532832272773
+    with_bess: 33.37694630116323
+  paired_mean_pv_hosting_gain_kw:
+    without_bess: 44.85397470917252
+    with_bess: 43.19799828723428
+  paired_mean_fixed_500kw_pv_use_gain_kwh:
+    without_bess: 18.366442877833506
+    with_bess: 5.7649801174685855
+  comparison_with_one_percent_allowance:
+    simultaneous_boundary_unchanged_at_reported_precision: true
+    paired_mean_pv_hosting_gain_difference_kw:
+      without_bess: -0.00007891954033545434
+      with_bess: -0.0010308255018125498
+    paired_mean_fixed_pv_use_gain_difference_kwh:
+      without_bess: -0.000001199999861478451
+      with_bess: -0.000005799984173604945
+
+interpretation:
+  - zero_deadline_miss_does_not_change_the_validation_simultaneous_pv_hosting_boundary_at_reported_precision
+  - renewable_hosting_and_use_gains_are_not_created_by_the_one_percent_deadline_miss_allowance
+  - result_is_a_perfect_information_planning_sensitivity_not_a_causal_controller_certificate
+  - result_is_supporting_evidence_and_not_a_new_headline_estimand

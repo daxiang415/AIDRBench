@@ -513,7 +513,7 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         for index, left in enumerate(_SCENARIO_SET_NAMES)
         for right in _SCENARIO_SET_NAMES[index + 1 :]
     )
-    checks["locked_sets_declared_and_unconsumed"] = (
+    checks["locked_sets_declared_with_valid_status"] = (
         scenario_sets["locked_id"].get("locked") is True
         and scenario_sets["locked_ood"].get("locked") is True
         and document.get("locked_id_status") in {"not_run", "approved_for_one_time_run", "consumed"}
@@ -616,6 +616,27 @@ def validate_nature_mainline_protocol(path: str | Path) -> dict[str, object]:
         "exists": controller_exists,
         "hash_matches": execution_checks["causal_controller_specification_hash"],
         "sha256": controller_actual_sha256,
+    }
+    locked_id_receipt = _mapping(
+        causal.get("locked_id_result_receipt"),
+        "causal_certificate.locked_id_result_receipt",
+    )
+    locked_id_receipt_path = Path(str(locked_id_receipt.get("path", "")))
+    locked_id_receipt_expected = str(locked_id_receipt.get("sha256", ""))
+    locked_id_receipt_exists = locked_id_receipt_path.is_file()
+    locked_id_receipt_actual = (
+        sha256_file(locked_id_receipt_path) if locked_id_receipt_exists else None
+    )
+    execution_checks["locked_id_result_receipt_hash"] = (
+        locked_id_receipt_exists
+        and len(locked_id_receipt_expected) == 64
+        and locked_id_receipt_actual == locked_id_receipt_expected
+    )
+    details["locked_id_result_receipt"] = {
+        "path": str(locked_id_receipt_path),
+        "exists": locked_id_receipt_exists,
+        "hash_matches": execution_checks["locked_id_result_receipt_hash"],
+        "sha256": locked_id_receipt_actual,
     }
 
     sensitivity_design = _mapping(document.get("sensitivity_design"), "sensitivity_design")

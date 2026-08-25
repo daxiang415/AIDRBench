@@ -34,7 +34,7 @@ The figures below use an asymmetric Nature Communications visual grammar: one do
 
 **Main claim:** Job-feasible workload flexibility expands the curtailment-constrained community DC–PV feasible set; its effect on utilisation of an already installed PV system is reported separately and may be profile- and storage-dependent.
 
-**Boundary:** These are job-feasible planning ensembles rather than deployed causal effects. Partially feasible envelope cells are not zero-capacity points, fixed-PV energy effects do not imply lower PCC peak, and the allowed 1% flexible deadline-miss budget remains visible.
+**Boundary:** These are job-feasible planning ensembles rather than deployed causal effects. Partially feasible envelope cells are not zero-capacity points, and fixed-PV energy effects do not imply lower PCC peak. The headline 1% flexible deadline-miss budget remains visible; a separate zero-miss sensitivity preserves the validation hosting boundary and PV-use gains at the reported precision.
 
 **QA:** The final-size panel audit, PDF glyph-floor check and output hashes are recorded in [figure4-renewable-integration-qa.md](figure4-renewable-integration-qa.md).
 

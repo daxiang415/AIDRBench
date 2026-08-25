@@ -1,0 +1,60 @@
+{
+  "archetype": "schematic-led composite",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "The environment is a benchmark implementation, not the paper's sole scientific contribution.",
+    "BESS is optimized only in the renewable-planning branch and is not an online environment action."
+  ],
+  "core_conclusion": "AIDRBench converts trace-calibrated jobs and measured power into distinct planning and causal demand-response evidence layers.",
+  "figure": "S1",
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 25197,
+      "format": "svg",
+      "path": "supplementary_figure_1.svg",
+      "sha256": "24d079f803be4a26ad4f7e1ded3d30b4b472f0d21e4c2abf214201fd209e60f0"
+    },
+    {
+      "bytes": 29108,
+      "format": "pdf",
+      "path": "supplementary_figure_1.pdf",
+      "sha256": "3e0bea70ba28ae7d70f474dfeaa74c4aefc92cc3f231ada7c85225da55c1a417"
+    },
+    {
+      "bytes": 1230440,
+      "format": "tiff",
+      "path": "supplementary_figure_1.tiff",
+      "sha256": "05fe147e8389afd526956adc097c8937f24b57c2b6d0d4ee58c1f603b8c8b0ee"
+    },
+    {
+      "bytes": 203407,
+      "format": "png",
+      "path": "supplementary_figure_1.png",
+      "sha256": "cd4359e34ad2b9daf41c7855c9dff5c57415cdf90dfda32a4993feed6119d3c5"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    4.65
+  ],
+  "schema_version": "aidrbench.supplementary_figure_specification.v1",
+  "source_data": [],
+  "sources": [
+    {
+      "bytes": 11416,
+      "path": "data/manifests/nature_mainline_protocol_v1.yaml",
+      "sha256": "b9b40a74ab4c518b6a71d36988dc4a2f52d9d59eccce0c02ff960be369b87194"
+    },
+    {
+      "bytes": 11431,
+      "path": "data/manifests/sources.yaml",
+      "sha256": "f5127b5d13eb7acb996eaa9d8d4515e8f316f03aeaae9912fa217b3bdcab7936"
+    },
+    {
+      "bytes": 2411,
+      "path": "configs/env/nature_mainline_validation.yaml",
+      "sha256": "d7dab9f8b3640100456c427acf720898d09f5b70af29b8875ccd670bec6281a9"
+    }
+  ]
+}

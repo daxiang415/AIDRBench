@@ -5,13 +5,23 @@ one dominant narrative or quantitative panel, a small number of subordinate
 panels, restrained low-saturation colour, direct labels, and generous white
 space. Scientific definitions and source-data provenance remain unchanged.
 """
-# ruff: noqa: E501
+# ruff: noqa: E402, E501
 
 from __future__ import annotations
 
 import json
+import os
+import tempfile
 from collections.abc import Callable, Sequence
 from pathlib import Path
+
+_matplotlib_cache = Path(tempfile.gettempdir()) / "aidrbench-matplotlib"
+_matplotlib_cache.mkdir(parents=True, exist_ok=True)
+os.environ.setdefault("MPLCONFIGDIR", str(_matplotlib_cache))
+
+import matplotlib
+
+matplotlib.use("Agg", force=True)
 
 import numpy as np
 import pandas as pd
@@ -22,7 +32,6 @@ from matplotlib.image import AxesImage
 
 from aidrbench.evaluation.nature_figures import (
     _COLORS,
-    _FIGURE_WIDTH_IN,
     _bool_series,
     _finalize_figure,
     _float,
@@ -35,6 +44,28 @@ from aidrbench.evaluation.nature_figures import (
     _verified_table,
     plot_nature_mainline_figure1_reference_style,
 )
+
+_FIGURE_WIDTH_MM = 183.0
+_FIGURE_WIDTH_IN = _FIGURE_WIDTH_MM / 25.4
+_EXPORT_SUFFIXES = (".svg", ".pdf", ".tiff", ".png")
+_TIFF_DPI = 600
+
+
+def _reference_publication_style() -> None:
+    """Declare the complete final-size export contract in this renderer."""
+
+    _publication_style()
+    plt.rcParams.update(
+        {
+            "font.family": "sans-serif",
+            "font.sans-serif": ["Arial", "Liberation Sans", "Helvetica", "sans-serif"],
+            "font.size": 7.0,
+            "svg.fonttype": "none",
+            "pdf.fonttype": 42,
+        }
+    )
+    if _TIFF_DPI < 600 or set(_EXPORT_SUFFIXES) != {".svg", ".pdf", ".tiff", ".png"}:
+        raise RuntimeError("reference figure export contract is invalid")
 
 
 def _short_heading(axis: Axes, text: str) -> None:
@@ -82,7 +113,7 @@ def plot_nature_mainline_figure2_reference_style(
 ) -> dict[str, object]:
     """Plot the firm-flexibility surface with one dominant capacity panel."""
 
-    _publication_style()
+    _reference_publication_style()
     manifest_path, manifest = _load_manifest(source_data_directory)
     pi = _verified_table(source_data_directory, manifest, "fig1_fig2_pi_firm_boundaries")
     na = _verified_table(source_data_directory, manifest, "fig2_restricted_na_surface")
@@ -231,7 +262,8 @@ def plot_nature_mainline_figure2_reference_style(
             dy=label_offsets[reliability],
             fontsize=6.4,
         )
-    ax_b.set_xlim(0.7, 9.3)
+    ax_b.set_xlim(0.7, 9.7)
+    ax_b.set_ylim(31.0, 61.5)
     ax_b.set_xticks(duration)
     ax_b.set_xlabel("Duration (h)")
     ax_b.set_ylabel("Candidate (kW)")
@@ -383,7 +415,7 @@ def plot_nature_mainline_figure3_reference_style(
 ) -> dict[str, object]:
     """Plot compute-debt accumulation as the dominant repeated-event mechanism."""
 
-    _publication_style()
+    _reference_publication_style()
     manifest_path, manifest = _load_manifest(source_data_directory)
     event = _verified_table(source_data_directory, manifest, "fig3_exhaustion_event_summary")
     joint = _verified_table(
@@ -571,7 +603,7 @@ def plot_nature_mainline_figure4_reference_style(
 ) -> dict[str, object]:
     """Plot PV hosting, fixed-PV operation and orthogonal DER interactions."""
 
-    _publication_style()
+    _reference_publication_style()
     manifest_path, manifest = _load_manifest(source_data_directory)
     pv_hosting = _verified_table(source_data_directory, manifest, "fig4_pv_hosting_summary")
     pv_gains = _verified_table(source_data_directory, manifest, "fig4_pv_hosting_contrasts")
@@ -877,7 +909,7 @@ def plot_nature_mainline_figure5_reference_style(
 ) -> dict[str, object]:
     """Plot compact sensitivity ranges above a dominant generalization boundary."""
 
-    _publication_style()
+    _reference_publication_style()
     manifest_path, manifest = _load_manifest(source_data_directory)
     power = _verified_table(source_data_directory, manifest, "fig5_power_case_sensitivity")
     workload = _verified_table(source_data_directory, manifest, "fig5_workload_sensitivity")

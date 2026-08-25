@@ -1,0 +1,9 @@
+dataset_role,analysis_variant,bess_enabled,paired_scenario_count,paired_mean_pv_hosting_gain_kw,paired_mean_pv_use_gain_kwh
+development,zero_miss_fixed_pv_operation,False,100,,182.68784575006117
+development,zero_miss_fixed_pv_operation,True,100,,87.46074577980602
+development,zero_miss_pv_hosting,False,100,45.6613403547521,
+development,zero_miss_pv_hosting,True,100,43.34641117696292,
+validation,zero_miss_fixed_pv_operation,False,100,,18.366442877833506
+validation,zero_miss_fixed_pv_operation,True,100,,5.7649801174685855
+validation,zero_miss_pv_hosting,False,100,44.85397470917252,
+validation,zero_miss_pv_hosting,True,100,43.19799828723428,

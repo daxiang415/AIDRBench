@@ -1,0 +1,118 @@
+{
+  "archetype": "quantitative grid",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "The minimum validation seed was selected by a fixed rule rather than by visual appearance.",
+    "One trajectory illustrates state transition and does not estimate population performance."
+  ],
+  "core_conclusion": "A fixed non-locked validation trajectory makes the hourly coupling among arrivals, causal action, PCC delivery, backlog and compute debt auditable.",
+  "figure": "S4",
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 43704,
+      "format": "svg",
+      "path": "supplementary_figure_4.svg",
+      "sha256": "12dbe9c9ef61e698faa12278328ab4e65938e9a98debf050f943a207897fff44"
+    },
+    {
+      "bytes": 28269,
+      "format": "pdf",
+      "path": "supplementary_figure_4.pdf",
+      "sha256": "f721525ddcf4d0c7193913808bf24e1b5667e613dd1345d4163ec2214040710d"
+    },
+    {
+      "bytes": 1234270,
+      "format": "tiff",
+      "path": "supplementary_figure_4.tiff",
+      "sha256": "ab02944f6843241dc5d560c64a93ca2cfc0f65cc01d9fc7efa1c207e6c13802a"
+    },
+    {
+      "bytes": 251031,
+      "format": "png",
+      "path": "supplementary_figure_4.png",
+      "sha256": "f24eceed3b70dfe1b5eb321be5f4038a8808786626e91c1ac8c47199750979d8"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    5.7
+  ],
+  "schema_version": "aidrbench.supplementary_figure_specification.v1",
+  "source_data": [
+    {
+      "columns": [
+        "hour",
+        "arrival_gpu_h",
+        "executed_gpu_h",
+        "action_fraction",
+        "community_power_kw",
+        "dc_power_kw",
+        "pcc_power_kw",
+        "baseline_pcc_power_kw",
+        "pcc_limit_kw",
+        "backlog_gpu_h",
+        "compute_debt_kwh",
+        "missed_gpu_h",
+        "event_active",
+        "recovery_active",
+        "is_clearance_tail"
+      ],
+      "path": "supplementary_figure_4_trajectory.csv",
+      "rows": 216,
+      "sha256": "c62ea85e736bf24d1052e979eba0c4d8e072cc63396e2a2f4c5b52aa4fd199ac"
+    }
+  ],
+  "sources": [
+    {
+      "bytes": 25645,
+      "path": "data/examples/nature_supplementary_validation_v1/causal_selection_q95.json",
+      "sha256": "ddd0094907e34f7f137856169c5fd6b84a33cf37cfc48e5158ceb5502fdd470b"
+    },
+    {
+      "bytes": 604,
+      "path": "configs/controller/nature_robust_mpc_v1.yaml",
+      "sha256": "73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf"
+    },
+    {
+      "bytes": 2314,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/metadata.json",
+      "sha256": "2e4fd279c5c6279b734278134248c69bab949bb29f1fae3751b951ee7d72b47b"
+    },
+    {
+      "bytes": 2328,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/environment_config.yaml",
+      "sha256": "1bc41058d970d1cda989723e4106cd20d7759eed02fa2ad9469cbebc27f9b0bc"
+    },
+    {
+      "bytes": 11475,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/community.parquet",
+      "sha256": "3ac8bdea039344b0e17276bebb2568fd92fc4bfad699bb8402f5588acea386f6"
+    },
+    {
+      "bytes": 566605,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/arrivals.parquet",
+      "sha256": "21b4584a5a682afc3265177d42dbc879c62fc80047397b035480205ecd956f23"
+    },
+    {
+      "bytes": 6663,
+      "path": "data/examples/nature_supplementary_validation_v1/hourly_seed_20000/baseline.parquet",
+      "sha256": "0a5e9fd101f8fdb8ef13592e022eab22eee289f193764a9c01a4bc8481f66174"
+    },
+    {
+      "bytes": 71931,
+      "path": "/home/user/projects/AIDRBench/src/aidrbench/envs/community_ai_dr_env.py",
+      "sha256": "5db556f7103e803f71dbbff4452c096ce7d5eba9cf98614033caef96552336e9"
+    },
+    {
+      "bytes": 14595,
+      "path": "/home/user/projects/AIDRBench/src/aidrbench/evaluation/hourly_rollout.py",
+      "sha256": "8f9eb0592a3fdd117c96ccad633c1b415c26ced7bd936838e92c5166b2daaa2b"
+    },
+    {
+      "bytes": 555,
+      "path": "/home/user/projects/AIDRBench/results/figures/nature_supplementary_v1/representative_trajectory_metadata.json",
+      "sha256": "15acb52871b4df53ac15d4a51a4df71d05de9602d475892684c78fb12225e2e3"
+    }
+  ]
+}

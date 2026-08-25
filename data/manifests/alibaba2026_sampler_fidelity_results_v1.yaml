@@ -1,0 +1,39 @@
+schema_version: 1
+receipt_role: post_run_non_locked_sampler_representativeness_diagnostic
+generated_at: "2026-08-24"
+locked_sets_used: false
+configuration:
+  path: configs/data/alibaba2026_sampler_fidelity_v1.yaml
+  sha256: 2e219cc786f3dc7b6e66c9cd1c3488a4c3b5802aaf4abfa927221858db90b32d
+inputs:
+  normalized_full_summary:
+    path: data/processed/jobs_summary.parquet
+    sha256: 95c91a8035197e15f29e9c1d15a9147d07b2a6959b2bb08322cb9f033b029124
+  formal_sampler:
+    path: data/processed/jobs_summary_sampler.parquet
+    sha256: 67e5cc0878e246e9de547cc838c6b0e3df5a25fcd52f043624235873ca2a0d66
+  independent_reference_sampler:
+    seed: 20260824
+    rows_per_stratum: 50000
+    sha256: 1ee05dc135825d1e4155b2bdd86ce26d9a48a33cab94b06e001994873c93fffe
+    redistribution: not_committed_regenerate_from_official_summary
+outputs:
+  report:
+    path: results/nature_mainline/alibaba2026_sampler_fidelity_v1/sampler_fidelity_report.json
+    sha256: b244d4d2d811d277b7228f3eab54dc62fe9c8803c0bce92fd183041194480b27
+  metrics:
+    path: results/nature_mainline/alibaba2026_sampler_fidelity_v1/sampler_fidelity_metrics.csv
+    sha256: b2a22980b1dcd46b324d31e4be7777baf3342085885b41853dd6670674d0d758
+observed_maxima:
+  ks_statistic: 0.00774
+  absolute_relative_error_q50: 0.01695
+  absolute_relative_error_q95: 0.00990
+  categorical_total_variation: 0.00656
+  normalized_wasserstein_by_reference_median: 0.21825
+diagnostic_thresholds_met: false
+interpretation:
+  - central_and_reported_quantile_distributions_are_close_under_an_independent_reservoir
+  - the_engineering_threshold_suite_failed_only_on_median_normalized_wasserstein_distance
+  - no_full_distribution_equivalence_is_claimed
+  - no_pod_hourly_temporal_correlation_equivalence_is_claimed
+  - no_locked_result_was_opened_or_changed

@@ -1,13 +1,13 @@
 # Figure 4 renewable-integration QA receipt
 
-Date: 2026-08-23
+Date: 2026-08-25
 
 Backend: Python/matplotlib
 
-Final width: 180 mm (double column)
+Final width: 183 mm (double column)
 
 Source Data manifest SHA-256:
-`ef92306befe815026c8ce3271c912c78dcd8c58b5c84e161744edfb9ad92f3b2`
+`0cda495b49a22357454d97ca66153579ed9d89e4957540ca86d63b45bce3ef13`
 
 ## Evidence and panel audit
 
@@ -28,8 +28,8 @@ collides with another plotted element. The hero panel remains visually dominant.
 - PDF text audit: 64 text runs; minimum 5.8 pt; zero runs below 5 pt.
 - SVG: editable text retained (64 `<text>` elements).
 - PDF: editable vector export.
-- TIFF: 4,251 × 3,630 pixels at 600 dpi.
-- PNG review preview: 2,125 × 1,815 pixels at 300 dpi.
+- TIFF: 4,322 × 3,630 pixels at 600 dpi.
+- PNG review preview: 2,161 × 1,815 pixels at 300 dpi.
 - Quantitative inputs: four hash-verified Source Data tables; no visual-only
   filtering of scenario rows.
 
@@ -37,16 +37,18 @@ collides with another plotted element. The hero panel remains visually dominant.
 
 | Format | SHA-256 |
 |---|---|
-| SVG | `de0b56d8c839513d3e840c68feebba787e3ad94a3d405582648f0eb7d1193fa3` |
-| PDF | `d319b1fb602136b9dc1d99f079ea6e103ea45f5a9e6a4aa2fc45ecde2c84b58e` |
-| TIFF | `ef52340f8ebced40b4ee9e25c46793a0b9f9f7826124f853e604afbf40ec5cea` |
-| PNG | `6dbd46b234f966c4f8778fc39d3c18d645e84e9e7f918e48e99a9c159f16dd58` |
+| SVG | `7b11fcb2d64a6c9c5644e9a65c942f738ae11e372a35bb077d443a3c5bba8208` |
+| PDF | `c5d3c1de0cab5b15243e94f142b391b1e2255e3df53154cb89cc6bede91761cc` |
+| TIFF | `eda64cb0b0e59db0b0e372175d7b027fb6fa4c7dc47bb3bf866c15b5f0ad178a` |
+| PNG | `fd7b22c427517b3e12558881bb895d4c713e45b98d0d295b8d1ac36e1d2f7025` |
 
 ## Claim boundary
 
 Figure 4 reports perfect-information renewable-planning ensembles, not a
 deployed causal effect. The fixed-PV validation gain is small, especially with
-BESS; flexible schedules use the declared 1% deadline-miss budget, and the
-figure does not claim a general reduction in PCC peak. A new community or
+BESS; headline flexible schedules use the declared 1% deadline-miss budget,
+and the figure does not claim a general reduction in PCC peak. A separate
+zero-deadline-miss sensitivity preserves the validation hosting boundary and
+PV-use gains at the reported precision. A new community or
 workload distribution requires local revalidation before transferring the PV
 benefit.

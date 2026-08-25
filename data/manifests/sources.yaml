@@ -1,5 +1,5 @@
-schema_version: 1
-last_reviewed: "2026-08-11"
+schema_version: 2
+last_reviewed: "2026-08-24"
 policy:
   raw_data_read_only: true
   raw_data_committed: false
@@ -9,6 +9,7 @@ policy:
 
 sources:
   burstgpt:
+    used_in_formal_mainline: false
     role: online_inference_arrivals_and_token_counts
     official_repository: https://github.com/HPMLL/BurstGPT
     release: v2.0
@@ -41,6 +42,7 @@ sources:
         bytes: 217312026
 
   alibaba_gpu_v2020:
+    used_in_formal_mainline: false
     role: empirically_parameterized_batch_arrivals_sizes_and_gpu_demand
     official_repository: https://github.com/alibaba/clusterdata
     schema_url: https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2020/README.md
@@ -72,7 +74,52 @@ sources:
           bytes: 113398956
     redistribution_note: verify_the_official_trace_terms_before_redistributing_raw_files
 
+  alibaba_gpu_v2026_job_execution_summary:
+    role: formal_ai_workload_job_shape_and_duration_source
+    used_in_formal_mainline: true
+    official_repository: https://github.com/alibaba/clusterdata/tree/master/cluster-trace-gpu-v2026
+    schema_url: https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2026/docs/schema.md
+    official_download_url: https://tre-clusterdata.oss-cn-hangzhou.aliyuncs.com/cluster-trace-gpu-v2026/data/asi_opensource_job_execution_summary.zip
+    source_scope: job_execution_summary_archive_only_not_full_356GB_release
+    release_archive:
+      local_path: asi_opensource_job_execution_summary.zip
+      sha256: 2dd48db5c5a532d0b1504c67522ed7f6929df6efd5c22abc4a921349aa37ff4f
+      bytes: 1188295031
+      retrieved_at_utc: "2026-08-12T06:43:00Z"
+    extracted_source:
+      local_path: data/raw/alibaba2026/asi_opensource_job_execution_summary/part-000.parquet
+      sha256: acd868090a64c8852ee2586510a0384111aed0378905f5405d2be6779062e963
+      bytes: 1188294827
+      rows: 40522321
+    normalized_full_summary:
+      local_path: data/processed/jobs_summary.parquet
+      sha256: 95c91a8035197e15f29e9c1d15a9147d07b2a6959b2bb08322cb9f033b029124
+      bytes: 1798917923
+      rows: 40522321
+      preprocessing_config:
+        local_path: configs/data/alibaba2026_lite.yaml
+        sha256: cc0c69abcb8012370aecf55acd6ee9191ba669ef7b7a99c4d4e1f274880bf34e
+        bytes: 187
+    formal_sampler_pool:
+      local_path: data/processed/jobs_summary_sampler.parquet
+      sha256: 67e5cc0878e246e9de547cc838c6b0e3df5a25fcd52f043624235873ca2a0d66
+      bytes: 4349964
+      rows: 100000
+      interpretation: project_generated_bounded_stratified_sampler_not_a_separate_alibaba_release
+      sampling_config:
+        local_path: configs/data/alibaba2026_sampler.yaml
+        sha256: c9c5c422788244161a2d7cc0888a0fc398eec31b79398d919402e26504387a77
+        bytes: 299
+      strata: [lp_training, lp_offline_inference]
+      rows_per_stratum: 50000
+      seed: 2026
+      sampling_method: streaming_uniform_random_key_top_k_per_stratum
+    deadline_warning: source_has_no_deadlines_all_deadlines_are_scenario_generated
+    temporal_warning: job_summary_does_not_reproduce_pod_hourly_temporal_correlations
+    redistribution_note: official_repository_describes_research_and_study_use_verify_terms_before_redistribution
+
   nlr_nrel_eulp:
+    used_in_formal_mainline: true
     role: community_background_load
     official_catalog: https://registry.opendata.aws/nrel-pds-building-stock/
     documentation: https://www.nrel.gov/buildings/end-use-load-profiles.html
@@ -113,6 +160,37 @@ sources:
         s3_uri: s3://oedi-data-lake/nrel-pds-building-stock/end-use-load-profiles-for-us-building-stock/2025/comstock_amy2018_release_3/timeseries_aggregates/by_ashrae_iecc_climate_zone_2006/upgrade=0/ashrae_iecc_climate_zone_2006=5A/up0-5a-smalloffice.csv
         sha256: 6ccd64bfbef650930b8aa48423c6fc50a1ec951ddf8d19334fce0ac7162856c5
         bytes: 10534407
+
+  rtx6000pro_4gpu_calibration:
+    role: formal_gpu_board_power_calibration
+    used_in_formal_mainline: true
+    measurement_scope: four_gpu_pcie_node_board_power_with_assumed_node_overhead
+    evidence_class: benchmark_anchored_synthetic
+    artifact:
+      local_path: data/calibration/rtx6000pro_4gpu_v1.yaml
+      sha256: 92eae659e628ed3bd76e07f9667235de96a3672bd9dd2a931b9617932ac1d856
+      bytes: 5764
+      internal_artifact_sha256: ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193
+
+formal_mainline_binding:
+  protocol_path: data/manifests/nature_mainline_protocol_v1.yaml
+  semantics: protocol_data_entries_must_match_these_paths_and_sha256_values
+  inputs:
+    community:
+      source_id: nlr_nrel_eulp
+      path: data/processed/community_load.parquet
+      sha256: daa513e8a6597232c47c5c0554fcf6723e59e785c3fe3c85c058ae54c6f235f0
+      bytes: 7292923
+    workload_sampler:
+      source_id: alibaba_gpu_v2026_job_execution_summary
+      path: data/processed/jobs_summary_sampler.parquet
+      sha256: 67e5cc0878e246e9de547cc838c6b0e3df5a25fcd52f043624235873ca2a0d66
+      bytes: 4349964
+    hardware_calibration:
+      source_id: rtx6000pro_4gpu_calibration
+      path: data/calibration/rtx6000pro_4gpu_v1.yaml
+      sha256: 92eae659e628ed3bd76e07f9667235de96a3672bd9dd2a931b9617932ac1d856
+      bytes: 5764
 
 generated_sources:
   community_synthetic:

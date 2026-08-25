@@ -3,7 +3,7 @@
 > **文档定位**：本文件定义 AIDRBench 面向 *Nature Communications* 的主论文科学主线。它是系统与机制研究方案，不是控制算法论文，也不是强化学习 benchmark 论文。
 > **核心原则**：全文只有一个主问题——AI 数据中心究竟能提供多少真实、可靠、可重复调用的需求响应；社区能够多安装和多利用多少光伏，是这部分 job-derived firm DR 的系统后果。PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
 
-正式仓库边界与权威文件顺序见 [`MAINLINE_FILES.md`](MAINLINE_FILES.md)。论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
+正式仓库边界与权威文件顺序见 [`MAINLINE_FILES.md`](MAINLINE_FILES.md)。论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览，Supplementary Figure 1–4 可在 [`docs/nature-supplementary-figure-preview.md`](docs/nature-supplementary-figure-preview.md) 预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
 
 ---
 
@@ -68,6 +68,30 @@
 - 一个把四卡服务器直接等同于 MW 级数据中心的硬件论文。
 
 强化学习、CMDP、安全层和硬件在环控制不属于本篇 NC 主线，已从正式 `main` 移除；需要时可从 Git 历史恢复到独立分支，不与正式证据共存。
+
+### 2.3 正式数据依据与 Alibaba 2026 Lite 的含义
+
+正式 Model A 的任务形状来自 Alibaba `cluster-trace-gpu-v2026` 官方
+`asi_opensource_job_execution_summary.zip`，不是 Alibaba 2020，也不是 BurstGPT。
+本地链条为：1.19 GB 官方压缩包 → 40,522,321 行原始/标准化 Parquet → 本项目
+生成的 100,000 行分层 sampler。所谓 `alibaba2026_lite` 是 AIDRBench 为减少重复
+实验 I/O 制作的有界采样池，不是 Alibaba 发布的另一套数据；它按 seed 2026 从
+低优先级 training 和 offline-inference 各抽取 50,000 行。正式协议使用该 sampler
+生成 class-aware synthetic arrivals，并按预声明策略生成源数据中不存在的 deadline。
+
+因此 Lite 保留的是任务规模、时长、类别和 GPU demand 的经验分布依据，不等于对
+完整集群时间线的逐时重放，也不包含约 352 GB `pod_hourly` 档案中的时间相关性。
+完整 URL、大小、预处理配置和从原始档案到正式输入的逐层 SHA-256 均记录在
+[`data/manifests/sources.yaml`](data/manifests/sources.yaml)，并与正式 protocol 的
+三个输入 fail closed 绑定。Alibaba 2020 与 BurstGPT 在该清单中明确标记为
+`used_in_formal_mainline: false`。
+
+一个使用不同 seed 的独立 100,000 行 reservoir 审计得到最大 KS=0.00774、median
+相对误差 1.69%、95th-percentile 相对误差 0.99%，但按 reference median 归一化的
+最大 Wasserstein distance 为 0.218，未通过 0.10 的工程诊断阈值。因此正式表述是
+“中心与主要分位数接近，但未证明全分布或时间序列等价”，不能再写成“大数据与 Lite
+没有区别”。完整审计收据见
+[`data/manifests/alibaba2026_sampler_fidelity_results_v1.yaml`](data/manifests/alibaba2026_sampler_fidelity_results_v1.yaml)。
 
 ---
 
@@ -738,6 +762,15 @@ flexible 解使用了允许的 1% deadline-miss budget，rigid baseline 为 0%�
 terminal backlog 均为 0。主文必须把 energy benefit、capacity effect 和 service
 budget 分开陈述。
 
+为排除这一服务质量混杂，项目又在全部 100 个 development 和 100 个 validation
+情景上，把 deadline miss 严格固定为 0，重新求解 reference-scale PV hosting 与固定
+500 kW PV 两类问题。共 1,600 行结果全部 optimal，最大 deadline-missed work 为
+0 GPU-h。Validation 的 all-scenario PV-hosting gain 仍为 32.825 kW（无 BESS）和
+33.377 kW（有 BESS），与 1% 版本在报告精度内相同；paired mean hosting gain 的
+变化小于 0.002 kW，固定 PV-use gain 的变化小于 0.000006 kWh。因此本文的 renewable
+planning 结果并不是通过牺牲 deadline service 换来的。该检查仍然是 PI planning
+sensitivity，不是 causal controller certificate，也未读取 locked-ID/OOD。
+
 ### Result 4.3 — 同一联合可行域的正交切片与资源交互
 
 既有 2 × 2 × 2 结果固定 500 kW PV、最大化 DC capacity；新结果固定 DC、
@@ -1036,13 +1069,13 @@ solver and tolerances
 
 ### 工作标题
 
-**Job-derived firm demand response expands community photovoltaic hosting and utilisation**
+**Job-derived flexibility limits firm demand response and expands photovoltaic hosting**
 
 ### 三句话贡献
 
 > First, we replace exogenous flexible-load fractions with job-derived firm-flexibility envelopes that jointly account for interval delivery, workload deadlines, recovery and rebound.
 
-> Second, we separate nominal, perfect-information and non-anticipative capacities to quantify physical and information losses, then map the remaining job-feasible flexibility to curtailment-constrained photovoltaic hosting and utilisation under fixed community and battery conditions.
+> Second, we separate nominal, perfect-information, non-anticipative and independently certified causal capacities, then evaluate the planning-level photovoltaic value of job-feasible schedules under an explicit service allowance without presenting it as a causal controller effect.
 
 > Third, we reveal compute debt as the mechanism that makes AI flexibility exhaustible and recovery-dependent under repeated grid dispatch.
 

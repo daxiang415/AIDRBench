@@ -117,6 +117,21 @@ def test_fixed_capacity_dispatch_reports_pv_and_service_metrics(tmp_path: Path) 
     assert solution.deadline_miss_fraction <= 0.01 + 1e-6
 
 
+def test_zero_miss_override_is_enforced_for_flexible_planning(tmp_path: Path) -> None:
+    artifact = _artifact(tmp_path)
+    solution = solve_fixed_capacity_pv_operation(
+        artifact,
+        portfolio=_portfolio(bess_enabled=False),
+        dc_operation="flexible",
+        dc_scale_of_reference_mix=1.0,
+        pv_rated_kw=300.0,
+        max_deadline_miss_rate=0.0,
+    )
+
+    assert solution.deadline_miss_gpu_h <= 1e-6
+    assert solution.deadline_miss_fraction <= 1e-9
+
+
 def test_renewable_analysis_rejects_relaxed_battery_dispatch(tmp_path: Path) -> None:
     artifact = _artifact(tmp_path)
     portfolio = CommunityPortfolio(

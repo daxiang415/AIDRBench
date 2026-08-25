@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "evidence_scope": "development_and_validation_sensitivity_only",
+  "locked_sets_used": false,
+  "specification_sha256": "0cd64dd3af407057ca67c13312fd5f01ae83ef1bba02647536f07d9d11330bb3",
+  "specification_file_sha256": "8cee3220c7e8200cd6031ca11feca45d5be8e657522ca8eb2526a1fe3edb186a",
+  "workers": 16,
+  "scenario_count": 200,
+  "row_count": 1600,
+  "solved_scenario_count": 200,
+  "resumed_scenario_count": 0,
+  "rigid_baselines_reused": true,
+  "outputs": {
+    "scenario_results": {
+      "path": "results/nature_mainline/renewable_zero_miss_v1/zero_miss_scenario_results.parquet",
+      "sha256": "ace56d8a1e55baaca78115d28241a2ca8aafc5a3a4204da655ff3652ba63c33f"
+    },
+    "summary": {
+      "path": "results/nature_mainline/renewable_zero_miss_v1/zero_miss_summary.csv",
+      "sha256": "c8ed33706632f72462933ef588f22889d754d181897d67177d7711c13ab58727"
+    },
+    "contrasts": {
+      "path": "results/nature_mainline/renewable_zero_miss_v1/zero_miss_contrasts.csv",
+      "sha256": "fe08946daf226eec45e4c0e3392ff3bf440f2d8b11e74b2506cf4d2136c8bfd8"
+    }
+  },
+  "interpretation_guardrails": [
+    "descriptive_service_sensitivity_not_a_new_headline_estimand",
+    "perfect_information_planning_not_causal_controller_replay",
+    "locked_id_and_locked_ood_not_read"
+  ]
+}

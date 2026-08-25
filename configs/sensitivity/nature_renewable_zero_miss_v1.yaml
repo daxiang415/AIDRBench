@@ -1,0 +1,42 @@
+schema_version: 1
+evidence_scope: development_and_validation_sensitivity_only
+locked_sets_used: false
+scenario_sets:
+  development:
+    path: results/nature_mainline/development_v2_nominal
+    episode_seed_range: [10000, 10099]
+    scenario_count: 100
+    rigid_baseline_results:
+      path: results/nature_mainline/renewable_integration_development_v1/scenario_renewable_integration.parquet
+      sha256: 300c96b917bcc2bab33c35df6e74dc5cbf19b4f38e26a7e90dd53293ffbb47fd
+  validation:
+    path: results/nature_mainline/validation_nominal
+    episode_seed_range: [20000, 20099]
+    scenario_count: 100
+    rigid_baseline_results:
+      path: results/nature_mainline/renewable_integration_validation_v1/scenario_renewable_integration.parquet
+      sha256: b4e3cdca5be34b83b46b855da67352849ab45e83484180cc5edaf2334f6da209
+portfolio:
+  path: configs/community/pv_bess.yaml
+  sha256: e4bc9dead9494906e3ab042cf2b653022e1e73e97e04468831ee273000d56d04
+service:
+  maximum_deadline_miss_fraction: 0.0
+  terminal_backlog_policy: inherit_model_a
+analyses:
+  pv_hosting:
+    dc_scale_of_reference_mix: 1.0
+    maximum_pv_curtailment_fraction: 0.05
+  fixed_pv_operation:
+    dc_scale_of_reference_mix: 1.0
+    pv_rated_kw: 500.0
+    near_pcc_limit_fraction: 0.95
+    lexicographic_tolerance_kwh: 0.00001
+  bess_enabled: [false, true]
+  dc_operation: [rigid, flexible]
+solver:
+  name: HIGHS
+  threads_per_process: 1
+  bess_dispatch_mode: milp_exclusive
+reporting:
+  inference: descriptive_paired_sensitivity_no_new_hypothesis_test
+  compare_with_headline_one_percent_allowance: true

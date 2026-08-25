@@ -1,0 +1,132 @@
+{
+  "figure_count": 4,
+  "figures": [
+    {
+      "figure": "S1",
+      "manifest": "supplementary_figure_1_manifest.json",
+      "outputs": [
+        {
+          "bytes": 25197,
+          "format": "svg",
+          "path": "supplementary_figure_1.svg",
+          "sha256": "24d079f803be4a26ad4f7e1ded3d30b4b472f0d21e4c2abf214201fd209e60f0"
+        },
+        {
+          "bytes": 29108,
+          "format": "pdf",
+          "path": "supplementary_figure_1.pdf",
+          "sha256": "3e0bea70ba28ae7d70f474dfeaa74c4aefc92cc3f231ada7c85225da55c1a417"
+        },
+        {
+          "bytes": 1230440,
+          "format": "tiff",
+          "path": "supplementary_figure_1.tiff",
+          "sha256": "05fe147e8389afd526956adc097c8937f24b57c2b6d0d4ee58c1f603b8c8b0ee"
+        },
+        {
+          "bytes": 203407,
+          "format": "png",
+          "path": "supplementary_figure_1.png",
+          "sha256": "cd4359e34ad2b9daf41c7855c9dff5c57415cdf90dfda32a4993feed6119d3c5"
+        }
+      ]
+    },
+    {
+      "figure": "S2",
+      "manifest": "supplementary_figure_2_manifest.json",
+      "outputs": [
+        {
+          "bytes": 26435,
+          "format": "svg",
+          "path": "supplementary_figure_2.svg",
+          "sha256": "2209cdc73b63bf8bbcbaf6bf9d6ff948ea7b70a22435101b902304f2c30fd5b8"
+        },
+        {
+          "bytes": 28032,
+          "format": "pdf",
+          "path": "supplementary_figure_2.pdf",
+          "sha256": "141d4fcf6b5d016d7c51d102ac7a87ace15dbeeddb14e277369292c318513388"
+        },
+        {
+          "bytes": 570364,
+          "format": "tiff",
+          "path": "supplementary_figure_2.tiff",
+          "sha256": "a6d60bb0fa54cbfedd97b77150459b2f3084b07ee197bafcb312249b52c11460"
+        },
+        {
+          "bytes": 122662,
+          "format": "png",
+          "path": "supplementary_figure_2.png",
+          "sha256": "a0931c9a8b658cbf9396bd09e7579c154c9f987d6680590e62ebf0ec0cfe9319"
+        }
+      ]
+    },
+    {
+      "figure": "S3",
+      "manifest": "supplementary_figure_3_manifest.json",
+      "outputs": [
+        {
+          "bytes": 20724,
+          "format": "svg",
+          "path": "supplementary_figure_3.svg",
+          "sha256": "bc8978111b31417b758434032ee89184c148b8899dba90823fdd956cf945425b"
+        },
+        {
+          "bytes": 25346,
+          "format": "pdf",
+          "path": "supplementary_figure_3.pdf",
+          "sha256": "5516934b644d3683a64506db7ab05eae61bd1c6116eae27f06e91a11862643e7"
+        },
+        {
+          "bytes": 1837798,
+          "format": "tiff",
+          "path": "supplementary_figure_3.tiff",
+          "sha256": "b1f722f5daf018fe22c093b2aea6678072b9b73f854dfe01373bc722530263c9"
+        },
+        {
+          "bytes": 192522,
+          "format": "png",
+          "path": "supplementary_figure_3.png",
+          "sha256": "9490db7c1dac7a1c712779ee243f9aaa5729b47f64a578be27cfba6fa9b9682c"
+        }
+      ]
+    },
+    {
+      "figure": "S4",
+      "manifest": "supplementary_figure_4_manifest.json",
+      "outputs": [
+        {
+          "bytes": 43704,
+          "format": "svg",
+          "path": "supplementary_figure_4.svg",
+          "sha256": "12dbe9c9ef61e698faa12278328ab4e65938e9a98debf050f943a207897fff44"
+        },
+        {
+          "bytes": 28269,
+          "format": "pdf",
+          "path": "supplementary_figure_4.pdf",
+          "sha256": "f721525ddcf4d0c7193913808bf24e1b5667e613dd1345d4163ec2214040710d"
+        },
+        {
+          "bytes": 1234270,
+          "format": "tiff",
+          "path": "supplementary_figure_4.tiff",
+          "sha256": "ab02944f6843241dc5d560c64a93ca2cfc0f65cc01d9fc7efa1c207e6c13802a"
+        },
+        {
+          "bytes": 251031,
+          "format": "png",
+          "path": "supplementary_figure_4.png",
+          "sha256": "f24eceed3b70dfe1b5eb321be5f4038a8808786626e91c1ac8c47199750979d8"
+        }
+      ]
+    }
+  ],
+  "locked_sets_used": false,
+  "schema_version": "aidrbench.supplementary_figure_specification.v1",
+  "specification": {
+    "bytes": 1290,
+    "path": "configs/paper/nature_supplementary_figures_v1.yaml",
+    "sha256": "d2a75de05047605cc9370eea19823bc39967714c29fdca70bce702947a9d0f50"
+  }
+}
