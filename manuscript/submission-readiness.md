@@ -29,7 +29,7 @@ Audit date: 2026-08-25
 - `pytest`: 160 passed.
 - Formal protocol with `--require-execution-ready`: valid; all 45 declared structure and execution checks passed.
 - Source manifest: valid; every locally declared artifact and all three formal-mainline bindings matched.
-- Main Source Data: 21 tables, 17,386 rows; the current review export binds all five figures to one manifest.
+- Main Source Data: 21 tables, 17,386 rows; the clean-commit export binds all five figures to one manifest and is tracked under `manuscript/source_data/`.
 - Figure renderers: 20/20 static checks; PDF minimum text sizes were 5.8–6.2 pt for main figures and 6.1–6.5 pt for supplementary figures.
 
 ## Required before submission or archival
@@ -38,7 +38,7 @@ Audit date: 2026-08-25
 2. Add funding, facility acknowledgements and non-author contributions.
 3. Provide CRediT author contributions and the competing-interests declaration.
 4. Select a repository software license; `pyproject.toml` deliberately remains unset until the author decides.
-5. Commit the scientific and manuscript changes, rerun Source Data and all nine figures from that clean commit, then archive the full CSV/SVG/PDF/TIFF bundle.
+5. Archive the full CSV/SVG/PDF/TIFF bundle generated from clean scientific commit `f2f4dc699c067891b84601ec8bd9ddd8505f849c`.
 6. Create an immutable GitHub release and Zenodo deposit; replace the Data Availability and Code Availability DOI placeholders.
 7. Add final title-page metadata and complete the journal submission forms, reporting checklist and source-data upload mapping.
 

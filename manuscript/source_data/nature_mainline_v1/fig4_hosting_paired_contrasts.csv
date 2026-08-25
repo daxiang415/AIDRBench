@@ -1,0 +1,17 @@
+evaluation_split,contrast,conditioning_axis,conditioning_level,independent_unit,scenario_count,estimate_mean_kw,sample_standard_deviation_kw,simultaneous_ci_lower_kw,simultaneous_ci_upper_kw,familywise_confidence_level,planned_contrast_count,bootstrap_resamples,equivalence_margin_kw,interpretation
+development,AI_BESS_INTERACTION,pv_enabled,False,frozen_scenario,100,-47.6404442982,32.5239026092,-55.4712664235,-38.0171166765,0.95,8,10000,10.0500391992,substitution
+development,AI_BESS_INTERACTION,pv_enabled,True,frozen_scenario,100,-76.0265427074,48.0655397641,-87.199499293,-61.1805988976,0.95,8,10000,10.0500391992,substitution
+development,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=False,bess=False",frozen_scenario,100,282.895048957,43.149491642,270.284839655,293.867237259,0.95,8,10000,0,positive
+development,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=False,bess=True",frozen_scenario,100,235.254604658,35.7735819126,225.262619435,245.165228062,0.95,8,10000,0,positive
+development,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=True,bess=False",frozen_scenario,100,346.496613764,55.3233874722,330.582881302,361.02944251,0.95,8,10000,0,positive
+development,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=True,bess=True",frozen_scenario,100,270.470071057,39.9770086507,259.400033917,281.284567659,0.95,8,10000,0,positive
+development,AI_PV_INTERACTION,bess_enabled,False,frozen_scenario,100,63.6015648074,32.6129467894,54.352632333,72.1497118104,0.95,8,10000,10.0500391992,complementarity
+development,AI_PV_INTERACTION,bess_enabled,True,frozen_scenario,100,35.2154663982,31.6860084701,26.7786734141,43.7140058191,0.95,8,10000,10.0500391992,complementarity
+validation,AI_BESS_INTERACTION,pv_enabled,False,frozen_scenario,100,-52.3063649073,10.6605085328,-55.4179625484,-49.5186493355,0.95,8,10000,10.0500391992,substitution
+validation,AI_BESS_INTERACTION,pv_enabled,True,frozen_scenario,100,-88.5411692908,10.4286580375,-91.224277237,-85.6608926395,0.95,8,10000,10.0500391992,substitution
+validation,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=False,bess=False",frozen_scenario,100,326.019379193,24.1259555905,319.326500868,332.805201779,0.95,8,10000,0,positive
+validation,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=False,bess=True",frozen_scenario,100,273.713014286,23.8153745313,267.325184353,280.037383199,0.95,8,10000,0,positive
+validation,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=True,bess=False",frozen_scenario,100,370.611786911,28.6373639107,362.736185854,378.277347599,0.95,8,10000,0,positive
+validation,AI_HOSTING_GAIN,pv_bess_portfolio,"pv=True,bess=True",frozen_scenario,100,282.07061762,30.829301018,273.844767047,290.465140737,0.95,8,10000,0,positive
+validation,AI_PV_INTERACTION,bess_enabled,False,frozen_scenario,100,44.5924077175,29.185152623,36.5725068521,52.6300026724,0.95,8,10000,10.0500391992,complementarity
+validation,AI_PV_INTERACTION,bess_enabled,True,frozen_scenario,100,8.35760333407,27.3837136736,1.05058614649,15.737153882,0.95,8,10000,10.0500391992,indeterminate

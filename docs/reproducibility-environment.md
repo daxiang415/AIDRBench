@@ -38,4 +38,4 @@ The complete dependency graph is pinned by `uv.lock` (SHA-256 `144f1f6af92d27d9b
 - source-manifest file hashes and formal-mainline bindings: passed;
 - five main and four supplementary figures: static preflight passed, visual inspection completed and PDF text floor at least 5 pt.
 
-The release workflow must rerun Source Data export from a committed clean tree and archive the resulting manifest together with the immutable Git tag and DOI.
+The manuscript Source Data were re-exported from clean scientific commit `f2f4dc699c067891b84601ec8bd9ddd8505f849c`. The resulting manifest has SHA-256 `7351fd609c9b23eb92a7e0e473f4279a61d3b5f59c7b9c913dd32fa6a40fd593` and records `working_tree_dirty=false`. The release workflow must archive this bundle and the full-format figures together with the immutable Git tag and DOI.

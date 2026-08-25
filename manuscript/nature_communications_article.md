@@ -217,7 +217,7 @@ Every formal result recorded the Git commit, protocol version, scenario and inpu
 
 ## Data Availability
 
-The NREL End-Use Load Profiles used for community demand are available through the OEDI building-stock data lake. The Alibaba 2026 job-execution summary used for workload calibration is available from the official `cluster-trace-gpu-v2026` release. Exact download locations, retrieval records, preprocessing configurations and SHA-256 hashes for the original archive, the 40,522,321-row normalised table and the project-made 100,000-row sampler are recorded in `data/manifests/sources.yaml`. Raw third-party data are not redistributed by this repository. Frozen scenario manifests, processed Source Data underlying the figures, calibration artifacts and result receipts will be deposited in [REPOSITORY AND DOI TO BE ADDED BEFORE SUBMISSION].
+The NREL End-Use Load Profiles used for community demand are available through the OEDI building-stock data lake. The Alibaba 2026 job-execution summary used for workload calibration is available from the official `cluster-trace-gpu-v2026` release. Exact download locations, retrieval records, preprocessing configurations and SHA-256 hashes for the original archive, the 40,522,321-row normalised table and the project-made 100,000-row sampler are recorded in `data/manifests/sources.yaml`. Raw third-party data are not redistributed by this repository. Frozen scenario manifests, processed Source Data underlying all figures, calibration artifacts and result receipts are included in the public repository or its immutable release archive and will also be deposited at [ZENODO DOI TO BE ADDED].
 
 ## Code Availability
 

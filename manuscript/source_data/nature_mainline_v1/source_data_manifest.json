@@ -1,0 +1,965 @@
+{
+  "bundle_id": "nature_communications_model_a_v1",
+  "schema_version": "aidrbench.manuscript_source_data_manifest.v1",
+  "software": {
+    "git": {
+      "commit": "f2f4dc699c067891b84601ec8bd9ddd8505f849c",
+      "working_tree_dirty": false
+    }
+  },
+  "source_specification": {
+    "path": "configs/paper/nature_source_data_v1.yaml",
+    "schema_version": "aidrbench.manuscript_source_data_specification.v1",
+    "sha256": "20b08fb05394ac310927bf50826cfd6c9611cd461107868459ea8556723198ac"
+  },
+  "tables": [
+    {
+      "columns": [
+        "mode",
+        "gpu_count",
+        "repeat",
+        "gpu_index",
+        "sample_count",
+        "mean_power_w",
+        "std_power_w",
+        "mean_utilization_pct"
+      ],
+      "figures": [
+        1
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "data/calibration/rtx6000pro_4gpu_v1_fit/run_gpu_means.parquet",
+          "rows_read": 30,
+          "sha256": "b4dcc5d6e2b65d700b54ec5096c1f5da5d02c3600ded3a2eb35a49cb61b7b010"
+        }
+      ],
+      "output": "fig1_calibration_run_means.csv",
+      "output_sha256": "22d33e548902d567c945391b1c99f3a01e787d1e9067b73a99f403010720f95e",
+      "panels": [
+        "c"
+      ],
+      "row_count": 30,
+      "table_id": "fig1_calibration_run_means"
+    },
+    {
+      "columns": [
+        "duration_h",
+        "reliability_target",
+        "confidence_level",
+        "scenario_count",
+        "tolerance_order_statistic_rank",
+        "achieved_tolerance_confidence",
+        "estimable",
+        "sample_size_sufficient",
+        "perfect_information_firm_capacity_kw",
+        "reference_mix_operating_peak_kw",
+        "nominal_flexibility_fraction",
+        "nominal_flexibility_kw",
+        "physical_gap_kw",
+        "physical_gap_fraction_of_reference_peak"
+      ],
+      "figures": [
+        1,
+        2
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_v2_pi_nominal/pi_firm_boundary.parquet",
+          "rows_read": 18,
+          "sha256": "97ded258e644bb29b0018b7bfb4131f694fa03d58e7cad1cff8e8ddff50b529c"
+        }
+      ],
+      "output": "fig1_fig2_pi_firm_boundaries.csv",
+      "output_sha256": "df87a505dfa83848281a7aaa393b3d307ae1cef130f5e3c8f3282753cf5dfcd1",
+      "panels": [
+        "fig1a",
+        "fig1b",
+        "fig2a"
+      ],
+      "row_count": 18,
+      "table_id": "fig1_fig2_pi_firm_boundaries"
+    },
+    {
+      "columns": [
+        "duration_h",
+        "notice_h",
+        "ensemble_success_fraction_target",
+        "scenario_count",
+        "required_success_count",
+        "selected_success_count",
+        "empirical_success_fraction",
+        "non_anticipative_capacity_kw",
+        "matched_pi_ensemble_capacity_kw",
+        "information_restriction_gap_kw",
+        "non_anticipative_status"
+      ],
+      "figures": [
+        2
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_v2_na_nominal_q95_full/non_anticipative_frontier.parquet",
+          "rows_read": 18,
+          "sha256": "756f2c362232a216ec8f5fbdaae2d3fa9b9cf889bc2e86180a6b99ddc090e733"
+        }
+      ],
+      "output": "fig2_restricted_na_surface.csv",
+      "output_sha256": "ff029d8eedccc4b3e518951903e913000af970a7dde36ba934f85f78451ab93b",
+      "panels": [
+        "a",
+        "c"
+      ],
+      "row_count": 18,
+      "table_id": "fig2_restricted_na_surface"
+    },
+    {
+      "columns": [
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "pi_empirical_capacity_kw",
+        "na_capacity_kw",
+        "fixed_comparison_capacity_kw",
+        "eligible_pre_execution_work_gpu_h_mean",
+        "pre_event_spare_capacity_gpu_h_mean",
+        "event_start_backlog_gpu_h_mean",
+        "event_start_compute_debt_kwh_mean",
+        "pre_event_schedule_divergence_gpu_h_mean",
+        "information_node_count",
+        "information_node_split_count",
+        "fixed_capacity_success_fraction",
+        "fixed_capacity_p05_service_margin",
+        "binding_constraint_counts",
+        "pi_notice_gain_kw",
+        "na_notice_gain_kw"
+      ],
+      "figures": [
+        2
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_notice_diagnostics_v2/notice_mechanism_diagnostics.parquet",
+          "rows_read": 4,
+          "sha256": "60195054f5dddc0d6c35ea0b281d585b1f9d041d1f26f58686581ca187722218"
+        }
+      ],
+      "output": "fig2_notice_mechanism_diagnostics.csv",
+      "output_sha256": "078c81622a6047cb91b3e141253c0889ab7d01fe279f133fe63007ede5464fdb",
+      "panels": [
+        "d"
+      ],
+      "row_count": 4,
+      "table_id": "fig2_notice_mechanism_diagnostics"
+    },
+    {
+      "columns": [
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "confidence_level",
+        "candidate_reduction_kw",
+        "candidate_fraction_of_reference_mix_peak",
+        "success_count",
+        "trial_count",
+        "empirical_success_fraction",
+        "wilson_lower_confidence_bound",
+        "certified",
+        "minimum_interval_delivery_ratio",
+        "p95_deadline_miss_rate",
+        "p95_rebound_ratio",
+        "p95_terminal_backlog_fraction",
+        "p05_window_peak_relief_fraction"
+      ],
+      "figures": [
+        2,
+        5
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/locked_id_certificate_q90/causal_certificates.parquet",
+          "rows_read": 18,
+          "sha256": "70dfa776cfa371c337853542164219587c9cd7ce612cd752e54553761b87bf95"
+        },
+        {
+          "labels": {},
+          "path": "results/nature_mainline/locked_id_certificate_q95/causal_certificates.parquet",
+          "rows_read": 18,
+          "sha256": "7953c686ab7c5a7a33272d506d618e0ccccb00c85f01d8aba8b990d9de048670"
+        },
+        {
+          "labels": {},
+          "path": "results/nature_mainline/locked_id_certificate_q99/causal_certificates.parquet",
+          "rows_read": 18,
+          "sha256": "6974f2f32595de8a49df2a6790d6e0292a3a08462d31830b58284a719868ff61"
+        }
+      ],
+      "output": "fig2_fig5_locked_id_certificates.csv",
+      "output_sha256": "c05f0477785b80a357ddcdb3441f07f8c47d185366c98d58c18f91953fc44eaa",
+      "panels": [
+        "fig2a",
+        "fig2b",
+        "fig2c",
+        "fig5e"
+      ],
+      "row_count": 54,
+      "table_id": "fig2_fig5_locked_id_certificates"
+    },
+    {
+      "columns": [
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "confidence_level",
+        "candidate_reduction_kw",
+        "candidate_fraction_of_reference_mix_peak",
+        "success_count",
+        "trial_count",
+        "empirical_success_fraction",
+        "wilson_lower_confidence_bound",
+        "certified",
+        "minimum_interval_delivery_ratio",
+        "p95_deadline_miss_rate",
+        "p95_rebound_ratio",
+        "p95_terminal_backlog_fraction",
+        "p05_window_peak_relief_fraction"
+      ],
+      "figures": [
+        5
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/locked_ood_certificate_q90/causal_certificates.parquet",
+          "rows_read": 18,
+          "sha256": "26a86ca7b095a7de666aa3d036a6a090618cf007f8bbc90cccf8a5765b73b337"
+        },
+        {
+          "labels": {},
+          "path": "results/nature_mainline/locked_ood_certificate_q95/causal_certificates.parquet",
+          "rows_read": 18,
+          "sha256": "90225924075c1e08c9eba9c449b6129e71062e68399371518e29b30e26dcc42d"
+        },
+        {
+          "labels": {},
+          "path": "results/nature_mainline/locked_ood_certificate_q99/causal_certificates.parquet",
+          "rows_read": 18,
+          "sha256": "04b24cfef3951b4a29e07742751b4cbe268b920075c75a6cbb541186e606aad8"
+        }
+      ],
+      "output": "fig5_locked_ood_certificates.csv",
+      "output_sha256": "71c365d5083c1bef2896d4acaac21c18a14996e55382f54268e04142a7308aa2",
+      "panels": [
+        "e"
+      ],
+      "row_count": 54,
+      "table_id": "fig5_locked_ood_certificates"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "duration_h",
+        "recovery_gap_h",
+        "event_ordinal",
+        "scenario_count",
+        "fixed_capacity_kw",
+        "local_event_success_fraction",
+        "fresh_local_event_success_fraction",
+        "p05_delivered_reduction_kw",
+        "p05_fresh_delivered_reduction_kw",
+        "fixed_commitment_residual_flexibility_ratio",
+        "mean_event_start_compute_debt_kwh",
+        "compute_debt_growth_vs_first_kwh",
+        "mean_paired_compute_debt_increment_kwh",
+        "mean_event_start_backlog_gpu_h",
+        "p05_minimum_local_service_margin",
+        "p05_paired_local_service_margin_delta",
+        "p95_rebound_ratio",
+        "failure_counts"
+      ],
+      "figures": [
+        3
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/development_exhaustion_diagnostics_v1/exhaustion_summary.parquet",
+          "rows_read": 40,
+          "sha256": "dd719c0dc95e298b7a1bc46cb46195ea0df4afec009307810abaf46243a1e146"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/validation_exhaustion_diagnostics_v1/exhaustion_summary.parquet",
+          "rows_read": 40,
+          "sha256": "47fc075ef0871f7890679ddaab976779755001c61fc6d5c2c5ce354e50f380c5"
+        }
+      ],
+      "output": "fig3_exhaustion_event_summary.csv",
+      "output_sha256": "4b0d716c8a8b0760d49cbd39fdcc169d2bf6b5ef4afad41323dd46944e3817c9",
+      "panels": [
+        "a",
+        "b"
+      ],
+      "row_count": 80,
+      "table_id": "fig3_exhaustion_event_summary"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "duration_h",
+        "recovery_gap_h",
+        "scenario_count",
+        "fixed_capacity_kw",
+        "joint_episode_success_fraction",
+        "mean_successful_event_count",
+        "event_count",
+        "episode_service_feasible_fraction",
+        "mean_episode_deadline_miss_rate",
+        "mean_episode_terminal_backlog_fraction"
+      ],
+      "figures": [
+        3
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/development_exhaustion_diagnostics_v1/joint_episode_summary.parquet",
+          "rows_read": 10,
+          "sha256": "477de93b7007e23a31ac1c3686aef1cf466e33f03db8581f484912278302c4ba"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/validation_exhaustion_diagnostics_v1/joint_episode_summary.parquet",
+          "rows_read": 10,
+          "sha256": "2510a7de0f1bbac39d205f6897aad84522a52d57465fdb9fff44ca14207def37"
+        }
+      ],
+      "output": "fig3_exhaustion_joint_episode_summary.csv",
+      "output_sha256": "adc7ef232060976e5b7fb3d27a545c0e798259d329e3eaaef900012d96333fd7",
+      "panels": [
+        "c",
+        "d"
+      ],
+      "row_count": 20,
+      "table_id": "fig3_exhaustion_joint_episode_summary"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "scenario_id",
+        "scenario_hash",
+        "episode_seed",
+        "duration_h",
+        "recovery_gap_h",
+        "event_ordinal",
+        "event_start_hour",
+        "fixed_capacity_kw",
+        "delivered_reduction_kw",
+        "fresh_delivered_reduction_kw",
+        "delivery_ratio",
+        "minimum_interval_delivery_ratio",
+        "event_start_backlog_gpu_h",
+        "event_start_compute_debt_kwh",
+        "fresh_event_start_compute_debt_kwh",
+        "paired_compute_debt_increment_kwh",
+        "paired_local_service_margin_delta",
+        "paired_residual_flexibility_ratio",
+        "local_event_success",
+        "fresh_local_event_success",
+        "failure_labels",
+        "fresh_failure_labels"
+      ],
+      "figures": [
+        3
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/development_exhaustion_diagnostics_v1/repeated_event_outcomes.parquet",
+          "rows_read": 4000,
+          "sha256": "4b18954edd139dd981ad4ec0cf0611099f27f41e933d17bcfd443d1d40edd595"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/validation_exhaustion_diagnostics_v1/repeated_event_outcomes.parquet",
+          "rows_read": 4000,
+          "sha256": "a596b35a4ca49030b7b15b831c8342868ab0d6ca1e66f3a0b74359894b819367"
+        }
+      ],
+      "output": "fig3_exhaustion_scenario_events.csv",
+      "output_sha256": "afd468efc92c3ed46bac463e1df1fb88ecedcca5537688c1d578492d1419e480",
+      "panels": [
+        "source_data"
+      ],
+      "row_count": 8000,
+      "table_id": "fig3_exhaustion_scenario_events"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "dc_operation",
+        "pv_enabled",
+        "bess_enabled",
+        "scenario_count",
+        "simultaneous_feasible_hosting_dc_peak_kw",
+        "mean_scenario_hosting_dc_peak_kw",
+        "minimum_scenario_hosting_dc_peak_kw",
+        "maximum_scenario_hosting_dc_peak_kw",
+        "q05_scenario_hosting_dc_peak_kw",
+        "q50_scenario_hosting_dc_peak_kw",
+        "q95_scenario_hosting_dc_peak_kw",
+        "hosting_gain_vs_rigid_simultaneous_kw"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/development_hosting_ensemble_v1/hosting_capacity_summary.parquet",
+          "rows_read": 8,
+          "sha256": "e3d45da4de5bfb5379a1c82ed152c23ffd0a4420530f14dded62c92ced2e4492"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/validation_hosting_ensemble_v1/hosting_capacity_summary.parquet",
+          "rows_read": 8,
+          "sha256": "97399bfb0e93270765c1531d63846cf8dd632aa09312ce0aa26997eee2b6dc4d"
+        }
+      ],
+      "output": "fig4_hosting_capacity_summary.csv",
+      "output_sha256": "54cd88787b56e8f77dc368c17f9aec5c2c475f2544d0051410db6b160e6d0a40",
+      "panels": [
+        "a"
+      ],
+      "row_count": 16,
+      "table_id": "fig4_hosting_capacity_summary"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "contrast",
+        "conditioning_axis",
+        "conditioning_level",
+        "independent_unit",
+        "scenario_count",
+        "estimate_mean_kw",
+        "sample_standard_deviation_kw",
+        "simultaneous_ci_lower_kw",
+        "simultaneous_ci_upper_kw",
+        "familywise_confidence_level",
+        "planned_contrast_count",
+        "bootstrap_resamples",
+        "equivalence_margin_kw",
+        "interpretation"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/development_hosting_ensemble_v1/hosting_paired_contrasts.parquet",
+          "rows_read": 8,
+          "sha256": "9da4b7ed8d782cda1bc271822e323cbc0393986061e621c7e019be94fac85c68"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/validation_hosting_ensemble_v1/hosting_paired_contrasts.parquet",
+          "rows_read": 8,
+          "sha256": "b8a09ba64a0bae9443e63bdf8e235e66a0ec8de095ce8866d56138fac578445f"
+        }
+      ],
+      "output": "fig4_hosting_paired_contrasts.csv",
+      "output_sha256": "3d6603a75213d3e4885164781e554f2ae6806a9ecdf7fc21e4a07b2e0bea3270",
+      "panels": [
+        "b",
+        "c",
+        "d"
+      ],
+      "row_count": 16,
+      "table_id": "fig4_hosting_paired_contrasts"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "scenario_id",
+        "scenario_hash",
+        "episode_seed",
+        "dc_operation",
+        "pv_enabled",
+        "bess_enabled",
+        "pcc_capacity_kw",
+        "reference_mix_operating_peak_kw",
+        "hosting_dc_peak_kw",
+        "hosting_scale_of_reference_mix",
+        "minimum_background_gross_headroom_kw",
+        "maximum_pcc_power_kw",
+        "total_pv_available_kwh",
+        "total_pv_used_kwh",
+        "total_pv_curtailed_kwh",
+        "total_bess_charge_kwh",
+        "total_bess_discharge_kwh",
+        "terminal_soc_deviation_kwh",
+        "hosting_status"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/development_hosting_ensemble_v1/scenario_hosting_capacity.parquet",
+          "rows_read": 800,
+          "sha256": "91d4f1dbff9dd8de8bc8447cbc39f7149d49f9c6d0742aa7ac77e03594b92823"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/validation_hosting_ensemble_v1/scenario_hosting_capacity.parquet",
+          "rows_read": 800,
+          "sha256": "2a04fc79fcdc5ba62bf8284a64eff9f068741d3814e5f9046460da414fa4e1eb"
+        }
+      ],
+      "output": "fig4_hosting_scenario_capacities.csv",
+      "output_sha256": "147560dc72790b4727f77bd9747d92ce5c73ff0328043c04c3006d715692e139",
+      "panels": [
+        "source_data"
+      ],
+      "row_count": 1600,
+      "table_id": "fig4_hosting_scenario_capacities"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "analysis_variant",
+        "dc_operation",
+        "bess_enabled",
+        "dc_scale_of_reference_mix",
+        "target_dc_peak_kw",
+        "maximum_pv_curtailment_fraction",
+        "scenario_count",
+        "feasible_scenario_count",
+        "all_scenarios_feasible",
+        "simultaneous_feasible_pv_hosting_kw",
+        "mean_scenario_pv_hosting_kw",
+        "minimum_scenario_pv_hosting_kw",
+        "maximum_scenario_pv_hosting_kw",
+        "q05_scenario_pv_hosting_kw",
+        "q50_scenario_pv_hosting_kw",
+        "q95_scenario_pv_hosting_kw"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/renewable_integration_development_v1/pv_hosting_summary.parquet",
+          "rows_read": 32,
+          "sha256": "aab401757dccdac603b31f3744f2bd466319823d438e7b172b8432deee0df095"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/renewable_integration_validation_v1/pv_hosting_summary.parquet",
+          "rows_read": 32,
+          "sha256": "1a24d6dd3374fb5d60bf8000e7b408f119dfe63bbf8b8f93d01fc68b40e88f58"
+        }
+      ],
+      "output": "fig4_pv_hosting_summary.csv",
+      "output_sha256": "9a1825aedc8ab59442abeb10f39c06eb1c2e89bd1de8fd6d8b17aaa46d1d92d4",
+      "panels": [
+        "a",
+        "b"
+      ],
+      "row_count": 64,
+      "table_id": "fig4_pv_hosting_summary"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "contrast",
+        "conditioning_axis",
+        "conditioning_level",
+        "dc_scale_of_reference_mix",
+        "maximum_pv_curtailment_fraction",
+        "unit",
+        "independent_unit",
+        "scenario_count",
+        "estimate_mean",
+        "sample_standard_deviation",
+        "simultaneous_ci_lower",
+        "simultaneous_ci_upper",
+        "familywise_confidence_level",
+        "planned_contrast_count",
+        "bootstrap_resamples"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/renewable_integration_development_v1/pv_hosting_contrasts.parquet",
+          "rows_read": 2,
+          "sha256": "f6d5a3c86987c784e59bd22009a08240555c902ed430b67ec6229d99aff18d4c"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/renewable_integration_validation_v1/pv_hosting_contrasts.parquet",
+          "rows_read": 2,
+          "sha256": "1fb4765c36026d37a7f2d68c6cf7b33050ae88478b2b4fa49a448eb808f39a56"
+        }
+      ],
+      "output": "fig4_pv_hosting_contrasts.csv",
+      "output_sha256": "2f9aa63645ded6dc60d94e072e91c6985bde97338a3960a5853dadfdaf020ef9",
+      "panels": [
+        "b"
+      ],
+      "row_count": 4,
+      "table_id": "fig4_pv_hosting_contrasts"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "dc_operation",
+        "bess_enabled",
+        "scenario_count",
+        "metric",
+        "mean",
+        "minimum",
+        "maximum",
+        "q05",
+        "q50",
+        "q95"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/renewable_integration_development_v1/pv_operation_summary.parquet",
+          "rows_read": 44,
+          "sha256": "fa1d0d44b88a911a19f3e54c633f82a3b4a178dad3ffa7b9e3ae7024fa2d5bb5"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/renewable_integration_validation_v1/pv_operation_summary.parquet",
+          "rows_read": 44,
+          "sha256": "8281c972bd0b2be279a822312ed5986ca9a7600f95be4541eb8470f10f71602a"
+        }
+      ],
+      "output": "fig4_pv_operation_summary.csv",
+      "output_sha256": "0c25c7837f7131b21646333eb903958c7a97b07866dd587ca5f786115e1dc0b7",
+      "panels": [
+        "c"
+      ],
+      "row_count": 88,
+      "table_id": "fig4_pv_operation_summary"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "contrast",
+        "conditioning_axis",
+        "conditioning_level",
+        "metric",
+        "unit",
+        "independent_unit",
+        "scenario_count",
+        "estimate_mean",
+        "sample_standard_deviation",
+        "simultaneous_ci_lower",
+        "simultaneous_ci_upper",
+        "familywise_confidence_level",
+        "planned_contrast_count",
+        "bootstrap_resamples"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/renewable_integration_development_v1/pv_operation_contrasts.parquet",
+          "rows_read": 10,
+          "sha256": "e89deee2062b2efdaa6dc8bdffc80f1424acc4dcfa4cc5456c9d880b77d6661a"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/renewable_integration_validation_v1/pv_operation_contrasts.parquet",
+          "rows_read": 10,
+          "sha256": "059ebcb844ab1334634867337ba2af36531d3190b4a8845a483cbe13f645b15d"
+        }
+      ],
+      "output": "fig4_pv_operation_contrasts.csv",
+      "output_sha256": "f39414fc52ea74061ce74dce62c3bf7bceaf688025f7222360bf46b9fa65dd97",
+      "panels": [
+        "c"
+      ],
+      "row_count": 20,
+      "table_id": "fig4_pv_operation_contrasts"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "scenario_id",
+        "scenario_hash",
+        "episode_seed",
+        "analysis_variant",
+        "dc_operation",
+        "bess_enabled",
+        "dc_scale_of_reference_mix",
+        "maximum_pv_curtailment_fraction",
+        "status",
+        "target_dc_peak_kw",
+        "reference_mix_operating_peak_kw",
+        "pcc_capacity_kw",
+        "pv_rated_kw",
+        "total_community_load_kwh",
+        "total_dc_energy_kwh",
+        "total_pv_available_kwh",
+        "total_pv_used_kwh",
+        "total_pv_curtailed_kwh",
+        "pv_utilisation_fraction",
+        "renewable_demand_share",
+        "total_grid_import_kwh",
+        "maximum_pcc_import_kw",
+        "hours_near_pcc_limit",
+        "near_pcc_limit_fraction",
+        "total_bess_charge_kwh",
+        "total_bess_discharge_kwh",
+        "total_bess_throughput_kwh",
+        "maximum_simultaneous_bess_charge_discharge_kw",
+        "terminal_soc_deviation_kwh",
+        "deadline_miss_gpu_h",
+        "deadline_miss_fraction",
+        "terminal_backlog_gpu_h",
+        "terminal_backlog_fraction"
+      ],
+      "figures": [
+        4
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "evaluation_split": "development"
+          },
+          "path": "results/nature_mainline/renewable_integration_development_v1/scenario_renewable_integration.parquet",
+          "rows_read": 3600,
+          "sha256": "300c96b917bcc2bab33c35df6e74dc5cbf19b4f38e26a7e90dd53293ffbb47fd"
+        },
+        {
+          "labels": {
+            "evaluation_split": "validation"
+          },
+          "path": "results/nature_mainline/renewable_integration_validation_v1/scenario_renewable_integration.parquet",
+          "rows_read": 3600,
+          "sha256": "b4e3cdca5be34b83b46b855da67352849ab45e83484180cc5edaf2334f6da209"
+        }
+      ],
+      "output": "fig4_renewable_scenario_results.csv",
+      "output_sha256": "a9645ef4b96d54a19f9d165e4637042eb899e9d88f0d3b80de735ac8ba44dd20",
+      "panels": [
+        "source_data"
+      ],
+      "row_count": 7200,
+      "table_id": "fig4_renewable_scenario_results"
+    },
+    {
+      "columns": [
+        "power_case",
+        "duration_h",
+        "reliability_target",
+        "confidence_level",
+        "estimable",
+        "perfect_information_firm_capacity_kw",
+        "reference_mix_operating_peak_kw",
+        "nominal_flexibility_kw",
+        "physical_gap_kw",
+        "physical_gap_fraction_of_reference_peak"
+      ],
+      "figures": [
+        5
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "power_case": "lower"
+          },
+          "path": "results/nature_mainline/development_v2_pi_lower_bound/pi_firm_boundary.parquet",
+          "rows_read": 18,
+          "sha256": "89145386656a2bb487e56ec8725b07623d67b77c138d218889381438ac900a49"
+        },
+        {
+          "labels": {
+            "power_case": "nominal"
+          },
+          "path": "results/nature_mainline/development_v2_pi_nominal/pi_firm_boundary.parquet",
+          "rows_read": 18,
+          "sha256": "97ded258e644bb29b0018b7bfb4131f694fa03d58e7cad1cff8e8ddff50b529c"
+        },
+        {
+          "labels": {
+            "power_case": "upper"
+          },
+          "path": "results/nature_mainline/development_v2_pi_upper_bound/pi_firm_boundary.parquet",
+          "rows_read": 18,
+          "sha256": "83f56eb934cd577e96b606d52729af19162906ddb613a7bf07fbd9355945171a"
+        }
+      ],
+      "output": "fig5_power_case_sensitivity.csv",
+      "output_sha256": "3c63f145949be8e243e5dcb6a499b3f231048659314d4196c1f1a21bb71d3ef9",
+      "panels": [
+        "a"
+      ],
+      "row_count": 54,
+      "table_id": "fig5_power_case_sensitivity"
+    },
+    {
+      "columns": [
+        "workload_case",
+        "flexible_arrival_utilization",
+        "rigid_gpu_utilization",
+        "deadline_slack_scale",
+        "duration_h",
+        "reliability_target",
+        "confidence_level",
+        "perfect_information_firm_capacity_kw",
+        "reference_perfect_information_firm_capacity_kw",
+        "firm_capacity_delta_from_reference_kw"
+      ],
+      "figures": [
+        5
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_workload_sensitivity_v1/workload_pi_firm_boundary.parquet",
+          "rows_read": 18,
+          "sha256": "5ccd22860f8045ed00757f343135e51850b8c9c8992de640db6f1a012704be42"
+        }
+      ],
+      "output": "fig5_workload_sensitivity.csv",
+      "output_sha256": "230784f3153273c82e1bd089685affc1234e05302193e1cb80ea2eb7af11f4a2",
+      "panels": [
+        "b"
+      ],
+      "row_count": 18,
+      "table_id": "fig5_workload_sensitivity"
+    },
+    {
+      "columns": [
+        "criteria_case",
+        "criteria_factor",
+        "min_delivery_ratio",
+        "min_interval_delivery_ratio",
+        "max_deadline_miss_rate",
+        "max_rebound_ratio",
+        "min_window_peak_relief_fraction",
+        "max_terminal_backlog_fraction",
+        "duration_h",
+        "reliability_target",
+        "confidence_level",
+        "perfect_information_firm_capacity_kw"
+      ],
+      "figures": [
+        5
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_criteria_sensitivity_v2/criteria_pi_firm_boundary.parquet",
+          "rows_read": 18,
+          "sha256": "dcac37a451553ddc9815e9e40343f4b70f2767ab21d5b7eef74eda29b2b7f5c4"
+        }
+      ],
+      "output": "fig5_success_criteria_sensitivity.csv",
+      "output_sha256": "3f0697b19b5b2599187823bf527a986e9695b8d8a56afedafddc260362f9131e",
+      "panels": [
+        "c"
+      ],
+      "row_count": 18,
+      "table_id": "fig5_success_criteria_sensitivity"
+    },
+    {
+      "columns": [
+        "infrastructure_case",
+        "pue",
+        "node_fixed_overhead_power_case",
+        "node_fixed_overhead_w",
+        "duration_h",
+        "reliability_target",
+        "confidence_level",
+        "perfect_information_firm_capacity_kw",
+        "reference_mix_operating_peak_kw",
+        "physical_gap_fraction_of_reference_peak",
+        "reference_perfect_information_firm_capacity_kw",
+        "firm_capacity_delta_from_reference_kw"
+      ],
+      "figures": [
+        5
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_infrastructure_sensitivity_v1/infrastructure_pi_firm_boundary.parquet",
+          "rows_read": 10,
+          "sha256": "b5fd93caccc5eca8ff557d3afd3e56e4e81070b17edc89e89936d5c00d050716"
+        }
+      ],
+      "output": "fig5_infrastructure_sensitivity.csv",
+      "output_sha256": "9b90368a52b8c0271826e60d6d09b37f28665f5896887c2f6312c4efa7edeebf",
+      "panels": [
+        "d"
+      ],
+      "row_count": 10,
+      "table_id": "fig5_infrastructure_sensitivity"
+    }
+  ]
+}

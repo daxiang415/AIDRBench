@@ -100,8 +100,9 @@ aidrbench paper supplementary-figures
 
 After export, confirm that `software.git.working_tree_dirty` is `false` in
 `results/nature_mainline/source_data_v1/source_data_manifest.json`. Generated results remain ignored
-by Git; release copies should be deposited with the manuscript source data and archived under the
-same tagged commit.
+by default; the clean review copy is stored under `manuscript/source_data/nature_mainline_v1/` and
+must match the generated manifest byte for byte. Full SVG/PDF/TIFF figure outputs and the same Source
+Data directory should be archived under the immutable release tag and DOI.
 
 ## 5. Interpretation boundaries
 

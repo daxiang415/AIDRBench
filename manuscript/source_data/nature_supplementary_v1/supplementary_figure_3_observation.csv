@@ -1,0 +1,64 @@
+feature_index,feature_name,observation_group,lower_bound,upper_bound
+0,hour_sin,Time encoding,-1,1
+1,hour_cos,Time encoding,-1,1
+2,weekday_sin,Time encoding,-1,1
+3,weekday_cos,Time encoding,-1,1
+4,community_net_fraction,Current power and request,0,2
+5,pv_fraction,Current power and request,0,2
+6,pcc_limit_fraction,Current power and request,0,2
+7,fixed_dc_fraction,Current power and request,0,2
+8,available_flexible_power_fraction,Current power and request,-1,1
+9,event_request_fraction,Current power and request,0,2
+10,backlog_horizon_fraction,"Backlog, arrivals and slack",0,4
+11,baseline_backlog_horizon_fraction,"Backlog, arrivals and slack",0,4
+12,excess_backlog_horizon_fraction,"Backlog, arrivals and slack",0,4
+13,cumulative_arrival_utilization,"Backlog, arrivals and slack",0,4
+14,deadline_miss_rate_so_far,"Backlog, arrivals and slack",0,1
+15,baseline_deadline_miss_rate_so_far,"Backlog, arrivals and slack",0,1
+16,terminal_excess_fraction_so_far,"Backlog, arrivals and slack",0,4
+17,mean_slack_fraction,"Backlog, arrivals and slack",0,1
+18,p10_slack_fraction,"Backlog, arrivals and slack",0,1
+19,deadline_feasibility_0h,Controlled deadline feasibility,0,4
+20,deadline_feasibility_1h,Controlled deadline feasibility,0,4
+21,deadline_feasibility_2h,Controlled deadline feasibility,0,4
+22,deadline_feasibility_3h,Controlled deadline feasibility,0,4
+23,deadline_feasibility_6h,Controlled deadline feasibility,0,4
+24,deadline_feasibility_12h,Controlled deadline feasibility,0,4
+25,deadline_feasibility_24h,Controlled deadline feasibility,0,4
+26,deadline_feasibility_48h,Controlled deadline feasibility,0,4
+27,excess_deadline_feasibility_0h,Excess deadline feasibility,0,4
+28,excess_deadline_feasibility_1h,Excess deadline feasibility,0,4
+29,excess_deadline_feasibility_2h,Excess deadline feasibility,0,4
+30,excess_deadline_feasibility_3h,Excess deadline feasibility,0,4
+31,excess_deadline_feasibility_6h,Excess deadline feasibility,0,4
+32,excess_deadline_feasibility_12h,Excess deadline feasibility,0,4
+33,excess_deadline_feasibility_24h,Excess deadline feasibility,0,4
+34,excess_deadline_feasibility_48h,Excess deadline feasibility,0,4
+35,event_active,Event and recovery history,0,1
+36,recovery_active,Event and recovery history,0,1
+37,event_window_active,Event and recovery history,0,1
+38,notice_active,Event and recovery history,0,1
+39,event_remaining_fraction,Event and recovery history,0,1
+40,notice_remaining_fraction,Event and recovery history,0,1
+41,recovery_remaining_fraction,Event and recovery history,0,1
+42,events_last_24h_squashed,Event and recovery history,0,1
+43,has_previous_event,Event and recovery history,0,1
+44,hours_since_previous_event_fraction,Event and recovery history,0,1
+45,running_window_baseline_peak_fraction,Running peaks and previous action,0,2
+46,running_window_pcc_peak_fraction,Running peaks and previous action,0,2
+47,running_window_relief_fraction,Running peaks and previous action,-4,4
+48,running_rebound_ratio,Running peaks and previous action,0,4
+49,previous_action_fraction,Running peaks and previous action,0,1
+50,previous_pcc_fraction,Running peaks and previous action,0,2
+51,community_forecast_t+1_fraction,Community forecast,0,2
+52,community_forecast_t+2_fraction,Community forecast,0,2
+53,community_forecast_t+3_fraction,Community forecast,0,2
+54,community_forecast_t+4_fraction,Community forecast,0,2
+55,community_forecast_t+5_fraction,Community forecast,0,2
+56,community_forecast_t+6_fraction,Community forecast,0,2
+57,available_flexible_forecast_t+1_fraction,Available-flexibility forecast,-1,1
+58,available_flexible_forecast_t+2_fraction,Available-flexibility forecast,-1,1
+59,available_flexible_forecast_t+3_fraction,Available-flexibility forecast,-1,1
+60,available_flexible_forecast_t+4_fraction,Available-flexibility forecast,-1,1
+61,available_flexible_forecast_t+5_fraction,Available-flexibility forecast,-1,1
+62,available_flexible_forecast_t+6_fraction,Available-flexibility forecast,-1,1

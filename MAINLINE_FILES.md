@@ -21,7 +21,8 @@ must never silently change their meaning, controller hash or scenario hash.
 
 - `README.md`: scientific question, estimands, hypotheses and experiment plan.
 - `manuscript/`: the article, Supplementary Information, terminology ledger,
-  evidence allocation and screened reference set.
+  evidence allocation, clean-commit Source Data, submission-readiness audit and
+  screened reference set.
 - `configs/env/nature_mainline_*.yaml`: development, validation, locked-ID and
   locked-OOD environments.
 - `configs/controller/nature_robust_mpc_v1.yaml`: the complete frozen causal

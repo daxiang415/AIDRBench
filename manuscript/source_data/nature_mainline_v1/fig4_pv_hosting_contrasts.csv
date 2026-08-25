@@ -1,0 +1,5 @@
+evaluation_split,contrast,conditioning_axis,conditioning_level,dc_scale_of_reference_mix,maximum_pv_curtailment_fraction,unit,independent_unit,scenario_count,estimate_mean,sample_standard_deviation,simultaneous_ci_lower,simultaneous_ci_upper,familywise_confidence_level,planned_contrast_count,bootstrap_resamples
+development,DR_PV_HOSTING_GAIN,bess_enabled,False,1,0.05,kW,frozen_scenario,100,45.6643134553,16.2013069446,42.2390786759,49.4788974971,0.95,2,10000
+development,DR_PV_HOSTING_GAIN,bess_enabled,True,1,0.05,kW,frozen_scenario,100,43.3462897352,16.8268391082,39.7582578124,47.3178065399,0.95,2,10000
+validation,DR_PV_HOSTING_GAIN,bess_enabled,False,1,0.05,kW,frozen_scenario,100,44.8540536287,14.1975368396,41.682148498,48.080847239,0.95,2,10000
+validation,DR_PV_HOSTING_GAIN,bess_enabled,True,1,0.05,kW,frozen_scenario,100,43.1990291127,14.4831992514,39.9870588505,46.4647819545,0.95,2,10000

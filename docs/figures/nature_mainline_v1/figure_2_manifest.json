@@ -40,7 +40,7 @@
     4.65
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "0cda495b49a22357454d97ca66153579ed9d89e4957540ca86d63b45bce3ef13",
+  "source_data_manifest_sha256": "7351fd609c9b23eb92a7e0e473f4279a61d3b5f59c7b9c913dd32fa6a40fd593",
   "source_tables": [
     "fig1_fig2_pi_firm_boundaries",
     "fig2_restricted_na_surface",

@@ -30,6 +30,8 @@ Official guidance:
 - `supplementary_information.md`: Supplementary Methods/Results working draft with evidence partitions, lock discipline, controller specification, certification rules, optimisation audits, full certificate tables and four generated supplementary figures.
 - `terminology-ledger.md`: canonical terms that must remain stable across the manuscript and Supplementary Information.
 - `results-evidence-allocation.md`: main-text versus Supplementary evidence decisions.
+- `source_data/`: clean-commit, hash-verified CSV tables underlying all main figures and the numerical supplementary figures.
+- `submission-readiness.md`: completed checks and the remaining author/archival metadata blockers.
 - `references/verified-v1/`: screened DOI whitelist, reference-manager exports and manual official-source records.
 
 ## Current status
@@ -42,6 +44,7 @@ Official guidance:
 - Main figures: five, within the journal's maximum of ten display items.
 - Supplementary figures: four generated at 183-mm width with editable SVG/PDF, 600-dpi TIFF, repository-preview PNG and per-figure source manifests.
 - Quantitative Results and figure legends: drafted from hash-verified Source Data.
+- Tracked Source Data: 21 main-figure tables (17,386 rows) plus calibration, observation and representative-trajectory tables for supplementary figures.
 - Literature citations: 34 references (approximately 938 whitespace-delimited words); 30 DOI records exported through the screened citation workflow and four official data/proceedings records maintained in a separate verified RIS file.
 - Author metadata, funding, contributions, competing interests and archival DOI: author input required.
 

@@ -1,0 +1,17 @@
+{
+  "candidate_reduction_kw": 39.65054527809973,
+  "controller": "robust_mpc",
+  "deadline_miss_gpu_h": 0.0,
+  "duration_h": 4,
+  "episode_seed": 20000,
+  "event_id": 0,
+  "event_start_hour": 115,
+  "event_stop_hour": 119,
+  "max_event_rebound_ratio": 0.11226773311733468,
+  "minimum_interval_delivery_ratio": 0.9711699336575695,
+  "notice_h": 0,
+  "representative_rule": "minimum_episode_seed",
+  "scenario_hash": "c53ae573b0664487ef9674ac8f746f47e59c1e10b31f872f34607fdfd247e7e8",
+  "scenario_id": "hourly_seed_20000",
+  "terminal_backlog_gpu_h": 0.0
+}

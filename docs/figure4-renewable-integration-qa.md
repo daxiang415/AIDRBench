@@ -7,7 +7,7 @@ Backend: Python/matplotlib
 Final width: 183 mm (double column)
 
 Source Data manifest SHA-256:
-`0cda495b49a22357454d97ca66153579ed9d89e4957540ca86d63b45bce3ef13`
+`7351fd609c9b23eb92a7e0e473f4279a61d3b5f59c7b9c913dd32fa6a40fd593`
 
 ## Evidence and panel audit
 

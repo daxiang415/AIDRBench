@@ -28,6 +28,8 @@ REQUIRED_PATHS = (
     "docs/nature-supplementary-figure-preview.md",
     "docs/reproducibility-environment.md",
     "manuscript/nature_communications_article.md",
+    "manuscript/source_data/nature_mainline_v1/source_data_manifest.json",
+    "manuscript/source_data/nature_supplementary_v1/supplementary_figure_4_trajectory.csv",
     "manuscript/submission-readiness.md",
     "manuscript/supplementary_information.md",
     "scripts/check_system.sh",
@@ -37,6 +39,7 @@ REQUIRED_PATHS = (
     "src/aidrbench/evaluation/hosting_capacity.py",
     "src/aidrbench/evaluation/supplementary_figures.py",
     "tests/test_nature_protocol.py",
+    "tests/test_manuscript_source_data_bundle.py",
     "tests/test_supplementary_figures.py",
 )
 
