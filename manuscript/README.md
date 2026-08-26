@@ -26,7 +26,7 @@ Official guidance:
 
 ## Current files
 
-- `nature_communications_article.md`: English working manuscript v0.3.
+- `nature_communications_article.md`: English working manuscript v0.4 with mechanism-led framing and subtractive main-text revision.
 - `supplementary_information.md`: Supplementary Methods/Results working draft with evidence partitions, lock discipline, controller specification, certification rules, optimisation audits, full certificate tables and four generated supplementary figures.
 - `terminology-ledger.md`: canonical terms that must remain stable across the manuscript and Supplementary Information.
 - `results-evidence-allocation.md`: main-text versus Supplementary evidence decisions.
@@ -36,11 +36,11 @@ Official guidance:
 
 ## Current status
 
-- Title: 10 words (journal maximum: 15).
-- Abstract: 139 whitespace-delimited words (current official Article maximum: 150; hyphenated compounds counted as one).
-- Introduction + Results + Discussion: approximately 3,856 whitespace-delimited words (current official main-text maximum: 6,000, excluding Methods and figure legends).
-- Methods: approximately 2,647 whitespace-delimited words (excluded from the 6,000-word main-text limit but still edited for reproducibility and concision).
-- Supplementary Information: approximately 7,396 whitespace-delimited words, including tables and captions.
+- Title: 11 words (journal maximum: 15).
+- Abstract: 143 whitespace-delimited words (current official Article maximum: 150; hyphenated compounds counted as one).
+- Introduction + Results + Discussion: approximately 2,846 whitespace-delimited words (current official main-text maximum: 6,000, excluding Methods and figure legends).
+- Methods: approximately 2,659 whitespace-delimited words (excluded from the 6,000-word main-text limit but still edited for reproducibility and concision).
+- Supplementary Information: approximately 7,419 whitespace-delimited words, including tables and captions.
 - Main figures: five, within the journal's maximum of ten display items.
 - Supplementary figures: four generated at 183-mm width with editable SVG/PDF, 600-dpi TIFF, repository-preview PNG and per-figure source manifests.
 - Quantitative Results and figure legends: drafted from hash-verified Source Data.
@@ -50,4 +50,4 @@ Official guidance:
 
 ## Evidence-first drafting order
 
-The draft is revised in this order: Results, Introduction, Discussion, Methods, title, Abstract. The v0.3 file is already arranged in publication order, but later edits should continue to originate from the Results evidence rather than from desired claims.
+The draft is revised in this order: Results, Introduction, Discussion, Methods, title, Abstract. The v0.4 file is already arranged in publication order, but later edits should continue to originate from the Results evidence rather than from desired claims.

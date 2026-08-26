@@ -195,8 +195,8 @@ def plot_nature_mainline_figure2_reference_style(
     )
     for y_value, label, color, y_offset in (
         (nominal[-1], "Nominal proxy", _COLORS["neutral"], 0.0),
-        (pi_capacity[-1], "PI tolerance", _COLORS["gold"], -0.8),
-        (na_capacity[-1], "Restricted NA", _COLORS["purple"], 1.5),
+        (pi_capacity[-1], "PI tolerance LB", _COLORS["gold"], -0.8),
+        (na_capacity[-1], "Empirical PI/NA", _COLORS["purple"], 1.5),
         (causal[-1], "Locked-ID", _COLORS["blue"], -2.0),
     ):
         ax_a.text(
@@ -356,7 +356,7 @@ def plot_nature_mainline_figure2_reference_style(
             "eligible work but yields zero capacity gain under Model A."
         ),
         claim_boundaries=(
-            "PI tolerance, restricted NA and locked-ID causal layers have different statistical interpretations.",
+            "The PI tolerance lower bound and empirical PI/NA boundary use different cross-scenario statistics.",
             "Certification is interval-wise rather than simultaneous over the complete surface.",
             "The q=0.95 H=1 candidate remains visibly not certified.",
         ),
@@ -982,7 +982,7 @@ def plot_nature_mainline_figure5_reference_style(
     ax_a.set_xlim(0.8, 9.0)
     ax_a.set_xticks([1, 2, 3, 4, 6, 8])
     ax_a.set_xlabel("Duration (h)")
-    ax_a.set_ylabel("PI capacity (kW)")
+    ax_a.set_ylabel("PI tolerance LB (kW)")
     ax_a.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
     ax_a.legend(loc="lower left", handlelength=1.8)
     _short_heading(ax_a, "Power-model uncertainty")

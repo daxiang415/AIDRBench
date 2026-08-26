@@ -376,7 +376,7 @@ P_{\mathrm{fixed}}
 
 其中 \(e_c\) 来自四 GPU 服务器的硬件测量和校准。硬件 repeat 的统计单位是一次独立 workload run；同一次四卡运行中的四张卡只用于形成该 run 的均值，不能当作四个独立重复。当前 active-power 拟合只有两个独立 fit runs 和一个 held-out run，因此区间应被视为小样本不确定性，而不是高精度硬件定律；idle 仅有一个 node-level run，node fixed overhead 仍是工程假设范围。
 
-数据来源也必须准确表述：社区负荷为 NLR/NREL EULP 建模并经实测校验的 profile，不是本项目采集的社区电表数据；任务到达为 Alibaba GPU 2026 trace-calibrated synthetic process，deadline 由预声明 policy 生成；DR 事件来自配置的峰时窗口随机抽样，不是真实 utility dispatch 记录。
+数据来源也必须准确表述：社区负荷为 NLR/NREL EULP 建模并经实测校验的 profile，不是本项目采集的社区电表数据；任务到达为 Alibaba GPU 2026 trace-informed synthetic process，保留声明的任务特征分布但不重放生产时间线，deadline 由预声明 policy 生成；DR 事件来自配置的峰时窗口随机抽样，不是真实 utility dispatch 记录。
 
 应同时区分：
 
@@ -515,7 +515,7 @@ bound；NA ensemble optimization 单独报告为受限场景边界。
 
 Model A 的 reference-mix operating peak 为 201.00 kW，因此预声明的 50%
 nominal proxy 为 100.50 kW。100 个 development frozen scenarios 上，q=0.95、
-95% confidence 的 exact-binomial PI lower-tolerance boundary 为：
+95% confidence 的 exact-binomial PI tolerance lower bound 为：
 
 | Duration | Nominal / kW | PI firm bound / kW | Nominal overstatement / kW | Overstatement / nominal |
 |---:|---:|---:|---:|---:|
@@ -540,7 +540,7 @@ firm DR 容量”成为可量化结果，而不只是概念判断。完整输入
 
 **Figure 1：Nominal-to-job-derived firm-capacity gap**
 
-- a：名义容量与 job-derived PI boundary 的定量差距；
+- a：名义容量与 job-derived PI tolerance lower bound 的定量差距；
 - b：任务 arrival–deadline–execution 关系；
 - c：任务调度到 DC/PCC 功率；
 - d：nominal、PI、restricted NA 与 causal 四层证据关系。
@@ -656,7 +656,7 @@ H=8 的 1.14 MWh。四事件 joint success 为 0.00–0.97；只有 H=4、gap=8 
 
 ---
 
-## Result 4 — Firm demand response expands community photovoltaic hosting and utilisation
+## Result 4 — Job-feasible flexibility reshapes the joint data-centre–PV hosting boundary
 
 ### 科学问题与证据逻辑
 
@@ -1069,21 +1069,21 @@ solver and tolerances
 
 ### 工作标题
 
-**Job-derived flexibility limits firm demand response and expands photovoltaic hosting**
+**Job constraints define firm data-centre demand response and photovoltaic hosting limits**
 
 ### 三句话贡献
 
 > First, we replace exogenous flexible-load fractions with job-derived firm-flexibility envelopes that jointly account for interval delivery, workload deadlines, recovery and rebound.
 
-> Second, we separate nominal, perfect-information, non-anticipative and independently certified causal capacities, then evaluate the planning-level photovoltaic value of job-feasible schedules under an explicit service allowance without presenting it as a causal controller effect.
+> Second, we separate a population-level perfect-information tolerance lower bound, an empirical non-anticipative planning boundary and a distribution-specific causal certificate.
 
-> Third, we reveal compute debt as the mechanism that makes AI flexibility exhaustible and recovery-dependent under repeated grid dispatch.
+> Third, we reveal compute debt as the mechanism of state-dependent repeatability and show that job-feasible planning reshapes the joint data-centre–PV hosting boundary.
 
 ### 主结论应落在这里
 
 \[
 \boxed{
-\text{AI workload flexibility is finite, state-dependent, duration-dependent and exhaustible.}
+\text{AI workload flexibility is a finite, state-dependent and distribution-specific power commitment.}
 }
 \]
 

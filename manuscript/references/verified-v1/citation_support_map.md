@@ -17,7 +17,7 @@ not inferred from title metadata alone.
 | Coordinated demand-side resources can affect community/city energy-system outcomes | 24 | Nature Communications publisher record and accepted manuscript | Used as structural precedent for the system-consequence layer |
 | Inter-temporal DR and recovery affect capacity credit | 25, 26 | Publisher abstract and full abstract | Supports reliability qualification; not the numerical AIDRBench certificate |
 | EULP profiles are modelled building-stock loads calibrated and validated against empirical data | 27, 28 | Official NLR/NREL reports | Profiles are not project-owned feeder measurements |
-| Alibaba traces contain heterogeneous production AI workloads at large cluster scale | 29, 30 | Official USENIX proceedings pages | AIDRBench samples trace-calibrated arrivals; it does not replay production deadlines |
+| Alibaba traces contain heterogeneous production AI workloads at large cluster scale | 29, 30 | Official USENIX proceedings pages | AIDRBench uses trace-informed job distributions; it does not replay production timestamps or deadlines |
 | Nonparametric tolerance bounds and Wilson intervals support finite-sample reliability statements | 31–33 | Publisher or official journal records | Statistical-method support only |
 | HiGHS solves the declared linear and mixed-integer programmes | 34 | Official solver citation page and journal metadata | Software-method attribution |
 

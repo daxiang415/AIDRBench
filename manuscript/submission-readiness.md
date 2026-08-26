@@ -14,9 +14,9 @@ Audit date: 2026-08-25
 
 ## Journal-format audit
 
-- Title: 10 words, below the 15-word Article limit.
-- Abstract: 139 whitespace-delimited words, below the 150-word limit.
-- Introduction + Results + Discussion: approximately 3,856 whitespace-delimited words, below the 6,000-word main-text limit that excludes Methods and figure legends.
+- Title: 11 words, below the 15-word Article limit.
+- Abstract: 143 whitespace-delimited words, below the 150-word limit.
+- Introduction + Results + Discussion: approximately 2,846 whitespace-delimited words, below the 6,000-word main-text limit that excludes Methods and figure legends.
 - Main display items: five figures, below the maximum of ten.
 - References: 34; DOI/reference-manager records are retained under `manuscript/references/verified-v1/`.
 - Supplementary Information includes complete methods, certificate tables, sensitivity results and four generated figures.
@@ -26,7 +26,7 @@ Audit date: 2026-08-25
 - `uv lock --check`: passed.
 - `ruff check .`: passed.
 - `mypy src`: passed for 56 source files.
-- `pytest`: 160 passed.
+- `pytest`: 162 passed.
 - Formal protocol with `--require-execution-ready`: valid; all 45 declared structure and execution checks passed.
 - Source manifest: valid; every locally declared artifact and all three formal-mainline bindings matched.
 - Main Source Data: 21 tables, 17,386 rows; the clean-commit export binds all five figures to one manifest and is tracked under `manuscript/source_data/`.

@@ -347,7 +347,7 @@ def _plot_environment_flow(
         formats=formats,
         source_records=sources,
         source_data=(),
-        conclusion="AIDRBench converts trace-calibrated jobs and measured power into distinct planning and causal demand-response evidence layers.",
+        conclusion="AIDRBench converts trace-informed jobs and measured power into distinct planning and causal demand-response evidence layers.",
         boundaries=(
             "The environment is a benchmark implementation, not the paper's sole scientific contribution.",
             "BESS is optimized only in the renewable-planning branch and is not an online environment action.",

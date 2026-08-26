@@ -2,7 +2,7 @@
   "archetype": "asymmetric quantitative figure",
   "backend": "python_matplotlib",
   "claim_boundaries": [
-    "PI tolerance, restricted NA and locked-ID causal layers have different statistical interpretations.",
+    "The PI tolerance lower bound and empirical PI/NA boundary use different cross-scenario statistics.",
     "Certification is interval-wise rather than simultaneous over the complete surface.",
     "The q=0.95 H=1 candidate remains visibly not certified."
   ],
@@ -11,28 +11,28 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 42855,
+      "bytes": 42860,
       "format": "svg",
       "path": "figure_2_duration_reliability_notice.svg",
-      "sha256": "a4b075094c27be14b041d282bbc9f087e60e58a71bc9e779398f85da525b2bee"
+      "sha256": "5102eaa3a47e093d21b4c2709e073afce7d178174a776ac42255eca3034da307"
     },
     {
-      "bytes": 29941,
+      "bytes": 29987,
       "format": "pdf",
       "path": "figure_2_duration_reliability_notice.pdf",
-      "sha256": "96b7173d1b6a598f0c5a23c0707711fb8289dd5b83b643d020b421be86b31fb6"
+      "sha256": "872be069f4652c9735de10c6572b65ffcdc8cbe4a064e0e2deeccc2825a42429"
     },
     {
-      "bytes": 1274810,
+      "bytes": 1277404,
       "format": "tiff",
       "path": "figure_2_duration_reliability_notice.tiff",
-      "sha256": "3aa4d8033cafdbf804d68f5f3274f6a35e43db68106cf81c429968ac3c920ac9"
+      "sha256": "dabbbbda03804e2ca2f3a6163ba64cfd4804cc2e6d2b22d331fd599a8bbcc300"
     },
     {
-      "bytes": 220202,
+      "bytes": 220455,
       "format": "png",
       "path": "figure_2_duration_reliability_notice.png",
-      "sha256": "9aebedcd5fe98ae12af4cb2cc816ecc0ac84bc4bbd063259067489745cb9b04b"
+      "sha256": "af011e5c453372f88874353a46030190615c37b925f2ac273e5cbb811af707d8"
     }
   ],
   "physical_size_inches": [

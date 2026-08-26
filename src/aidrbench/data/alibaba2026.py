@@ -668,7 +668,7 @@ def make_alibaba_lite_hourly_arrivals(
     arrival_process: str = "nhpp",
     seed: int,
 ) -> pd.DataFrame:
-    """Sample trace-calibrated synthetic flexible arrivals at hourly resolution.
+    """Sample trace-informed synthetic flexible arrivals at hourly resolution.
 
     Each hour/class total is scaled to the target virtual data-center GPU-hour
     demand. The sampled records retain the empirical ``gpu_request`` and

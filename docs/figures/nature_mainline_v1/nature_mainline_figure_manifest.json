@@ -35,28 +35,28 @@
       "manifest": "figure_2_manifest.json",
       "outputs": [
         {
-          "bytes": 42855,
+          "bytes": 42860,
           "format": "svg",
           "path": "figure_2_duration_reliability_notice.svg",
-          "sha256": "a4b075094c27be14b041d282bbc9f087e60e58a71bc9e779398f85da525b2bee"
+          "sha256": "5102eaa3a47e093d21b4c2709e073afce7d178174a776ac42255eca3034da307"
         },
         {
-          "bytes": 29941,
+          "bytes": 29987,
           "format": "pdf",
           "path": "figure_2_duration_reliability_notice.pdf",
-          "sha256": "96b7173d1b6a598f0c5a23c0707711fb8289dd5b83b643d020b421be86b31fb6"
+          "sha256": "872be069f4652c9735de10c6572b65ffcdc8cbe4a064e0e2deeccc2825a42429"
         },
         {
-          "bytes": 1274810,
+          "bytes": 1277404,
           "format": "tiff",
           "path": "figure_2_duration_reliability_notice.tiff",
-          "sha256": "3aa4d8033cafdbf804d68f5f3274f6a35e43db68106cf81c429968ac3c920ac9"
+          "sha256": "dabbbbda03804e2ca2f3a6163ba64cfd4804cc2e6d2b22d331fd599a8bbcc300"
         },
         {
-          "bytes": 220202,
+          "bytes": 220455,
           "format": "png",
           "path": "figure_2_duration_reliability_notice.png",
-          "sha256": "9aebedcd5fe98ae12af4cb2cc816ecc0ac84bc4bbd063259067489745cb9b04b"
+          "sha256": "af011e5c453372f88874353a46030190615c37b925f2ac273e5cbb811af707d8"
         }
       ]
     },
@@ -125,28 +125,28 @@
       "manifest": "figure_5_manifest.json",
       "outputs": [
         {
-          "bytes": 42126,
+          "bytes": 42130,
           "format": "svg",
           "path": "figure_5_robustness_generalization.svg",
-          "sha256": "538e44adc5773612e43d209a2744920b2a5d1cfbaa7bae9ce9e1d9b40eeb1e52"
+          "sha256": "86c6f7288409eed429082dbfa9a077b8fbbdb5f2c2a9f4170b4fe5a964349dab"
         },
         {
-          "bytes": 31102,
+          "bytes": 31269,
           "format": "pdf",
           "path": "figure_5_robustness_generalization.pdf",
-          "sha256": "a8491bae61fe701205df45e2f9736387fd7341ba9f8efabef6c659ae64f6a7e5"
+          "sha256": "2181c109ff29f43d9e0584029d4f8636e2625236ee6c3ac71ed30987456b1fad"
         },
         {
-          "bytes": 1095426,
+          "bytes": 1096592,
           "format": "tiff",
           "path": "figure_5_robustness_generalization.tiff",
-          "sha256": "09a39767882033bc63a9dcbc1534dc998cb9de0f3002bff10fa11ff422614e91"
+          "sha256": "48e92ba8d2fe14011b46a62b0a0bba09a7250dde6b26e75c050cfa750b52fb69"
         },
         {
-          "bytes": 221591,
+          "bytes": 221952,
           "format": "png",
           "path": "figure_5_robustness_generalization.png",
-          "sha256": "be0aac9931f5c434a21ac112b63e81c858cf2f7a649be15b4b864aa9f0cbc32f"
+          "sha256": "5921feb6ccc124b33c8dd65b63f3b80d9dc5f7fa2d164ee383655aae12f0d3d2"
         }
       ]
     }

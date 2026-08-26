@@ -532,14 +532,14 @@ def plot_nature_mainline_figure2(
         _numeric(q95_pi, "perfect_information_firm_capacity_kw"),
         marker="o",
         color=_COLORS["gold"],
-        label="PI tolerance bound",
+        label="PI tolerance lower bound",
     )
     ax_a.plot(
         _numeric(q95_na, "duration_h"),
         _numeric(q95_na, "non_anticipative_capacity_kw"),
         marker="s",
         color=_COLORS["purple"],
-        label="Restricted NA",
+        label="Empirical PI/NA boundary",
     )
     certified = _bool_series(q95_cert["certified"])
     ax_a.plot(
@@ -725,7 +725,7 @@ def plot_nature_mainline_figure2(
             "available scheduling information but produces zero capacity gain under Model A."
         ),
         claim_boundaries=(
-            "PI tolerance, restricted NA and locked-ID causal layers have different statistical interpretations.",
+            "The PI tolerance lower bound and empirical PI/NA boundary use different cross-scenario statistics.",
             "Certification is interval-wise rather than simultaneous over the complete surface.",
             "The q=0.95 H=1 candidate remains visibly not certified.",
         ),
