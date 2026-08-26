@@ -33,6 +33,9 @@ Official guidance:
 - `source_data/`: clean-commit, hash-verified CSV tables underlying all main figures and the numerical supplementary figures.
 - `submission-readiness.md`: completed checks and the remaining author/archival metadata blockers.
 - `references/verified-v1/`: screened DOI whitelist, reference-manager exports and manual official-source records.
+- `exports/AIDRBench_Nature_Communications_v0.4_review.pdf`: current 17-page A4 review PDF compiled from LaTeX with all five main figures.
+- `exports/AIDRBench_Nature_Communications_v0.4_review.tex`: portable LaTeX review source; compile from the repository root so the tracked figure paths resolve.
+- `exports/AIDRBench_Nature_Communications_v0.4_review_preview.png`: first-page preview for GitHub review.
 
 ## Current status
 

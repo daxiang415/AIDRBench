@@ -34,6 +34,7 @@ results/**
 # External repositories and large runtime artifacts
 external/
 *.log
+*.aux
 *.pid
 *.zip
 *.tar
