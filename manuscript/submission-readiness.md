@@ -10,6 +10,7 @@ Audit date: 2026-08-25
 - Locked-ID and locked-OOD results are frozen and hash-bound; no locked outcome was reopened during the final sensitivity and figure work.
 - Alibaba 2026, NREL community profiles and four-GPU calibration are bound to the formal protocol by local SHA-256 values.
 - The zero-deadline-miss renewable sensitivity covers 1,600 optimal rows and preserves the headline hosting and PV-use results.
+- The paired EULP 3A/3C/5A development sensitivity holds jobs, hardware and events fixed across 300 scenarios. It returns identical q = 0.95 firm-capacity surfaces and controller success counts across profiles, plus 1,200/1,200 optimal PV-hosting programmes and six positive Bonferroni-controlled paired contrasts.
 - Five main figures and four supplementary figures are generated at 183-mm width with per-figure manifests.
 
 ## Journal-format audit
@@ -19,7 +20,7 @@ Audit date: 2026-08-25
 - Introduction + Results + Discussion: approximately 2,846 whitespace-delimited words, below the 6,000-word main-text limit that excludes Methods and figure legends.
 - Main display items: five figures, below the maximum of ten.
 - References: 34; DOI/reference-manager records are retained under `manuscript/references/verified-v1/`.
-- Supplementary Information includes complete methods, certificate tables, sensitivity results and four generated figures.
+- Supplementary Information includes complete methods, certificate tables, sensitivity results and four generated figures; the main manuscript now contains six generated figures.
 
 ## Repository and reproducibility audit
 
@@ -33,6 +34,8 @@ Audit date: 2026-08-25
 - Figure renderers: 20/20 static checks; PDF minimum text sizes were 5.8–6.2 pt for main figures and 6.1–6.5 pt for supplementary figures.
 
 ## Required before submission or archival
+
+- Commit the community-profile implementation, regenerate the 29-table Source Data bundle from that clean commit, and rebuild the manuscript review PDF so it includes Figure 6. The current development bundle correctly records `working_tree_dirty=true` and is not the archival export.
 
 1. Add author names, affiliations and corresponding-author email.
 2. Add funding, facility acknowledgements and non-author contributions.

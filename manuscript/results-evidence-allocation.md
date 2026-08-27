@@ -17,6 +17,7 @@ The main text follows the shortest evidence chain needed to establish the centra
 | power, workload and criterion sensitivities | robustness / heterogeneity | concise ranges in Result 5 | Fig. 5 and SI |
 | locked-ID certificate | necessary support | Result 5, including H=1 failure | Fig. 5; complete q×H×N table in SI |
 | locked-OOD replay | conclusion-changing boundary | Result 5 | Fig. 5; complete outcomes in SI |
+| paired EULP 3A/3C/5A profile-only sensitivity | attribution boundary: community shape is non-binding for tested firm capacity but conditions PCC/PV value | Result 5 concise profile-only conclusion | Fig. 6; scenario-level PI/controller/renewable rows in Source Data and complete protocol in SI |
 | 63-dimensional AIDRBench interface and reward variants | reproducibility detail / non-mainline extension | Methods sentence only; no reward results | Supplementary observation and scope-exclusion sections |
 | Alibaba 2026 Lite marginal representativeness audit | data-provenance qualification | Methods/SI limitation only; no equivalence claim | Supplementary Methods and audit receipt |
 | RL training and algorithm comparisons | outside the paper's main claim | excluded | online-control extension only |
@@ -26,6 +27,7 @@ The main text follows the shortest evidence chain needed to establish the centra
 - Nominal resource supported (37.6–52.7%) and unsupported (47.3–62.4%) relative to the 100.50 kW nominal proxy.
 - Validation all-scenario PV-hosting boundary gains and the distinct paired mean gains; full simultaneous confidence intervals remain in the figure and Supplementary Information.
 - Validation fixed-PV utilisation effects with bounded interpretation, plus the zero-deadline-miss replication showing that the hosting gain is not created by the 1% allowance.
+- Profile-only q = 0.95 firm-boundary invariance and fixed-controller success counts; complete per-scenario profile differences remain in Source Data.
 - Repeated-event ranges for event-4 compute-debt increment, residual delivery and joint success.
 - Locked-ID success counts and one-sided 95% Wilson lower bounds for q=0.95.
 - Locked-OOD q=0.95 success counts and the 0/18 certification outcome.

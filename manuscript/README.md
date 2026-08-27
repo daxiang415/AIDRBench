@@ -26,14 +26,14 @@ Official guidance:
 
 ## Current files
 
-- `nature_communications_article.md`: English working manuscript v0.4 with mechanism-led framing and subtractive main-text revision.
+- `nature_communications_article.md`: English working manuscript v0.5 with mechanism-led framing, the paired community-profile sensitivity and six main figures.
 - `supplementary_information.md`: Supplementary Methods/Results working draft with evidence partitions, lock discipline, controller specification, certification rules, optimisation audits, full certificate tables and four generated supplementary figures.
 - `terminology-ledger.md`: canonical terms that must remain stable across the manuscript and Supplementary Information.
 - `results-evidence-allocation.md`: main-text versus Supplementary evidence decisions.
 - `source_data/`: clean-commit, hash-verified CSV tables underlying all main figures and the numerical supplementary figures.
 - `submission-readiness.md`: completed checks and the remaining author/archival metadata blockers.
 - `references/verified-v1/`: screened DOI whitelist, reference-manager exports and manual official-source records.
-- `exports/AIDRBench_Nature_Communications_v0.4_review.pdf`: current 17-page A4 review PDF compiled from LaTeX with all five main figures.
+- `exports/AIDRBench_Nature_Communications_v0.4_review.pdf`: previous 17-page A4 review PDF; it predates Figure 6 and must be regenerated from the v0.5 manuscript after a clean commit.
 - `exports/AIDRBench_Nature_Communications_v0.4_review.tex`: portable LaTeX review source; compile from the repository root so the tracked figure paths resolve.
 - `exports/AIDRBench_Nature_Communications_v0.4_review_preview.png`: first-page preview for GitHub review.
 - `exports/AIDRBench_Nature_Communications_v0.3_Supplementary_Information.pdf`: current 16-page A4 Supplementary Information PDF with four figures and six numbered release tables.
@@ -44,13 +44,13 @@ Official guidance:
 
 - Title: 11 words (journal maximum: 15).
 - Abstract: 143 whitespace-delimited words (current official Article maximum: 150; hyphenated compounds counted as one).
-- Introduction + Results + Discussion: approximately 2,846 whitespace-delimited words (current official main-text maximum: 6,000, excluding Methods and figure legends).
-- Methods: approximately 2,659 whitespace-delimited words (excluded from the 6,000-word main-text limit but still edited for reproducibility and concision).
-- Supplementary Information: approximately 7,419 whitespace-delimited words, including tables and captions.
-- Main figures: five, within the journal's maximum of ten display items.
+- Introduction + Results + Discussion: approximately 3,181 whitespace-delimited words (current official main-text maximum: 6,000, excluding Methods and figure legends).
+- Methods: approximately 2,846 whitespace-delimited words (excluded from the 6,000-word main-text limit but still edited for reproducibility and concision).
+- Supplementary Information: approximately 7,868 whitespace-delimited words, including tables and captions.
+- Main figures: six, within the journal's maximum of ten display items.
 - Supplementary figures: four generated at 183-mm width with editable SVG/PDF, 600-dpi TIFF, repository-preview PNG and per-figure source manifests.
 - Quantitative Results and figure legends: drafted from hash-verified Source Data.
-- Tracked Source Data: 21 main-figure tables (17,386 rows) plus calibration, observation and representative-trajectory tables for supplementary figures.
+- Tracked Source Data: 29 main-figure tables (21,694 rows) plus calibration, observation and representative-trajectory tables for supplementary figures. The current Figure 6 development export records a dirty worktree and must be regenerated after commit for archival release.
 - Literature citations: 34 references (approximately 938 whitespace-delimited words); 30 DOI records exported through the screened citation workflow and four official data/proceedings records maintained in a separate verified RIS file.
 - Author metadata, funding, contributions, competing interests and archival DOI: author input required.
 

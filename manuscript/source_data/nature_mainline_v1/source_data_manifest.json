@@ -3,14 +3,14 @@
   "schema_version": "aidrbench.manuscript_source_data_manifest.v1",
   "software": {
     "git": {
-      "commit": "f2f4dc699c067891b84601ec8bd9ddd8505f849c",
-      "working_tree_dirty": false
+      "commit": "0198ab8bacaec26eb8ed1b5ad82ff0adff380505",
+      "working_tree_dirty": true
     }
   },
   "source_specification": {
     "path": "configs/paper/nature_source_data_v1.yaml",
     "schema_version": "aidrbench.manuscript_source_data_specification.v1",
-    "sha256": "20b08fb05394ac310927bf50826cfd6c9611cd461107868459ea8556723198ac"
+    "sha256": "ae8a03bdc09d45023882f25c774183b38c6c5d4c83b66c5961b2244df7b8e6ea"
   },
   "tables": [
     {
@@ -960,6 +960,314 @@
       ],
       "row_count": 10,
       "table_id": "fig5_infrastructure_sensitivity"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "climate_zone",
+        "timestamp",
+        "community_load_kw",
+        "pv_generation_kw",
+        "net_community_load_kw",
+        "profile_id"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {
+            "climate_zone": "3A",
+            "community_profile_case": "reference_3a"
+          },
+          "path": "results/nature_mainline/development_community_profile_scenarios_v1/reference_3a/hourly_seed_10000/community.parquet",
+          "rows_read": 222,
+          "sha256": "d9f66a5211f665669e89f64f3d058a380b10bf8dc53ba804044d2b65d2aad71d"
+        },
+        {
+          "labels": {
+            "climate_zone": "3C",
+            "community_profile_case": "climate_3c"
+          },
+          "path": "results/nature_mainline/development_community_profile_scenarios_v1/climate_3c/hourly_seed_10000/community.parquet",
+          "rows_read": 222,
+          "sha256": "76720638f0689562000e5edf4b924acbe221ac2adb0f64a9c2f05f85a057b5d8"
+        },
+        {
+          "labels": {
+            "climate_zone": "5A",
+            "community_profile_case": "climate_5a"
+          },
+          "path": "results/nature_mainline/development_community_profile_scenarios_v1/climate_5a/hourly_seed_10000/community.parquet",
+          "rows_read": 222,
+          "sha256": "5144c996bae726243798165d6c18497124722fc8873ec550ca17598624804391"
+        }
+      ],
+      "output": "fig6_community_profile_representative_curves.csv",
+      "output_sha256": "25a0d71837a707bf21c006881c2de017519537d6f156b1af659ca39ba6a641e7",
+      "panels": [
+        "a"
+      ],
+      "row_count": 666,
+      "table_id": "fig6_community_profile_representative_curves"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "profile_id",
+        "climate_zone",
+        "duration_h",
+        "reliability_target",
+        "confidence_level",
+        "scenario_count",
+        "perfect_information_firm_capacity_kw",
+        "reference_mix_operating_peak_kw",
+        "reference_perfect_information_firm_capacity_kw",
+        "firm_capacity_delta_from_reference_kw"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_community_profile_sensitivity_v1/community_profile_pi_firm_boundary.parquet",
+          "rows_read": 18,
+          "sha256": "06bc8d7875350e972c3d03b464c9039d949f2fa5c8c5d0204eb070f9def9d956"
+        }
+      ],
+      "output": "fig6_community_profile_pi_firm_boundaries.csv",
+      "output_sha256": "39cdc244f46496901d339b6a60f3a8bd693a35c69ebf4b0072a80e1b0939c138",
+      "panels": [
+        "b"
+      ],
+      "row_count": 18,
+      "table_id": "fig6_community_profile_pi_firm_boundaries"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "profile_id",
+        "climate_zone",
+        "transfer_interpretation",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "confidence_level",
+        "candidate_reduction_kw",
+        "success_count",
+        "trial_count",
+        "empirical_success_fraction",
+        "wilson_lower_confidence_bound",
+        "meets_target_diagnostic",
+        "minimum_interval_delivery_ratio",
+        "p95_deadline_miss_rate",
+        "p95_rebound_ratio",
+        "p95_terminal_backlog_fraction",
+        "p05_window_peak_relief_fraction"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_community_profile_sensitivity_v1/community_profile_causal_transfer_summary.parquet",
+          "rows_read": 6,
+          "sha256": "3351cc1c645490a65e711d68e0c13e83d0c72f03a116dd2c53ad4e1d0b5fa453"
+        }
+      ],
+      "output": "fig6_community_profile_causal_transfer.csv",
+      "output_sha256": "ccac999c114692003d763cbee79c21165aadbfd08ec28826854a9ebe7ee5d157",
+      "panels": [
+        "c"
+      ],
+      "row_count": 6,
+      "table_id": "fig6_community_profile_causal_transfer"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "profile_id",
+        "climate_zone",
+        "bess_enabled",
+        "dc_operation",
+        "scenario_count",
+        "feasible_scenario_count",
+        "all_scenarios_feasible",
+        "simultaneous_feasible_pv_hosting_kw",
+        "mean_scenario_pv_hosting_kw",
+        "q05_scenario_pv_hosting_kw",
+        "q50_scenario_pv_hosting_kw",
+        "q95_scenario_pv_hosting_kw"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_community_profile_renewable_v1/community_profile_pv_hosting_summary.parquet",
+          "rows_read": 12,
+          "sha256": "a13036d24154b407be0209bde5e693c99f3eae4933ab67c3cfc69c5c55cc6949"
+        }
+      ],
+      "output": "fig6_community_profile_pv_hosting_summary.csv",
+      "output_sha256": "8072f5f243447684ef0805fc0b4fa85b67e728f1ad72b8366a878a8e2b7d958b",
+      "panels": [
+        "d"
+      ],
+      "row_count": 12,
+      "table_id": "fig6_community_profile_pv_hosting_summary"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "profile_id",
+        "climate_zone",
+        "bess_enabled",
+        "contrast",
+        "independent_unit",
+        "scenario_count",
+        "estimate_mean_kw",
+        "sample_standard_deviation_kw",
+        "simultaneous_ci_lower_kw",
+        "simultaneous_ci_upper_kw",
+        "familywise_confidence_level",
+        "familywise_method",
+        "planned_contrast_count",
+        "bootstrap_resamples"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_community_profile_renewable_v1/community_profile_pv_hosting_contrasts.parquet",
+          "rows_read": 6,
+          "sha256": "e98134cb9717c59d0e6ae8ad1eb49d2053b23837c8b7cf94e60d5ae66d363de8"
+        }
+      ],
+      "output": "fig6_community_profile_pv_hosting_contrasts.csv",
+      "output_sha256": "89ad585aa09730c6c1f08f0d02adf4a5c6a5fa28cea74b4e94997f011a5cffbd",
+      "panels": [
+        "d"
+      ],
+      "row_count": 6,
+      "table_id": "fig6_community_profile_pv_hosting_contrasts"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "profile_id",
+        "climate_zone",
+        "generation_seed",
+        "scenario_id",
+        "scenario_hash",
+        "duration_h",
+        "perfect_information_capacity_kw",
+        "perfect_information_status",
+        "paired_capacity_delta_kw",
+        "paired_capacity_ratio"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_community_profile_sensitivity_v1/community_profile_pi_frontier.parquet",
+          "rows_read": 1800,
+          "sha256": "98a71c083a3e0275c3dd98ed40e740c8c1d8043ba13d7d691f848cc63c0e15f5"
+        }
+      ],
+      "output": "fig6_community_profile_pi_scenario_frontier.csv",
+      "output_sha256": "a308bc22e997eb7c84f7e72bad10dcc94bc79a3ea7e7221b5127225f111bea91",
+      "panels": [
+        "source_data"
+      ],
+      "row_count": 1800,
+      "table_id": "fig6_community_profile_pi_scenario_frontier"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "profile_id",
+        "climate_zone",
+        "scenario_id",
+        "scenario_hash",
+        "episode_seed",
+        "duration_h",
+        "notice_h",
+        "candidate_reduction_kw",
+        "success",
+        "delivery_ratio",
+        "minimum_interval_delivery_ratio",
+        "deadline_miss_rate",
+        "rebound_ratio",
+        "window_peak_relief_fraction",
+        "terminal_backlog_fraction",
+        "failure_reasons"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_community_profile_sensitivity_v1/community_profile_causal_transfer_outcomes.parquet",
+          "rows_read": 600,
+          "sha256": "cf106b70ed8b4bec980a39994e854a1ed3fafaaac5d943e935b646451ba50470"
+        }
+      ],
+      "output": "fig6_community_profile_causal_outcomes.csv",
+      "output_sha256": "efc6452d738b0f0361c8dc3d5cec54a1cff3dfb944e1ccaeed7df45f6772c5d3",
+      "panels": [
+        "source_data"
+      ],
+      "row_count": 600,
+      "table_id": "fig6_community_profile_causal_outcomes"
+    },
+    {
+      "columns": [
+        "community_profile_case",
+        "profile_id",
+        "climate_zone",
+        "scenario_id",
+        "scenario_hash",
+        "episode_seed",
+        "dc_operation",
+        "bess_enabled",
+        "dc_scale_of_reference_mix",
+        "maximum_pv_curtailment_fraction",
+        "status",
+        "pv_rated_kw",
+        "total_community_load_kwh",
+        "total_pv_available_kwh",
+        "total_pv_used_kwh",
+        "maximum_pcc_import_kw",
+        "deadline_miss_fraction",
+        "terminal_backlog_fraction"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/nature_mainline/development_community_profile_renewable_v1/community_profile_pv_hosting_scenarios.parquet",
+          "rows_read": 1200,
+          "sha256": "0ea4700988a51bdb41b0e12895c2b0ca06bbad8b7aacc596754330c16e8dd381"
+        }
+      ],
+      "output": "fig6_community_profile_pv_hosting_scenarios.csv",
+      "output_sha256": "c31d052462a2ddb8718b4466307eca453a4b6da9dd3ee3ae61e61bd06e5cecd2",
+      "panels": [
+        "source_data"
+      ],
+      "row_count": 1200,
+      "table_id": "fig6_community_profile_pv_hosting_scenarios"
     }
   ]
 }

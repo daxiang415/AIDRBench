@@ -206,6 +206,13 @@ def _add_scenario_parsers(subparsers: Any) -> None:
     infrastructure_check.add_argument("--specification", required=True)
     infrastructure_check.add_argument("--seeds", nargs="+", type=int, required=True)
     infrastructure_check.add_argument("--output", required=True)
+    community_profile_check = commands.add_parser(
+        "check-community-profile-sensitivities",
+        help="gate paired climate-zone community profiles on no-DR service feasibility",
+    )
+    community_profile_check.add_argument("--specification", required=True)
+    community_profile_check.add_argument("--seeds", nargs="+", type=int, required=True)
+    community_profile_check.add_argument("--output", required=True)
     freeze_sensitivities = commands.add_parser(
         "freeze-sensitivities",
         help="freeze paired development scenarios for a sparse workload design",
@@ -218,6 +225,12 @@ def _add_scenario_parsers(subparsers: Any) -> None:
     )
     freeze_infrastructure.add_argument("--specification", required=True)
     freeze_infrastructure.add_argument("--output", required=True)
+    freeze_community_profiles = commands.add_parser(
+        "freeze-community-profile-sensitivities",
+        help="freeze paired development scenarios for climate-zone profile archetypes",
+    )
+    freeze_community_profiles.add_argument("--specification", required=True)
+    freeze_community_profiles.add_argument("--output", required=True)
 
 
 def _add_optimization_parsers(subparsers: Any) -> None:
@@ -281,6 +294,27 @@ def _add_optimization_parsers(subparsers: Any) -> None:
         help="independent frozen scenarios to solve concurrently (default: 1)",
     )
     infrastructure_sensitivity.add_argument("--output", required=True)
+    community_profile_sensitivity = commands.add_parser(
+        "community-profile-sensitivity",
+        help="solve paired climate-zone PI bounds and fixed-controller transfer diagnostics",
+    )
+    community_profile_sensitivity.add_argument("--scenarios", required=True)
+    community_profile_sensitivity.add_argument("--specification", required=True)
+    community_profile_sensitivity.add_argument(
+        "--workers",
+        type=int,
+        default=1,
+        help="independent frozen scenarios or controller replays to run concurrently",
+    )
+    community_profile_sensitivity.add_argument("--output", required=True)
+    community_profile_renewable = commands.add_parser(
+        "community-profile-renewable-sensitivity",
+        help="solve the sparse paired PV-hosting consequence across climate-zone profiles",
+    )
+    community_profile_renewable.add_argument("--scenarios", required=True)
+    community_profile_renewable.add_argument("--specification", required=True)
+    community_profile_renewable.add_argument("--workers", type=int, default=1)
+    community_profile_renewable.add_argument("--output", required=True)
     non_anticipative = commands.add_parser(
         "non-anticipative-firm",
         help="compute a restricted finite-scenario causal non-anticipative bound",
@@ -500,7 +534,7 @@ def _add_paper_parsers(subparsers: Any) -> None:
         "--output",
         default="results/figures/nature_mainline_v1",
     )
-    figures.add_argument("--figures", nargs="+", type=int, default=[1, 2, 3, 4, 5])
+    figures.add_argument("--figures", nargs="+", type=int, default=[1, 2, 3, 4, 5, 6])
     figures.add_argument(
         "--formats",
         nargs="+",
@@ -955,6 +989,18 @@ def _run_scenario(args: argparse.Namespace) -> int:
         )
         _print_summary(summary)
         return 0
+    if args.scenario_command == "check-community-profile-sensitivities":
+        from aidrbench.evaluation.community_profile_sensitivity import (
+            check_community_profile_no_dr_feasibility,
+        )
+
+        summary = check_community_profile_no_dr_feasibility(
+            args.specification,
+            seeds=args.seeds,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
     if args.scenario_command == "freeze-sensitivities":
         from aidrbench.evaluation.workload_sensitivity import (
             freeze_workload_sensitivity_scenarios,
@@ -972,6 +1018,17 @@ def _run_scenario(args: argparse.Namespace) -> int:
         )
 
         summary = freeze_infrastructure_sensitivity_scenarios(
+            args.specification,
+            output_directory=args.output,
+        )
+        _print_summary(summary)
+        return 0
+    if args.scenario_command == "freeze-community-profile-sensitivities":
+        from aidrbench.evaluation.community_profile_sensitivity import (
+            freeze_community_profile_sensitivity_scenarios,
+        )
+
+        summary = freeze_community_profile_sensitivity_scenarios(
             args.specification,
             output_directory=args.output,
         )
@@ -1028,6 +1085,32 @@ def _run_optimization(args: argparse.Namespace) -> int:
         )
 
         summary = compute_and_save_infrastructure_sensitivity(
+            args.scenarios,
+            specification=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "community-profile-sensitivity":
+        from aidrbench.evaluation.community_profile_sensitivity import (
+            compute_and_save_community_profile_sensitivity,
+        )
+
+        summary = compute_and_save_community_profile_sensitivity(
+            args.scenarios,
+            specification=args.specification,
+            output_directory=args.output,
+            workers=args.workers,
+        )
+        _print_summary(summary)
+        return 0
+    if args.optimization_command == "community-profile-renewable-sensitivity":
+        from aidrbench.evaluation.community_profile_renewable import (
+            compute_and_save_community_profile_renewable_sensitivity,
+        )
+
+        summary = compute_and_save_community_profile_renewable_sensitivity(
             args.scenarios,
             specification=args.specification,
             output_directory=args.output,

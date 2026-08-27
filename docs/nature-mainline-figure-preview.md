@@ -46,6 +46,14 @@ The figures below use an asymmetric Nature Communications visual grammar: one do
 
 **Boundary:** Sensitivities are development PI planning bounds, not causal certificates. Zero certified locked-OOD cells does not establish zero OOD capacity because OOD capacity reselection was prohibited.
 
+## Figure 6 | Community profiles condition system value, not firm compute capacity
+
+![Figure 6: paired EULP climate-zone profile sensitivity for net community demand, firm capacity, fixed-controller transfer and PV hosting](figures/nature_mainline_v1/figure_6_community_profile_sensitivity.png)
+
+**Main claim:** Holding jobs, hardware and event streams fixed, EULP 3A/3C/5A profiles leave the q = 0.95 job-derived firm-capacity surface and fixed-controller success counts unchanged, while shifting the absolute all-scenario PV-hosting boundary and its flexible-workload increment.
+
+**Boundary:** These are climate-zone profile archetypes rather than named cities, geocoded data centres or measured feeders. Firm/controller panels are development diagnostics; PV hosting is a perfect-information planning bound, not a locked causal effect.
+
 ## Reproduction
 
 The source-data and full-format figure bundle can be regenerated using the commands in [paper-packaging.md](paper-packaging.md). Per-figure and bundle manifests beside these previews record the exact source-data manifest hash and PNG SHA-256 values.

@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -266,6 +267,84 @@ def _pv_operation_contrast_records() -> list[dict[str, object]]:
     ]
 
 
+def _community_profile_records() -> list[dict[str, object]]:
+    return [
+        {
+            "community_profile_case": case,
+            "climate_zone": zone,
+            "timestamp": timestamp,
+            "net_community_load_kw": (
+                base
+                + 45.0 * np.sin(2.0 * np.pi * hour / 24.0)
+                + 8.0 * np.sin(2.0 * np.pi * hour / 168.0)
+            ),
+        }
+        for case, zone, base in (
+            ("reference_3a", "3A", 310.0),
+            ("climate_3c", "3C", 335.0),
+            ("climate_5a", "5A", 280.0),
+        )
+        for hour, timestamp in enumerate(pd.date_range("2018-05-06", periods=168, freq="h"))
+    ]
+
+
+def _community_profile_firm_records() -> list[dict[str, object]]:
+    capacities = {1: 53.01, 2: 44.46, 3: 41.19, 4: 40.15, 6: 40.15, 8: 37.76}
+    return [
+        {
+            "community_profile_case": case,
+            "climate_zone": zone,
+            "duration_h": duration,
+            "perfect_information_firm_capacity_kw": capacity,
+        }
+        for case, zone in (
+            ("reference_3a", "3A"),
+            ("climate_3c", "3C"),
+            ("climate_5a", "5A"),
+        )
+        for duration, capacity in capacities.items()
+    ]
+
+
+def _community_profile_causal_records() -> list[dict[str, object]]:
+    return [
+        {
+            "community_profile_case": case,
+            "climate_zone": zone,
+            "duration_h": duration,
+            "empirical_success_fraction": 0.98 if duration == 4 else 0.97,
+            "wilson_lower_confidence_bound": 0.941 if duration == 4 else 0.927,
+        }
+        for case, zone in (
+            ("reference_3a", "3A"),
+            ("climate_3c", "3C"),
+            ("climate_5a", "5A"),
+        )
+        for duration in (4, 8)
+    ]
+
+
+def _community_profile_hosting_records() -> list[dict[str, object]]:
+    return [
+        {
+            "community_profile_case": case,
+            "climate_zone": zone,
+            "bess_enabled": bess,
+            "dc_operation": operation,
+            "simultaneous_feasible_pv_hosting_kw": (
+                base + 55.0 * bess + (48.0 - 12.0 * bess if operation == "flexible" else 0.0)
+            ),
+        }
+        for case, zone, base in (
+            ("reference_3a", "3A", 420.0),
+            ("climate_3c", "3C", 510.0),
+            ("climate_5a", "5A", 360.0),
+        )
+        for bess in (False, True)
+        for operation in ("rigid", "flexible")
+    ]
+
+
 def _write_bundle(root: Path) -> None:
     root.mkdir()
     records: list[dict[str, object]] = []
@@ -287,6 +366,34 @@ def _write_bundle(root: Path) -> None:
                 for repeat in (1, 2, 3)
                 for gpu_index in range(gpu_count)
             ],
+        )
+    )
+    records.append(
+        _write_table(
+            root,
+            "fig6_community_profile_representative_curves",
+            _community_profile_records(),
+        )
+    )
+    records.append(
+        _write_table(
+            root,
+            "fig6_community_profile_pi_firm_boundaries",
+            _community_profile_firm_records(),
+        )
+    )
+    records.append(
+        _write_table(
+            root,
+            "fig6_community_profile_causal_transfer",
+            _community_profile_causal_records(),
+        )
+    )
+    records.append(
+        _write_table(
+            root,
+            "fig6_community_profile_pv_hosting_summary",
+            _community_profile_hosting_records(),
         )
     )
     records.append(
@@ -447,7 +554,7 @@ def test_plot_all_nature_mainline_figures_write_editable_svg(tmp_path: Path) -> 
         formats=("svg",),
     )
 
-    assert summary["figure_count"] == 5
+    assert summary["figure_count"] == 6
     for record in summary["figures"]:
         svg_path = Path(str(record["outputs"][0]["path"]))
         assert svg_path.stat().st_size > 10_000

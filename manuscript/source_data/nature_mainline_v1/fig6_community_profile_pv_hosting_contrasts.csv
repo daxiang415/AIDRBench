@@ -1,0 +1,7 @@
+community_profile_case,profile_id,climate_zone,bess_enabled,contrast,independent_unit,scenario_count,estimate_mean_kw,sample_standard_deviation_kw,simultaneous_ci_lower_kw,simultaneous_ci_upper_kw,familywise_confidence_level,familywise_method,planned_contrast_count,bootstrap_resamples
+climate_3c,eulp_mixed_3c,3C,False,FLEXIBLE_MINUS_RIGID_PV_HOSTING,paired_frozen_scenario,100,42.8793314128,11.6663428717,39.9666994631,46.0928222548,0.95,bonferroni,6,10000
+climate_3c,eulp_mixed_3c,3C,True,FLEXIBLE_MINUS_RIGID_PV_HOSTING,paired_frozen_scenario,100,42.3527705068,12.0197508839,39.3648693515,45.6743900363,0.95,bonferroni,6,10000
+climate_5a,eulp_mixed_5a,5A,False,FLEXIBLE_MINUS_RIGID_PV_HOSTING,paired_frozen_scenario,100,44.9045791671,21.1717340643,39.4997941763,50.7811321506,0.95,bonferroni,6,10000
+climate_5a,eulp_mixed_5a,5A,True,FLEXIBLE_MINUS_RIGID_PV_HOSTING,paired_frozen_scenario,100,42.9485247845,21.6442540372,37.5290611937,49.062229226,0.95,bonferroni,6,10000
+reference_3a,eulp_mixed_3a,3A,False,FLEXIBLE_MINUS_RIGID_PV_HOSTING,paired_frozen_scenario,100,45.6643134553,16.2013069446,41.6544527826,50.1696405839,0.95,bonferroni,6,10000
+reference_3a,eulp_mixed_3a,3A,True,FLEXIBLE_MINUS_RIGID_PV_HOSTING,paired_frozen_scenario,100,43.3462599184,16.8268810837,39.0784112447,47.9607980802,0.95,bonferroni,6,10000

@@ -1,0 +1,21 @@
+schema_version: 1
+design: paired_climate_zone_profiles
+base_config: configs/env/nature_mainline_development.yaml
+profile_split_manifest: data/manifests/community_profile_split_v1.yaml
+require_no_dr_service_feasibility: true
+
+# These are NREL EULP climate-zone profile archetypes, not named cities,
+# geocoded data centres, feeder measurements or a spatial siting sample.
+# Every case retains the same 75% residential / 25% small-office mixture and
+# the same 800-kW background-peak scaling; only the temporal load/PV profile
+# selected from the processed EULP table changes.
+cases:
+  - name: reference_3a
+    profile_id: eulp_mixed_3a
+    climate_zone: 3A
+  - name: climate_3c
+    profile_id: eulp_mixed_3c
+    climate_zone: 3C
+  - name: climate_5a
+    profile_id: eulp_mixed_5a
+    climate_zone: 5A

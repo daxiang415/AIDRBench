@@ -1,0 +1,50 @@
+{
+  "archetype": "asymmetric mixed-modality figure",
+  "backend": "python_matplotlib",
+  "claim_boundaries": [
+    "The profiles are climate-zone archetypes rather than named or geocoded sites.",
+    "Firm-capacity and controller-transfer results are development sensitivity diagnostics, not new locked certificates.",
+    "PV hosting is a perfect-information planning bound rather than a causal controller effect."
+  ],
+  "core_conclusion": "Climate-zone community profiles do not change job-derived firm capacity in the controlled Model A sensitivity, while the PV-hosting consequence remains conditioned by the community profile.",
+  "figure": 6,
+  "minimum_configured_font_pt": 6.5,
+  "outputs": [
+    {
+      "bytes": 65765,
+      "format": "svg",
+      "path": "figure_6_community_profile_sensitivity.svg",
+      "sha256": "085697b6cafc494a926c7d6f1897f5dcceaa5fa61903cf5bf633f3bad2e8a71a"
+    },
+    {
+      "bytes": 34682,
+      "format": "pdf",
+      "path": "figure_6_community_profile_sensitivity.pdf",
+      "sha256": "473690a4c5f7c84b42ed79344ba60c1fe008cf2238921f133741644833610297"
+    },
+    {
+      "bytes": 1341308,
+      "format": "tiff",
+      "path": "figure_6_community_profile_sensitivity.tiff",
+      "sha256": "5586d7350c73b1a9fc2ff2a4ef08f382c2cabe842ef39b9fb24276cec53d2430"
+    },
+    {
+      "bytes": 367630,
+      "format": "png",
+      "path": "figure_6_community_profile_sensitivity.png",
+      "sha256": "82afcbeef252b07bc559f141b8962f0ae30892ff79dcf00d2c9d071cc31d5a0a"
+    }
+  ],
+  "physical_size_inches": [
+    7.204724409448819,
+    5.35
+  ],
+  "schema_version": "aidrbench.nature_figure_manifest.v1",
+  "source_data_manifest_sha256": "9e29f02448813df1836de55a1a0e4e67a7b5d8acee049435983b658847954505",
+  "source_tables": [
+    "fig6_community_profile_representative_curves",
+    "fig6_community_profile_pi_firm_boundaries",
+    "fig6_community_profile_causal_transfer",
+    "fig6_community_profile_pv_hosting_summary"
+  ]
+}

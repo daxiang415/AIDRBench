@@ -871,6 +871,28 @@ Model A 上 validation-selected 的固定候选不能直接外推到联合 commu
 与 arrival-process shift；这限定了 causal certificate 的适用域，而不是重新估计
 OOD 容量。
 
+为避免把联合 OOD 结果误归因于“地理位置”，新增了严格配对的 community-profile
+单因素 sensitivity：EULP 3A、3C、5A 三个气候区原型保持相同的任务 arrivals、
+deadlines、硬件、事件流和随机种子，只替换社区负荷/PV 时序。3 cases × 3 seeds
+的 no-DR gate 全部通过；随后 3 × 100 个 development frozen scenarios 的
+q=0.95 PI 容量在 H={1,2,3,4,6,8} 上均为
+{53.01,44.46,41.19,40.15,40.15,37.76} kW，三个 profile 的正式 tolerance
+boundary 在数值精度内完全一致。固定 validation-selected robust-MPC candidate
+在 H=4/H=8 上也分别都是 98/100 和 97/100 success。由此只能得出：在当前
+Model A 中 community profile 单独变化不是 job-derived firm capacity 的 binding
+因素；此前 locked-OOD 下降不能归因于 community shift alone，也不能在未做
+arrival-only attribution experiment 时反称全部来自 arrival process。
+
+相同 300 个 paired scenarios 的 reference-scale PV-hosting slice 也已完成：
+rigid/flexible × BESS off/on 共 1,200/1,200 个 `optimal` programs。无 BESS
+时 3A/3C/5A 的 all-scenario rigid→flexible boundary 分别为
+430.45→525.74、603.52→667.04、506.17→585.41 kW；有 BESS 时为
+482.65→585.91、668.56→726.91、558.40→639.27 kW。六个配对 mean gain
+为 42.35–45.66 kW，Bonferroni 95% simultaneous intervals 均不跨 0。
+因此 community profile 在本设计中不改变 job-derived firm capacity，却明显
+改变绝对 PV-hosting boundary 及其 worst-scenario flexibility increment。这是
+development PI planning sensitivity，不是具名地域的 causal effect。
+
 ### 对应主图
 
 **Figure 5：Robustness, certification and generalization**
@@ -879,6 +901,17 @@ OOD 容量。
 - b：不同 workload/deadline 场景的机制一致性；
 - c：validation-to-locked-ID 的独立容量认证；
 - d：locked-OOD 下的失效边界。
+
+**Figure 6：Community-profile sensitivity and system consequence**
+
+- a：EULP 3A/3C/5A 气候区原型的代表性一周净社区负荷；
+- b：严格配对的 q=0.95 PI firm-capacity curves；
+- c：固定 robust-MPC candidate 的 development transfer diagnostic；
+- d：相同 profile 下 rigid/flexible、BESS on/off 的 PV-hosting boundary。
+
+Figure 6 不使用无法由数据支持的“城市地图”。三个 profile 是气候区负荷原型，
+不是具名城市、地理编码数据中心或实测馈线；其中 firm/controller 结果是
+development sensitivity，PV hosting 是 PI planning bound。
 
 ---
 

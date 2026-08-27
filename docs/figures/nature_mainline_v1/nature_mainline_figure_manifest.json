@@ -149,6 +149,36 @@
           "sha256": "5921feb6ccc124b33c8dd65b63f3b80d9dc5f7fa2d164ee383655aae12f0d3d2"
         }
       ]
+    },
+    {
+      "figure": 6,
+      "manifest": "figure_6_manifest.json",
+      "outputs": [
+        {
+          "bytes": 65765,
+          "format": "svg",
+          "path": "figure_6_community_profile_sensitivity.svg",
+          "sha256": "085697b6cafc494a926c7d6f1897f5dcceaa5fa61903cf5bf633f3bad2e8a71a"
+        },
+        {
+          "bytes": 34682,
+          "format": "pdf",
+          "path": "figure_6_community_profile_sensitivity.pdf",
+          "sha256": "473690a4c5f7c84b42ed79344ba60c1fe008cf2238921f133741644833610297"
+        },
+        {
+          "bytes": 1341308,
+          "format": "tiff",
+          "path": "figure_6_community_profile_sensitivity.tiff",
+          "sha256": "5586d7350c73b1a9fc2ff2a4ef08f382c2cabe842ef39b9fb24276cec53d2430"
+        },
+        {
+          "bytes": 367630,
+          "format": "png",
+          "path": "figure_6_community_profile_sensitivity.png",
+          "sha256": "82afcbeef252b07bc559f141b8962f0ae30892ff79dcf00d2c9d071cc31d5a0a"
+        }
+      ]
     }
   ],
   "schema_version": "aidrbench.nature_figure_bundle.v2.reference_style"

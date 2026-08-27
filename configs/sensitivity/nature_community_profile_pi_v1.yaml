@@ -1,0 +1,19 @@
+schema_version: 1
+design: paired_climate_zone_pi_and_fixed_causal
+case_specification: configs/sensitivity/nature_community_profiles_v1.yaml
+service_gate_manifest: results/nature_mainline/community_profile_service_gate_v1/no_dr_service_feasibility.json
+service_gate_seed_range: [10000, 10002]
+development_seed_range: [10000, 10099]
+
+# PI estimates the physical planning boundary across the complete headline
+# duration set. The fixed causal transfer is intentionally limited to the two
+# mechanism durations used in the predeclared sparse sensitivity mainline.
+durations_h: [1, 2, 3, 4, 6, 8]
+reliability_target: 0.95
+confidence_level: 0.95
+nominal_flexibility_fraction: 0.50
+
+controller_config: configs/controller/nature_robust_mpc_v1.yaml
+reference_selection: results/nature_mainline/causal_selection_q95/causal_selection.json
+causal_notice_h: 0
+causal_durations_h: [4, 8]

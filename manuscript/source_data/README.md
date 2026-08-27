@@ -2,7 +2,7 @@
 
 ## Main figures
 
-`nature_mainline_v1/` contains the 21 CSV tables underlying Figures 1–5 and the machine-readable export manifest. The bundle contains 17,386 rows and was exported from clean commit `f2f4dc699c067891b84601ec8bd9ddd8505f849c`; `software.git.working_tree_dirty` is `false`. The manifest SHA-256 is `7351fd609c9b23eb92a7e0e473f4279a61d3b5f59c7b9c913dd32fa6a40fd593`.
+`nature_mainline_v1/` contains the 29 CSV tables underlying Figures 1–6 and the machine-readable export manifest. The bundle contains 21,694 rows. The current development export records commit `0198ab8bacaec26eb8ed1b5ad82ff0adff380505` with `software.git.working_tree_dirty=true` because the new community-profile analysis and Figure 6 have not yet been committed; it must be regenerated from the resulting clean commit before archival release. The current manifest SHA-256 is `9e29f02448813df1836de55a1a0e4e67a7b5d8acee049435983b658847954505`.
 
 Each manifest table declares its figure and panel mapping, retained columns, row count, input hashes and output CSV hash. The figure renderer validates these hashes before plotting.
 

@@ -10,6 +10,7 @@ space. Scientific definitions and source-data provenance remain unchanged.
 from __future__ import annotations
 
 import json
+import math
 import os
 import tempfile
 from collections.abc import Callable, Sequence
@@ -1170,12 +1171,307 @@ def plot_nature_mainline_figure5_reference_style(
     )
 
 
+def plot_nature_mainline_figure6_reference_style(
+    source_data_directory: str | Path,
+    output_directory: str | Path,
+    *,
+    formats: Sequence[str] = ("svg", "pdf", "tiff", "png"),
+) -> dict[str, object]:
+    """Plot the controlled climate-zone community-profile sensitivity."""
+
+    _reference_publication_style()
+    manifest_path, manifest = _load_manifest(source_data_directory)
+    profiles = _verified_table(
+        source_data_directory,
+        manifest,
+        "fig6_community_profile_representative_curves",
+    )
+    firm = _verified_table(
+        source_data_directory,
+        manifest,
+        "fig6_community_profile_pi_firm_boundaries",
+    )
+    causal = _verified_table(
+        source_data_directory,
+        manifest,
+        "fig6_community_profile_causal_transfer",
+    )
+    hosting = _verified_table(
+        source_data_directory,
+        manifest,
+        "fig6_community_profile_pv_hosting_summary",
+    )
+
+    zone_order = ("3A", "3C", "5A")
+    zone_styles = {
+        "3A": (_COLORS["blue"], "o", "-"),
+        "3C": (_COLORS["gold"], "s", "--"),
+        "5A": (_COLORS["purple"], "^", ":"),
+    }
+    required_zones = set(zone_order)
+    for frame, name in (
+        (profiles, "representative profiles"),
+        (firm, "firm boundaries"),
+        (causal, "causal transfer"),
+        (hosting, "PV hosting"),
+    ):
+        if set(frame["climate_zone"].astype(str)) != required_zones:
+            raise ValueError(f"Figure 6 {name} must contain climate zones 3A, 3C and 5A")
+
+    figure = plt.figure(figsize=(_FIGURE_WIDTH_IN, 5.35), constrained_layout=False)
+    grid = figure.add_gridspec(
+        2,
+        12,
+        height_ratios=(1.0, 1.0),
+        hspace=0.64,
+        wspace=1.20,
+    )
+    ax_a = figure.add_subplot(grid[0, :7])
+    ax_b = figure.add_subplot(grid[0, 7:])
+    ax_c = figure.add_subplot(grid[1, :4])
+    ax_d = figure.add_subplot(grid[1, 5:])
+
+    for zone in zone_order:
+        selected = profiles[profiles["climate_zone"].astype(str) == zone].copy()
+        selected["timestamp"] = pd.to_datetime(selected["timestamp"])
+        selected = selected.sort_values("timestamp").head(168)
+        if len(selected) != 168:
+            raise ValueError(f"Figure 6 climate zone {zone} needs at least 168 hourly rows")
+        color, _marker, linestyle = zone_styles[zone]
+        hours = np.arange(len(selected), dtype=float)
+        ax_a.plot(
+            hours,
+            _numeric(selected, "net_community_load_kw").to_numpy(dtype=float),
+            color=color,
+            linestyle=linestyle,
+            linewidth=1.25,
+            label=zone,
+        )
+    ax_a.set_xlim(0, 167)
+    ax_a.set_xticks([0, 24, 48, 72, 96, 120, 144, 168])
+    ax_a.set_xticklabels(["0", "1", "2", "3", "4", "5", "6", "7"])
+    ax_a.set_xlabel("Elapsed day")
+    ax_a.set_ylabel("Net community load (kW)")
+    ax_a.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
+    ax_a.legend(title="Climate zone", loc="upper right", ncol=3, handlelength=2.0)
+    _short_heading(ax_a, "Community profiles differ across climate zones")
+    _panel_label(ax_a, "a", x=-0.12, y=1.10)
+
+    maximum_formal_spread = 0.0
+    for zone in zone_order:
+        selected = firm[firm["climate_zone"].astype(str) == zone].sort_values("duration_h")
+        color, marker, linestyle = zone_styles[zone]
+        x_values = _numeric(selected, "duration_h").to_numpy(dtype=float)
+        y_values = _numeric(
+            selected,
+            "perfect_information_firm_capacity_kw",
+        ).to_numpy(dtype=float)
+        ax_b.plot(
+            x_values,
+            y_values,
+            color=color,
+            marker=marker,
+            linestyle=linestyle,
+            linewidth=1.35,
+            markersize=3.7,
+            markerfacecolor="white",
+            markeredgewidth=0.9,
+            label=zone,
+        )
+    for _duration, selected in firm.groupby("duration_h", sort=True):
+        values = _numeric(selected, "perfect_information_firm_capacity_kw")
+        maximum_formal_spread = max(maximum_formal_spread, _float(values.max() - values.min()))
+    ax_b.set_xlim(0.7, 8.5)
+    ax_b.set_xticks([1, 2, 3, 4, 6, 8])
+    ax_b.set_xlabel("Event duration (h)")
+    ax_b.set_ylabel("PI tolerance lower bound (kW)")
+    ax_b.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
+    ax_b.text(
+        0.98,
+        0.93,
+        f"maximum formal spread < {max(1e-9, maximum_formal_spread):.0e} kW",
+        transform=ax_b.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=6.3,
+        color=_COLORS["neutral"],
+    )
+    _short_heading(ax_b, "Firm capacity remains job-limited")
+    _panel_label(ax_b, "b", x=-0.18, y=1.10)
+
+    x_base = np.arange(2, dtype=float)
+    offsets = {"3A": -0.12, "3C": 0.0, "5A": 0.12}
+    for zone in zone_order:
+        selected = causal[causal["climate_zone"].astype(str) == zone].sort_values("duration_h")
+        color, marker, _linestyle = zone_styles[zone]
+        x_values = x_base + offsets[zone]
+        success = _numeric(selected, "empirical_success_fraction").to_numpy(dtype=float)
+        lower = _numeric(selected, "wilson_lower_confidence_bound").to_numpy(dtype=float)
+        ax_c.vlines(x_values, lower, success, color=color, linewidth=1.1)
+        ax_c.scatter(x_values, success, color=color, marker=marker, s=24, label=zone, zorder=3)
+        ax_c.scatter(
+            x_values,
+            lower,
+            facecolors="white",
+            edgecolors=color,
+            marker=marker,
+            s=22,
+            linewidths=0.9,
+            zorder=3,
+        )
+    ax_c.axhline(0.95, color=_COLORS["neutral"], linestyle="--", linewidth=0.8)
+    ax_c.set_xticks(x_base, ["H=4 h", "H=8 h"])
+    ax_c.set_xlim(-0.45, 1.45)
+    ax_c.set_ylim(0.90, 1.005)
+    ax_c.set_ylabel("Development success fraction")
+    ax_c.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
+    ax_c.text(
+        0.02,
+        0.05,
+        "filled: empirical\nopen: 95% Wilson LB",
+        transform=ax_c.transAxes,
+        fontsize=6.2,
+        color=_COLORS["neutral"],
+        ha="left",
+        va="bottom",
+    )
+    _short_heading(ax_c, "Causal transfer is unchanged")
+    _panel_label(ax_c, "c", x=-0.22, y=1.10)
+
+    y_positions: list[float] = []
+    y_labels: list[str] = []
+    y_cursor = 0.0
+    for bess_enabled in (False, True):
+        for zone in zone_order:
+            selected = hosting[
+                (hosting["climate_zone"].astype(str) == zone)
+                & (_bool_series(hosting["bess_enabled"]) == bess_enabled)
+            ]
+            rigid = selected[selected["dc_operation"].astype(str) == "rigid"]
+            flexible = selected[selected["dc_operation"].astype(str) == "flexible"]
+            if len(rigid) != 1 or len(flexible) != 1:
+                raise ValueError("Figure 6 PV-hosting summary is not a complete 3 x 2 x 2 design")
+            rigid_value = _float(rigid.iloc[0]["simultaneous_feasible_pv_hosting_kw"])
+            flexible_value = _float(
+                flexible.iloc[0]["simultaneous_feasible_pv_hosting_kw"]
+            )
+            if not math.isfinite(rigid_value) or not math.isfinite(flexible_value):
+                raise ValueError("Figure 6 needs finite all-scenario PV-hosting boundaries")
+            color, marker, _linestyle = zone_styles[zone]
+            ax_d.plot(
+                [rigid_value, flexible_value],
+                [y_cursor, y_cursor],
+                color=color,
+                linewidth=2.1,
+                alpha=0.70,
+            )
+            ax_d.scatter(
+                rigid_value,
+                y_cursor,
+                facecolors="white",
+                edgecolors=color,
+                marker=marker,
+                s=27,
+                linewidths=1.0,
+                zorder=3,
+            )
+            ax_d.scatter(
+                flexible_value,
+                y_cursor,
+                color=color,
+                marker=marker,
+                s=27,
+                zorder=3,
+            )
+            y_positions.append(y_cursor)
+            y_labels.append(zone)
+            y_cursor += 0.72
+        y_cursor += 0.35
+    ax_d.set_yticks(y_positions, y_labels)
+    ax_d.invert_yaxis()
+    ax_d.text(
+        -0.11,
+        0.80,
+        "Without BESS",
+        transform=ax_d.transAxes,
+        rotation=90,
+        rotation_mode="anchor",
+        ha="center",
+        va="center",
+        fontsize=6.2,
+        color=_COLORS["neutral"],
+    )
+    ax_d.text(
+        -0.11,
+        0.23,
+        "With BESS",
+        transform=ax_d.transAxes,
+        rotation=90,
+        rotation_mode="anchor",
+        ha="center",
+        va="center",
+        fontsize=6.2,
+        color=_COLORS["neutral"],
+    )
+    ax_d.set_xlabel("All-scenario feasible PV hosting (kW)")
+    ax_d.grid(axis="x", color=_COLORS["grid"], linewidth=0.5)
+    ax_d.text(
+        0.99,
+        0.04,
+        "open: rigid   filled: flexible",
+        transform=ax_d.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=6.2,
+        color=_COLORS["neutral"],
+    )
+    _short_heading(ax_d, "System value remains profile-dependent")
+    _panel_label(ax_d, "d", x=-0.15, y=1.10)
+
+    figure.text(
+        0.985,
+        0.012,
+        "Climate-zone profile archetypes; not geocoded sites",
+        ha="right",
+        va="bottom",
+        fontsize=6.2,
+        color=_COLORS["neutral"],
+    )
+    figure.subplots_adjust(left=0.105, right=0.965, bottom=0.12, top=0.94)
+    return _finalize_figure(
+        figure,
+        figure_number=6,
+        source_manifest_path=manifest_path,
+        source_tables=(
+            "fig6_community_profile_representative_curves",
+            "fig6_community_profile_pi_firm_boundaries",
+            "fig6_community_profile_causal_transfer",
+            "fig6_community_profile_pv_hosting_summary",
+        ),
+        output_directory=output_directory,
+        stem="figure_6_community_profile_sensitivity",
+        formats=formats,
+        core_conclusion=(
+            "Climate-zone community profiles do not change job-derived firm capacity in "
+            "the controlled Model A sensitivity, while the PV-hosting consequence remains "
+            "conditioned by the community profile."
+        ),
+        claim_boundaries=(
+            "The profiles are climate-zone archetypes rather than named or geocoded sites.",
+            "Firm-capacity and controller-transfer results are development sensitivity diagnostics, not new locked certificates.",
+            "PV hosting is a perfect-information planning bound rather than a causal controller effect.",
+        ),
+        archetype="asymmetric mixed-modality figure",
+    )
+
+
 _REFERENCE_PLOTTERS: dict[int, Callable[..., dict[str, object]]] = {
     1: plot_nature_mainline_figure1_reference_style,
     2: plot_nature_mainline_figure2_reference_style,
     3: plot_nature_mainline_figure3_reference_style,
     4: plot_nature_mainline_figure4_reference_style,
     5: plot_nature_mainline_figure5_reference_style,
+    6: plot_nature_mainline_figure6_reference_style,
 }
 
 
@@ -1203,7 +1499,7 @@ def plot_nature_mainline_figures_reference_style(
     source_data_directory: str | Path,
     output_directory: str | Path,
     *,
-    figures: Sequence[int] = (1, 2, 3, 4, 5),
+    figures: Sequence[int] = (1, 2, 3, 4, 5, 6),
     formats: Sequence[str] = ("svg", "pdf", "tiff", "png"),
 ) -> dict[str, object]:
     """Generate selected reference-led figures and a portable bundle manifest."""
@@ -1245,4 +1541,5 @@ def plot_nature_mainline_figures_reference_style(
 
 # Public aliases used by focused tests and downstream scripts.
 plot_nature_mainline_figure2 = plot_nature_mainline_figure2_reference_style
+plot_nature_mainline_figure6 = plot_nature_mainline_figure6_reference_style
 plot_nature_mainline_figures = plot_nature_mainline_figures_reference_style

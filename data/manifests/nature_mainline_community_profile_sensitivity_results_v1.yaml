@@ -1,0 +1,159 @@
+schema_version: 1
+receipt_role: post_run_hash_receipt_not_preregistration
+evidence_scope: development_paired_community_profile_sensitivity
+generated_at: "2026-08-28T00:50:00+09:00"
+analysis_git_commit: 0198ab8bacaec26eb8ed1b5ad82ff0adff380505
+working_tree_dirty_during_analysis: true
+reinforcement_learning_used: false
+locked_data_read: false
+
+interpretation_guardrails:
+  - climate_zone_profile_archetypes_not_named_or_geocoded_sites
+  - jobs_hardware_events_and_random_streams_paired_across_profiles
+  - firm_and_controller_results_are_development_diagnostics_not_locked_certificates
+  - pv_hosting_is_a_perfect_information_planning_bound_not_a_causal_effect
+  - joint_locked_ood_loss_cannot_be_attributed_to_community_profile_alone
+  - arrival_process_only_attribution_not_estimated
+  - all_scenario_boundary_differences_and_paired_mean_contrasts_are_distinct_estimands
+
+specifications:
+  cases:
+    path: configs/sensitivity/nature_community_profiles_v1.yaml
+    sha256: 933a4534b481f0c31b96b8f2481ce97bd30c1f5691e5c6dfd5cdf3366798ddbd
+  firm_and_controller:
+    path: configs/sensitivity/nature_community_profile_pi_v1.yaml
+    sha256: 34826a3181a10d208f37480e9534b1b7ee986acda0d6853cf0a95b04911fe9a4
+  renewable:
+    path: configs/sensitivity/nature_community_profile_renewable_v1.yaml
+    sha256: f264e4dd04a9f4ca2d9412468c1aaa432b966fec514583ae26e41788747a3abd
+    solver: HIGHS
+    threads_per_process: 1
+    time_limit_seconds: 7200
+    bess_dispatch_mode: milp_exclusive
+
+design:
+  profiles:
+    reference_3a: {profile_id: eulp_mixed_3a, climate_zone: 3A}
+    climate_3c: {profile_id: eulp_mixed_3c, climate_zone: 3C}
+    climate_5a: {profile_id: eulp_mixed_5a, climate_zone: 5A}
+  development_seed_range: [10000, 10099]
+  independent_scenarios_per_profile: 100
+  frozen_scenario_count: 300
+  paired_factors:
+    - arrivals
+    - deadlines
+    - hardware_and_power_model
+    - event_stream
+    - random_streams
+  changed_factor: community_load_and_native_pv_profile
+
+service_gate:
+  case_count: 3
+  seeds_per_case: 3
+  evaluation_count: 9
+  all_cases_service_feasible: true
+  maximum_baseline_deadline_miss_rate: 0.0
+  maximum_baseline_terminal_backlog_fraction: 0.0
+  manifest_sha256: 65a1920571610f75e8ba165f7452968bc2ef86358ee8cabd708674372b97c109
+
+scenario_set:
+  path: results/nature_mainline/development_community_profile_scenarios_v1
+  index_sha256: 45ad13346f978da05b9d27f365fb61ef1f47322acb7729f81614bf28f9db0b7e
+  unique_scenario_hash_count: 300
+  paired_identity_audit_passed: true
+
+firm_capacity:
+  reliability_target: 0.95
+  confidence_level: 0.95
+  scenario_count_per_profile: 100
+  optimization_row_count: 1800
+  optimal_row_count: 1800
+  perfect_information_tolerance_lower_bound_kw_identical_across_profiles:
+    H1: 53.005063
+    H2: 44.464147
+    H3: 41.190817
+    H4: 40.146878
+    H6: 40.146878
+    H8: 37.759754
+  maximum_formal_profile_spread_kw_below: 1.0e-9
+
+fixed_controller_transfer:
+  interpretation: fixed_validation_selected_candidate_development_diagnostic
+  controller: robust_mpc
+  notice_h: 0
+  H4:
+    candidate_kw: 39.650545
+    success_count_each_profile: 98
+    trial_count_each_profile: 100
+    wilson_lower_bound_each_profile: 0.941352
+  H8:
+    candidate_kw: 36.706198
+    success_count_each_profile: 97
+    trial_count_each_profile: 100
+    wilson_lower_bound_each_profile: 0.927290
+
+pv_hosting:
+  capacity_layer: perfect_information_renewable_planning_bound
+  dc_scale_of_reference_mix: 1.0
+  maximum_pv_curtailment_fraction: 0.05
+  maximum_deadline_miss_rate: 0.01
+  scenario_program_count: 1200
+  optimal_program_count: 1200
+  maximum_observed_deadline_miss_fraction: 0.01000000000000016
+  maximum_terminal_backlog_fraction: 0.0
+  all_scenario_feasible_boundary_kw:
+    reference_3a:
+      no_bess: {rigid: 430.448294, flexible: 525.741229, difference: 95.292935}
+      bess: {rigid: 482.654684, flexible: 585.913605, difference: 103.258921}
+    climate_3c:
+      no_bess: {rigid: 603.524041, flexible: 667.039692, difference: 63.515651}
+      bess: {rigid: 668.559995, flexible: 726.905128, difference: 58.345132}
+    climate_5a:
+      no_bess: {rigid: 506.167874, flexible: 585.413494, difference: 79.245620}
+      bess: {rigid: 558.399696, flexible: 639.265423, difference: 80.865727}
+  paired_mean_flexible_minus_rigid_kw:
+    reference_3a_no_bess: {estimate: 45.664313, simultaneous_ci: [41.654453, 50.169641]}
+    reference_3a_bess: {estimate: 43.346260, simultaneous_ci: [39.078411, 47.960798]}
+    climate_3c_no_bess: {estimate: 42.879331, simultaneous_ci: [39.966699, 46.092822]}
+    climate_3c_bess: {estimate: 42.352771, simultaneous_ci: [39.364869, 45.674390]}
+    climate_5a_no_bess: {estimate: 44.904579, simultaneous_ci: [39.499794, 50.781132]}
+    climate_5a_bess: {estimate: 42.948525, simultaneous_ci: [37.529061, 49.062229]}
+  inference:
+    independent_unit: paired_frozen_scenario
+    familywise_method: bonferroni
+    familywise_confidence_level: 0.95
+    planned_contrast_count: 6
+    bootstrap_resamples: 10000
+
+execution_notes:
+  - scenario_partitions_were_written_atomically_and_hash_identity_checked_on_resume
+  - final_run_resumed_298_of_300_complete_partitions
+  - an_algebraically_redundant_no_export_energy_balance_pv_nameplate_upper_bound_was_added_before_the_final_two_replays
+  - the_redundant_bound_does_not_change_the_feasible_set_or_estimand
+  - all_final_rows_have_optimal_status
+  - after_analysis_the_redundant_bound_was_scoped_to_the_profile_runner_to_preserve_the_hash_of_the_existing_formal_renewable_model
+  - clean_commit_replay_and_source_data_regeneration_are_required_before_archival_release
+
+outputs:
+  firm_manifest: 00aa5ef5bb580a766ef1d3f84b9ff0fb6b238b8428675cafe518ecef52f56b9f
+  pi_frontier: 98a71c083a3e0275c3dd98ed40e740c8c1d8043ba13d7d691f848cc63c0e15f5
+  pi_firm_boundary: 06bc8d7875350e972c3d03b464c9039d949f2fa5c8c5d0204eb070f9def9d956
+  causal_transfer_summary: 3351cc1c645490a65e711d68e0c13e83d0c72f03a116dd2c53ad4e1d0b5fa453
+  causal_transfer_outcomes: cf106b70ed8b4bec980a39994e854a1ed3fafaaac5d943e935b646451ba50470
+  renewable_scenario_results: 0ea4700988a51bdb41b0e12895c2b0ca06bbad8b7aacc596754330c16e8dd381
+  renewable_summary: a13036d24154b407be0209bde5e693c99f3eae4933ab67c3cfc69c5c55cc6949
+  renewable_contrasts: e98134cb9717c59d0e6ae8ad1eb49d2053b23837c8b7cf94e60d5ae66d363de8
+  renewable_manifest: b21dcebc0dd700783b05b59d02ff777f41f2af0e64244780df2416bf91234843
+  source_data_manifest: 9e29f02448813df1836de55a1a0e4e67a7b5d8acee049435983b658847954505
+
+executed_source_sha256:
+  src/aidrbench/evaluation/community_profile_sensitivity.py: 48bed5ef9b798c4a18d2929616a637bb17094777cb3d4b12acb32d97be260cde
+  src/aidrbench/evaluation/community_profile_renewable.py: 53b35b2a6112b6c41d575165a9281274df65c9333d61f0ea153f3c8e8c5079d0
+  src/aidrbench/evaluation/renewable_integration.py: a5fe58749c5dae24e11a2e89068bf2976ed1cb71ad279ff8e92b957931810b55
+  src/aidrbench/evaluation/nature_figures_reference.py: c1e8a6a9c9911dddbe3fc9a9b10605c7e5b848c17aaa199a62947b512737caec
+
+current_reproducer_source_sha256:
+  src/aidrbench/evaluation/community_profile_sensitivity.py: 48bed5ef9b798c4a18d2929616a637bb17094777cb3d4b12acb32d97be260cde
+  src/aidrbench/evaluation/community_profile_renewable.py: 649ce932dd7fb29e32d6f8cfb90716c708067377f559899d2fb364cb35261ccc
+  src/aidrbench/evaluation/renewable_integration.py: 271fbddf0b119cd4211ec9e42a02610ca1ede64f827c8a4aa969cefab5f0962b
+  src/aidrbench/evaluation/nature_figures_reference.py: c1e8a6a9c9911dddbe3fc9a9b10605c7e5b848c17aaa199a62947b512737caec

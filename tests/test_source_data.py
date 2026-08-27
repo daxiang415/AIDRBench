@@ -31,12 +31,15 @@ def _write_specification(path: Path, tables: list[dict[str, object]]) -> None:
 def test_default_nature_source_data_specification_is_valid() -> None:
     specification = load_source_data_specification("configs/paper/nature_source_data_v1.yaml")
     assert specification.bundle_id == "nature_communications_model_a_v1"
-    assert len(specification.tables) == 21
+    assert len(specification.tables) == 29
     assert {table.table_id for table in specification.tables} >= {
         "fig1_fig2_pi_firm_boundaries",
         "fig3_exhaustion_event_summary",
         "fig4_hosting_paired_contrasts",
         "fig5_locked_ood_certificates",
+        "fig6_community_profile_pi_firm_boundaries",
+        "fig6_community_profile_pv_hosting_contrasts",
+        "fig6_community_profile_pv_hosting_scenarios",
     }
 
 
