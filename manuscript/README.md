@@ -36,6 +36,9 @@ Official guidance:
 - `exports/AIDRBench_Nature_Communications_v0.4_review.pdf`: current 17-page A4 review PDF compiled from LaTeX with all five main figures.
 - `exports/AIDRBench_Nature_Communications_v0.4_review.tex`: portable LaTeX review source; compile from the repository root so the tracked figure paths resolve.
 - `exports/AIDRBench_Nature_Communications_v0.4_review_preview.png`: first-page preview for GitHub review.
+- `exports/AIDRBench_Nature_Communications_v0.3_Supplementary_Information.pdf`: current 16-page A4 Supplementary Information PDF with four figures and six numbered release tables.
+- `exports/AIDRBench_Nature_Communications_v0.3_Supplementary_Information.tex`: portable Supplementary Information LaTeX source with repository-relative figure paths.
+- `exports/AIDRBench_Nature_Communications_v0.3_Supplementary_Information_preview.png`: Supplementary Information first-page preview for GitHub review.
 
 ## Current status
 

@@ -35,6 +35,7 @@ results/**
 external/
 *.log
 *.aux
+*.toc
 *.pid
 *.zip
 *.tar
