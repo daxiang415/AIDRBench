@@ -11,10 +11,10 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 42130,
+      "bytes": 41914,
       "format": "svg",
       "path": "figure_5_robustness_generalization.svg",
-      "sha256": "86c6f7288409eed429082dbfa9a077b8fbbdb5f2c2a9f4170b4fe5a964349dab"
+      "sha256": "fd6291069e246b268cd266cfcc3f84d9fe2d22babf2ad0654cf6e58ee0786a3d"
     },
     {
       "bytes": 31269,
@@ -40,7 +40,7 @@
     4.9
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9e29f02448813df1836de55a1a0e4e67a7b5d8acee049435983b658847954505",
+  "source_data_manifest_sha256": "90828abf3d0771916c2a8eaa85ce5835fcd06a2deec8a255acfd7f4992ad4ffc",
   "source_tables": [
     "fig5_power_case_sensitivity",
     "fig5_workload_sensitivity",

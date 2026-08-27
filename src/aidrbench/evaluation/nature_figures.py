@@ -223,6 +223,14 @@ def _format_outputs(
                 dpi=dpi,
                 metadata={"Creator": "AIDRBench", "Date": None},
             )
+            # Matplotlib terminates many multiline SVG path commands with a
+            # space before the newline. Normalise those generated lines so the
+            # submission assets also satisfy the repository whitespace gate.
+            svg_text = path.read_text(encoding="utf-8")
+            path.write_text(
+                "\n".join(line.rstrip() for line in svg_text.splitlines()) + "\n",
+                encoding="utf-8",
+            )
         elif extension == "pdf":
             figure.savefig(
                 path,

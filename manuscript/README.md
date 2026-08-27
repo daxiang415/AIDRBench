@@ -50,7 +50,7 @@ Official guidance:
 - Main figures: six, within the journal's maximum of ten display items.
 - Supplementary figures: four generated at 183-mm width with editable SVG/PDF, 600-dpi TIFF, repository-preview PNG and per-figure source manifests.
 - Quantitative Results and figure legends: drafted from hash-verified Source Data.
-- Tracked Source Data: 29 main-figure tables (21,694 rows) plus calibration, observation and representative-trajectory tables for supplementary figures. The current Figure 6 development export records a dirty worktree and must be regenerated after commit for archival release.
+- Tracked Source Data: 29 main-figure tables (21,694 rows) plus calibration, observation and representative-trajectory tables for supplementary figures. The main bundle was regenerated from clean scientific commit `ba0dfb7de774d34b336c6cd25f062ed382c55825` and passes the release provenance gate.
 - Literature citations: 34 references (approximately 938 whitespace-delimited words); 30 DOI records exported through the screened citation workflow and four official data/proceedings records maintained in a separate verified RIS file.
 - Author metadata, funding, contributions, competing interests and archival DOI: author input required.
 

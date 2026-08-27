@@ -3,8 +3,8 @@
   "schema_version": "aidrbench.manuscript_source_data_manifest.v1",
   "software": {
     "git": {
-      "commit": "0198ab8bacaec26eb8ed1b5ad82ff0adff380505",
-      "working_tree_dirty": true
+      "commit": "ba0dfb7de774d34b336c6cd25f062ed382c55825",
+      "working_tree_dirty": false
     }
   },
   "source_specification": {

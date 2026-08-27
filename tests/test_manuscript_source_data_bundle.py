@@ -22,14 +22,15 @@ def test_clean_main_figure_source_data_bundle_is_complete_and_hash_bound() -> No
 
     assert manifest["software"]["git"]["working_tree_dirty"] is False
     assert len(manifest["software"]["git"]["commit"]) == 40
-    assert len(manifest["tables"]) == 21
-    assert sum(int(table["row_count"]) for table in manifest["tables"]) == 17_386
+    assert len(manifest["tables"]) == 29
+    assert sum(int(table["row_count"]) for table in manifest["tables"]) == 21_694
     assert {figure for table in manifest["tables"] for figure in table["figures"]} == {
         1,
         2,
         3,
         4,
         5,
+        6,
     }
     outputs = [str(table["output"]) for table in manifest["tables"]]
     assert len(outputs) == len(set(outputs))

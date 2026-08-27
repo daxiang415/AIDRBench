@@ -10,10 +10,10 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 47244,
+      "bytes": 46948,
       "format": "svg",
       "path": "figure_1_nominal_job_derived_gap.svg",
-      "sha256": "e0d987c81c58b41ffe4a3c5d336f9aaaafa372ab841d679183907b905f179bda"
+      "sha256": "5dc3a15bc2a2d7b912eb017f39ac0f5154dc9146b66c1ac424fe765c4a6c310e"
     },
     {
       "bytes": 34530,
@@ -39,7 +39,7 @@
     5.25
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9e29f02448813df1836de55a1a0e4e67a7b5d8acee049435983b658847954505",
+  "source_data_manifest_sha256": "90828abf3d0771916c2a8eaa85ce5835fcd06a2deec8a255acfd7f4992ad4ffc",
   "source_tables": [
     "fig1_fig2_pi_firm_boundaries",
     "fig1_calibration_run_means"

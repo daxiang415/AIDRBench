@@ -11,10 +11,10 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 42860,
+      "bytes": 42623,
       "format": "svg",
       "path": "figure_2_duration_reliability_notice.svg",
-      "sha256": "5102eaa3a47e093d21b4c2709e073afce7d178174a776ac42255eca3034da307"
+      "sha256": "601064e2559ffc46d2a17f1775e86dcb1270bb2d41cfdea38adfad92a9979ae4"
     },
     {
       "bytes": 29987,
@@ -40,7 +40,7 @@
     4.65
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9e29f02448813df1836de55a1a0e4e67a7b5d8acee049435983b658847954505",
+  "source_data_manifest_sha256": "90828abf3d0771916c2a8eaa85ce5835fcd06a2deec8a255acfd7f4992ad4ffc",
   "source_tables": [
     "fig1_fig2_pi_firm_boundaries",
     "fig2_restricted_na_surface",

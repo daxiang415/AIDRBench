@@ -5,10 +5,10 @@
       "manifest": "figure_1_manifest.json",
       "outputs": [
         {
-          "bytes": 47244,
+          "bytes": 46948,
           "format": "svg",
           "path": "figure_1_nominal_job_derived_gap.svg",
-          "sha256": "e0d987c81c58b41ffe4a3c5d336f9aaaafa372ab841d679183907b905f179bda"
+          "sha256": "5dc3a15bc2a2d7b912eb017f39ac0f5154dc9146b66c1ac424fe765c4a6c310e"
         },
         {
           "bytes": 34530,
@@ -35,10 +35,10 @@
       "manifest": "figure_2_manifest.json",
       "outputs": [
         {
-          "bytes": 42860,
+          "bytes": 42623,
           "format": "svg",
           "path": "figure_2_duration_reliability_notice.svg",
-          "sha256": "5102eaa3a47e093d21b4c2709e073afce7d178174a776ac42255eca3034da307"
+          "sha256": "601064e2559ffc46d2a17f1775e86dcb1270bb2d41cfdea38adfad92a9979ae4"
         },
         {
           "bytes": 29987,
@@ -65,10 +65,10 @@
       "manifest": "figure_3_manifest.json",
       "outputs": [
         {
-          "bytes": 49401,
+          "bytes": 49233,
           "format": "svg",
           "path": "figure_3_compute_debt_exhaustion.svg",
-          "sha256": "c2b8e97b8621e14e8ced717fd6c2b3adbab8fac4ba679aff8eeaace73056e1cb"
+          "sha256": "2b2001ab25d4c734618724cd41b5c77cf12a131cc4693540bb79eff6be2c13be"
         },
         {
           "bytes": 30228,
@@ -95,10 +95,10 @@
       "manifest": "figure_4_manifest.json",
       "outputs": [
         {
-          "bytes": 57251,
+          "bytes": 56989,
           "format": "svg",
           "path": "figure_4_hosting_capacity_interactions.svg",
-          "sha256": "7b11fcb2d64a6c9c5644e9a65c942f738ae11e372a35bb077d443a3c5bba8208"
+          "sha256": "4696ce5644a62b204175ce19da23908269524e4e3732d9e3645230369dbdf173"
         },
         {
           "bytes": 33170,
@@ -125,10 +125,10 @@
       "manifest": "figure_5_manifest.json",
       "outputs": [
         {
-          "bytes": 42130,
+          "bytes": 41914,
           "format": "svg",
           "path": "figure_5_robustness_generalization.svg",
-          "sha256": "86c6f7288409eed429082dbfa9a077b8fbbdb5f2c2a9f4170b4fe5a964349dab"
+          "sha256": "fd6291069e246b268cd266cfcc3f84d9fe2d22babf2ad0654cf6e58ee0786a3d"
         },
         {
           "bytes": 31269,
@@ -155,10 +155,10 @@
       "manifest": "figure_6_manifest.json",
       "outputs": [
         {
-          "bytes": 65765,
+          "bytes": 65065,
           "format": "svg",
           "path": "figure_6_community_profile_sensitivity.svg",
-          "sha256": "085697b6cafc494a926c7d6f1897f5dcceaa5fa61903cf5bf633f3bad2e8a71a"
+          "sha256": "5c777f1206c8627aad978df80044bf43ab23ea88376ad151c42b4b676b40a420"
         },
         {
           "bytes": 34682,

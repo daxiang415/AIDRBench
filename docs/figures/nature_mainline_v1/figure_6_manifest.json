@@ -11,10 +11,10 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 65765,
+      "bytes": 65065,
       "format": "svg",
       "path": "figure_6_community_profile_sensitivity.svg",
-      "sha256": "085697b6cafc494a926c7d6f1897f5dcceaa5fa61903cf5bf633f3bad2e8a71a"
+      "sha256": "5c777f1206c8627aad978df80044bf43ab23ea88376ad151c42b4b676b40a420"
     },
     {
       "bytes": 34682,
@@ -40,7 +40,7 @@
     5.35
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9e29f02448813df1836de55a1a0e4e67a7b5d8acee049435983b658847954505",
+  "source_data_manifest_sha256": "90828abf3d0771916c2a8eaa85ce5835fcd06a2deec8a255acfd7f4992ad4ffc",
   "source_tables": [
     "fig6_community_profile_representative_curves",
     "fig6_community_profile_pi_firm_boundaries",
