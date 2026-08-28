@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import cast
 
 import pandas as pd
 import pytest
@@ -26,7 +27,39 @@ from aidrbench.evaluation.firm_flexibility import FirmFlexibilityCriteria
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def _base_document() -> dict[str, object]:
+def _write_test_community_profiles(tmp_path: Path) -> Path:
+    """Create a small, deterministic profile bundle independent of local data."""
+
+    timestamps = pd.date_range("2018-01-01", periods=24 * 14, freq="h")
+    records: list[pd.DataFrame] = []
+    for profile_id, phase_hours, pv_scale in (
+        ("eulp_mixed_3a", 0, 1.00),
+        ("eulp_mixed_3c", 5, 0.85),
+        ("eulp_mixed_5a", 9, 0.70),
+    ):
+        clock_hours = [int(value) for value in timestamps.hour]
+        load = [500.0 + 8.0 * ((hour + phase_hours) % 24) for hour in clock_hours]
+        pv = [
+            120.0 * pv_scale * max(0.0, 1.0 - abs(hour - 12.0) / 6.0)
+            for hour in clock_hours
+        ]
+        records.append(
+            pd.DataFrame(
+                {
+                    "timestamp": timestamps,
+                    "community_load_kw": load,
+                    "pv_generation_kw": pv,
+                    "profile_id": profile_id,
+                    "source": "self_contained_ci_fixture",
+                }
+            )
+        )
+    path = tmp_path / "community_profiles.parquet"
+    pd.concat(records, ignore_index=True).to_parquet(path, index=False)
+    return path
+
+
+def _base_document(community_path: Path) -> dict[str, object]:
     document = yaml.safe_load(
         (ROOT / "configs/env/nature_mainline_development.yaml").read_text(
             encoding="utf-8"
@@ -37,13 +70,19 @@ def _base_document() -> dict[str, object]:
     document["virtual_datacenter"]["node_count"] = 4
     document["dr"]["event_start_hour_choices"] = [24]
     document["dr"]["event_duration_hours"] = 1
-    return document
+    document["community"]["path"] = str(community_path)
+    document["community"]["window_start"] = "2018-01-01T00:00:00"
+    document["community"]["window_end"] = "2018-01-15T00:00:00"
+    document["workload"]["source"] = "synthetic"
+    document["workload"].pop("summary_path", None)
+    return cast(dict[str, object], document)
 
 
 def _write_contracts(tmp_path: Path) -> tuple[Path, Path]:
+    community_path = _write_test_community_profiles(tmp_path)
     base_path = tmp_path / "base.yaml"
     base_path.write_text(
-        yaml.safe_dump(_base_document(), sort_keys=False), encoding="utf-8"
+        yaml.safe_dump(_base_document(community_path), sort_keys=False), encoding="utf-8"
     )
     design_path = tmp_path / "design.yaml"
     design_path.write_text(
