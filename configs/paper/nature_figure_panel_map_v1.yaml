@@ -1,0 +1,297 @@
+schema_version: aidrbench.figure_panel_map.v1
+target_journal: Nature Communications
+
+figures:
+  "1":
+    title: Nominal flexibility versus the job-derived firm boundary
+    panels:
+      a:
+        kind: conceptual schematic
+        plot_data: null
+        question: How does an assumed flexible-load fraction become a qualified grid resource?
+        encoding: Three stages show the nominal proxy, job scheduling with compute debt, and the firm PCC resource.
+        statistic: No numerical observations are plotted; the displayed 50% is the declared nominal proxy.
+        interpretation: Job feasibility, recovery and reliability must be imposed before flexibility is offered.
+        boundary: This panel is explanatory and does not estimate capacity.
+      b:
+        kind: line comparison with shaded gap
+        plot_data: figure_1_panel_b.csv
+        question: How far does the 50% nominal proxy exceed the job-feasible PI boundary?
+        encoding: Duration is x; capacity is y; grey is nominal, blue is PI, and shading is overstatement.
+        statistic: q=0.95 exact-binomial tolerance lower bound from 100 development scenarios.
+        interpretation: The gap grows from 47.3% to 62.4% of nominal across 1-8 h.
+        boundary: PI is a full-information planning upper bound, not a causal certificate.
+      c:
+        kind: grouped per-board scatter with run means
+        plot_data: figure_1_panel_c.csv
+        question: Which measured board-power observations anchor the class-aware power slopes?
+        encoding: Each dot is one GPU-board time mean; repeat clusters are separated; short bars are within-run means.
+        statistic: Repeats 1-2 are fit runs; repeat 3 is held out; GPUs in one synchronized run are not independent.
+        interpretation: Four-GPU training draws less board power than single-GPU training in this PCIe topology.
+        boundary: The measurement anchors board power only, not facility overhead or another GPU generation.
+      d:
+        kind: evidence hierarchy schematic
+        plot_data: null
+        question: Which evidence level supports each type of capacity statement?
+        encoding: Nominal assumption progresses through PI and NA planning bounds to an independently tested causal offer.
+        statistic: No numerical observations are plotted.
+        interpretation: Only the causal locked test is a certificate for a fixed implementation.
+        boundary: PI and NA must not be described as independently certified capacities.
+
+  "2":
+    title: Duration, reliability and advance notice shape firm flexibility
+    panels:
+      a:
+        kind: multi-layer capacity curves
+        plot_data: figure_2_panel_a.csv
+        question: How do nominal, physical, information-restricted and causal capacities separate with duration?
+        encoding: Duration is x; capacity is y; the cross marks an uncertified locked-ID candidate.
+        statistic: q=0.95; notice=0 h; PI tolerance and empirical PI/NA use different cross-scenario estimands.
+        interpretation: Longer events reduce all job-derived capacity layers.
+        boundary: Empirical PI/NA above PI tolerance does not imply an information advantage.
+      b:
+        kind: reliability-stratified candidate curves
+        plot_data: figure_2_panel_b.csv
+        question: How much candidate capacity is lost as the required reliability rises?
+        encoding: Three coloured curves represent q=0.90, 0.95 and 0.99; open markers are not certified.
+        statistic: Each locked-ID cell uses 500 independent episodes and a one-sided 95% Wilson lower bound.
+        interpretation: Higher reliability requirements lower selectable candidate capacity.
+        boundary: Candidate capacity and certified capacity are distinct when an open marker is shown.
+      c:
+        kind: paired horizontal bars with annotation
+        plot_data: figure_2_panel_c.csv
+        question: Why can six-hour notice expose movable work without increasing firm capacity?
+        encoding: Bars show eligible pre-execution work and no-control spare capacity; text shows NA notice gain.
+        statistic: Means over 100 development scenarios for H=4 and 8 h at N=6 h.
+        interpretation: Work is visible before the event, but pre-event compute headroom remains binding.
+        boundary: Zero notice gain is a Model A result, not a universal theorem.
+
+  "3":
+    title: Repeated dispatch accumulates compute debt before delivery collapses
+    panels:
+      a:
+        kind: repeated-event line plot
+        plot_data: figure_3_panel_a_b.csv
+        question: How does paired compute debt change with event ordinal?
+        encoding: Event ordinal is x; mean paired compute-debt increment is y; colour is duration and line style is split.
+        statistic: Arithmetic mean over five recovery-gap cells, each containing 100 independent scenarios.
+        interpretation: Compute debt accumulates across repeated calls, especially for longer events.
+        boundary: This is a fixed-capacity mechanism diagnostic, not a repeated-event capacity certificate.
+      b:
+        kind: repeated-event line plot
+        plot_data: figure_3_panel_a_b.csv
+        question: Does instantaneous delivery fail at the same rate as compute debt accumulates?
+        encoding: Event ordinal is x and residual delivery relative to a matched fresh event is y.
+        statistic: Same split, duration, recovery-gap averaging and scenarios as panel a.
+        interpretation: Delivery remains near the fresh-event level while service debt accumulates.
+        boundary: Near-one delivery does not imply full episode service feasibility.
+      c:
+        kind: heatmap
+        plot_data: figure_3_panel_c.csv
+        question: Which development duration-gap cells complete all four events successfully?
+        encoding: Rows are duration, columns are recovery gap, and cell colour/text is joint-episode success fraction.
+        statistic: 100 independent development episodes per cell; no interpolation.
+        interpretation: Recovery helps only when sufficient scheduling headroom exists.
+        boundary: Capacity was fixed before this diagnostic.
+      d:
+        kind: heatmap
+        plot_data: figure_3_panel_d.csv
+        question: Does the repeated-event mechanism replicate in independent validation scenarios?
+        encoding: Same axes and colour scale as panel c.
+        statistic: 100 independent validation episodes per cell; no interpolation.
+        interpretation: Validation identifies the same state-dependent exhaustion pattern.
+        boundary: This remains a diagnostic rather than a new certificate.
+
+  "4":
+    title: Workload flexibility expands community photovoltaic hosting
+    panels:
+      a:
+        kind: joint feasibility envelope
+        plot_data: figure_4_panel_a.csv
+        question: How does flexible scheduling shift the DC-PV hosting boundary with and without BESS?
+        encoding: Installed DC capacity is x and PV hosting at at most 5% curtailment is y; style maps operation and BESS.
+        statistic: Validation planning results over 100 scenarios per cell; filled means 100/100 feasible.
+        interpretation: Flexible workload scheduling expands the all-scenario feasible envelope.
+        boundary: Open partial cells are plotted at the minimum-scenario boundary and are not firm zero values.
+      b:
+        kind: paired effect with simultaneous confidence interval
+        plot_data: figure_4_panel_b.csv
+        question: What is the scenario-paired PV-hosting gain at the 201-kW reference data centre?
+        encoding: Point is paired mean and whisker is Bonferroni 95% simultaneous interval; rows split BESS status.
+        statistic: 100 scenarios, 10,000 bootstrap resamples, development and validation shown separately.
+        interpretation: Flexible scheduling increases PV hosting with and without BESS.
+        boundary: The paired mean is a different estimand from the all-scenario boundary in panel a.
+      c:
+        kind: three paired effects with simultaneous confidence intervals
+        plot_data: figure_4_panel_c.csv
+        question: How does flexibility change operation of a fixed 500-kW PV system?
+        encoding: Columns show curtailment, utilisation and grid-import changes; rows split BESS status.
+        statistic: Validation, 100 scenarios and Bonferroni 95% simultaneous bootstrap intervals.
+        interpretation: PV-utilisation gains are small and shrink with BESS.
+        boundary: PV-utilisation fraction is displayed in percentage points; energy metrics remain kWh.
+      d:
+        kind: difference-in-differences interaction effects
+        plot_data: figure_4_panel_d.csv
+        question: Are AI flexibility, PV and BESS effects additive or interacting?
+        encoding: Points and intervals are interaction effects; grey band is the practical equivalence margin.
+        statistic: 100 scenarios, 10,000 bootstrap resamples and Bonferroni 95% simultaneous intervals.
+        interpretation: The panel separates resource interaction from the main hosting gain.
+        boundary: AI_HOSTING_GAIN is excluded here because panel b reports that estimand.
+
+  "5":
+    title: Sensitivity and independent evaluation define the generalisation boundary
+    panels:
+      a:
+        kind: power-case sensitivity curves
+        plot_data: figure_5_panel_a.csv
+        question: How does measured power uncertainty change the PI capacity boundary?
+        encoding: Duration is x, PI tolerance lower bound is y and line style identifies lower/nominal/upper cases.
+        statistic: q=0.95 development PI boundaries.
+        interpretation: Hardware calibration uncertainty shifts the absolute capacity surface.
+        boundary: These are planning bounds, not causal certificates.
+      b:
+        kind: min-max sensitivity segments
+        plot_data: figure_5_panel_b.csv
+        question: Which predeclared assumption families shift capacity most at H=4 and 8 h?
+        encoding: Each segment spans the minimum to maximum non-reference capacity change within one family.
+        statistic: Endpoints retain the exact case names; reference cases are excluded from the range.
+        interpretation: Workload and power/infrastructure assumptions dominate several criterion changes.
+        boundary: A range is not a probability interval and does not weight cases by likelihood.
+      c:
+        kind: matched locked-ID and locked-OOD reliability curves
+        plot_data: figure_5_panel_c.csv
+        question: Do validation-selected fixed candidates retain their target reliability under joint OOD replay?
+        encoding: Duration is x and one-sided 95% Wilson lower bound is y; dashed line is q=0.95.
+        statistic: 500 locked-ID and 500 locked-OOD episodes per duration; candidate is held fixed.
+        interpretation: Fixed candidates fail to retain the declared reliability under the joint OOD shift.
+        boundary: OOD capacity was not reselected, so failure is not evidence of zero OOD capacity.
+
+  "6":
+    title: Community profiles condition system value but not job-derived firm capacity
+    panels:
+      a:
+        kind: representative time-series curves
+        plot_data: figure_6_panel_a.csv
+        question: How do the three climate-zone community net-load profiles differ?
+        encoding: Elapsed day is x, net community load is y and line style/colour identifies zone.
+        statistic: Earliest 168 chronological hours per zone; no smoothing.
+        interpretation: The community contexts differ while jobs, hardware and events remain paired.
+        boundary: Zones are profile archetypes, not named or geocoded sites.
+      b:
+        kind: paired firm-capacity curves
+        plot_data: figure_6_panel_b.csv
+        question: Does changing only the community profile alter job-derived PI firm capacity?
+        encoding: Duration is x, PI tolerance lower bound is y and line style/marker identifies zone.
+        statistic: 100 paired development scenarios per zone at q=0.95.
+        interpretation: The three curves coincide to numerical precision.
+        boundary: This controlled invariance does not cover different job or hardware distributions.
+      c:
+        kind: empirical fraction and Wilson-bound comparison
+        plot_data: figure_6_panel_c.csv
+        question: Does the fixed causal controller transfer across the three community profiles?
+        encoding: Filled markers are empirical success and open markers are one-sided 95% Wilson lower bounds.
+        statistic: 100 development episodes per zone and duration for H=4 and 8 h.
+        interpretation: Success counts are unchanged in this profile-only sensitivity.
+        boundary: This is a development transfer diagnostic, not a new locked certificate.
+      d:
+        kind: paired rigid-flexible hosting segments
+        plot_data: figure_6_panel_d.csv
+        question: How does community profile alter the PV-hosting value of workload flexibility?
+        encoding: Open marker is rigid, filled marker is flexible and rows split zone and BESS status.
+        statistic: 100-scenario all-feasible planning boundary for each design cell.
+        interpretation: Absolute hosting and the flexible-workload gain remain profile-dependent.
+        boundary: PV hosting is a perfect-information planning result, not a causal-controller effect.
+
+supplementary_figures:
+  S1:
+    title: AIDRBench environment and evidence flow
+    panels:
+      a:
+        kind: environment-flow schematic
+        plot_data: null
+        question: Which inputs define an hourly scenario and transition?
+        encoding: Boxes and arrows map community, jobs, DR events and power calibration to queues, actions and PCC metrics.
+        statistic: No numerical observations are plotted.
+        interpretation: The environment binds all inputs before control.
+        boundary: BESS is not an online environment action.
+      b:
+        kind: evidence-flow schematic
+        plot_data: null
+        question: How do planning, causal certification and downstream analyses relate?
+        encoding: Evidence layers flow from nominal through PI/NA to frozen causal locked tests and outcome analyses.
+        statistic: No numerical observations are plotted.
+        interpretation: Planning bounds and causal certificates remain distinct.
+        boundary: BESS appears only in the renewable-planning branch.
+  S2:
+    title: Four-GPU board-power calibration
+    panels:
+      a:
+        kind: grouped per-board scatter with run means
+        plot_data: figure_s2_panel_a.csv
+        question: What did each GPU board report in each fit and held-out run?
+        encoding: Dots are per-board means; filled/open distinguishes fit/held-out; short marks are within-run means.
+        statistic: Three runs per mode and GPU-count condition; GPUs within a synchronized run are repeated observations.
+        interpretation: Four-GPU training is topology-dependent while inference remains near the board limit.
+        boundary: The board measurements do not measure node or cooling overhead.
+      b:
+        kind: parameter estimates with confidence intervals
+        plot_data: figure_s2_panel_b.csv
+        question: Which active-power parameters and uncertainty intervals enter Model A?
+        encoding: Point is fitted W/GPU and whisker is the stored Student-t 95% interval.
+        statistic: Two independent four-GPU fit run means per class; repeat 3 is held out.
+        interpretation: Training and offline inference use different incremental power slopes.
+        boundary: The 300-W node overhead is an engineering assumption, not telemetry.
+  S3:
+    title: Normalised observation and causal information timing
+    panels:
+      a:
+        kind: observation-group count bars
+        plot_data: figure_s3_panel_a.csv
+        question: How are the 63 bounded policy features allocated across semantic groups?
+        encoding: Bar length is the number of features in each observation group.
+        statistic: Exact count over the fixed firm_v5 observation contract.
+        interpretation: The policy interface is explicit and bounded.
+        boundary: Compute debt is an audit diagnostic, not a separately named policy feature.
+      b:
+        kind: information-timing schematic
+        plot_data: null
+        question: Which information is visible before, during and after an event?
+        encoding: Timeline bands distinguish policy observation, causal forecast and audit-only state.
+        statistic: No numerical observations are plotted.
+        interpretation: Future workload arrivals remain hidden from the causal controller.
+        boundary: Audit-only state must not be interpreted as policy input.
+  S4:
+    title: Representative transition under the frozen causal controller
+    panels:
+      a:
+        kind: representative arrival and execution time series
+        plot_data: figure_s4_panel_a_b_c_d.csv
+        question: How does executed flexible work track released work around the event?
+        encoding: Relative hour is x and GPU-hours are y; gold is arrivals and blue is execution.
+        statistic: One deterministic non-locked validation episode chosen by minimum seed.
+        interpretation: Work is deferred during control and recovered while meeting service constraints.
+        boundary: One trajectory does not estimate population performance.
+      b:
+        kind: controller-action step curve
+        plot_data: figure_s4_panel_a_b_c_d.csv
+        question: Which execution fractions did the frozen robust MPC choose?
+        encoding: Relative hour is x and action fraction in [0,1] is y.
+        statistic: Same representative episode as panel a.
+        interpretation: The controller modulates aggregate executable work causally.
+        boundary: This is not an RL action or a tuned example.
+      c:
+        kind: baseline and controlled PCC power time series
+        plot_data: figure_s4_panel_a_b_c_d.csv
+        question: Did controlled PCC power deliver the requested reduction relative to baseline?
+        encoding: Relative hour is x; baseline, controlled PCC and limit are separate curves.
+        statistic: Same representative episode; event shading spans four hours.
+        interpretation: The controlled trajectory delivers the fixed 39.65-kW candidate in this episode.
+        boundary: Certification uses the full locked ensemble rather than this trajectory.
+      d:
+        kind: dual-axis backlog and compute-debt time series
+        plot_data: figure_s4_panel_a_b_c_d.csv
+        question: What service debt accompanies the power response and recovery?
+        encoding: Left y-axis is backlog GPU-h and right y-axis is compute debt kWh.
+        statistic: Same representative episode and 12-h pre/24-h post plotting window.
+        interpretation: The power response is coupled to deferred service state.
+        boundary: Dual axes have different units and must not be compared by visual slope alone.

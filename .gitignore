@@ -30,6 +30,7 @@ data/processed/*.csv
 results/**
 !results/**/
 !results/**/.gitkeep
+!results/_build_figure_revision_package.py
 
 # External repositories and large runtime artifacts
 external/

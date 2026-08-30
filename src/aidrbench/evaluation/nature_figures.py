@@ -51,6 +51,8 @@ _FIGURE_WIDTH_MM = 183.0
 _FIGURE_WIDTH_IN = _FIGURE_WIDTH_MM / 25.4
 # Export contract: figure.svg, figure.pdf, figure.tiff, and figure.png.
 _MIN_FONT_PT = 6.5
+_CALIBRATION_FIT_REPEATS = frozenset({1, 2})
+_CALIBRATION_HELD_OUT_REPEATS = frozenset({3})
 
 
 def _sha256(path: Path) -> str:
@@ -115,6 +117,77 @@ def _require_columns(frame: pd.DataFrame, columns: Sequence[str], *, table_id: s
     missing = sorted(set(columns).difference(frame.columns))
     if missing:
         raise ValueError(f"{table_id}: missing required columns: {', '.join(missing)}")
+
+
+def _calibration_run_groups(
+    calibration: pd.DataFrame,
+    *,
+    mode: str,
+    gpu_count: int,
+) -> tuple[tuple[int, np.ndarray], ...]:
+    """Return every per-board observation, grouped only by independent run."""
+
+    subset = calibration[
+        (calibration["mode"] == mode)
+        & np.isclose(_numeric(calibration, "gpu_count"), float(gpu_count))
+    ].copy()
+    groups: list[tuple[int, np.ndarray]] = []
+    for repeat, frame in subset.groupby("repeat", sort=True):
+        repeat_value = float(str(repeat))
+        if not np.isclose(repeat_value, round(repeat_value)):
+            raise ValueError(f"calibration repeat must be integer-valued: {repeat}")
+        values = _numeric(frame, "mean_power_w").to_numpy(dtype=float)
+        if len(values) != gpu_count:
+            raise ValueError(
+                f"calibration run {mode}/{gpu_count} GPU/repeat {int(round(repeat_value))} "
+                f"contains {len(values)} board observations; expected {gpu_count}"
+            )
+        groups.append((int(round(repeat_value)), values))
+    if not groups:
+        raise ValueError(f"calibration category has no observations: {mode}/{gpu_count} GPU")
+    expected_repeats = _CALIBRATION_FIT_REPEATS | _CALIBRATION_HELD_OUT_REPEATS
+    observed_repeats = {repeat for repeat, _values in groups}
+    if observed_repeats != expected_repeats:
+        raise ValueError(
+            f"calibration category {mode}/{gpu_count} GPU has repeats "
+            f"{sorted(observed_repeats)}; expected {sorted(expected_repeats)}"
+        )
+    return tuple(groups)
+
+
+def _plot_calibration_observations(
+    axis: Axes,
+    calibration: pd.DataFrame,
+    categories: Sequence[tuple[str, int, str, str]],
+) -> None:
+    """Plot per-board observations and within-run means without hidden aggregation."""
+
+    for category_index, (mode, gpu_count, _label, color) in enumerate(categories):
+        groups = _calibration_run_groups(calibration, mode=mode, gpu_count=gpu_count)
+        run_offsets = np.linspace(-0.11, 0.11, len(groups)) if len(groups) > 1 else [0.0]
+        for run_offset, (repeat, values) in zip(run_offsets, groups, strict=True):
+            center = category_index + float(run_offset)
+            board_offsets = (
+                np.linspace(-0.026, 0.026, len(values)) if len(values) > 1 else np.array([0.0])
+            )
+            held_out = repeat in _CALIBRATION_HELD_OUT_REPEATS
+            axis.scatter(
+                center + board_offsets,
+                values,
+                s=17,
+                facecolors="white" if held_out else color,
+                edgecolors=color,
+                linewidths=0.75,
+                zorder=3,
+            )
+            axis.hlines(
+                float(values.mean()),
+                center - 0.055,
+                center + 0.055,
+                color=_COLORS["ink"],
+                lw=1.0,
+                zorder=4,
+            )
 
 
 def _publication_style() -> None:
@@ -406,29 +479,15 @@ def plot_nature_mainline_figure1(
     ax_b.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
     _panel_label(ax_b, "b")
 
-    grouped: pd.DataFrame = (
-        calibration.groupby(["mode", "gpu_count", "repeat"], as_index=False)
-        .mean(numeric_only=True)
-        .sort_values(["mode", "gpu_count", "repeat"])
-    )
     categories = [
-        ("training", 1),
-        ("training", 4),
-        ("offline_inference", 1),
-        ("offline_inference", 4),
+        ("training", 1, "Training\n1 GPU", _COLORS["purple"]),
+        ("training", 4, "Training\n4 GPUs", _COLORS["purple"]),
+        ("offline_inference", 1, "Inference\n1 GPU", _COLORS["flex"]),
+        ("offline_inference", 4, "Inference\n4 GPUs", _COLORS["flex"]),
     ]
-    labels = ["Training\n1 GPU", "Training\n4 GPUs", "Inference\n1 GPU", "Inference\n4 GPUs"]
-    for index, (mode, count) in enumerate(categories):
-        subset = grouped[(grouped["mode"] == mode) & (_numeric(grouped, "gpu_count") == count)]
-        values = _numeric(subset, "mean_power_w").to_numpy(dtype=float)
-        offsets = np.linspace(-0.10, 0.10, len(values)) if len(values) > 1 else np.array([0.0])
-        color = _COLORS["purple"] if mode == "training" else _COLORS["flex"]
-        ax_c.scatter(index + offsets, values, s=18, color=color, zorder=3)
-        ax_c.hlines(
-            float(values.mean()), index - 0.18, index + 0.18, color=_COLORS["neutral"], lw=1.4
-        )
-    ax_c.set_xticks(range(len(labels)), labels)
-    ax_c.set_ylabel("Mean GPU-board power (W)")
+    _plot_calibration_observations(ax_c, calibration, categories)
+    ax_c.set_xticks(range(len(categories)), [item[2] for item in categories])
+    ax_c.set_ylabel("GPU-board power (W)")
     ax_c.set_title("Measured four-GPU runs anchor class-aware power", loc="left")
     ax_c.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
     _panel_label(ax_c, "c")
@@ -1877,23 +1936,13 @@ def plot_nature_mainline_figure1_reference_style(
     _panel_label(ax_b, "b", x=-0.10, y=1.04)
 
     # Panel c: measurement anchor, kept visually subordinate to the headline result.
-    grouped: pd.DataFrame = (
-        calibration.groupby(["mode", "gpu_count", "repeat"], as_index=False)
-        .mean(numeric_only=True)
-        .sort_values(["mode", "gpu_count", "repeat"])
-    )
     categories = (
         ("training", 1, "Train\n1 GPU", _COLORS["purple"]),
         ("training", 4, "Train\n4 GPU", _COLORS["purple"]),
         ("offline_inference", 1, "Infer\n1 GPU", _COLORS["flex"]),
         ("offline_inference", 4, "Infer\n4 GPU", _COLORS["flex"]),
     )
-    for index, (mode, count, _label, color) in enumerate(categories):
-        subset = grouped[(grouped["mode"] == mode) & (_numeric(grouped, "gpu_count") == count)]
-        values = _numeric(subset, "mean_power_w").to_numpy(dtype=float)
-        offsets = np.linspace(-0.08, 0.08, len(values)) if len(values) > 1 else np.array([0.0])
-        ax_c.scatter(index + offsets, values, s=17, color=color, zorder=3)
-        ax_c.hlines(float(values.mean()), index - 0.18, index + 0.18, color=_COLORS["ink"], lw=1.3)
+    _plot_calibration_observations(ax_c, calibration, categories)
     ax_c.set_xticks(range(len(categories)), [item[2] for item in categories])
     ax_c.set_ylabel("GPU-board power (W)")
     ax_c.set_title("Measured power anchor", loc="left", fontweight="bold")

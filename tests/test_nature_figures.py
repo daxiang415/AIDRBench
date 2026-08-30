@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from aidrbench.evaluation.nature_figures import _calibration_run_groups
 from aidrbench.evaluation.nature_figures_reference import (
     plot_nature_mainline_figure2,
     plot_nature_mainline_figures,
@@ -68,6 +69,49 @@ def _pi_records() -> list[dict[str, object]]:
         for reliability in _RELIABILITIES
         for duration in _DURATIONS
     ]
+
+
+def test_calibration_run_groups_retain_every_board_observation() -> None:
+    calibration = pd.DataFrame.from_records(
+        [
+            {
+                "mode": "training",
+                "gpu_count": 4,
+                "repeat": repeat,
+                "gpu_index": gpu_index,
+                "mean_power_w": 240.0 + 10.0 * repeat + gpu_index,
+            }
+            for repeat in (1, 2, 3)
+            for gpu_index in range(4)
+        ]
+    )
+
+    groups = _calibration_run_groups(calibration, mode="training", gpu_count=4)
+
+    assert [repeat for repeat, _values in groups] == [1, 2, 3]
+    assert [values.tolist() for _repeat, values in groups] == [
+        [250.0, 251.0, 252.0, 253.0],
+        [260.0, 261.0, 262.0, 263.0],
+        [270.0, 271.0, 272.0, 273.0],
+    ]
+
+
+def test_calibration_run_groups_fail_closed_on_missing_board() -> None:
+    calibration = pd.DataFrame.from_records(
+        [
+            {
+                "mode": "training",
+                "gpu_count": 4,
+                "repeat": 1,
+                "gpu_index": gpu_index,
+                "mean_power_w": 250.0 + gpu_index,
+            }
+            for gpu_index in range(3)
+        ]
+    )
+
+    with pytest.raises(ValueError, match="contains 3 board observations; expected 4"):
+        _calibration_run_groups(calibration, mode="training", gpu_count=4)
 
 
 def _certificate_records(*, ood: bool) -> list[dict[str, object]]:

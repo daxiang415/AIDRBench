@@ -21,7 +21,7 @@ tables:
 
   - table_id: fig1_fig2_pi_firm_boundaries
     figures: [1, 2]
-    panels: [fig1a, fig1b, fig2a]
+    panels: [fig1b, fig2a]
     output: fig1_fig2_pi_firm_boundaries.csv
     inputs:
       - path: results/nature_mainline/development_v2_pi_nominal/pi_firm_boundary.parquet
@@ -44,7 +44,7 @@ tables:
 
   - table_id: fig2_restricted_na_surface
     figures: [2]
-    panels: [a, c]
+    panels: [a]
     output: fig2_restricted_na_surface.csv
     inputs:
       - path: results/nature_mainline/development_v2_na_nominal_q95_full/non_anticipative_frontier.parquet
@@ -64,7 +64,7 @@ tables:
 
   - table_id: fig2_notice_mechanism_diagnostics
     figures: [2]
-    panels: [d]
+    panels: [c]
     output: fig2_notice_mechanism_diagnostics.csv
     inputs:
       - path: results/nature_mainline/development_notice_diagnostics_v2/notice_mechanism_diagnostics.parquet
@@ -91,7 +91,7 @@ tables:
 
   - table_id: fig2_fig5_locked_id_certificates
     figures: [2, 5]
-    panels: [fig2a, fig2b, fig2c, fig5e]
+    panels: [fig2a, fig2b, fig5c]
     output: fig2_fig5_locked_id_certificates.csv
     inputs:
       - path: results/nature_mainline/locked_id_certificate_q90/causal_certificates.parquet
@@ -118,7 +118,7 @@ tables:
 
   - table_id: fig5_locked_ood_certificates
     figures: [5]
-    panels: [e]
+    panels: [c]
     output: fig5_locked_ood_certificates.csv
     inputs:
       - path: results/nature_mainline/locked_ood_certificate_q90/causal_certificates.parquet
@@ -234,7 +234,7 @@ tables:
 
   - table_id: fig4_hosting_capacity_summary
     figures: [4]
-    panels: [a]
+    panels: [source_data]
     output: fig4_hosting_capacity_summary.csv
     inputs:
       - path: results/nature_mainline/development_hosting_ensemble_v1/hosting_capacity_summary.parquet
@@ -259,7 +259,7 @@ tables:
 
   - table_id: fig4_hosting_paired_contrasts
     figures: [4]
-    panels: [b, c, d]
+    panels: [d]
     output: fig4_hosting_paired_contrasts.csv
     inputs:
       - path: results/nature_mainline/development_hosting_ensemble_v1/hosting_paired_contrasts.parquet
@@ -318,7 +318,7 @@ tables:
 
   - table_id: fig4_pv_hosting_summary
     figures: [4]
-    panels: [a, b]
+    panels: [a]
     output: fig4_pv_hosting_summary.csv
     inputs:
       - path: results/nature_mainline/renewable_integration_development_v1/pv_hosting_summary.parquet
@@ -375,7 +375,7 @@ tables:
 
   - table_id: fig4_pv_operation_summary
     figures: [4]
-    panels: [c]
+    panels: [source_data]
     output: fig4_pv_operation_summary.csv
     inputs:
       - path: results/nature_mainline/renewable_integration_development_v1/pv_operation_summary.parquet
@@ -514,7 +514,7 @@ tables:
 
   - table_id: fig5_success_criteria_sensitivity
     figures: [5]
-    panels: [c]
+    panels: [b]
     output: fig5_success_criteria_sensitivity.csv
     inputs:
       - path: results/nature_mainline/development_criteria_sensitivity_v2/criteria_pi_firm_boundary.parquet
@@ -535,7 +535,7 @@ tables:
 
   - table_id: fig5_infrastructure_sensitivity
     figures: [5]
-    panels: [d]
+    panels: [b]
     output: fig5_infrastructure_sensitivity.csv
     inputs:
       - path: results/nature_mainline/development_infrastructure_sensitivity_v1/infrastructure_pi_firm_boundary.parquet

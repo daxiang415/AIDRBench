@@ -3,14 +3,14 @@
   "schema_version": "aidrbench.manuscript_source_data_manifest.v1",
   "software": {
     "git": {
-      "commit": "ba0dfb7de774d34b336c6cd25f062ed382c55825",
-      "working_tree_dirty": false
+      "commit": "97d5c1d92ef98da82df9bb8fba588802b1ea81bc",
+      "working_tree_dirty": true
     }
   },
   "source_specification": {
     "path": "configs/paper/nature_source_data_v1.yaml",
     "schema_version": "aidrbench.manuscript_source_data_specification.v1",
-    "sha256": "ae8a03bdc09d45023882f25c774183b38c6c5d4c83b66c5961b2244df7b8e6ea"
+    "sha256": "726deb1d27752508edacb5b588539be63e429088903b13833cb6c34b261ca065"
   },
   "tables": [
     {
@@ -75,7 +75,6 @@
       "output": "fig1_fig2_pi_firm_boundaries.csv",
       "output_sha256": "df87a505dfa83848281a7aaa393b3d307ae1cef130f5e3c8f3282753cf5dfcd1",
       "panels": [
-        "fig1a",
         "fig1b",
         "fig2a"
       ],
@@ -110,8 +109,7 @@
       "output": "fig2_restricted_na_surface.csv",
       "output_sha256": "ff029d8eedccc4b3e518951903e913000af970a7dde36ba934f85f78451ab93b",
       "panels": [
-        "a",
-        "c"
+        "a"
       ],
       "row_count": 18,
       "table_id": "fig2_restricted_na_surface"
@@ -151,7 +149,7 @@
       "output": "fig2_notice_mechanism_diagnostics.csv",
       "output_sha256": "078c81622a6047cb91b3e141253c0889ab7d01fe279f133fe63007ede5464fdb",
       "panels": [
-        "d"
+        "c"
       ],
       "row_count": 4,
       "table_id": "fig2_notice_mechanism_diagnostics"
@@ -204,8 +202,7 @@
       "panels": [
         "fig2a",
         "fig2b",
-        "fig2c",
-        "fig5e"
+        "fig5c"
       ],
       "row_count": 54,
       "table_id": "fig2_fig5_locked_id_certificates"
@@ -255,7 +252,7 @@
       "output": "fig5_locked_ood_certificates.csv",
       "output_sha256": "71c365d5083c1bef2896d4acaac21c18a14996e55382f54268e04142a7308aa2",
       "panels": [
-        "e"
+        "c"
       ],
       "row_count": 54,
       "table_id": "fig5_locked_ood_certificates"
@@ -451,7 +448,7 @@
       "output": "fig4_hosting_capacity_summary.csv",
       "output_sha256": "54cd88787b56e8f77dc368c17f9aec5c2c475f2544d0051410db6b160e6d0a40",
       "panels": [
-        "a"
+        "source_data"
       ],
       "row_count": 16,
       "table_id": "fig4_hosting_capacity_summary"
@@ -498,8 +495,6 @@
       "output": "fig4_hosting_paired_contrasts.csv",
       "output_sha256": "3d6603a75213d3e4885164781e554f2ae6806a9ecdf7fc21e4a07b2e0bea3270",
       "panels": [
-        "b",
-        "c",
         "d"
       ],
       "row_count": 16,
@@ -601,8 +596,7 @@
       "output": "fig4_pv_hosting_summary.csv",
       "output_sha256": "9a1825aedc8ab59442abeb10f39c06eb1c2e89bd1de8fd6d8b17aaa46d1d92d4",
       "panels": [
-        "a",
-        "b"
+        "a"
       ],
       "row_count": 64,
       "table_id": "fig4_pv_hosting_summary"
@@ -693,7 +687,7 @@
       "output": "fig4_pv_operation_summary.csv",
       "output_sha256": "0c25c7837f7131b21646333eb903958c7a97b07866dd587ca5f786115e1dc0b7",
       "panels": [
-        "c"
+        "source_data"
       ],
       "row_count": 88,
       "table_id": "fig4_pv_operation_summary"
@@ -922,7 +916,7 @@
       "output": "fig5_success_criteria_sensitivity.csv",
       "output_sha256": "3f0697b19b5b2599187823bf527a986e9695b8d8a56afedafddc260362f9131e",
       "panels": [
-        "c"
+        "b"
       ],
       "row_count": 18,
       "table_id": "fig5_success_criteria_sensitivity"
@@ -956,7 +950,7 @@
       "output": "fig5_infrastructure_sensitivity.csv",
       "output_sha256": "9b90368a52b8c0271826e60d6d09b37f28665f5896887c2f6312c4efa7edeebf",
       "panels": [
-        "d"
+        "b"
       ],
       "row_count": 10,
       "table_id": "fig5_infrastructure_sensitivity"
