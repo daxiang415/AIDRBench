@@ -221,10 +221,20 @@ def plot_nature_mainline_figure2_reference_style(
         )
     ax_a.set_xlim(0.7, 10.0)
     ax_a.set_ylim(30, 108)
-    ax_a.set_xticks(duration)
+    ax_a.set_xticks(range(1, 9))
     ax_a.set_xlabel("Event duration (h)")
     ax_a.set_ylabel("Firm reduction capacity (kW)")
     ax_a.grid(axis="y", color=_COLORS["grid"], linewidth=0.55)
+    ax_a.text(
+        0.01,
+        0.02,
+        "Markers: evaluated durations; H=5 and H=7 not evaluated.",
+        transform=ax_a.transAxes,
+        fontsize=6.0,
+        color=_COLORS["neutral"],
+        ha="left",
+        va="bottom",
+    )
     _short_heading(ax_a, "Duration separates nominal, feasible and certified capacity")
     _panel_label(ax_a, "a", x=-0.08, y=1.08)
 
@@ -265,7 +275,7 @@ def plot_nature_mainline_figure2_reference_style(
         )
     ax_b.set_xlim(0.7, 9.7)
     ax_b.set_ylim(31.0, 61.5)
-    ax_b.set_xticks(duration)
+    ax_b.set_xticks(range(1, 9))
     ax_b.set_xlabel("Duration (h)")
     ax_b.set_ylabel("Candidate (kW)")
     ax_b.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
@@ -981,10 +991,20 @@ def plot_nature_mainline_figure5_reference_style(
             label=case.capitalize(),
         )
     ax_a.set_xlim(0.8, 9.0)
-    ax_a.set_xticks([1, 2, 3, 4, 6, 8])
+    ax_a.set_xticks(range(1, 9))
     ax_a.set_xlabel("Duration (h)")
     ax_a.set_ylabel("PI tolerance LB (kW)")
     ax_a.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
+    ax_a.text(
+        0.02,
+        0.04,
+        "H=5 and H=7 not evaluated",
+        transform=ax_a.transAxes,
+        fontsize=5.8,
+        color=_COLORS["neutral"],
+        ha="left",
+        va="bottom",
+    )
     ax_a.legend(loc="lower left", handlelength=1.8)
     _short_heading(ax_a, "Power-model uncertainty")
     _panel_label(ax_a, "a", x=-0.22, y=1.10)
@@ -1124,14 +1144,14 @@ def plot_nature_mainline_figure5_reference_style(
     )
     ax_c.set_xlim(0.8, 9.8)
     ax_c.set_ylim(0.70, 1.005)
-    ax_c.set_xticks(duration_values)
+    ax_c.set_xticks(range(1, 9))
     ax_c.set_xlabel("Event duration (h)")
     ax_c.set_ylabel("One-sided 95% Wilson lower bound")
     ax_c.grid(axis="y", color=_COLORS["grid"], linewidth=0.55)
     ax_c.text(
         0.01,
         0.04,
-        "OOD protocol replays validation-selected candidates; it does not re-estimate OOD capacity.",
+        "OOD replays fixed candidates; H=5 and H=7 were not evaluated.",
         transform=ax_c.transAxes,
         fontsize=6.2,
         color=_COLORS["neutral"],
@@ -1282,10 +1302,20 @@ def plot_nature_mainline_figure6_reference_style(
         values = _numeric(selected, "perfect_information_firm_capacity_kw")
         maximum_formal_spread = max(maximum_formal_spread, _float(values.max() - values.min()))
     ax_b.set_xlim(0.7, 8.5)
-    ax_b.set_xticks([1, 2, 3, 4, 6, 8])
+    ax_b.set_xticks(range(1, 9))
     ax_b.set_xlabel("Event duration (h)")
     ax_b.set_ylabel("PI tolerance lower bound (kW)")
     ax_b.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
+    ax_b.text(
+        0.02,
+        0.04,
+        "H=5 and H=7 not evaluated",
+        transform=ax_b.transAxes,
+        fontsize=5.8,
+        color=_COLORS["neutral"],
+        ha="left",
+        va="bottom",
+    )
     ax_b.text(
         0.98,
         0.93,

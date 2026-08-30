@@ -22,6 +22,7 @@ from aidrbench.evaluation.nature_figures import (
 )
 
 _SCHEMA_VERSION = "aidrbench.figure_panel_plot_data.v1"
+_DISPLAY_DURATION_GRID = tuple(range(1, 9))
 
 
 def _sha256(path: Path) -> str:
@@ -81,6 +82,61 @@ def _write_manifest(destination: Path, records: list[dict[str, object]]) -> dict
     return manifest
 
 
+def _complete_duration_display_grid(
+    frame: pd.DataFrame,
+    *,
+    group_columns: tuple[str, ...] = (),
+) -> pd.DataFrame:
+    """Expose the full 1--8 h display axis without inventing missing results.
+
+    The frozen mainline evaluated H={1,2,3,4,6,8}.  Reindexing panel exports
+    makes the two unevaluated integer hours explicit to a reader while keeping
+    their numerical cells empty.  Renderers still draw only computed rows.
+    """
+
+    if "duration_h" not in frame.columns:
+        raise ValueError("duration display grid requires a duration_h column")
+    source = frame.copy()
+    source["duration_h"] = _numeric(source, "duration_h").astype(int)
+    frames: list[pd.DataFrame] = []
+    grouped_frames: list[tuple[object, pd.DataFrame]]
+    if group_columns:
+        grouped_frames = [
+            (key, selected)
+            for key, selected in source.groupby(
+                list(group_columns),
+                sort=True,
+                dropna=False,
+            )
+        ]
+    else:
+        grouped_frames = [((), source)]
+    for raw_key, selected in grouped_frames:
+        keys = raw_key if isinstance(raw_key, tuple) else (raw_key,)
+        evaluated = set(_numeric(selected, "duration_h").astype(int))
+        completed = selected.set_index("duration_h").reindex(_DISPLAY_DURATION_GRID)
+        for column, value in zip(group_columns, keys, strict=True):
+            completed[column] = value
+        completed.index.name = "duration_h"
+        completed = completed.reset_index()
+        completed["duration_grid_status"] = [
+            "evaluated" if duration in evaluated else "not_evaluated"
+            for duration in _DISPLAY_DURATION_GRID
+        ]
+        completed["value_origin"] = [
+            "computed_original_mainline"
+            if duration in evaluated
+            else "no_value_no_interpolation"
+            for duration in _DISPLAY_DURATION_GRID
+        ]
+        frames.append(completed)
+    ordered = pd.concat(frames, ignore_index=True)
+    base_columns = list(frame.columns)
+    return ordered[
+        [*base_columns, "duration_grid_status", "value_origin"]
+    ].sort_values([*group_columns, "duration_h"])
+
+
 def export_main_figure_panel_plot_data(
     source_data_directory: str | Path,
     output_directory: str | Path,
@@ -102,12 +158,13 @@ def export_main_figure_panel_plot_data(
         _numeric(q95_pi, "nominal_flexibility_kw")
         - _numeric(q95_pi, "perfect_information_firm_capacity_kw")
     ) / _numeric(q95_pi, "nominal_flexibility_kw")
+    q95_pi_display = _complete_duration_display_grid(q95_pi)
     records.append(
         _write_panel(
             destination,
             figure="1",
             panel="b",
-            frame=q95_pi[
+            frame=q95_pi_display[
                 [
                     "duration_h",
                     "reliability_target",
@@ -117,11 +174,13 @@ def export_main_figure_panel_plot_data(
                     "perfect_information_firm_capacity_kw",
                     "physical_gap_kw",
                     "overstatement_percent_of_nominal",
+                    "duration_grid_status",
+                    "value_origin",
                 ]
             ],
             source_tables=("fig1_fig2_pi_firm_boundaries",),
-            selection="reliability_target == 0.95; all declared durations",
-            transformation="overstatement = 100 * (nominal - PI tolerance lower bound) / nominal",
+            selection="reliability_target == 0.95; complete 1-8 h display grid",
+            transformation="overstatement = 100 * (nominal - PI tolerance lower bound) / nominal; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
         )
     )
 
@@ -175,6 +234,7 @@ def export_main_figure_panel_plot_data(
         on="duration_h",
         validate="one_to_one",
     ).sort_values("duration_h")
+    figure2a = _complete_duration_display_grid(figure2a)
     records.append(
         _write_panel(
             destination,
@@ -186,14 +246,18 @@ def export_main_figure_panel_plot_data(
                 "fig2_restricted_na_surface",
                 "fig2_fig5_locked_id_certificates",
             ),
-            selection="q == 0.95 and notice == 0 h",
-            transformation="duration-keyed one-to-one merge; no averaging",
+            selection="q == 0.95 and notice == 0 h; complete 1-8 h display grid",
+            transformation="duration-keyed one-to-one merge; no averaging; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
         )
     )
     figure2b = certificates[
         np.isclose(_numeric(certificates, "notice_h"), 0)
         & _numeric(certificates, "reliability_target").isin([0.90, 0.95, 0.99])
     ].sort_values(["reliability_target", "duration_h"])
+    figure2b = _complete_duration_display_grid(
+        figure2b,
+        group_columns=("reliability_target",),
+    )
     records.append(
         _write_panel(
             destination,
@@ -201,8 +265,8 @@ def export_main_figure_panel_plot_data(
             panel="b",
             frame=figure2b,
             source_tables=("fig2_fig5_locked_id_certificates",),
-            selection="notice == 0 h and q in {0.90, 0.95, 0.99}",
-            transformation="filled marker if certified; open marker otherwise",
+            selection="notice == 0 h and q in {0.90, 0.95, 0.99}; complete 1-8 h display grid",
+            transformation="filled marker if certified; open marker otherwise; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
         )
     )
     diagnostics = table("fig2_notice_mechanism_diagnostics")
@@ -345,6 +409,10 @@ def export_main_figure_panel_plot_data(
 
     power = table("fig5_power_case_sensitivity")
     figure5a = power[np.isclose(_numeric(power, "reliability_target"), 0.95)].copy()
+    figure5a = _complete_duration_display_grid(
+        figure5a,
+        group_columns=("power_case",),
+    )
     records.append(
         _write_panel(
             destination,
@@ -352,8 +420,8 @@ def export_main_figure_panel_plot_data(
             panel="a",
             frame=figure5a.sort_values(["power_case", "duration_h"]),
             source_tables=("fig5_power_case_sensitivity",),
-            selection="q == 0.95; lower, nominal and upper power cases",
-            transformation="no aggregation",
+            selection="q == 0.95; lower, nominal and upper power cases; complete 1-8 h display grid",
+            transformation="no aggregation; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
         )
     )
     workload = table("fig5_workload_sensitivity")
@@ -437,6 +505,7 @@ def export_main_figure_panel_plot_data(
         suffixes=("_locked_id", "_locked_ood"),
         validate="one_to_one",
     ).sort_values("duration_h")
+    figure5c = _complete_duration_display_grid(figure5c)
     records.append(
         _write_panel(
             destination,
@@ -444,8 +513,8 @@ def export_main_figure_panel_plot_data(
             panel="c",
             frame=figure5c,
             source_tables=("fig2_fig5_locked_id_certificates", "fig5_locked_ood_certificates"),
-            selection="q == 0.95 and notice == 0 h; matched by duration and fixed candidate",
-            transformation="one-to-one ID/OOD merge; plotted y values are one-sided 95% Wilson lower bounds",
+            selection="q == 0.95 and notice == 0 h; matched by duration and fixed candidate; complete 1-8 h display grid",
+            transformation="one-to-one ID/OOD merge; plotted y values are one-sided 95% Wilson lower bounds; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
         )
     )
 
@@ -472,6 +541,10 @@ def export_main_figure_panel_plot_data(
         )
     )
     firm = table("fig6_community_profile_pi_firm_boundaries")
+    firm = _complete_duration_display_grid(
+        firm,
+        group_columns=("climate_zone",),
+    )
     records.append(
         _write_panel(
             destination,
@@ -479,8 +552,8 @@ def export_main_figure_panel_plot_data(
             panel="b",
             frame=firm.sort_values(["climate_zone", "duration_h"]),
             source_tables=("fig6_community_profile_pi_firm_boundaries",),
-            selection="all three climate zones and six durations at q == 0.95",
-            transformation="no aggregation; maximum spread annotation is max(zone) - min(zone) within duration",
+            selection="all three climate zones and complete 1-8 h display grid at q == 0.95",
+            transformation="no aggregation; maximum spread annotation is max(zone) - min(zone) within evaluated duration; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
         )
     )
     causal = table("fig6_community_profile_causal_transfer")

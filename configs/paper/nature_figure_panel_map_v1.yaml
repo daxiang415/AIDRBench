@@ -17,10 +17,10 @@ figures:
         kind: line comparison with shaded gap
         plot_data: figure_1_panel_b.csv
         question: How far does the 50% nominal proxy exceed the job-feasible PI boundary?
-        encoding: Duration is x; capacity is y; grey is nominal, blue is PI, and shading is overstatement.
-        statistic: q=0.95 exact-binomial tolerance lower bound from 100 development scenarios.
-        interpretation: The gap grows from 47.3% to 62.4% of nominal across 1-8 h.
-        boundary: PI is a full-information planning upper bound, not a causal certificate.
+        encoding: Duration is x; markers identify evaluated durations, grey is nominal, blue is PI, and shading is overstatement. The axis displays every integer hour from 1 to 8.
+        statistic: q=0.95 exact-binomial tolerance lower bound from 100 development scenarios at H={1,2,3,4,6,8}; H=5 and H=7 were not evaluated.
+        interpretation: The gap grows from 47.3% at H=1 to 62.4% at H=8.
+        boundary: PI is a full-information planning upper bound, not a causal certificate; lines between evaluated markers must not be read as computed H=5 or H=7 values.
       c:
         kind: grouped per-board scatter with run means
         plot_data: figure_1_panel_c.csv
@@ -45,18 +45,18 @@ figures:
         kind: multi-layer capacity curves
         plot_data: figure_2_panel_a.csv
         question: How do nominal, physical, information-restricted and causal capacities separate with duration?
-        encoding: Duration is x; capacity is y; the cross marks an uncertified locked-ID candidate.
+        encoding: Duration is x; capacity is y; markers identify evaluated durations and the cross marks an uncertified locked-ID candidate. The axis displays every integer hour from 1 to 8.
         statistic: q=0.95; notice=0 h; PI tolerance and empirical PI/NA use different cross-scenario estimands.
         interpretation: Longer events reduce all job-derived capacity layers.
-        boundary: Empirical PI/NA above PI tolerance does not imply an information advantage.
+        boundary: Empirical PI/NA above PI tolerance does not imply an information advantage; H=5 and H=7 were not evaluated and are not interpolated.
       b:
         kind: reliability-stratified candidate curves
         plot_data: figure_2_panel_b.csv
         question: How much candidate capacity is lost as the required reliability rises?
-        encoding: Three coloured curves represent q=0.90, 0.95 and 0.99; open markers are not certified.
+        encoding: Three coloured curves represent q=0.90, 0.95 and 0.99; open markers are not certified and absent markers at H=5 and H=7 denote unevaluated durations.
         statistic: Each locked-ID cell uses 500 independent episodes and a one-sided 95% Wilson lower bound.
         interpretation: Higher reliability requirements lower selectable candidate capacity.
-        boundary: Candidate capacity and certified capacity are distinct when an open marker is shown.
+        boundary: Candidate capacity and certified capacity are distinct when an open marker is shown; line segments do not create H=5 or H=7 estimates.
       c:
         kind: paired horizontal bars with annotation
         plot_data: figure_2_panel_c.csv
@@ -145,10 +145,10 @@ figures:
         kind: power-case sensitivity curves
         plot_data: figure_5_panel_a.csv
         question: How does measured power uncertainty change the PI capacity boundary?
-        encoding: Duration is x, PI tolerance lower bound is y and line style identifies lower/nominal/upper cases.
+        encoding: Duration is x, PI tolerance lower bound is y and line style identifies lower/nominal/upper cases; markers show the six evaluated durations on a complete 1-8 h axis.
         statistic: q=0.95 development PI boundaries.
         interpretation: Hardware calibration uncertainty shifts the absolute capacity surface.
-        boundary: These are planning bounds, not causal certificates.
+        boundary: These are planning bounds, not causal certificates; H=5 and H=7 were not evaluated and are not interpolated.
       b:
         kind: min-max sensitivity segments
         plot_data: figure_5_panel_b.csv
@@ -161,10 +161,10 @@ figures:
         kind: matched locked-ID and locked-OOD reliability curves
         plot_data: figure_5_panel_c.csv
         question: Do validation-selected fixed candidates retain their target reliability under joint OOD replay?
-        encoding: Duration is x and one-sided 95% Wilson lower bound is y; dashed line is q=0.95.
+        encoding: Duration is x and one-sided 95% Wilson lower bound is y; dashed line is q=0.95 and markers denote evaluated durations.
         statistic: 500 locked-ID and 500 locked-OOD episodes per duration; candidate is held fixed.
         interpretation: Fixed candidates fail to retain the declared reliability under the joint OOD shift.
-        boundary: OOD capacity was not reselected, so failure is not evidence of zero OOD capacity.
+        boundary: OOD capacity was not reselected, so failure is not evidence of zero OOD capacity; H=5 and H=7 were not evaluated.
 
   "6":
     title: Community profiles condition system value but not job-derived firm capacity
@@ -181,10 +181,10 @@ figures:
         kind: paired firm-capacity curves
         plot_data: figure_6_panel_b.csv
         question: Does changing only the community profile alter job-derived PI firm capacity?
-        encoding: Duration is x, PI tolerance lower bound is y and line style/marker identifies zone.
-        statistic: 100 paired development scenarios per zone at q=0.95.
+        encoding: Duration is x, PI tolerance lower bound is y and line style/marker identifies zone; the axis displays all integer hours and markers identify evaluated durations.
+        statistic: 100 paired development scenarios per zone at q=0.95 and H={1,2,3,4,6,8}; H=5 and H=7 were not evaluated.
         interpretation: The three curves coincide to numerical precision.
-        boundary: This controlled invariance does not cover different job or hardware distributions.
+        boundary: This controlled invariance does not cover different job or hardware distributions; line segments do not create H=5 or H=7 estimates.
       c:
         kind: empirical fraction and Wilson-bound comparison
         plot_data: figure_6_panel_c.csv

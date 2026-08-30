@@ -40,7 +40,7 @@
     6.05
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9c2aae4dc490988615c2afbfb8b5024c4135fdeffa6538221505eb85302e014f",
+  "source_data_manifest_sha256": "4d7a7ab8193e0588bd2a6da829b3e00e4efa06f482625df32a6381bef3c00949",
   "source_tables": [
     "fig4_pv_hosting_summary",
     "fig4_pv_hosting_contrasts",

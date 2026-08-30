@@ -37,6 +37,24 @@ ARTICLE_PATH = ROOT / "manuscript" / "nature_communications_article.md"
 SI_PATH = ROOT / "manuscript" / "supplementary_information.md"
 PANEL_MAP_PATH = ROOT / "configs" / "paper" / "nature_figure_panel_map_v1.yaml"
 
+DURATION_GRID_GUIDE = """# Duration-axis data note
+
+The frozen mainline evaluated six event durations: **H = 1, 2, 3, 4, 6 and 8 h**.
+The plotted markers and every non-empty numerical row come directly from those computed results.
+
+The artwork displays all integer ticks from 1 to 8 so that the axis is visually continuous. H=5 and
+H=7 were not evaluated in the original protocol. In the panel-level CSVs, those hours are retained as
+explicit rows with:
+
+- `duration_grid_status = not_evaluated`;
+- `value_origin = no_value_no_interpolation`;
+- empty numerical result cells.
+
+No interpolation, imputation or hidden calculation is used. A line segment between two evaluated
+markers is only a visual connection and must not be read as a computed value at H=5 or H=7. The
+upstream files in `data_used_by_current_plot/` retain the original six computed durations exactly.
+"""
+
 MAIN_SLUGS = {
     1: "Nominal_to_job_derived_gap",
     2: "Duration_reliability_and_notice",
@@ -378,6 +396,7 @@ def build() -> dict[str, Any]:
     if ZIP_PATH.exists():
         ZIP_PATH.unlink()
     PACKAGE_ROOT.mkdir(parents=True, exist_ok=True)
+    write_text(PACKAGE_ROOT / "DURATION_GRID_NOTE.md", DURATION_GRID_GUIDE)
 
     article = ARTICLE_PATH.read_text(encoding="utf-8")
     si_text = SI_PATH.read_text(encoding="utf-8")
@@ -514,6 +533,8 @@ def build() -> dict[str, Any]:
             panel_records=main_panel_records,
             panel_data_root=main_panel_data_root,
         )
+        if figure in {1, 2, 5, 6}:
+            write_text(figure_folder / "DURATION_GRID_NOTE.md", DURATION_GRID_GUIDE)
 
         readme_lines = [
             f"# Figure {figure}: {slug.replace('_', ' ')}",
@@ -856,11 +877,13 @@ uv run --frozen --extra analysis --extra control aidrbench paper supplementary-f
         "- `OPEN_ME.html`：用浏览器快速查看全部图和数据入口。",
         "- `FIGURE_DATA_MAP.csv`：Figure 与上游 Source Data 的总映射。",
         "- 每张图的 `PANEL_DATA_MAP.csv`：panel 与最终绘制 CSV 的一对一映射。",
+        "- `DURATION_GRID_NOTE.md`：Figure 1、2、5、6 的持续时间轴说明；H=5、7 明确为空且未插值。",
         "- `FILE_INVENTORY.csv`：包内文件用途总表。",
         "",
         "## 数据目录含义",
         "",
         "- `panel_level_plot_data/` 是面板最终值；核对图上数字时优先使用。",
+        "- 持续时间相关 CSV 始终列出 H=1...8；H=5、7 用 `not_evaluated` 和空数值明确标识，不进行插值。",
         "- `data_used_by_current_plot/` 是绘图函数读取的上游表，可能包含最终面板未显示的组别或时间段。",
         "- `supporting_or_scenario_level_data/` 是同一图对应的更细粒度表，适合改成分布图、散点图、箱线图或重新计算摘要。",
         "- 未打包 Alibaba/NREL 第三方原始大文件；其 URL、版本、路径和 SHA-256 均保留在 provenance manifests 中。",
@@ -931,6 +954,7 @@ This package is arranged for a reader who has not seen the manuscript or plottin
 1. Open `OPEN_ME.html` and choose a figure.
 2. Open that figure's `PANEL_GUIDE.md` to learn the question, axes, colour/marker meaning, sample/statistic, interpretation and claim boundary for every panel.
 3. Open the matching file under `panel_level_plot_data/`; it contains the exact post-filter or post-aggregation values drawn in that panel.
+   Duration panels list H=1...8 explicitly; H=5 and H=7 are blank `not_evaluated` rows, never interpolated values.
 4. Use `data_used_by_current_plot/` only when you need the fuller upstream table, and `supporting_or_scenario_level_data/` for scenario-level redesign.
 5. Run `python VERIFY_PACKAGE.py` from the package root to verify every checksum and every quantitative panel-data link.
 6. To regenerate all artwork from the extracted package, run `bash 05_PLOTTING_CODE_AND_SPECS/REGENERATE_COMMANDS.sh`; this uses the bundled source tree, inputs and locked dependencies.

@@ -11,28 +11,28 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 65065,
+      "bytes": 66215,
       "format": "svg",
       "path": "figure_6_community_profile_sensitivity.svg",
-      "sha256": "5c777f1206c8627aad978df80044bf43ab23ea88376ad151c42b4b676b40a420"
+      "sha256": "49c9e15488ab14278fe9dce68701fd7c8aeb6622b9e67d51536b8bf94f87eb0f"
     },
     {
-      "bytes": 34682,
+      "bytes": 34872,
       "format": "pdf",
       "path": "figure_6_community_profile_sensitivity.pdf",
-      "sha256": "473690a4c5f7c84b42ed79344ba60c1fe008cf2238921f133741644833610297"
+      "sha256": "9f18bd3e62c40139290ce2b84acd120cba2f6a1d83fe670095d2c4482e01bbe5"
     },
     {
-      "bytes": 1341308,
+      "bytes": 1354282,
       "format": "tiff",
       "path": "figure_6_community_profile_sensitivity.tiff",
-      "sha256": "5586d7350c73b1a9fc2ff2a4ef08f382c2cabe842ef39b9fb24276cec53d2430"
+      "sha256": "841cde5f2f9cc4cb2c18faaec24035bf199e595efa45da135bf55e379cd4f198"
     },
     {
-      "bytes": 367630,
+      "bytes": 372549,
       "format": "png",
       "path": "figure_6_community_profile_sensitivity.png",
-      "sha256": "82afcbeef252b07bc559f141b8962f0ae30892ff79dcf00d2c9d071cc31d5a0a"
+      "sha256": "583cf175f1306ca2b9f3135d179b9fbdb43b01af0cd08d0d2b97063da8828ee5"
     }
   ],
   "physical_size_inches": [
@@ -40,7 +40,7 @@
     5.35
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9c2aae4dc490988615c2afbfb8b5024c4135fdeffa6538221505eb85302e014f",
+  "source_data_manifest_sha256": "4d7a7ab8193e0588bd2a6da829b3e00e4efa06f482625df32a6381bef3c00949",
   "source_tables": [
     "fig6_community_profile_representative_curves",
     "fig6_community_profile_pi_firm_boundaries",

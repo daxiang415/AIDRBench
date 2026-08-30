@@ -11,28 +11,28 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 41914,
+      "bytes": 43903,
       "format": "svg",
       "path": "figure_5_robustness_generalization.svg",
-      "sha256": "fd6291069e246b268cd266cfcc3f84d9fe2d22babf2ad0654cf6e58ee0786a3d"
+      "sha256": "245fccb07c5cdf147cd476f3c76e7097b0138e4675a2c5edb13eff557375d0a7"
     },
     {
-      "bytes": 31269,
+      "bytes": 31448,
       "format": "pdf",
       "path": "figure_5_robustness_generalization.pdf",
-      "sha256": "2181c109ff29f43d9e0584029d4f8636e2625236ee6c3ac71ed30987456b1fad"
+      "sha256": "90ebbf97acc921bfb148cfe646df21c221f70bcaa88f4818b40f9339566687b8"
     },
     {
-      "bytes": 1096592,
+      "bytes": 1100210,
       "format": "tiff",
       "path": "figure_5_robustness_generalization.tiff",
-      "sha256": "48e92ba8d2fe14011b46a62b0a0bba09a7250dde6b26e75c050cfa750b52fb69"
+      "sha256": "2d8e73a90ee0c8283e364fdfd86a57088777740fdc9b8e9d7d1b87767971ae83"
     },
     {
-      "bytes": 221952,
+      "bytes": 228669,
       "format": "png",
       "path": "figure_5_robustness_generalization.png",
-      "sha256": "5921feb6ccc124b33c8dd65b63f3b80d9dc5f7fa2d164ee383655aae12f0d3d2"
+      "sha256": "35bd0c789d3f8db61cc2340f2246723c49ed52bdca7af81e7d3376f00bf50922"
     }
   ],
   "physical_size_inches": [
@@ -40,7 +40,7 @@
     4.9
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9c2aae4dc490988615c2afbfb8b5024c4135fdeffa6538221505eb85302e014f",
+  "source_data_manifest_sha256": "4d7a7ab8193e0588bd2a6da829b3e00e4efa06f482625df32a6381bef3c00949",
   "source_tables": [
     "fig5_power_case_sensitivity",
     "fig5_workload_sensitivity",

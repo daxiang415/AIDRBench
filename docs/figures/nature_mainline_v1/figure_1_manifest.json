@@ -10,28 +10,28 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 53225,
+      "bytes": 54492,
       "format": "svg",
       "path": "figure_1_nominal_job_derived_gap.svg",
-      "sha256": "2ae3f152387f4e3cf68b1b6c92934062ae46783c32880fec6e82b34c239d8e74"
+      "sha256": "00fa8921a3501e7f4fd183a1ba4275d9cc19cee11dfe2264737cce116e8663d5"
     },
     {
-      "bytes": 36592,
+      "bytes": 37365,
       "format": "pdf",
       "path": "figure_1_nominal_job_derived_gap.pdf",
-      "sha256": "db688b50c2cb4d03ea5d7d2230cda18e9957e39c877aa7eb4bb53114e5a1a88b"
+      "sha256": "8f9fa6cae7e90f4b186a8ba81fbc31a97131609d0b4fc45a1a4b41f86d9c4984"
     },
     {
-      "bytes": 1538458,
+      "bytes": 1559594,
       "format": "tiff",
       "path": "figure_1_nominal_job_derived_gap.tiff",
-      "sha256": "22067f0a8fd43aaa29778b391b18d4808b8895c93a407520017b8a174639a8f7"
+      "sha256": "8cdede8388a3b0c28381431985d48dbbb9b59312b8963f83f43f21375a8ab271"
     },
     {
-      "bytes": 246594,
+      "bytes": 254725,
       "format": "png",
       "path": "figure_1_nominal_job_derived_gap.png",
-      "sha256": "59d0d20c758b0edf23275f96023d1d776788c8a33cd7845e21ecb2f56195d033"
+      "sha256": "5e8f2c48f099360eadf2c20badcf5069dd3f8e27144b1bcb94350102c28a05ac"
     }
   ],
   "physical_size_inches": [
@@ -39,7 +39,7 @@
     5.25
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9c2aae4dc490988615c2afbfb8b5024c4135fdeffa6538221505eb85302e014f",
+  "source_data_manifest_sha256": "4d7a7ab8193e0588bd2a6da829b3e00e4efa06f482625df32a6381bef3c00949",
   "source_tables": [
     "fig1_fig2_pi_firm_boundaries",
     "fig1_calibration_run_means"

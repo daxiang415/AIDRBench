@@ -11,28 +11,28 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 42623,
+      "bytes": 44667,
       "format": "svg",
       "path": "figure_2_duration_reliability_notice.svg",
-      "sha256": "601064e2559ffc46d2a17f1775e86dcb1270bb2d41cfdea38adfad92a9979ae4"
+      "sha256": "edd63d18d1991379b1e6f239a836cd8272f887db221cb733398811c59c44d49b"
     },
     {
-      "bytes": 29987,
+      "bytes": 30613,
       "format": "pdf",
       "path": "figure_2_duration_reliability_notice.pdf",
-      "sha256": "872be069f4652c9735de10c6572b65ffcdc8cbe4a064e0e2deeccc2825a42429"
+      "sha256": "825c90cbf4b54f877316dfef4bb309c0718bf2ec810de725870d96cbc0dd7115"
     },
     {
-      "bytes": 1277404,
+      "bytes": 1299966,
       "format": "tiff",
       "path": "figure_2_duration_reliability_notice.tiff",
-      "sha256": "dabbbbda03804e2ca2f3a6163ba64cfd4804cc2e6d2b22d331fd599a8bbcc300"
+      "sha256": "da4a21432533898741620385981ad36b8c84836346995d681fe20183e4d4c2b4"
     },
     {
-      "bytes": 220455,
+      "bytes": 228769,
       "format": "png",
       "path": "figure_2_duration_reliability_notice.png",
-      "sha256": "af011e5c453372f88874353a46030190615c37b925f2ac273e5cbb811af707d8"
+      "sha256": "92dd35ad83fa895e0abafc695cc150f4a40e094df3cbe91bf9240e9c2a7a7792"
     }
   ],
   "physical_size_inches": [
@@ -40,7 +40,7 @@
     4.65
   ],
   "schema_version": "aidrbench.nature_figure_manifest.v1",
-  "source_data_manifest_sha256": "9c2aae4dc490988615c2afbfb8b5024c4135fdeffa6538221505eb85302e014f",
+  "source_data_manifest_sha256": "4d7a7ab8193e0588bd2a6da829b3e00e4efa06f482625df32a6381bef3c00949",
   "source_tables": [
     "fig1_fig2_pi_firm_boundaries",
     "fig2_restricted_na_surface",

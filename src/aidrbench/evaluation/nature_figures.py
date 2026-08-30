@@ -462,7 +462,7 @@ def plot_nature_mainline_figure1(
     ax_a.set_xlabel("Event duration (h)")
     ax_a.set_ylabel("Capacity (kW)")
     ax_a.set_title("Job constraints remove nearly half of nominal flexibility", loc="left")
-    ax_a.set_xticks(durations)
+    ax_a.set_xticks(range(1, 9))
     ax_a.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
     ax_a.legend(loc="lower left")
     _panel_label(ax_a, "a")
@@ -472,7 +472,7 @@ def plot_nature_mainline_figure1(
     for x_value, y_value in zip(durations, gap_pct, strict=True):
         ax_b.text(x_value, y_value + 1.1, f"{y_value:.1f}%", ha="center", va="bottom")
     ax_b.set_ylim(0, max(70.0, float(gap_pct.max()) + 8.0))
-    ax_b.set_xticks(durations)
+    ax_b.set_xticks(range(1, 9))
     ax_b.set_xlabel("Event duration (h)")
     ax_b.set_ylabel("Overstatement (% of nominal)")
     ax_b.set_title("Overstatement grows with event duration", loc="left")
@@ -1928,11 +1928,21 @@ def plot_nature_mainline_figure1_reference_style(
         )
     ax_b.set_xlim(0.7, 9.2)
     ax_b.set_ylim(30, 108)
-    ax_b.set_xticks(durations)
+    ax_b.set_xticks(range(1, 9))
     ax_b.set_xlabel("Event duration (h)")
     ax_b.set_ylabel("Firm reduction capacity (kW)")
     ax_b.set_title("Nominal versus job-derived firm capacity", loc="left", fontweight="bold")
     ax_b.grid(axis="y", color=_COLORS["grid"], linewidth=0.55)
+    ax_b.text(
+        0.01,
+        0.02,
+        "Markers are evaluated durations; H=5 and H=7 were not evaluated.",
+        transform=ax_b.transAxes,
+        fontsize=6.0,
+        color=_COLORS["neutral"],
+        ha="left",
+        va="bottom",
+    )
     _panel_label(ax_b, "b", x=-0.10, y=1.04)
 
     # Panel c: measurement anchor, kept visually subordinate to the headline result.
