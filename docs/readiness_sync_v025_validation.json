@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scientific_anchor": "8c508b9ca13c26089e27ff1a0b36405cbbfa6280",
+  "historical_audit_preserved": true,
+  "current_readiness_version": "v0.25",
+  "frozen_evidence_files": 206,
+  "main_and_si_unchanged": true,
+  "authors_and_archive_placeholders_retained": true,
+  "relative_links_verified": true,
+  "checks_inherited_from_named_snapshots": true,
+  "new_scientific_simulations": 0,
+  "final_submission_frozen": false,
+  "full_archive_sha256_verified": true,
+  "freeze_verifier": "PASS",
+  "ruff": "PASS"
+}

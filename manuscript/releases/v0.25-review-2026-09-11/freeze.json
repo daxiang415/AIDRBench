@@ -1,0 +1,49 @@
+{
+  "snapshot_id": "AIDRBench-v0.25-review-2026-09-11",
+  "scope": "Frozen review evidence; not a final journal submission release",
+  "review_status": "frozen",
+  "submission_readiness": "blocked",
+  "manuscript_version": "0.25",
+  "chinese_reader_version": "v19",
+  "git": {
+    "repository": "daxiang415/AIDRBench",
+    "scientific_commit": "8c508b9ca13c26089e27ff1a0b36405cbbfa6280",
+    "branch_locator": "codex/manuscript-v025",
+    "note": "The branch may acquire documentation-only updates; the commit identifies the scientific anchor.",
+    "snapshot_manifest_at_commit": "GITHUB_REVIEW_MANIFEST.csv",
+    "snapshot_manifest_sha256": "a5356de74fb030bd8525bf76563bb1551d759df392e2db7a2b157ae50a2ca263"
+  },
+  "files": {
+    "manifest": "files.csv",
+    "sha256": "55dff437b8e52208cfc20afb5e7a736ba3547d4c0777b307e8a16d0d740b48f1",
+    "count": 206,
+    "bytes": 33125826
+  },
+  "complete_local_package": {
+    "filename": "AIDRBench_All_Figures_2026-09-10_v14.zip",
+    "bytes": 13392344034,
+    "sha256": "e7d2095b32e3ad8af8ca396d7260a494120e52357b52342c6b395c91785cb923",
+    "sha256_rechecked_on": "2026-09-11",
+    "members": 56521,
+    "uploaded_to_github": false,
+    "integrity_receipt": "manuscript/revisions/commitment_narrative_2026-09-10/package_validation.json"
+  },
+  "binding": {
+    "english_markdown_and_pdfs": "GitHub main/SI and PDFs equal the checked local v0.25 release hashes.",
+    "chinese_and_packaged_markdown": "Image-link paths differ by delivery location; aligned content and PDF identities are retained.",
+    "plotting_code": "GitHub code was formatted for lint; all eleven redrawn PNGs equal the full v14 release.",
+    "complete_simulation_code_and_inputs": "Identified by the full local package SHA-256; not claimed to be present in the lightweight GitHub snapshot."
+  },
+  "pending_author_inputs": [
+    "names/order/affiliations/correspondence",
+    "funding/acknowledgements",
+    "contributions/competing_interests",
+    "software_licence",
+    "archival_identifiers_and_access"
+  ],
+  "pending_scientific_strengthening": [
+    "new external workload evidence",
+    "focused comparison with closest cited studies"
+  ],
+  "no_new_scientific_simulations": true
+}

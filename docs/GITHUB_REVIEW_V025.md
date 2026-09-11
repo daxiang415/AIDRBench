@@ -2,6 +2,8 @@
 
 This is the current **2026-09-10 manuscript/SI v0.25**, Chinese **v19**, copied from the checked local release for GitHub access on 2026-09-11. It is a review snapshot, not a journal submission or a new set of experiments. No author identities, funding or licence have been supplied on the author's behalf.
 
+Current [submission readiness](../manuscript/submission-readiness.md), [Chinese explanation](../manuscript/submission-readiness.zh.md) and [review freeze record](../manuscript/releases/v0.25-review-2026-09-11/README.md) supersede the archived 2026-09-06 readiness audit. Documentation updates do not change scientific commit `8c508b9`.
+
 ## Read the current paper
 
 - [English main text](../manuscript/nature_communications_article.md)

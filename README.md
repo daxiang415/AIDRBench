@@ -1,3 +1,5 @@
+> Updated preparation status: [v0.25 readiness](manuscript/submission-readiness.md) · [中文说明](manuscript/submission-readiness.zh.md) · [review freeze](manuscript/releases/v0.25-review-2026-09-11/README.md). The scientific anchor remains `8c508b9`; author and archive inputs are still pending.
+
 > **Current GitHub reading copy: v0.25 (2026-09-10), uploaded for review on 2026-09-11.** Start with [GITHUB_REVIEW_V025.md](docs/GITHUB_REVIEW_V025.md). It links the current English/Chinese papers, PDFs, eleven figures and directly runnable summary-data plotting code. The 13.39-GB v14 archive and raw/hourly recovery data remain local; historical references below to local release paths are not GitHub downloads.
 # AIDRBench：工作负载表征与可靠响应承诺
 
