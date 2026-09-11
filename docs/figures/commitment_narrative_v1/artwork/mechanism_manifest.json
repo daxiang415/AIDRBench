@@ -1,0 +1,84 @@
+{
+  "version": "0.24",
+  "source_tables": {
+    "refinement_selected_confirmed.csv": "fd274223813768d70ff5635463a22976370daa4245d89527e754cae6cdd7c1ff",
+    "ready_pi_categories.csv": "ff8f58eaa7c502412d74d14c5d276f25804fba6c7592e286cd45525172a297ac",
+    "external_cross_score_weekly.csv": "94241ca53e9ca13296590a639e63aba1856f83079118c56ae25db831f8a01706",
+    "weighted_week_summary.csv": "71519be39cdedd5b75e7d34138d20c2783b8679af5d381d5ee204d78b7cf989c",
+    "physical_operating_exposure.csv": "0bdf762405d111aa2ffb68d10285b4e4426f470e7acd22afbd9db722f5b1636b",
+    "ready_operating_components.csv": "bdfa5481b3a62ffdfcd931d51e61384d223d7d4ccd6a05efa795153bda7e83e4",
+    "refinement_economic_sensitivity.csv": "4c7822f5bf9762281c375245dd06c466ad37e78a49d17139bba437be8de75aca",
+    "ready_refinement_price_curves.csv": "8ca8c29faf0bebc36904338308c052f6a529f3356b734d0bc18984f5bf57009d",
+    "refinement_development_summary.csv": "5392bdebd6ce08cc743893fa85906158503f821e3ff3832002478620d764e04d",
+    "previous/confirmation_summary.csv": "760c2b12a0fa15262b8227f2442a28815e87636f1d6e169cd893cdc967db60e4",
+    "previous/target_call_pairs.csv": "d07dc7f89e449dcd60207c5cbbfcd981d60a92527d66acc0217d0764e2d46edd",
+    "ready_annual_values.csv": "8216e422cd9941b6f550dae73ea482ae70a733fe54d653983343ff958efa7328",
+    "refinement_price_frontier.csv": "06f70828b4af17389dc4f32b794b409cc53c7aa8d528b982b51cad6bc1ed43e3"
+  },
+  "outputs": {
+    "AIDRBench_Figure_3.pdf": {
+      "sha256": "b8ff7ca944a1c6d72a3eb17af302f2e581366b7b087b6bef4dcbcbe768eac86b",
+      "bytes": 30783
+    },
+    "AIDRBench_Figure_3.svg": {
+      "sha256": "9492f6374898c9788d97c92f04dea84e694c32a437063f9e6bb4b597b100e576",
+      "bytes": 46389
+    },
+    "AIDRBench_Figure_3.png": {
+      "sha256": "70482d0c97897fba5dccdb080c5a2af7a9300c0b43e6f588989a90d930f6d0de",
+      "bytes": 305826
+    },
+    "AIDRBench_Figure_3.tiff": {
+      "sha256": "57ed9642a9b143542b63146976e60656d92ecec3b22af385366ad35d25b5c9cf",
+      "bytes": 73145366
+    },
+    "AIDRBench_Figure_6.pdf": {
+      "sha256": "2f2d4e03a01d0c971e73b11d49425ed6c20d1b1e1109a6ad82bd4cacad93510b",
+      "bytes": 30260
+    },
+    "AIDRBench_Figure_6.svg": {
+      "sha256": "ad7e1ed2e4a6765ba825884333eaac03815a251093b369cf2740d559f72b5316",
+      "bytes": 37138
+    },
+    "AIDRBench_Figure_6.png": {
+      "sha256": "ce2141410653f82ecdd8eff46fefe8f9661577288b28948fed4b939068e7aa2f",
+      "bytes": 366294
+    },
+    "AIDRBench_Figure_6.tiff": {
+      "sha256": "4347d3cedd1ec3b5d22637816f6e5493151c9c8aaba00143e34c84e8acab7270",
+      "bytes": 69514046
+    },
+    "AIDRBench_Supplementary_Figure_3.pdf": {
+      "sha256": "39bb387ea25b91184dc85bb1436afa5e894a9d130a796416aefa78edcdbf4baa",
+      "bytes": 29983
+    },
+    "AIDRBench_Supplementary_Figure_3.svg": {
+      "sha256": "5cb4c7e963d00c3d90d5a1b99d4e220e7114a1a6f9ea11492bea80ee0e26e650",
+      "bytes": 42952
+    },
+    "AIDRBench_Supplementary_Figure_3.png": {
+      "sha256": "969ab5e52271363553e7b4e2d8b733aabdbfad12838a551e7b5634657af2c529",
+      "bytes": 306651
+    },
+    "AIDRBench_Supplementary_Figure_3.tiff": {
+      "sha256": "bd98f450c5b160bb866933a3f9e899b07750e4c465cfbb9ec4e3a1b6f93ba16f",
+      "bytes": 71589086
+    },
+    "AIDRBench_Supplementary_Figure_5.pdf": {
+      "sha256": "bf0797f7eb9a9401968b7952a0da97b27026f9cc0c1759c8592d0c13deb8d64c",
+      "bytes": 28856
+    },
+    "AIDRBench_Supplementary_Figure_5.svg": {
+      "sha256": "323da312c3a2629179a45f3304c72af5798f9110875d11d4af852a2f353bafb4",
+      "bytes": 36695
+    },
+    "AIDRBench_Supplementary_Figure_5.png": {
+      "sha256": "c0b2dbc8176e965afcf1aab8845380eadaf0b557933681fc529dc19dea2c76a8",
+      "bytes": 346116
+    },
+    "AIDRBench_Supplementary_Figure_5.tiff": {
+      "sha256": "ef1ff005b1926ca27358b73f16bb9801a6c9f9e79d973cb67f9e2e56737cbca9",
+      "bytes": 69514046
+    }
+  }
+}

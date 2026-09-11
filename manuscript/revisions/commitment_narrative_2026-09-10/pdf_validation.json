@@ -1,0 +1,296 @@
+{
+  "status": "PASS",
+  "main": {
+    "pages": 17,
+    "sha256": "d7f6f9ded52e129e84095cbee01ffd004f74c8cb2613ecd13bb4161db778336a",
+    "text_spans_outside_pages": [],
+    "rendered_pages": [
+      4,
+      5,
+      16
+    ],
+    "bookmarks": [
+      [
+        1,
+        "Figure 1 | Workload composition and declared permission to defer",
+        2
+      ],
+      [
+        1,
+        "Figure 2 | Relaxed planning statistics and independently tested single offers",
+        3
+      ],
+      [
+        1,
+        "Figure 3 | Separate qualification, feasibility and workload transfer",
+        4
+      ],
+      [
+        1,
+        "Figure 4 | Supply margins and the decisions behind a commitment",
+        5
+      ],
+      [
+        1,
+        "Figure 5 | Separate controls for GPU allocation and rigid-load power",
+        6
+      ],
+      [
+        1,
+        "Figure 6 | Price the operating exposure of qualified commitments",
+        7
+      ]
+    ]
+  },
+  "supplement": {
+    "pages": 25,
+    "sha256": "3876ec2b9b48abf2eb11f27c8f96a6e25d268d944c4f72765bb0104a01598f4f",
+    "text_spans_outside_pages": [],
+    "rendered_pages": [
+      2,
+      3,
+      4,
+      5,
+      12,
+      13,
+      25
+    ],
+    "bookmarks": [
+      [
+        1,
+        "Reader guide",
+        3
+      ],
+      [
+        1,
+        "Supplementary Notes",
+        3
+      ],
+      [
+        2,
+        "1. Eligibility is an operating permission",
+        3
+      ],
+      [
+        2,
+        "2. Planning and qualification answer different questions",
+        3
+      ],
+      [
+        2,
+        "3. Service standards and call history must be tested together",
+        3
+      ],
+      [
+        2,
+        "4. PV hosting and utilisation have different denominators",
+        4
+      ],
+      [
+        2,
+        "5. Controls separate allocation from eligibility",
+        4
+      ],
+      [
+        2,
+        "6. Cost thresholds are conditional participation screens",
+        4
+      ],
+      [
+        2,
+        "7. Design provenance and interpretation of superseded comparisons",
+        4
+      ],
+      [
+        1,
+        "Supplementary Methods",
+        5
+      ],
+      [
+        2,
+        "1. Source audit and permissions",
+        5
+      ],
+      [
+        2,
+        "2. Paired scenarios and baseline gate",
+        5
+      ],
+      [
+        2,
+        "3. Power conversion, queues and observations",
+        5
+      ],
+      [
+        2,
+        "4. Success criteria and statistics",
+        6
+      ],
+      [
+        2,
+        "5. Causal controller and development correction",
+        6
+      ],
+      [
+        2,
+        "6. Repeated programmes",
+        6
+      ],
+      [
+        2,
+        "7. Renewable planning",
+        8
+      ],
+      [
+        2,
+        "8. Orthogonal sensitivity controls",
+        8
+      ],
+      [
+        2,
+        "9. Complete ledgers and economic sensitivity",
+        8
+      ],
+      [
+        1,
+        "Supplementary Figures",
+        10
+      ],
+      [
+        2,
+        "Supplementary Figure 1 | Study inputs and evidence flow",
+        10
+      ],
+      [
+        2,
+        "Supplementary Figure 2 | Four-GPU board-power calibration",
+        11
+      ],
+      [
+        2,
+        "Supplementary Figure 3 | Candidate resolution and structural context",
+        12
+      ],
+      [
+        2,
+        "Supplementary Figure 4 | PV benefits and fixed-request controls",
+        13
+      ],
+      [
+        2,
+        "Supplementary Figure 5 | Waiting valuation and access fees change product choice",
+        14
+      ],
+      [
+        1,
+        "Supplementary Tables",
+        15
+      ],
+      [
+        2,
+        "Supplementary Table 1 | Power coefficients and measurement scope",
+        15
+      ],
+      [
+        2,
+        "Supplementary Table 2 | Five workload configurations",
+        15
+      ],
+      [
+        2,
+        "Supplementary Table 3 | Evidence partitions and execution provenance",
+        15
+      ],
+      [
+        2,
+        "Supplementary Table 4 | Relaxed planning statistics and independent single-event qualification",
+        16
+      ],
+      [
+        2,
+        "Supplementary Table 5 | Repeated programmes and matched fresh calls",
+        16
+      ],
+      [
+        2,
+        "Supplementary Table 6 | PV hosting and fixed-PV utilisation",
+        16
+      ],
+      [
+        2,
+        "Supplementary Table 7 | Single-event and complete-programme participation screens",
+        18
+      ],
+      [
+        2,
+        "Supplementary Table 8 | Orthogonal allocation and rigid-power controls",
+        18
+      ],
+      [
+        2,
+        "Supplementary Table 9 | Monetary assumptions and sensitivity ranges",
+        18
+      ],
+      [
+        2,
+        "Supplementary Table 10 | Frozen repeated offers and new independent confirmation",
+        19
+      ],
+      [
+        2,
+        "Supplementary Table 11 | Paired recovery intervention at the full eight-hour request",
+        20
+      ],
+      [
+        2,
+        "Supplementary Table 12 | Participation thresholds for development-selected repeated offers",
+        20
+      ],
+      [
+        2,
+        "Supplementary Table 13 | Retrospective zero-deadline-loss check",
+        21
+      ],
+      [
+        2,
+        "Supplementary Table 14 | Frozen structural selections and independent confirmation",
+        22
+      ],
+      [
+        2,
+        "Supplementary Table 15 | Full-request structural diagnostics",
+        22
+      ],
+      [
+        2,
+        "Supplementary Table 16 | Observed-order and permuted-hour timing stress",
+        23
+      ],
+      [
+        2,
+        "Supplementary Table 17 | Qualified reference products and access-fee decomposition",
+        23
+      ],
+      [
+        2,
+        "Supplementary Table 18 | Local candidate refinement and independent confirmation",
+        24
+      ],
+      [
+        2,
+        "Supplementary Table 19 | Same-scenario exact-window feasibility diagnostics",
+        24
+      ],
+      [
+        2,
+        "Supplementary Table 20 | Matched submission-count and task-resource-time transfer",
+        25
+      ],
+      [
+        2,
+        "Supplementary Table 21 | Physical operating exposure and conditional refined-product costs",
+        25
+      ]
+    ]
+  }
+}

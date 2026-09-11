@@ -1,0 +1,14 @@
+{
+  "main": {
+    "blocks": 172,
+    "source_sha256": "553eecf3bf1b3a1d6ac03c783dc584957900137567e07ebb3280ed0d31e4a9e2",
+    "words": 9249,
+    "abstract_words": 181,
+    "results_words": 1805
+  },
+  "supplement": {
+    "blocks": 150,
+    "source_sha256": "1184e0120c7fc368719da0121eb2291137394f36d0a9965b77a4a5c7146bba60",
+    "words": 10756
+  }
+}

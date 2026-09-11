@@ -20,6 +20,9 @@ not inferred from title metadata alone.
 | Alibaba traces contain heterogeneous production AI workloads at large cluster scale | 29, 30 | Official USENIX proceedings pages | AIDRBench uses trace-informed job distributions; it does not replay production timestamps or deadlines |
 | Nonparametric tolerance bounds and Wilson intervals support finite-sample reliability statements | 31–33 | Publisher or official journal records | Statistical-method support only |
 | HiGHS solves the declared linear and mixed-integer programmes | 34 | Official solver citation page and journal metadata | Software-method attribution |
+| Operator accounting lives and infrastructure-finance methods anchor economic-life and discount-rate sensitivity ranges | 35–38 | Official SEC filings and NREL methodology | Range anchors only; not physical GPU life or an observed target-operator WACC |
+| Demand-response controls can contain site-fixed and capacity-dependent enablement components | 39 | Official LBNL report | Historical commercial-building context; not an AI-data-centre cost calibration |
+| Named capacity products provide product-specific payment observations | 40 | Official PJM auction report | Comparator only after accreditation mapping; not a transferable tariff or evidence that K_cert equals UCAP |
 
 The numerical AIDRBench findings are supported by repository Source Data and
 result receipts, not by these external references.

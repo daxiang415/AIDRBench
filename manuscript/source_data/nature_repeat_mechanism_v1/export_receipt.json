@@ -1,0 +1,10 @@
+{
+  "status": "COMPLETE",
+  "input_scenarios": 2000,
+  "groups": 147,
+  "hourly_rows": 5162400,
+  "trials": 23900,
+  "all_original_hourly_columns_retained": true,
+  "all_trials_included": true,
+  "ready_curves": 476280
+}

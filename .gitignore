@@ -45,3 +45,11 @@ external/
 # Keep manifests and documentation tracked
 !data/manifests/**
 !docs/**
+
+# Large local full-data releases; regenerate TIFF from summary tables.
+*.tiff
+*.tif
+*.parquet
+manuscript/source_data/**/ready_hourly_curves.csv
+manuscript/source_data/**/recovery_inputs/
+manuscript/source_data/**/hourly/

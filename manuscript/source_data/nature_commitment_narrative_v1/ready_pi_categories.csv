@@ -1,0 +1,10 @@
+variant,category,cases
+u50d100g10,Immediate shortage,2
+u50d100g10,Other infeasible,1
+u65d100g10,Immediate shortage,2
+u65d100g10,PI feasible; causal failure,1
+u65d50g10,Immediate shortage,2
+u65d50g10,Other infeasible,1
+u65d50g20,Immediate shortage,2
+u65d50g20,Other infeasible,1
+u80d100g10,Both feasible,3

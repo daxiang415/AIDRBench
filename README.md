@@ -1,15 +1,29 @@
-# AIDRBench：Job-derived firm DR 与社区光伏系统价值
+> **Current GitHub reading copy: v0.25 (2026-09-10), uploaded for review on 2026-09-11.** Start with [GITHUB_REVIEW_V025.md](docs/GITHUB_REVIEW_V025.md). It links the current English/Chinese papers, PDFs, eleven figures and directly runnable summary-data plotting code. The 13.39-GB v14 archive and raw/hourly recovery data remain local; historical references below to local release paths are not GitHub downloads.
+# AIDRBench：工作负载表征与可靠响应承诺
 
-> **文档定位**：本文件定义 AIDRBench 面向 *Nature Communications* 的主论文科学主线。它是系统与机制研究方案，不是控制算法论文，也不是强化学习 benchmark 论文。
-> **核心原则**：全文只有一个主问题——AI 数据中心究竟能提供多少真实、可靠、可重复调用的需求响应；社区能够多安装和多利用多少光伏，是这部分 job-derived firm DR 的系统后果。PI/NA 是规划边界，真正的可靠可交付容量还必须由一个冻结的因果调度实现，在独立 locked-ID 场景上认证。该要求不把论文变成控制器竞赛，也不需要 RL。
+当前英文正文与补充材料 **v0.25**，中文逐段稿 **v19**，完整绘图恢复包 **v14**。
 
-正式仓库边界与权威文件顺序见 [`MAINLINE_FILES.md`](MAINLINE_FILES.md)。论文 Figure 1–5 可在 [`docs/nature-mainline-figure-preview.md`](docs/nature-mainline-figure-preview.md) 直接预览，Supplementary Figure 1–4 可在 [`docs/nature-supplementary-figure-preview.md`](docs/nature-supplementary-figure-preview.md) 预览；Source Data 与完整格式的可复现打包命令见 [`docs/paper-packaging.md`](docs/paper-packaging.md)。
+- [正文中文](docs/chinese_reader/v19/main_zh.md) · [补充材料中文](docs/chinese_reader/v19/supplement_zh.md)
+- [正文 PDF](manuscript/exports/AIDRBench_Nature_Communications_v0.25_content_revision.pdf) · [补充 PDF](manuscript/exports/AIDRBench_Nature_Communications_v0.25_Supplementary_Information_content_revision.pdf)
+- [六张主图](docs/nature-mainline-figure-preview.md) · [五张补充图](docs/nature-supplementary-figure-preview.md)
+- [GitHub 重绘与数据范围说明](docs/GITHUB_REVIEW_V025.md) · [修改理由与证据分配](manuscript/revisions/commitment_narrative_2026-09-10/RESULTS_AND_REASONS_ZH.md)
+- [权威文件与恢复入口](MAINLINE_FILES.md)
 
----
+本版使用既有冻结实验，不新增模拟，不重新选择报价。图 3c 纳入次数/任务资源时间 × 原序/小时置乱的配对对照；2.95 kW 请求的资源时间成功数从原序 31/80 变为置乱后 55/80（1% 标准）或 54/80（零漏期标准），次数权重在两种顺序均为 80/80。置乱改变顺序及其与调用、社区负荷的对齐，不能全部解释为自相关效应。
+
+图 4 展示即时供给余量与承诺判断：先识别不可能成功的序列，再区分严格时间窗不可行和因果控制差距；固定因果报价通过独立资格检验后，才比较运行成本与不参与。一次序列失败不自动否定概率性合同。原主图 PV 结果移至 S4，旧交叉评分移至 S3d，历史解释集中在补充说明 7。
+
+参考四/八小时报价仍为 5.60/4.42 kW；两种服务标准选值相同，零漏期确认 297/300、296/300。早期 PI 统一表述为放松规划统计量，不保证逐工作组可行。英文 SI 标题与正文一致。完整数据、原协议、历史文稿和复算能力保留。
+
+没有启动子智能体；作者、基金、许可证与公开归档仍待用户决定。
+
+## 历史研究设计与开发记录（v0.19 及以前）
+
+下文保留此前研究脉络。旧 75% 配置、201-kW 模块、旧 locked 证书与历史敏感性各有原适用范围，不代替本版五档的新结果。当前结果以文首 v0.25 文稿及源数据为准。
 
 ## 1. 一句话科学命题
 
-**AI 数据中心需求响应是一种受任务约束的有限资源；任务期限、可靠性要求和计算债务决定 firm DR capacity，而剩余的真实柔性进一步决定社区能够容纳并有效利用多少光伏。**
+**AI 数据中心需求响应是一种受任务约束的有限资源；任务期限、可靠性要求和计算债务决定技术 firm capacity，社区能源约束决定其系统价值，而参与机制的增量成本决定其中有多少会成为运营商真正愿意出售的容量。**
 
 论文要回答的不是：
 
@@ -17,7 +31,7 @@
 
 而是：
 
-> AI 工作负荷中名义上“可以延迟”的部分，到底有多少能够在服务质量、恢复和可靠性约束下转化为真实的电网资源；这种资源为何会随持续时间和连续调用而衰减；经过这些筛选后，它能否扩大社区的 DC–PV 联合接入边界、提高已安装光伏的利用并减少弃光？
+> AI 工作负荷中名义上“可以延迟”的部分，到底有多少能够在服务质量、恢复和可靠性约束下转化为真实的电网资源；这种资源为何会随持续时间和连续调用而衰减；它能否扩大社区的 DC–PV 联合接入边界；以及市场补偿何时足以覆盖利用 workload slack、预留算力或挤占计算吞吐的增量成本？
 
 全文的因果链固定为：
 
@@ -28,7 +42,9 @@
 \rightarrow
 \text{duration/reliability/debt limits}
 \rightarrow
-\text{community PV hosting and utilisation value}.
+\text{community PV hosting and utilisation value}
+\rightarrow
+\text{economic participation boundary}.
 \]
 
 ---
@@ -37,12 +53,13 @@
 
 ### 2.1 这篇论文是什么
 
-这是一篇连接以下四个层次的系统科学研究：
+这是一篇连接以下五个层次的系统科学研究：
 
 1. **AI 任务层**：任务到达时间、GPU-hour 需求、工作负荷类别、运行时长和 deadline；
 2. **数据中心层**：任务执行、刚性与柔性功率、积压、计算债务、恢复和反弹；
 3. **社区能源层**：背景负荷、光伏、储能和 PCC/变压器容量约束；
 4. **电网服务层**：可靠需求响应、灵活性耗尽和数据中心接入容量。
+5. **运营决策层**：自然 workload slack、专门预留 headroom 或挤占高价值吞吐对应的增量成本与 break-even compensation。
 
 研究的最终产物不是某个控制器的 reward，而是一个具有物理和统计含义的：
 
@@ -191,6 +208,16 @@ F_q(H,N).
 
 **假设 H5**：硬件功率参数会显著改变绝对 kW 和接入容量，但“名义灵活性高估、持续时间效应和计算债务耗尽”这些机制结论应在合理不确定性范围内保持稳定。若 firm DR 不能迁移到新的社区 profile 与任务分布，其 PV hosting/utilisation benefit 也不得直接迁移。
 
+### Q6. 技术上可认证的容量是否会真正进入市场？
+
+**假设 H6**：技术证书只是上限。若需求响应利用自然 workload slack，增量成本主要来自延迟、使能与未交付风险；若必须专门预留 GPU headroom，则增加资本暴露；若挤占高价值计算，则增加机会成本。因此经济可供容量满足
+
+\[
+K_{\mathrm{econ}}\leq K_{\mathrm{cert}},
+\]
+
+并且取决于参与机制、事件时长与频率、固定站点成本的摊薄以及产品补偿。当前主文只评价 binary offer `0` 或 full `K_cert`，不把未经独立认证的中间 fraction 写成 firm offer；0.2–20 MW 只作 proportional-reference-module accounting sensitivity，不产生新技术证书。
+
 ---
 
 ## 5. 统一理论框架
@@ -320,7 +347,25 @@ F_{q,S}^{\mathrm{NA},\mathcal P}-F_q^{\mathrm{causal}}.
 
 该差距不用于比较算法优劣，而用于防止把同一场景集合上求得的 NA 数值误写成 unseen scenarios 上的可靠承诺。
 
-### 5.6 控制算法扩展仍为可选
+### 5.6 技术证书到经济 offer
+
+对经过独立认证的容量，利用 paired no-DR event ledger 计算年化增量净价值：
+
+\[
+V_{\mathrm{annual}}(K)=R_{\mathrm{capacity}}+R_{\mathrm{performance}}
+-C_{\mathrm{enable}}-C_{\mathrm{reserve}}-C_{\mathrm{opportunity}}
+-C_{\mathrm{delay}}-C_{\mathrm{SLA}}-C_{\mathrm{penalty}}+V_{\mathrm{energy}}.
+\]
+
+其中 performance 只按每个结算间隔 capped at offered kW 的交付量计费；delay、missed work 和 energy 必须计算到 episode-end clearance tail。固定站点成本为
+
+\[
+C_{\mathrm{enable}}=\mathbf 1[K>0]C_{\mathrm{fixed,site}}+c_{\mathrm{variable}}K.
+\]
+
+主文报告 mean 与 fifth-percentile risk-rule break-even capacity payment。后者是参数化 fresh-event annualisation 的决策统计量，不是置信区间、真实 tariff 或连续重复事件项目的收益预测。
+
+### 5.7 控制算法扩展仍为可选
 
 主线必须报告一个冻结的因果实现及其独立证书；额外的 threshold、MPC 或 RL 横向比较仍只属于 Supplementary/后续控制论文：
 
@@ -517,7 +562,7 @@ Model A 的 reference-mix operating peak 为 201.00 kW，因此预声明的 50%
 nominal proxy 为 100.50 kW。100 个 development frozen scenarios 上，q=0.95、
 95% confidence 的 exact-binomial PI tolerance lower bound 为：
 
-| Duration | Nominal / kW | PI firm bound / kW | Nominal overstatement / kW | Overstatement / nominal |
+| Duration | Nominal / kW | PI firm bound / kW | Nominal minus PI bound / kW | Reduction relative to nominal |
 |---:|---:|---:|---:|---:|
 | 1 h | 100.50 | 53.01 | 47.50 | 47.3% |
 | 2 h | 100.50 | 44.46 | 56.04 | 55.8% |
@@ -538,12 +583,12 @@ firm DR 容量”成为可量化结果，而不只是概念判断。完整输入
 
 ### 对应主图
 
-**Figure 1：Nominal-to-job-derived firm-capacity gap**
+**Figure 1：工作可推迟权限与 GPU 分配影响规划响应**
 
-- a：名义容量与 job-derived PI tolerance lower bound 的定量差距；
-- b：任务 arrival–deadline–execution 关系；
-- c：任务调度到 DC/PCC 功率；
-- d：nominal、PI、restricted NA 与 causal 四层证据关系。
+- a：10–60% 可推迟工作、10–90% GPU 配额网格中通过服务检查的 4 h PI 下界曲线，尾期依赖点单独标出；
+- b：已测试配置的服务可行分配范围；
+- c：原参考配置中名义比较值与六种时长 PI 容忍下界；
+- d：全部 30 个板卡功率观测及其 12 次独立运行的分组。
 
 ---
 
@@ -902,16 +947,71 @@ development PI planning sensitivity，不是具名地域的 causal effect。
 - c：validation-to-locked-ID 的独立容量认证；
 - d：locked-OOD 下的失效边界。
 
-**Figure 6：Community-profile sensitivity and system consequence**
+**Supplementary Figure S5：Community-profile sensitivity and system consequence**
 
 - a：EULP 3A/3C/5A 气候区原型的代表性一周净社区负荷；
 - b：严格配对的 q=0.95 PI firm-capacity curves；
 - c：固定 robust-MPC candidate 的 development transfer diagnostic；
 - d：相同 profile 下 rigid/flexible、BESS on/off 的 PV-hosting boundary。
 
-Figure 6 不使用无法由数据支持的“城市地图”。三个 profile 是气候区负荷原型，
+Supplementary Figure S5 不使用无法由数据支持的“城市地图”。三个 profile 是气候区负荷原型，
 不是具名城市、地理编码数据中心或实测馈线；其中 firm/controller 结果是
 development sensitivity，PV hosting 是 PI planning bound。
+
+---
+
+## Result 6 — Participation costs bound economically offerable firm DR
+
+### 科学问题
+
+独立技术认证的容量中，有多少在给定补偿与增量成本下会成为运营商愿意出售的容量？
+
+### 分析内容
+
+- 固定 H={2,4,8}、q=0.95、N=0 的 full `K_cert`，不重新选择容量；
+- 在 100 个 validation scenarios 上以同一 certificate-pinned runtime 重放 robust MPC 与 no-DR；
+- performance revenue 只按 capped delivery，delay 和 energy 计算到 episode end；
+- 区分 slack-backed、reserved-headroom、throughput-displacing 三种参与机制；
+- 固定站点使能成本与按 offer-kW 变化的成本分开；
+- 1/12/50 次为 plausible fresh-event screening，100/250 次为 exposure stress；
+- 0.2/1/5/20 MW 为 proportional accounting scale，不是新技术证书。
+
+### 当前定量结果
+
+在 1 MW proportional accounting scale、H=4 h、每年 50 次 fresh-state 调用、
+固定站点成本 25,000 USD/year、延迟单价 0.005 USD/GPU-h/h、执行补偿
+50 USD/MWh 的参考成本设定下，risk-adjusted break-even capacity payment 分别为：slack-backed 246.60、reserved-headroom 362.75、
+throughput-displacing 414.99 real-2026 USD/kW-year。排除固定 site cost 后分别为
+119.87、236.02 和 288.26 USD/kW-year。固定成本摊销从 0.2 MW 的 633.66
+USD/kW-year 降至 20 MW 的 6.34 USD/kW-year，因此规模改变的是成本分摊，
+而不是 reference-module 的技术证书。
+
+H=2/4/8 h 的 risk-adjusted break-even 为 164.67/246.60/437.21
+（slack-backed）、280.82/362.75/553.36（reserved headroom）和
+247.77/414.99/774.37 USD/kW-year（throughput displacement）。在这些参考成本下，
+持续时间越长，技术认证 kW 越低，但每 kW 需要的经济补偿更高。
+
+**2026-09-05 经济稳健性补强：** 新增 1,728 个延迟单价 × 固定站点成本组合，
+保留原技术证书与 Figure 6 输入。H=4 h、50 次调用、1 MW 核算尺度下，
+固定成本为 25,000 USD/year 时，自然余量门槛随延迟单价从零增至原值两倍，
+由 117.04 增至 376.19 USD/kW-year。扩展到 2,000/10,000 次年度抽样后，
+原九个门槛的最大变化为 3.32 USD/kW-year。300 个事件没有超出数值容差的
+增量 missed/terminal work；机会成本是条件暴露，不是实测永久计算或收入损失。
+新增分析明确为 post-hoc development sensitivity，见 Supplementary Tables 7–9、
+`manuscript/source_data/nature_economic_robustness_v1/` 和
+`docs/economic_participation/cost_robustness_2026-09-05.md`。
+
+### 对应主图
+
+**Main Figure 6：Participation costs bound economically offerable demand response**
+
+- a：三种机制在 0.2/1/5/20 MW accounting scales 下，含/不含固定 site cost 的 risk-adjusted break-even；
+- b：fresh-event count、economic life、effective `alpha × v_GPUh` 三条机制 sensitivity；
+- c：signed break-even decomposition，固定/variable enablement 分开；
+- d：独立认证 H={2,4,8} 的 reference Kcert 与 1 MW proportional accounting boundary。
+
+正式 artwork 只从 `results/exports/AIDRBench_Figure6_WebGPT_v2.zip` 的四个
+exact panel CSV 由网页版 GPT 生成。本地 renderer 不作为正式投稿图来源。
 
 ---
 
@@ -928,6 +1028,8 @@ development sensitivity，PV hosting 是 PI planning bound。
 | 重复事件耗尽 | repeated-event stress test | 是 |
 | Hosting capacity | PV/BESS/PCC optimization | 是 |
 | 参数不确定性 | lower/nominal/upper uncertainty bounds | 是 |
+| 经济参与 | paired event ledger、incremental accounting、break-even screening | 是 |
+| 恢复算力映射 | event-end debt → recovery-throughput-equivalent GPU/power sensitivity | 补充材料 |
 | Rule/MPC smoke test | software validation | 否，最多补充材料 |
 
 **重要区分**：非前视优化给出受限场景规划边界；只有独立 locked-ID 上的固定因果候选才能称为容量证书。这一验证不等于控制器竞赛。
@@ -1102,7 +1204,7 @@ solver and tolerances
 
 ### 工作标题
 
-**Job constraints define firm data-centre demand response and photovoltaic hosting limits**
+**Job constraints and participation costs define firm data-centre demand response**
 
 ### 三句话贡献
 
@@ -1112,11 +1214,13 @@ solver and tolerances
 
 > Third, we reveal compute debt as the mechanism of state-dependent repeatability and show that job-feasible planning reshapes the joint data-centre–PV hosting boundary.
 
+> Fourth, we show that technical certification does not guarantee participation: fixed site enablement, reserved headroom and displaced compute define distinct break-even compensation thresholds.
+
 ### 主结论应落在这里
 
 \[
 \boxed{
-\text{AI workload flexibility is a finite, state-dependent and distribution-specific power commitment.}
+\text{AI workload flexibility becomes a grid resource only after technical and economic qualification.}
 }
 \]
 
@@ -1220,6 +1324,23 @@ H={1,2,3,4,6,8}: {437,433,445,425,398,383}/500，对应 Wilson 下界
 secondary validation selection 和预声明 locked replay。各单元格报告 interval-wise
 Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 
+### Phase 7 — 经济参与 screening
+
+- 固定 q=0.95、N=0、H={2,4,8} 的 full `K_cert`；
+- 在 100 个 validation scenarios 上构造 paired no-DR event/interval ledger；
+- 区分 slack-backed、reserved-headroom、throughput-displacing；
+- fixed site enablement 与 variable cost 分开；
+- mean 与 fifth-percentile risk-rule break-even 分开；
+- 输出 0.2/1/5/20 MW proportional accounting sensitivity；
+- 将外部证据分为 product observation、range anchor、context only；
+- 正式 Figure 6 只由网页版 GPT 使用 exact panel CSV 生成。
+
+当前状态：300 个 event rows 与 33,414 个 interval rows 已完成并通过物理恒等式
+审计；经济 evaluation 有 46,080 个 annual result rows；Figure 6 的 a/b/c/d 分别
+为 24/13/36/9 个 exact plotting rows。Web-GPT v2 ZIP 已通过 Windows-compatible
+标准压缩测试和内部 SHA-256 校验。经济结果仍是 fresh-event parameterized
+screening，不是独立 economic locked-ID、真实市场利润预测或 MW 级技术证书。
+
 ---
 
 ## 16. 完成标准
@@ -1240,6 +1361,10 @@ Wilson 下界，不声称整张 surface 具有 simultaneous confidence。
 - [x] 所有主线数值结果具有结果回执、provenance 和 hash；
 - [x] locked ID 与 locked OOD 分开，且都只在模型和分析方案冻结后运行；
 - [x] 控制器结果未被误写成文章的核心创新。
+- [x] full certified capacity 的 paired economic ledger 与 through-episode-end 成本口径完成；
+- [x] 三种参与机制、固定站点规模效应与 duration-specific break-even 完成；
+- [x] economic Source Data、外部证据 register 和 Web-GPT Figure 6 包完成；
+- [ ] Web-GPT 正式 Figure 6/S5 artwork、作者信息和归档 DOI 待补。
 
 ---
 
@@ -1263,8 +1388,12 @@ compute debt, recovery and repeated-event exhaustion
 joint DC–PV hosting and fixed-capacity PV utilisation under BESS
                 ↓
 robustness across hardware, workload and community uncertainty
+                ↓
+paired incremental-cost ledger
+                ↓
+technical certificate → economically offerable capacity
 ```
 
 一句话概括：
 
-> **这篇论文研究的是 AI 灵活性作为一种电网资源的物理边界、可靠边界、耗尽机制和系统价值，而不是研究如何训练一个更好的控制器。**
+> **这篇论文研究的是 AI 灵活性作为一种电网资源的物理边界、可靠边界、耗尽机制、系统价值与经济参与条件，而不是研究如何训练一个更好的控制器。**

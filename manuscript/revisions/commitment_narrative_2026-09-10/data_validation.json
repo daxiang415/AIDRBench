@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "new_simulations": 0,
+  "recomputed_ledger_rows": 640,
+  "example_seed": 990000,
+  "example_selection": "Lowest protocol seed; all four representations at fraction 0.5",
+  "copied_tables": [
+    {
+      "table": "refinement_selected_confirmed.csv",
+      "source": "manuscript/source_data/nature_commitment_mechanisms_v1/refinement_selected_confirmed.csv",
+      "sha256": "fd274223813768d70ff5635463a22976370daa4245d89527e754cae6cdd7c1ff"
+    },
+    {
+      "table": "ready_pi_categories.csv",
+      "source": "manuscript/source_data/nature_commitment_mechanisms_v1/ready_pi_categories.csv",
+      "sha256": "ff8f58eaa7c502412d74d14c5d276f25804fba6c7592e286cd45525172a297ac"
+    },
+    {
+      "table": "external_cross_score_weekly.csv",
+      "source": "manuscript/source_data/nature_commitment_mechanisms_v1/external_cross_score_weekly.csv",
+      "sha256": "94241ca53e9ca13296590a639e63aba1856f83079118c56ae25db831f8a01706"
+    },
+    {
+      "table": "weighted_week_summary.csv",
+      "source": "manuscript/source_data/nature_commitment_mechanisms_v1/weighted_week_summary.csv",
+      "sha256": "71519be39cdedd5b75e7d34138d20c2783b8679af5d381d5ee204d78b7cf989c"
+    },
+    {
+      "table": "refinement_development_summary.csv",
+      "source": "manuscript/source_data/nature_commitment_mechanisms_v1/refinement_development_summary.csv",
+      "sha256": "5392bdebd6ce08cc743893fa85906158503f821e3ff3832002478620d764e04d"
+    },
+    {
+      "table": "single_confirm_summary.csv",
+      "source": "manuscript/source_data/nature_workload_composition_v1/single_confirm_summary.csv",
+      "sha256": "b242a84dad0312f735f5d1a960131cbb2308d6e8309a2687a7044d2f846b1a5e"
+    },
+    {
+      "table": "control_causal_summary.csv",
+      "source": "manuscript/source_data/nature_workload_composition_v1/control_causal_summary.csv",
+      "sha256": "231fff9b373c8ea640289aa041983b3444e7c88d5d2e35ac671f4417b476139c"
+    },
+    {
+      "table": "renewable_paired_comparisons.csv",
+      "source": "manuscript/source_data/nature_workload_composition_v1/renewable_paired_comparisons.csv",
+      "sha256": "8cab8b59d9cb517250154ea3ecad9623db730029aaa61012c83f0db8ddf336fb"
+    },
+    {
+      "table": "confirmation_summary.csv",
+      "source": "manuscript/source_data/nature_operating_tradeoffs_v1/confirmation_summary.csv",
+      "sha256": "760c2b12a0fa15262b8227f2442a28815e87636f1d6e169cd893cdc967db60e4"
+    }
+  ],
+  "paired_supply_quadrants": {
+    "original_shortage_False_permuted_shortage_False": 26,
+    "original_shortage_False_permuted_shortage_True": 5,
+    "original_shortage_True_permuted_shortage_False": 29,
+    "original_shortage_True_permuted_shortage_True": 20
+  },
+  "all_original_ledgers_unchanged": true
+}

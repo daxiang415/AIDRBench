@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "jobs": 714903,
+  "tasks": 732318,
+  "source_job_sha256": "379ecb3becaba347f44a53bf7eb53e54b185221b2a0338a3f828828d269ba96c",
+  "source_task_sha256": "6954802b457305f8a9e480ef97c40060baee59649fd3adc62c5a1e048aa058de",
+  "processed_sha256": "eb3e387d8ba4c5ac1de30eb1875c8a5e44e385cd559fedbd0e0ffcad29ae6929",
+  "reconstructed_work_max_abs_error_gpu_s": 1.1641532182693481e-10,
+  "naive_job_duration_times_total_gpu_mismatches": 131379,
+  "release_origin_offset_s": 542323.0,
+  "weeks": 8,
+  "trace_hours": [
+    168,
+    1511
+  ],
+  "definition": "sum over terminated positive-resource tasks: instances * requested_GPU_percent/100 * (task completion - task launch)",
+  "boundary": "allocated resource-time, not sensor-measured busy GPU-hours; job sojourn time is NOT task execution time; normalised weeks, synthetic classes/deadlines, fluid execution",
+  "schema_url": "https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2020/README.md"
+}

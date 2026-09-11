@@ -1,0 +1,18 @@
+{
+  "status": "complete",
+  "trial_counts": {
+    "single_dev": 4000,
+    "single_confirm": 9000,
+    "repeat_dev": 4000,
+    "repeat_confirm": 15000,
+    "control_confirm": 2400
+  },
+  "formal_replays": 34400,
+  "full_hourly_rows": 7430400,
+  "hourly_groups": 168,
+  "event_outcome_rows": 55400,
+  "statistical_unit": "scenario_seed; all calls within a programme remain dependent",
+  "completeness": "all development and confirmation trial event outcomes and hourly trajectories, with all original columns plus paired baseline metrics; complete drawing summaries",
+  "preserved_local_simulation_results": "/home/user/projects/AIDRBench/results/nature_mainline/workload_composition_v4",
+  "old_75_percent_outputs": "unchanged historical results; not input to new curves"
+}

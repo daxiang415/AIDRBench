@@ -1,0 +1,3 @@
+workload_class,estimate_w_per_gpu,interval_lower_w_per_gpu,interval_upper_w_per_gpu,confidence_level,statistical_unit,independent_run_count,held_out_overall_mae_w_per_gpu
+training,259.082472426,225.812419818,292.352525035,0.95,independent_four_gpu_workload_run_mean,2,3.79555376838
+offline_inference,300.022173713,299.69476705,300.349580377,0.95,independent_four_gpu_workload_run_mean,2,3.79555376838

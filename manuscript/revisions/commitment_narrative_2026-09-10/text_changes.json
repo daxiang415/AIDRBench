@@ -1,0 +1,701 @@
+[
+  {
+    "id": "M006",
+    "before": {
+      "en": "Artificial-intelligence data centres could help electricity grids accommodate growing demand by postponing computing, provided that response commitments preserve service. Here we connect workload permissions to independently tested offers, workload-timing limits and participation costs. A production resource-time audit informs scenarios with 5–20% of work eligible, supporting single-event offers of 2.95–11.80 kW at modelled operating peaks of 190–200 kW. At 10% eligibility, locally refined four- and eight-hour repeated offers of 5.60 and 4.42 kW qualify under a zero-deadline-loss standard. Same-scenario feasibility tests distinguish immediate power shortage, deadline constraints and a gap between causal control and perfect-information scheduling. Crucially, an offer that transfers under submission-count profiles can fail when observed task resource-time weights are restored: a fixed 2.95-kW request succeeds in 80/80 count-weighted but only 31/80 resource-time-weighted realisations across eight production weeks, despite service-feasible no-response baselines. Operating ledgers then identify conditional compensation boundaries between qualified duration products. These findings show why operators must validate the temporal supply of reducible power, alongside task service and recovery obligations, before transferring a model-qualified commitment to another workload.",
+      "zh": "人工智能数据中心可以通过推迟计算，帮助电网应对不断增长的需求，前提是响应承诺能够维持计算服务。本文将工作参与许可与独立检验的报价、工作时序限制和参与成本联系起来。生产资源时间审计为 5%–20% 工作可参与的情景提供依据；在约 190–200 kW 的模型运行峰值下，单次事件合格报价为 2.95–11.80 kW。当工作参与比例为 10% 时，局部加密后的四小时和八小时重复报价分别为 5.60 和 4.42 kW，均通过零期限违约标准的资格检验。同场景可行性对照区分了即时功率不足、期限约束，以及因果控制与完美信息调度之间的差距。关键在于，能够适用于提交次数曲线的报价，在恢复真实任务资源时间权重后可能失败：对八个生产周，固定 2.95 kW 请求在次数加权下成功 80/80，而在资源时间加权下仅为 31/80，尽管无响应基线全部满足服务要求。随后，运行账本给出合格时长产品之间的条件性补偿边界。这些发现说明，将模型内合格的承诺用于另一种工作负载前，运营者需要同时核验可削功率的时间分布、任务服务与恢复义务。",
+      "id": "M006"
+    },
+    "after": {
+      "en": "Artificial-intelligence data centres could help electricity grids accommodate growing demand by postponing computing, but a response commitment must remain deliverable as workloads change. Here we test how workload representation affects this commitment in a trace-informed scheduling and electricity model. At 10% work eligibility, independent tests support four- and eight-hour offers of 5.60 and 4.42 kW at a 95% success-probability target, with zero missed work required for a successful series. Yet a fixed 2.95-kW request succeeds in 80/80 submission-count-weighted realisations and only 31/80 task-resource-time-weighted realisations across eight observed weeks with matched weekly work totals. Permuting hourly blocks raises resource-time success to 55/80 with a 1% missed-work allowance and 54/80 with zero missed work. Workload weighting and hourly order with call alignment therefore expose distinct limits. Immediate supply checks and strict task-window feasibility tests separate impossible delivery from failures with a feasible full-information schedule. Operating ledgers then compare compensation only for independently qualified products. This assessment identifies when a workload change invalidates a model-supported commitment, when controller improvement remains possible and when a price comparison is meaningful.",
+      "zh": "人工智能数据中心可以通过推迟计算，帮助电网应对不断增长的需求，但响应承诺必须在工作负载变化后仍然可交付。本文在受生产轨迹约束的调度与电力模型中，检验工作负载的表征方式如何影响这种承诺。当 10% 工作允许参与时，独立测试支持四小时 5.60 kW 和八小时 4.42 kW 的报价，整体成功概率目标为 95%，且一次序列只有零漏期工作才能被判为成功。然而，在八个实际观察周中保持每周工作总量一致，固定 2.95 kW 请求按提交次数加权时成功 80/80，按任务资源时间加权时仅成功 31/80。置乱完整小时块后，资源时间测试在允许 1% 漏期工作时成功 55/80，在要求零漏期时成功 54/80。因此，工作量权重以及小时顺序与调用的对齐关系，揭示了不同层面的限制。即时供给检查与严格任务时间窗检验进一步区分无法交付的情形，以及完整未来信息下存在可行调度的控制失败。随后，运行账本只对通过独立资格检验的产品比较补偿。这一评估帮助识别工作负载变化何时使模型支持的承诺失效、何时仍有改进控制器的空间，以及何时才有意义开展价格比较。",
+      "id": "M006"
+    }
+  },
+  {
+    "id": "M009",
+    "before": {
+      "en": "A field demonstration on 256 graphics processing units (GPUs) reduced power by 25% for three hours while meeting the tested quality-of-service requirements.<sup>3</sup> Batch scheduling, server power management and workload migration have been used to reduce peaks and participate in demand response.<sup>4–8</sup> Carbon-aware scheduling extends these controls to hours and locations with lower emissions or greater renewable availability.<sup>9–12</sup> Other studies address pause-and-resume decisions and GPU power capping.<sup>13,14</sup> Trace-based and planning studies connect workload flexibility to demand-response programmes, advance notice and grid interconnection.<sup>15–18</sup> A recent preprint further distinguishes eligible workload power from dependable relief, using duration, reliability and portfolio structure and explicitly recognising delivery and recovery requirements.<sup>19</sup> The remaining operational question is how a declared offer performs when causal control carries unfinished work and overlapping recovery obligations through successive calls.",
+      "zh": "一项包含 256 个图形处理器（GPU）的现场演示实现了持续三小时、幅度 25% 的功率削减，同时满足所测试的服务质量要求。<sup>3</sup> 批处理调度、服务器功率管理和工作负载迁移已被用于削峰和需求响应。<sup>4–8</sup> 碳感知调度进一步将工作安排到排放更低或可再生能源更充足的时段和地点。<sup>9–12</sup> 其他研究讨论了暂停与恢复决策以及 GPU 功率限制。<sup>13,14</sup> 基于轨迹的研究和规划研究把工作灵活性与需求响应项目、提前通知和电网接入联系起来。<sup>15–18</sup> 一篇近期预印本进一步依据持续时间、可靠性和资源组合结构区分了合资格工作功率与可靠减负，并明确认识到实际交付和恢复要求。<sup>19</sup> 仍需回答的运行问题是：当因果控制器将未完成工作及重叠恢复义务带入后续调用时，预先声明的功率承诺能够交付到什么程度。",
+      "id": "M009"
+    },
+    "after": {
+      "en": "A field demonstration on 256 graphics processing units (GPUs) reduced power by 25% for three hours while meeting the tested quality-of-service requirements.<sup>3</sup> Batch scheduling, server power management and workload migration have been used to reduce peaks and participate in demand response.<sup>4–8</sup> Carbon-aware scheduling extends these controls to hours and locations with lower emissions or greater renewable availability.<sup>9–12</sup> Other studies address pause-and-resume decisions and GPU power capping.<sup>13,14</sup> Trace-based and planning studies connect workload flexibility to demand-response programmes, advance notice and grid interconnection.<sup>15–18</sup> A recent preprint distinguishes eligible workload power from dependable relief through duration, reliability, portfolio structure and delivery and recovery requirements.<sup>19</sup> These advances motivate a more specific commitment question: can a request that passes a simplified workload test still fail when task-size variation and hourly order are represented more faithfully?",
+      "zh": "一项在 256 块图形处理器（GPU）上的现场演示，在满足所测试服务质量要求的同时，将功率降低了 25%，持续三小时。<sup>3</sup> 批处理调度、服务器功率管理与工作负载迁移已被用于降低峰值和参与需求响应。<sup>4–8</sup> 碳感知调度进一步将这些控制扩展到排放更低或可再生能源更充足的时段和地点。<sup>9–12</sup> 另一些研究讨论暂停与恢复决策以及 GPU 功率上限。<sup>13,14</sup> 基于轨迹和规划的研究也将工作负载灵活性与需求响应计划、提前通知和电网接入联系起来。<sup>15–18</sup> 一篇近期预印本通过持续时间、可靠性、组合结构以及交付和恢复要求，区分了可参与工作功率与可靠减负。<sup>19</sup> 这些进展引出一个更具体的承诺问题：当任务规模差异与小时顺序得到更充分的表征时，一个通过简化工作负载测试的请求是否仍会失败？",
+      "id": "M009"
+    }
+  },
+  {
+    "id": "M010",
+    "before": {
+      "en": "The workload mix sets the first limit on that commitment. Online inference must respond to user requests, whereas some training and offline-inference work can wait within an agreed deadline. Production traces distinguish these classes and their scheduling priorities,<sup>20</sup> but priority is not permission to defer work for grid services. An assessment must therefore specify which jobs are eligible, rather than assigning a fixed flexible fraction to total electricity demand. Eligible jobs must still fit between release and deadline. After a call, postponed work competes with new arrivals; the additional processing obligation relative to operation without response is compute debt.<sup>6,13,21,22</sup> Hardware allocation and recovery rules determine whether that debt can be cleared before the next call.",
+      "zh": "工作构成首先限制了这种承诺。在线推理需要及时回应用户请求，部分训练和离线推理则可在约定期限内等待。生产轨迹区分了这些类别及其调度优先级，<sup>20</sup> 但低优先级不等于获准为电网服务而延后。因此，评估必须明确哪些作业有资格，不能给总用电简单指定一个固定可调比例。获准作业仍须在释放与截止时间之间完成。调用之后，推迟的工作与新到达工作竞争；相对于无响应运行增加的未来处理义务称为计算债务。<sup>6,13,21,22</sup> 硬件分配和恢复规则决定这些债务能否在下次调用前清除。",
+      "id": "M010"
+    },
+    "after": {
+      "en": "The workload mix sets which computing may participate. Online inference must respond to user requests, whereas some training and offline-inference work can wait within an agreed deadline. Production traces distinguish these classes and their scheduling priorities,<sup>20</sup> but priority is not permission to defer work for grid services. Even at fixed eligible work, job counts do not specify how much work arrives in each hour. Each job must fit between release and deadline, and postponement creates an additional processing obligation relative to operation without response, or compute debt.<sup>6,13,21,22</sup> Thus, low-supply hours and recovery requirements can invalidate a request even when average workload and installed hardware appear sufficient.",
+      "zh": "工作负载构成决定哪些计算可以参与。在线推理必须及时响应用户请求，而部分训练和离线推理可以在约定期限内等待。生产轨迹区分了这些类别及其调度优先级，<sup>20</sup> 但优先级不等于允许为了电网服务而推迟工作。即使可参与工作总量相同，作业次数也不能确定每个小时到达的工作量。每项作业仍必须在释放与期限之间完成；推迟执行会产生相对于无响应运行的额外处理义务，即计算债务。<sup>6,13,21,22</sup> 因此，即便平均工作量和已安装硬件看似充足，供给低谷与恢复要求仍可能使请求无法履行。",
+      "id": "M010"
+    }
+  },
+  {
+    "id": "M011",
+    "before": {
+      "en": "Reliable delivery is only part of the case for grid participation. A community point of common coupling (PCC) connects data-centre demand, photovoltaic (PV) generation and battery energy storage systems (BESS) to the upstream grid.<sup>23–27</sup> The benefits of rescheduling work therefore depend on local demand, renewable output and storage operation. Scheduling changes may create room for additional PV capacity without producing a comparable gain in the use of an existing installation. An operator also needs compensation for the computing resources used to provide the response. Postponing work into otherwise idle periods, reserving spare capacity and accepting exposure to displaced computing create different costs. The same electrical offer can therefore have different economic requirements. Assessing these requirements alongside delivery and local system effects is necessary to identify capacity that operators have a reason to offer.",
+      "zh": "可靠交付只是数据中心参与电网响应需要考虑的一个方面。社区的公共连接点（PCC）将数据中心用电、光伏（PV）发电和电池储能系统（BESS）连接到上级电网。<sup>23–27</sup> 因此，重新安排计算工作的收益还取决于当地用电需求、可再生能源出力和储能运行。调度调整可能为新增光伏装机腾出空间，却未必同等程度地提高现有光伏设施的利用率。运营者还需要获得补偿，以覆盖提供响应所付出的计算资源成本。将工作推迟到原本空闲的时段、预留备用算力，以及承担有价值计算被挤占的风险，会形成不同的成本。因此，即使电力响应承诺相同，经济要求也可能不同。只有将这些要求与响应交付和当地系统效益一并评估，才能判断哪些容量值得运营者向电网提供。",
+      "id": "M011"
+    },
+    "after": {
+      "en": "Delivery and value also require different evidence. At a community point of common coupling (PCC), data-centre demand interacts with photovoltaic (PV) generation and battery energy storage systems (BESS).<sup>23–27</sup> A hardware allocation that benefits PV hosting need not increase an independently tested response offer. For an operator, postponement creates waiting and service-loss exposure, while access charges affect whether participation is worthwhile. Valuing those quantities cannot make an undeliverable commitment feasible. A useful assessment must therefore establish what can be offered before comparing service products at stated prices.",
+      "zh": "交付能力与参与价值还需要不同的证据。在社区公共耦合点（PCC），数据中心需求与光伏（PV）发电和电池储能系统（BESS）相互作用。<sup>23–27</sup> 有利于光伏接纳的硬件分配，不一定提高通过独立检验的响应报价。对运营者而言，推迟执行产生等待与服务损失暴露，而接入费用影响参与是否值得。给这些数量定价，不能使无法交付的承诺变得可行。因此，有用的评估必须先明确能够提供什么，再在指定价格下比较服务产品。",
+      "id": "M011"
+    }
+  },
+  {
+    "id": "M012",
+    "before": {
+      "en": "Here we examine how an operator should choose a response commitment when eligible work, task timing and recovery obligations impose different limits. A production execution audit informs 5%, 10% and 20% work-permission scenarios; larger comparisons make the additional business assumptions explicit. AIDRBench combines trace-informed jobs, four-GPU board-power measurements and a modelled community electricity system. We independently test causal-controller offers, refine the reference duration products and use same-scenario perfect-information feasibility checks to interpret failures. Matched tests across eight observed production weeks then separate submission counts from submitted task resource-time.<sup>28</sup> Complete operating ledgers expose the waiting and service-loss quantities behind conditional compensation. Together, these comparisons identify when to revise the controller, reconsider task permissions or withhold a commitment from a changed workload.",
+      "zh": "本文研究：当可参与工作、任务时序和恢复义务施加不同限制时，运营者应如何选择响应承诺。生产执行数据审计为 5%、10% 和 20% 工作许可情景提供依据，更高比例的对照则明确其额外业务假设。AIDRBench 结合受轨迹约束的作业、四块 GPU 的板卡功率测量与社区电力系统模型。我们独立检验因果控制器的报价，加密参考时长产品，并通过同场景完美信息可行性对照解释失败。随后，八个实际生产周的配对测试区分提交次数与提交任务的资源时间。<sup>28</sup> 完整运行账本展示条件性补偿背后的等待与服务损失量。共同来看，这些对照帮助区分何时应改进控制器、重新考虑任务许可，或暂缓将承诺用于改变后的工作负载。",
+      "id": "M012"
+    },
+    "after": {
+      "en": "Here we identify how a simplified workload representation can support the wrong commitment decision. AIDRBench combines trace-informed jobs, four-GPU board-power measurements and a modelled community electricity system. Production execution data inform plausible work-permission scenarios. We independently test causal-controller offers and compare matched submission-count and task-resource-time profiles in their observed and permuted hourly orders.<sup>28</sup> An instantaneous supply condition and same-scenario perfect-information feasibility checks then distinguish why requests fail. Finally, complete operating ledgers compare qualified duration products with non-participation. Together, the tests connect workload characterisation to decisions about the request, controller and compensation.",
+      "zh": "本文识别简化的工作负载表征如何支持错误的承诺决策。AIDRBench 结合受轨迹约束的作业、四块 GPU 的板卡功率测量与社区电力系统模型。生产执行数据为合理的工作参与许可情景提供依据。我们独立检验因果控制器的报价，并对提交次数和任务资源时间曲线开展配对比较，分别保留实际小时顺序或置乱该顺序。<sup>28</sup> 随后，即时供给条件与同场景完美信息可行性检验区分请求失败的原因。最后，完整运行账本将合格时长产品与不参与进行比较。这些测试共同将工作负载表征与请求、控制器和补偿决策联系起来。",
+      "id": "M012"
+    }
+  },
+  {
+    "id": "M016",
+    "before": {
+      "en": "The primary low-share scenarios allowed 5%, 10% or 20% of total offered work to be deferred, preserving the observed class mix and varying permission within low-priority batch work. The 40% comparison required almost all training and offline inference to opt in. Reaching 60% required a different business mix: 19.1 percentage points of total work were reassigned from online to offline inference before batch work was made eligible (Fig. 1b). Online jobs remained ineligible in every scenario. Thus, the two larger fractions describe additional operational assumptions, rather than evidence that a typical inference-led facility can defer most of its load.",
+      "zh": "主体低比例情景允许总投入工作量的 5%、10% 或 20% 延后，保持观察到的类别构成，只改变低优先级批处理中的获准份额。40% 对照需要几乎全部训练和离线推理都同意参与。达到 60% 则需要不同业务构成：先将总工作量的 19.1 个百分点从在线推理改为离线推理，再赋予批处理延后资格（图 1b）。所有情景中的在线作业均无此资格。因此，两个高比例描述的是额外运行假设，不能证明典型的推理主导设施能够延后大部分负荷。",
+      "id": "M016"
+    },
+    "after": {
+      "en": "The primary scenarios allowed 5%, 10% or 20% of total offered work to wait, preserving the observed class mix and varying permission within low-priority batch work. The 40% comparison required almost all training and offline inference to opt in. The 60% case additionally reassigned 19.1 percentage points of total work from online to offline inference (Fig. 1b). Online jobs remained ineligible; these larger fractions therefore describe additional business assumptions.",
+      "zh": "主要情景允许总供给工作量的 5%、10% 或 20% 等待，在保留观测类别构成的同时，改变低优先级批处理工作的许可比例。40% 对照要求几乎全部训练和离线推理参与。60% 情景还将总工作量的 19.1 个百分点从在线推理重新分配到离线推理（图 1b）。在线作业始终不允许参与，因此更高比例代表额外的业务假设。",
+      "id": "M016"
+    }
+  },
+  {
+    "id": "M017",
+    "before": {
+      "en": "All five configurations retained 576 GPUs and 374.4 GPU-h of offered work per hour. We assigned the same approximate fraction of GPUs as work to the flexible pool, keeping mean utilisation near 65% in both pools. This declared allocation policy avoids interpreting a severely overloaded or largely idle pool as the reference operating condition. It also means that the five-way comparison changes eligibility together with its supporting allocation; controls at 10% eligibility isolate allocation separately (Fig. 5; Supplementary Table 8).",
+      "zh": "五种配置均保留 576 张 GPU 和每小时 374.4 GPU 小时的投入工作量。灵活池 GPU 比例与其承接的工作比例大致相同，使两池平均利用率维持在约 65%。这一明确的分配规则避免将严重过载或大部分闲置的池当作参考运行条件。同时，五档比较改变的是资格及其配套分配；在 10% 资格下另设对照，单独识别分配的影响（图 5；补充表 8）。",
+      "id": "M017"
+    },
+    "after": {
+      "en": "Each configuration retained 576 GPUs and 374.4 GPU-h of offered work per hour. Assigning approximately the same fraction of GPUs as eligible work kept mean utilisation near 65% in both pools. The primary comparison therefore changes permission together with supporting allocation; controls at 10% eligibility isolate allocation (Fig. 5). Four-GPU board-power calibration constrained the batch-work conversion, whereas rigid workloads used an engineering power proxy (Supplementary Fig. 2; Supplementary Tables 1–3).",
+      "zh": "各配置均保留 576 块 GPU，每小时供给 374.4 GPU-h 工作。向灵活池分配与可参与工作比例大致相同的 GPU，使两个池的平均利用率均接近 65%。因此，主要比较同时改变参与许可及其配套分配；10% 参与比例下的对照则单独考察分配（图 5）。四块 GPU 的板卡功率校准约束批处理工作的功率转换，刚性工作负载采用工程功率代理（补充图 2；补充表 1–3）。",
+      "id": "M017"
+    }
+  },
+  {
+    "id": "M019",
+    "action": "compressed_or_relocated",
+    "before": {
+      "en": "Measured board power constrained the batch-work conversion: four-GPU training and offline inference averaged 259.08 and 300.02 W per GPU, with a held-out mean absolute prediction error of 3.80 W (Supplementary Fig. 2). Online and other rigid workloads required a separate engineering power proxy, tested in sensitivity controls. The measurements therefore supported the scheduling-to-power calculation without establishing the workload mix or the power of online serving.",
+      "zh": "实测板卡功率约束了批处理工作量到用电的换算：四 GPU 训练与离线推理平均每 GPU 为 259.08 W 和 300.02 W，留出测试的平均绝对预测误差为 3.80 W（补充图 2）。在线及其他刚性工作需要另设工程功率代理，并通过对照检查。测量因此支持调度到功率的换算，但不能证明工作构成或在线服务功率。",
+      "id": "M019"
+    }
+  },
+  {
+    "id": "M020",
+    "before": {
+      "en": "![Figure 1](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_1.png)",
+      "zh": "![图 1](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_1.png)",
+      "id": "M020"
+    },
+    "after": {
+      "en": "![Figure 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_1.png)",
+      "zh": "![图 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_1.png)",
+      "id": "M020"
+    }
+  },
+  {
+    "id": "M022",
+    "before": {
+      "en": "Limiting eligible work constrained the response. Under perfect information (PI), where the scheduler knows all future arrivals, four-hour relaxed planning statistics were 2.89, 5.78 and 11.56 kW at 5%, 10% and 20% eligibility. Development-selected offers of 2.95, 5.90 and 11.80 kW then qualified on 300 independent scenarios, corresponding to 1.6–5.9% of the configurations' operating peaks (Fig. 2a; Supplementary Table 4). The 40% and 60% comparisons qualified at 22.19 and 34.00 kW under their additional assumptions. The proportional low-share response follows the shared job-template scaling and allocation policy; it is not an empirically established linear law for production facilities.",
+      "zh": "限制获准工作量也限制了响应。在完全信息（PI，即调度器事先知道所有未来到达工作）条件下，5%、10%、20% 资格的四小时放松规划统计量为 2.89、5.78、11.56 kW；开发选出的 2.95、5.90、11.80 kW 承诺随后在 300 个独立情景中通过资格检验，相当于各配置运行峰值的 1.6%–5.9%（图 2a；补充表 4）。40% 和 60% 对照在其额外假设下分别合格于 22.19 和 34.00 kW。低比例区间的比例关系来自共同作业模板缩放及分配规则，不是生产设施中经实证确认的线性规律。",
+      "id": "M022"
+    },
+    "after": {
+      "en": "Development-selected single-event offers of 2.95, 5.90 and 11.80 kW qualified on 300 independent scenarios at 5%, 10% and 20% eligibility, respectively, corresponding to 1.6–5.9% of operating peak demand (Fig. 2a; Supplementary Table 4). The 40% and 60% comparisons qualified at 22.19 and 34.00 kW under their additional assumptions. The proportional low-share response follows the shared job-template scaling and allocation policy. Relaxed perfect-information (PI) tolerance statistics provide a planning comparison but do not guarantee individual work-group feasibility (Methods).",
+      "zh": "当参与比例分别为 5%、10% 和 20% 时，开发阶段选出的单次报价 2.95、5.90 和 11.80 kW 在 300 个独立情景上通过资格检验，对应运行峰值需求的 1.6%–5.9%（图 2a；补充表 4）。在额外业务假设下，40% 和 60% 对照的合格报价为 22.19 和 34.00 kW。低比例情景的比例关系来自共享作业模板的缩放和分配规则。放松的完美信息（PI）容忍统计量提供规划比较，但不保证各工作组可行（见方法）。",
+      "id": "M022"
+    }
+  },
+  {
+    "id": "M023",
+    "before": {
+      "en": "The same selected power qualified at four and eight hours on this finite grid, but longer events reduced observed success from 295/300 to 292/300 in every configuration. The one-sided 95% probability lower bounds were 0.9662 and 0.9533, respectively. Zero-, two- and six-hour notice produced identical paired success outcomes (Fig. 2b). In this model, jobs cannot execute before release and the no-response reference already processes available work eagerly. Advance information therefore does not establish additional pre-executable work. The fixed-request result does not rule out notice benefits under another baseline schedule, workload release pattern or controller.",
+      "zh": "在该有限网格内，相同承诺功率同时通过四小时和八小时检验，但较长事件使各配置的观察成功数从 295/300 降为 292/300，单侧 95% 概率下界分别为 0.9662 和 0.9533。提前零、二、六小时通知的配对成功结果完全一致（图 2b）。模型不允许作业在释放前执行，无响应参考也已尽早处理可用工作，因此提前获得信息并不自动增加可提前执行的工作。固定请求的结果不能排除其他基准调度、释放模式或控制器下的通知收益。",
+      "id": "M023"
+    },
+    "after": {
+      "en": "The same selected power qualified at four and eight hours on the tested grid, with success decreasing from 295/300 to 292/300 in every configuration; one-sided 95% probability lower bounds were 0.9662 and 0.9533. Zero-, two- and six-hour notice gave identical paired outcomes (Fig. 2b). Because jobs cannot execute before release and the baseline already processes available work eagerly, advance information created no extra pre-executable work in this setting.",
+      "zh": "在所测试网格中，相同选定功率均通过四小时与八小时资格检验，但各配置成功数均由 295/300 降至 292/300；单侧 95% 概率下界分别为 0.9662 和 0.9533。提前零、两和六小时通知得到相同的配对结果（图 2b）。由于作业不能在释放前执行，且基线已尽早处理可用工作，在这一设定下，提前信息并未增加可提前执行的工作。",
+      "id": "M023"
+    }
+  },
+  {
+    "id": "M024",
+    "before": {
+      "en": "![Figure 2](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_2.png)",
+      "zh": "![图 2](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_2.png)",
+      "id": "M024"
+    },
+    "after": {
+      "en": "![Figure 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_2.png)",
+      "zh": "![图 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_2.png)",
+      "id": "M024"
+    }
+  },
+  {
+    "id": "M027",
+    "before": {
+      "en": "We held work eligibility at 10% and tested four calls with a controller that enforces every overlapping recovery obligation. In the reference configuration—65% offered utilisation, reference deadlines and a 10% GPU pool—local refinement at 0.295-kW steps selected 5.60 kW for four-hour calls and 4.42 kW for eight-hour calls, both with 16-h start spacing. Under zero missed work, independent confirmation gave 297/300 and 296/300 successes, with one-sided 95% probability lower bounds of 0.9752 and 0.9706 (Fig. 3a). The 1% and zero-loss endpoints selected the same capacities. The earlier coarse-grid difference between those standards was therefore not a stable reference-capacity penalty (Supplementary Tables 14 and 18).",
+      "zh": "我们固定 10% 工作可参与，使用落实每项重叠恢复义务的控制器测试四次调用。在参考配置下，即工作供给利用率 65%、参考期限与 10% GPU 池，按约 0.295 kW 的步长局部加密后，四小时和八小时调用分别选择 5.60 和 4.42 kW，开始间隔均为 16 h。按零漏期工作标准，独立确认分别成功 297/300 和 296/300，单侧 95% 概率下界为 0.9752 和 0.9706（图 3a）。1% 与零损失终点选择了相同容量。因此，早期粗网格中两种标准的差别不能作为稳定的参考容量惩罚（补充表 14、18）。",
+      "id": "M027"
+    },
+    "after": {
+      "en": "At 10% work eligibility, we tested four calls using a controller that enforces every overlapping recovery obligation. In the reference configuration—65% offered utilisation, reference deadlines and a 10% GPU pool—the four- and eight-hour offers were 5.60 and 4.42 kW, both with 16-h start spacing. When successful series required zero missed work, independent confirmation gave 297/300 and 296/300 successes, with one-sided 95% probability lower bounds of 0.9752 and 0.9706 (Fig. 3a). Both the 1% and zero-miss standards selected these capacities on the local grid (Supplementary Table 18). Their agreement provides no basis for applying a uniform capacity discount solely because the success criterion becomes stricter.",
+      "zh": "在 10% 工作允许参与时，我们使用落实每项重叠恢复义务的控制器测试四次调用。在参考配置下，即工作供给利用率 65%、参考期限和 10% GPU 池，四小时与八小时报价分别为 5.60 和 4.42 kW，调用开始间隔均为 16 h。当一次序列必须零漏期才能判为成功时，独立确认成功数分别为 297/300 和 296/300，单侧 95% 概率下界为 0.9752 和 0.9706（图 3a）。1% 与零漏期标准在局部网格上均选择这些容量（补充表 18）。两者一致的结果不支持仅因成功标准变严格，就施加统一的容量折减。",
+      "id": "M027"
+    }
+  },
+  {
+    "id": "M023_limits",
+    "action": "compressed_or_relocated",
+    "before": {
+      "id": "M023_limits",
+      "en": "Failure diagnosis required a separate feasibility test. At the unchanged 5.90-kW request, selected same-scenario comparisons revealed three distinct limits (Fig. 3b; Supplementary Table 19). Some baseline hours contained too little flexible power to supply 95% of the request even with all flexible execution stopped. In a reference scenario that passed this necessary condition, the causal controller failed but a full-information schedule met every electrical obligation with zero missed work. Halving that scenario’s deadline slack made the request infeasible under the same delivery and recovery criteria; doubling GPU allocation did not restore feasibility. The broader structural tests also retained an unchanged electrical outcome for the last call when earlier calls were removed at a matched clock time (Supplementary Fig. 3; Supplementary Table 15). Thus, neither a controller failure nor a repeated-call failure alone identifies the underlying capacity limit.",
+      "zh": "解释失败需要单独检验可行性。在保持 5.90 kW 请求不变的同场景对照中，我们辨明三种不同限制（图 3b；补充表 19）。一些基线小时中的灵活功率过少，即使全部停止灵活执行，也无法交付请求的 95%。在通过这一必要条件的一个参考场景中，因果控制器失败，但完整未来信息下存在满足全部电力义务且零漏期的调度。将同一场景的期限余量减半后，在相同交付与恢复判据下请求变为不可行；GPU 分配加倍也未恢复可行性。更广泛的结构检验还保留了一个结果：在对齐时刻后，去掉先前调用并不改变末次调用的电力结果（补充图 3；补充表 15）。因此，仅凭控制器失败或重复调用失败，都不能判定其背后的容量限制。"
+    }
+  },
+  {
+    "id": "M023_timing",
+    "before": {
+      "id": "M023_timing",
+      "en": "The timing tests locate a further transfer limit. In the earlier eight-week submission-count test, the 4.42-kW request succeeded in 63/80 chronological realisations under either the 1% or zero-loss score; every one of its 17 failures triggered immediate supply shortage. At 2.95 kW, both scores gave 80/80 (Fig. 3c). In a new matched test, replacing hourly job counts with observed task resource-time weights reduced success at the unchanged 2.95-kW request from 80/80 to 31/80; the remaining 49 realisations all encountered immediate shortage. At 4.42 kW, every resource-time-weighted chronological realisation encountered shortage and failed, whereas count weighting gave 61/80 successes at 1% and 60/80 at zero loss (Fig. 3d). All no-response baselines met the zero-loss service criterion. These comparisons held weekly work totals fixed: temporal concentration and low-supply hours, rather than total eligible work or an infeasible baseline, prevented transfer (Supplementary Table 20).",
+      "zh": "时序测试揭示了进一步的适用边界。在早期八周提交次数测试中，4.42 kW 请求在原序下按 1% 或零损失评分均成功 63/80，其余 17 次失败全部触及即时供给不足；2.95 kW 在两种评分下均为 80/80（图 3c）。在新的配对测试中，将逐小时任务次数替换为实际任务资源时间权重后，同一个 2.95 kW 请求的成功数从 80/80 降至 31/80，其余 49 次全部出现即时不足。4.42 kW 在资源时间加权的全部原序实现中均触及不足并失败，而次数加权下按 1% 和零损失分别成功 61/80、60/80（图 3d）。所有无响应基线均满足零损失服务标准。这些比较保持各周工作总量不变：阻止结果适用的是时间上的集中与供给低谷，而非总可参与工作量或本身不可行的基线（补充表 20）。"
+    },
+    "after": {
+      "id": "M023_timing",
+      "en": "These reference offers did not establish transfer to a different workload representation. In eight observed weeks, the fixed 2.95-kW request passed 80/80 chronological submission-count-weighted realisations but only 31/80 matched task-resource-time-weighted realisations (Fig. 3c,d). Weekly class totals, synthetic service rules, community profiles and event clocks were held fixed. All no-response baselines met zero-miss service. The 49 resource-time failures therefore arose under response commitments in otherwise service-feasible scenarios, rather than from more total eligible work or an infeasible baseline.",
+      "zh": "这些参考报价并不确立其对另一种工作负载表征的适用性。在八个实际观察周中，固定 2.95 kW 请求在原序提交次数加权下成功 80/80，在配对任务资源时间加权下仅成功 31/80（图 3c,d）。各类别周总工作量、合成服务规则、社区曲线与事件时刻均保持一致。全部无响应基线满足零漏期服务。因此，49 次资源时间失败发生于本来能够满足服务的情景加入响应承诺后，不能归因于总可参与工作量增加或基线本身不可行。"
+    }
+  },
+  {
+    "id": "M028",
+    "before": {
+      "en": "![Figure 3](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_3.png)",
+      "zh": "![图 3](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_3.png)",
+      "id": "M028"
+    },
+    "after": {
+      "en": "![Figure 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_3.png)",
+      "zh": "![图 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_3.png)",
+      "id": "M028"
+    }
+  },
+  {
+    "id": "M029",
+    "before": {
+      "en": "### PV hosting gains need not imply substantial utilisation gains",
+      "zh": "### 光伏接纳容量增加不等于利用率显著提高",
+      "id": "M029"
+    },
+    "after": {
+      "en": "### Supply and feasibility checks identify what a failed request requires",
+      "zh": "### 供给与可行性检查识别失败请求需要怎样调整",
+      "id": "M029"
+    }
+  },
+  {
+    "id": "M030",
+    "before": {
+      "en": "At the fixed 576-GPU installation, flexibility increased all-scenario PV hosting by 2.82, 5.40 and 10.36 kW at 5%, 10% and 20% eligibility without BESS (Fig. 4a; Supplementary Table 6). In the 10% case, however, a fixed 500-kW PV installation gained only 0.0057 percentage points of local utilisation (95% paired interval, 0.0019–0.0106; Fig. 4b). Additional installed capacity and improved use of an existing installation are therefore distinct benefits.",
+      "zh": "在固定 576 个 GPU 的安装规模下，无电池储能时，5%、10% 和 20% 工作可延后分别使全情景光伏接纳边界增加 2.82、5.40 和 10.36 kW（图 4a；补充表 6）。但在 10% 情景中，对固定 500 kW 光伏装机的本地利用率，增益仅为 0.0057 个百分点（95% 配对区间为 0.0019–0.0106；图 4b）。因此，增加可安装容量与提高既有装机利用程度是不同的收益。",
+      "id": "M030"
+    },
+    "after": {
+      "en": "An instantaneous supply screen explained the electrical failures. For each event hour, we compared the matched baseline power available above community and idle-plus-rigid demand with 95% of the request. A deficit makes successful delivery impossible in that hour, even if all flexible execution stops. All 49 chronological resource-time failures at 2.95 kW met this condition; after permutation, it affected 25 realisations (Fig. 4a,b). The paired changes included both removal and creation of shortages. A non-negative margin is necessary but insufficient: one of the 55 permuted resource-time realisations without shortage still failed the zero-miss endpoint.",
+      "zh": "即时供给检查解释了电力交付失败。对每个事件小时，我们将匹配基线中高于社区需求、空闲及刚性功耗的可削功率，与请求的 95% 比较。若存在缺口，即便停止全部灵活执行，该小时仍不可能成功交付。2.95 kW 原序资源时间测试的全部 49 次失败均满足这一条件；置乱后，该条件涉及 25 个实现（图 4a,b）。配对变化既包括消除缺口，也包括产生新的缺口。非负余量只是必要条件，并不足以保证成功：在置乱后没有即时不足的 55 个资源时间实现中，仍有一个未通过零漏期终点。",
+      "id": "M030"
+    }
+  },
+  {
+    "id": "M031",
+    "before": {
+      "en": "With BESS, the 10% hosting gain was 5.22 kW and the utilisation contrast was unresolved at the configured mixed-integer optimisation precision. Small signed storage contrasts remain in Source Data; sampling intervals exclude optimisation error. All renewable results used full future information, zero missed work and separately optimised schedules. They establish conditional planning benefits rather than outcomes demonstrated by the causal response controller.",
+      "zh": "有电池储能时，10% 情景的接纳容量增益为 5.22 kW，而利用率差异在所设混合整数优化精度下无法辨明。源数据保留了这些很小的有符号储能差值；抽样区间不包含优化误差。全部可再生能源结果均采用完整未来信息、零工作期限违约和单独优化的调度。因此，它们体现条件性的规划收益，尚不是因果响应控制器已实现的效果。",
+      "id": "M031"
+    },
+    "after": {
+      "en": "Strict task-window feasibility then distinguished failures beyond that supply condition. At a fixed 5.90-kW request, a reference scenario that passed the supply screen failed under causal control but admitted a full-information schedule meeting all electrical obligations with zero missed work (Fig. 3b; Supplementary Table 19). Halving its deadline slack made the request infeasible under the same delivery and recovery criteria; doubling GPU allocation did not restore feasibility. Each variant used its own matched baseline. The feasible reference case leaves room for controller improvement, whereas proven infeasibility calls for changing the request or operating terms. Neither finding follows from the causal failure alone.",
+      "zh": "随后，严格任务时间窗可行性区分了即时供给条件之外的失败。在固定 5.90 kW 请求下，一个通过供给检查的参考情景在因果控制下失败，却存在满足全部电气义务且零漏期的完整信息调度（图 3b；补充表 19）。将其期限余量减半后，在相同交付和恢复判据下，请求变为不可行；将 GPU 分配加倍也没有恢复可行性。各变体采用各自匹配的基线。参考情景的可行解说明仍有改进控制器的空间，而已证明的不可行则要求改变请求或运行条款。这两种判断都不能仅从因果控制失败得出。",
+      "id": "M031"
+    }
+  },
+  {
+    "id": "M033",
+    "before": {
+      "en": "![Figure 4](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_4.png)",
+      "zh": "![图 4](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_4.png)",
+      "id": "M033"
+    },
+    "after": {
+      "en": "![Figure 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_4.png)",
+      "zh": "![图 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_4.png)",
+      "id": "M033"
+    }
+  },
+  {
+    "id": "M034",
+    "before": {
+      "en": "### GPU allocation and rigid-load power affect different parts of the assessment",
+      "zh": "### GPU 分配与刚性功率影响评估的不同部分",
+      "id": "M034"
+    },
+    "after": {
+      "en": "### Allocation changes system value without necessarily increasing the offer",
+      "zh": "### 分配可以改变系统价值，而不一定提高报价",
+      "id": "M034"
+    }
+  },
+  {
+    "id": "M035",
+    "before": {
+      "en": "At fixed 10% eligibility, increasing the flexible GPU allocation from 10% to 20% or 30% left the four- and eight-hour relaxed PI statistics at 5.78 and 5.57 kW (Fig. 5a). The unchanged 5.90-kW controller offer also retained 295/300 and 292/300 successes. Extra processing headroom did not supply extra eligible arrivals at the call time. This isolates the allocation effect around the low-eligibility configuration and prevents the primary matching rule from being mistaken for a pure eligibility-only experiment.",
+      "zh": "固定 10% 资格时，将灵活 GPU 分配由 10% 增至 20% 或 30%，四/八小时 放松 PI 统计量仍为 5.78 和 5.57 kW（图 5a）。不变的 5.90 kW 控制器承诺也保持 295/300 和 292/300 的成功数。额外处理余量没有增加调用时已释放的合格工作。这一对照在低资格配置附近单独识别分配影响，避免将主体匹配规则误认为纯资格单因素实验。",
+      "id": "M035"
+    },
+    "after": {
+      "en": "At fixed 10% work eligibility, increasing flexible GPU allocation from 10% to 20% or 30% left the tested 5.90-kW single-event offer at 295/300 four-hour and 292/300 eight-hour successes. The corresponding relaxed-PI tolerance statistics were also unchanged (Fig. 5a; Supplementary Fig. 4c). Reducing the rigid-class active-power proxy from 300 to 225 or 150 W per GPU preserved these baseline-relative responses but changed operating peak demand from 193.44 to 173.53 or 153.63 kW (Fig. 5b). Thus, eligible arrivals constrained this response, while rigid power remained relevant to facility demand and proportional cost accounting (Fig. 5c,d).",
+      "zh": "在固定 10% 工作允许参与时，将灵活 GPU 分配由 10% 提高至 20% 或 30%，所测试的 5.90 kW 单次报价仍保持四小时 295/300、八小时 292/300 成功。相应的放松 PI 容忍统计量也未改变（图 5a；补充图 4c）。将刚性类别活动功率代理从每 GPU 300 W 降至 225 或 150 W，未改变这些相对基线的响应，却使运行峰值需求从 193.44 kW 变为 173.53 或 153.63 kW（图 5b）。因此，可参与工作的到达约束了这一响应，而刚性功率仍影响设施需求与比例成本核算（图 5c,d）。",
+      "id": "M035"
+    }
+  },
+  {
+    "id": "M036",
+    "before": {
+      "en": "Reducing the unmeasured rigid-class active-power proxy from 300 to 225 or 150 W per GPU also left these baseline-relative offers and success counts unchanged (Fig. 5b; Supplementary Fig. 4). The proxy instead changed the operating-peak coefficient from 193.44 to 173.53 or 153.63 kW. Constant rigid consumption cancels in the paired reduction, but it remains part of facility demand, PV integration and proportional economic accounting. An unchanged response estimate therefore does not make the rigid-power assumption irrelevant.",
+      "zh": "将未测刚性类别的活动功率代理由每 GPU 300 W 降至 225 W 或 150 W，也没有改变这些相对基准的承诺及成功数（图 5b；补充图 4），但运行峰值系数从 193.44 kW 降至 173.53 或 153.63 kW。恒定刚性用电在配对削减量中相消，却仍影响设施需求、光伏配合及按比例经济核算。因此，响应估计不变并不意味着刚性功率假设无关。",
+      "id": "M036"
+    },
+    "after": {
+      "en": "The same allocation could matter more for a different service. At 10% eligibility, raising the flexible GPU share from 10% to 20% increased the no-BESS PV hosting gain from 5.40 to 24.99 kW (Supplementary Fig. 4d). The primary 10% case nevertheless improved utilisation of a fixed 500-kW PV installation by only 0.0057 percentage points (95% paired interval, 0.0019–0.0106; Supplementary Fig. 4a,b). Hosting and utilisation therefore measure different benefits. All PV comparisons used separate full-information schedules; small storage contrasts remained limited by solver precision (Supplementary Table 6).",
+      "zh": "相同分配对另一种服务可能更重要。在 10% 工作参与比例下，将灵活 GPU 比例由 10% 提高至 20%，使无储能光伏接纳增量由 5.40 kW 增至 24.99 kW（补充图 4d）。然而，主要 10% 情景对固定 500 kW 光伏设施利用率的提高仅为 0.0057 个百分点（95% 配对区间 0.0019–0.0106；补充图 4a,b）。因此，接纳容量与利用率衡量不同收益。全部光伏比较采用独立的完整信息调度；微小储能差异仍受求解精度限制（补充表 6）。",
+      "id": "M036"
+    }
+  },
+  {
+    "id": "M037",
+    "action": "compressed_or_relocated",
+    "before": {
+      "en": "Allocation nevertheless changed local grid value: assigning 20% of GPUs to the flexible pool increased the no-BESS PV hosting gain from 5.40 to 24.99 kW at unchanged 10% work eligibility (Supplementary Fig. 4). Cost controls retained each configuration's complete ledger and its own operating peak (Fig. 5c,d; Supplementary Table 8). At the proportional 1-MW accounting scale, a changed peak also changes the number of reference modules represented; these cost contrasts do not measure GPU procurement. The selected controls do not cover simultaneous changes in arrival correlations, deadlines, online-serving dynamics and all prices.",
+      "zh": "分配仍改变了本地电网价值：工作资格维持 10%，将 20% GPU 分给灵活池，使无储能光伏承载增量由 5.40 增至 24.99 kW（补充图 4）。成本对照保留各配置完整账本及自身运行峰值（图 5c、d；补充表 8）。在按比例换算的 1 MW 会计尺度下，峰值变化也改变所代表的参考模块数量；这些成本差异不测量 GPU 采购。选定对照未覆盖到达相关性、截止时间、在线服务动态与全部价格的同时变化。",
+      "id": "M037"
+    }
+  },
+  {
+    "id": "M038",
+    "before": {
+      "en": "![Figure 5](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_5.png)",
+      "zh": "![图 5](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_5.png)",
+      "id": "M038"
+    },
+    "after": {
+      "en": "![Figure 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_5.png)",
+      "zh": "![图 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_5.png)",
+      "id": "M038"
+    }
+  },
+  {
+    "id": "M040",
+    "before": {
+      "en": "Access and operating costs answer different participation questions. In the original 10% eligibility, four-hour single-event case, US$819.90 of the US$863.26 per offered kW-year threshold came from the assumed US$25,000 annual site fee—about 95% (Supplementary Table 17). That low-eligibility unit-cost penalty was primarily fee allocation. We therefore compared the complete response-and-recovery ledgers of the newly qualified duration products separately from access charges. All amounts use a proportional 1-MW accounting scale and retain failed confirmation trajectories.",
+      "zh": "接入成本与运行成本回答不同的参与问题。在原有 10% 工作可参与、四小时单次事件情景中，每报价 kW 每年 863.26 美元的门槛，有 819.90 美元来自假定的每年 25,000 美元场站费用，约占 95%（补充表 17）。这一低参与比例下的单位成本惩罚主要由费用分摊造成。因此，我们将新合格时长产品的完整响应与恢复账本同接入费用分开比较。全部金额按比例折算至 1 MW 核算规模，且保留确认中的失败轨迹。",
+      "id": "M040"
+    },
+    "after": {
+      "en": "Once a duration product qualified, its operating exposure and access charges could be valued separately. In the 10% eligibility single-event case, the assumed US$25,000 annual site fee accounted for about 95% of the US$863.26 per offered kW-year threshold (Supplementary Table 17). To distinguish fee allocation from operating consequences, we compared complete response-and-recovery ledgers for the qualified repeated products. All amounts use proportional 1-MW accounting and retain failed confirmation trajectories.",
+      "zh": "时长产品通过资格检验后，其运行暴露与接入费用可以分别估值。在 10% 工作参与比例的单次事件情景中，假定每年 25,000 美元的场站费解释了每报价 kW·年 863.26 美元门槛的约 95%（补充表 17）。为区分费用分摊和实际运行后果，我们比较了合格重复产品完整的响应与恢复账本。全部金额按比例折算至 1 MW，并保留确认中的失败轨迹。",
+      "id": "M040"
+    }
+  },
+  {
+    "id": "M041",
+    "before": {
+      "en": "For the locally refined zero-loss products, mean additional waiting exposure per four-call series was 16,491 GPU-h×h for four-hour calls and 24,509 GPU-h×h for eight-hour calls (Fig. 6a; Supplementary Table 21). These are quantities to be valued by the operator. At the illustrative waiting price of US$0.005/GPU-h/h and twelve independent series per year, the no-fixed-fee thresholds were US$183.30 and 330.11 per offered accounting kW-year, respectively (Fig. 6b,c). Their capacity difference and waiting exposure explain the conditional cost comparison; neither has been measured as an operator’s willingness to accept.",
+      "zh": "对局部加密后的零损失产品，每组四次调用的平均额外等待暴露，四小时产品为 16,491 GPU-h×h，八小时产品为 24,509 GPU-h×h（图 6a；补充表 21）。这些是需要运营者定价的运行量。在示例等待价格每 GPU-h 每小时 0.005 美元、每年十二组独立序列下，无固定费补偿门槛分别为每报价核算 kW 每年 183.30 和 330.11 美元（图 6b,c）。所选容量的差别与等待暴露解释了这一条件性成本比较；两者均未被测量为运营者的实际接受意愿。",
+      "id": "M041"
+    },
+    "after": {
+      "en": "For the four- and eight-hour products qualified with a zero-miss success criterion, mean additional waiting exposure per four-call series was 16,491 and 24,509 GPU-h×h, respectively (Fig. 6a; Supplementary Table 21). At the illustrative waiting price of US$0.005/GPU-h/h and twelve independent series per year, the no-fixed-fee thresholds were US$183.30 and 330.11 per offered accounting kW-year (Fig. 6b,c). Their capacity difference and waiting exposure explain this conditional comparison; the valuations have not been measured as an operator’s willingness to accept.",
+      "zh": "对于采用零漏期成功判据通过资格检验的四小时与八小时产品，每组四次调用的平均额外等待暴露分别为 16,491 和 24,509 GPU-h×h（图 6a；补充表 21）。采用每 GPU-h 每小时 0.005 美元的示例等待价格，并假设每年十二组独立序列，无固定费用门槛分别为每报价核算 kW·年 183.30 和 330.11 美元（图 6b,c）。容量差异与等待暴露解释了这一条件性比较；这些估值尚不是运营者接受意愿的实测结果。",
+      "id": "M041"
+    }
+  },
+  {
+    "id": "M042",
+    "before": {
+      "en": "At equal illustrative capacity prices of US$250 per kW-year and zero site fee, the four-hour product’s fifth-percentile annual net value was US$1,932, compared with −US$1,832 for eight hours. For the eight-hour product to match the four-hour product conditional on participation, its price must exceed 1.267 times the four-hour price plus US$97.93 per kW-year; the full boundary also requires non-negative net value (Fig. 6d). The coefficient follows the refined capacity ratio, replacing the coarse-grid value of 1.5. When waiting has no incremental price, the equal-price ranking reverses below approximately US$25.57 per kW-year (Supplementary Fig. 5). A shared fee can change whether either option beats non-participation, but a common fee cancels between participating products.",
+      "zh": "在两种产品容量价格均为每 kW 每年 250 美元、且没有场站费的示例下，四小时产品的年度净值第五百分位为 1,932 美元，八小时为 −1,832 美元。若比较两种参与方案，八小时产品价格须超过四小时价格的 1.267 倍再加每 kW 每年 97.93 美元，才能优于四小时；完整边界还要求净值非负（图 6d）。该系数来自加密后的所选容量比，替代粗网格中的 1.5。当等待没有增量价格时，等价支付下的产品排序在约每 kW 每年 25.57 美元以下反转（补充图 5）。共享费用可以改变某种产品是否优于不参与，但两个参与产品承担的共同费用在相互比较时抵消。",
+      "id": "M042"
+    },
+    "after": {
+      "en": "At equal illustrative capacity prices of US$250 per kW-year and zero site fee, the four-hour product’s fifth-percentile annual net value was US$1,932, compared with −US$1,832 for eight hours. Conditional on participation, equal value requires an eight-hour price of 1.267 times the four-hour price plus US$97.93 per kW-year; the full boundary also requires non-negative net value (Fig. 6d). The coefficient is the ratio of the selected capacities. When waiting has no incremental price, the equal-price ranking reverses below approximately US$25.57 per kW-year (Supplementary Fig. 5). A shared fee can change whether either option beats non-participation, but a common fee cancels between participating products.",
+      "zh": "在两种产品容量价格同为每 kW·年 250 美元、且场站费为零的示例下，四小时产品年度净值的第五百分位为 1,932 美元，八小时为 −1,832 美元。以参与为条件，两者价值相等要求八小时价格等于四小时价格的 1.267 倍，再加每 kW·年 97.93 美元；完整边界还要求净值非负（图 6d）。该系数等于所选容量之比。当等待没有增量价格时，相同价格下的排序在约每 kW·年 25.57 美元以下反转（补充图 5）。共享费用可以改变任一选择是否优于不参与，但共同费用在参与产品之间比较时抵消。",
+      "id": "M042"
+    }
+  },
+  {
+    "id": "M044",
+    "before": {
+      "en": "![Figure 6](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_6.png)",
+      "zh": "![图 6](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Figure_6.png)",
+      "id": "M044"
+    },
+    "after": {
+      "en": "![Figure 6](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_6.png)",
+      "zh": "![图 6](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_6.png)",
+      "id": "M044"
+    }
+  },
+  {
+    "id": "M046",
+    "before": {
+      "en": "The main operational finding is that preserving how often jobs arrive can still overstate the transferability of a grid commitment. At unchanged weekly eligible work, a 2.95-kW request passed every chronological submission-count realisation but failed in 49 of 80 matched resource-time-weighted realisations. Each failed realisation contained an hour in which the baseline itself offered too little reducible power. This identifies a concrete decision error: accepting a contract because it passed a count-based workload test, despite inadequate power in the workload’s low-supply hours. The result connects production workload characterisation<sup>20,28</sup> to the commitment question raised by field demonstrations<sup>3</sup> and scheduling studies.<sup>5–19</sup>",
+      "zh": "最主要的运行发现是：即便保留作业到达次数，仍可能高估电网承诺的适用性。保持各周可参与工作总量不变时，2.95 kW 请求在所有原序提交次数实现中通过，却在 80 个配对的资源时间加权实现中失败 49 次。每个失败实现都存在一个基线本身无法提供足够可削功率的小时。这识别出一种具体决策错误：仅因合同通过次数驱动的工作负载测试便接受它，尽管实际工作量的供给低谷不足以履约。该结果将生产工作负载描述<sup>20,28</sup>与现场展示<sup>3</sup>及调度研究<sup>5–19</sup>提出的承诺问题联系起来。",
+      "id": "M046"
+    },
+    "after": {
+      "en": "The main finding is a failure of commitment transfer that a submission-count test did not reveal. Matching weekly work totals was insufficient when task resource-time exposed low-supply hours. Permuting hourly blocks improved delivery but left a substantial gap to count-weighted profiles. The comparison therefore separates the choice of workload weights from hourly order and alignment, while leaving their joint effect explicit. It identifies a concrete decision error: accepting a request on the basis of a simplified workload replay whose reducible-power supply does not represent the workload to which the commitment will apply. This connects production workload characterisation<sup>20,28</sup> to the operational commitment question raised by field demonstrations<sup>3</sup> and scheduling studies.<sup>5–19</sup>",
+      "zh": "主要发现是提交次数测试未能揭示的承诺迁移失败。当任务资源时间暴露出供给低谷时，每周工作总量匹配仍不足以确保交付。置乱小时块改善了交付，但与次数加权曲线相比仍存在明显差距。因此，这一比较区分了工作量权重选择与小时顺序及对齐，同时明确保留两者的共同影响。它识别一种具体决策错误：依据简化工作负载重放接受请求，而该重放中的可削功率供给并不能代表承诺实际适用的工作负载。这将生产工作负载表征<sup>20,28</sup>与现场演示<sup>3</sup>及调度研究<sup>5–19</sup>提出的运行承诺问题联系起来。",
+      "id": "M046"
+    }
+  },
+  {
+    "id": "M047",
+    "before": {
+      "en": "A failed controller test also requires care in deciding what to change. The same-scenario checks distinguish a necessary instantaneous shortage from a deadline-constrained infeasible programme and from a failure for which a feasible full-information schedule exists. Only the last points directly to unused scheduling or information opportunities; it does not by itself establish a realizable causal policy. Conversely, adding GPU capacity cannot repair a shortage of reducible baseline power and did not restore the tight-deadline diagnostic. Local grid refinement further showed that the earlier reference derating under zero loss was not stable. Commitment choices must therefore rest on independently tested requests and explicit failure mechanisms, rather than a universal penalty assigned to stricter service.",
+      "zh": "面对控制器测试失败，决定改变什么也需要谨慎。同场景核查区分了必要的即时不足、受期限限制而不可行的方案，以及存在完整未来信息可行调度的控制失败。只有最后一种直接指向尚未利用的调度或信息机会；它本身仍不证明存在可实现的因果策略。相反，新增 GPU 容量无法修补基线可削功率不足，也没有恢复紧期限诊断中的可行性。局部网格加密还说明，早期参考情景中零损失导致的降档并不稳定。因此，承诺选择必须依据独立测试的请求与明确的失败机制，而非给更严格服务附加一个普遍容量惩罚。",
+      "id": "M047"
+    },
+    "after": {
+      "en": "The diagnosis also determines what can usefully change. An instantaneous deficit rules out successful delivery in the affected hour. If that condition passes, strict task-window infeasibility and a feasible PI schedule with causal failure require different responses: revise operating terms in the first case, investigate control and information limits in the second. These scenario-level findings must then be assessed through the declared probabilistic qualification rule. More GPUs, a stricter service label or a low estimated price cannot substitute for that sequence of evidence.",
+      "zh": "诊断还决定哪些调整有意义。即时缺口排除了受影响小时成功交付的可能。若通过这一条件，严格任务时间窗不可行与 PI 可行但因果控制失败需要不同处理：前者需要修改运行条款，后者值得调查控制与信息限制。随后，这些情景层面的发现仍须通过声明的概率性资格规则进行评估。更多 GPU、更严格的服务标签或较低的估计价格，都不能替代这一证据顺序。",
+      "id": "M047"
+    }
+  },
+  {
+    "id": "M048",
+    "action": "compressed_or_relocated",
+    "before": {
+      "en": "Other system effects remain service-specific. Authorising 5–20% of work supported single-event offers of 2.95–11.80 kW in the reference model, while broader permissions required additional business assumptions. At fixed permission, a larger flexible GPU pool increased PV hosting without increasing the tested demand-response offer. Additional PV capacity and improved use of an existing installation are separate planning benefits,<sup>23–27</sup> just as constant rigid power can cancel in a baseline-relative response while remaining relevant to facility demand and cost scaling.",
+      "zh": "其他系统影响仍取决于具体服务。在参考模型中，授权 5%–20% 工作参与支持 2.95–11.80 kW 的单次事件报价，更宽参与许可需要额外业务假设。在固定工作许可下，更大的灵活 GPU 池提高了光伏接纳量，却没有提高所测需求响应报价。增加光伏装机与改善现有装机利用程度是不同的规划收益；<sup>23–27</sup> 同样，恒定刚性功率虽然在相对基线的响应中抵消，却仍影响设施需求与成本折算。",
+      "id": "M048"
+    }
+  },
+  {
+    "id": "M049",
+    "before": {
+      "en": "Economic assessment should expose the operating quantities before assigning prices. Waiting and missed-work exposure can be inspected independently of their valuations. The preferred duration can change when waiting is free, while a common access fee affects entry rather than the ranking of two participating services. Comparing annual net values, including non-participation, avoids confusing a small unit-cost threshold with the most valuable contract. The refined capacity ratio changes the tariff boundary as well, so an economic coefficient should not be reported more precisely than the operating choice on which it depends.",
+      "zh": "经济评估应先展示运行量，再赋予价格。等待与漏期暴露可以独立于估值进行检查。当等待免费时，优选时长可能改变；共同接入费用则影响是否进入市场，而非两个参与服务的相对排序。比较包括不参与在内的年度净值，可以避免把较低单位成本门槛误认为最有价值的合同。加密后的容量比也改变了补偿边界，因此经济系数的解释不能比它所依赖的运行选择更精确。",
+      "id": "M049"
+    },
+    "after": {
+      "en": "Economic assessment follows qualification and exposes quantities before assigning prices. Waiting and missed-work exposure remain inspectable independently of their valuations. The preferred duration can change when waiting is free, whereas a common access fee affects entry rather than the ranking of participating products. Comparing annual net values with non-participation avoids confusing a low unit-cost threshold with the most valuable contract. The capacity ratio and stated valuations determine the price boundary, whose use remains conditional on the workload for which delivery was qualified.",
+      "zh": "经济评估在资格检验之后开展，并先展示数量再赋予价格。等待与漏期工作暴露可以独立于估值检查。当等待免费时，偏好的时长可以改变；共同接入费则影响是否进入，而不改变参与产品间的排序。将年度净值与不参与比较，可以避免把较低单位成本门槛误当成最有价值的合同。容量比和指定估值决定价格边界，而这一边界仍只适用于已取得交付资格的工作负载。",
+      "id": "M049"
+    }
+  },
+  {
+    "id": "M051",
+    "before": {
+      "en": "The evidence is conditional on hourly divisible work, synthetic deadlines and permissions, a fixed rigid-load proxy and a small board-power calibration. Observed task resource-time preserves submission-weight heterogeneity but is not sensor-measured GPU activity, production deadlines or application pause–checkpoint–restart validation. Eight observed weeks with ten synthetic realisations each are not 80 independent production weeks. The earlier PI statistics are relaxed planning envelopes; the new exact-window feasibility checks establish scenario-level possibilities and impossibilities, not a causal capacity certificate. Qualification bounds are pointwise, candidate grids are finite and annual accounts combine independent series. These limits define where the reported commitment and price comparisons can be used.",
+      "zh": "证据以小时级可分割工作、合成期限与许可、固定刚性负荷代理和小规模板卡功率标定为条件。实际任务资源时间保留提交权重的异质性，但不等于传感器测得的 GPU 忙碌活动、生产期限或应用暂停—检查点—重启验证。八个观察周各十次合成实现，不等于八十个独立生产周。早期 PI 统计量属于放松模型的规划界限；新增严格作业时间窗可行性检验建立的是情景内的可能与不可能，而非因果容量资格。资格概率界为逐项保证，候选网格有限，年度核算组合独立序列。这些限制界定了承诺与价格比较的适用范围。",
+      "id": "M051"
+    },
+    "after": {
+      "en": "The evidence is conditional on hourly divisible work, synthetic deadlines and permissions, a fixed rigid-load proxy and a small board-power calibration. Observed task resource-time preserves submitted workload-size heterogeneity but is not sensor-measured GPU activity or application pause–checkpoint–restart validation. Hour permutation changes temporal dependence and alignment with calls and community demand together. Eight observed weeks with ten synthetic realisations each are not 80 independent production weeks. Relaxed-PI tolerance statistics do not guarantee work-group feasibility; exact-window diagnostics establish scenario-level possibilities and impossibilities, not causal capacity. Qualification bounds are pointwise, candidate grids are finite and annual accounts combine independent series. These conditions delimit the commitment and price comparisons.",
+      "zh": "这些证据以小时级可分割工作、合成期限与许可、固定刚性负荷代理和小规模板卡功率校准为条件。观测任务资源时间保留了提交工作规模的异质性，但不等于传感器实测 GPU 活动，也不是应用暂停—检查点—恢复验证。小时置乱同时改变时间依赖及其与调用和社区需求的对齐。八个观察周各十次合成实现不等于八十个独立生产周。放松 PI 容忍统计量不保证工作组可行；严格时间窗诊断确立的是情景层面的可能与不可能，而非因果容量。资格概率界为逐项结果，候选网格有限，年度账本组合独立序列。这些条件界定了承诺与价格比较的适用范围。",
+      "id": "M051"
+    }
+  },
+  {
+    "id": "M077",
+    "before": {
+      "en": "### Planning bounds and independent certification",
+      "zh": "### 规划下界与独立认证",
+      "id": "M077"
+    },
+    "after": {
+      "en": "### Relaxed planning and independent qualification",
+      "zh": "### 放松规划与独立资格检验",
+      "id": "M077"
+    }
+  },
+  {
+    "id": "M078",
+    "before": {
+      "en": "The earlier PI programme maximised R under cumulative class-release and class-deadline constraints. These are necessary aggregate conditions, but are a relaxation when job windows cross: work executed for an earlier, later-deadline job can satisfy a cumulative due-work inequality for a different job. Its retained optima therefore define relaxed planning envelopes, not generally job-feasible capacities. Their second order statistic among 100 scenarios is a 95%/95% tolerance statistic of that relaxed quantity, with achieved confidence 0.96292.<sup>33</sup> It does not guarantee feasible work scheduling. Controller offers instead use completed queue simulations on independent seeds; their joint delivery-and-service probability is assessed by a one-sided 95% Wilson lower bound, required to reach 0.95.<sup>34,35</sup> The new feasibility diagnostics below use each work group’s own release and deadline.",
+      "zh": "早期 PI 程序在累计类别释放量与累计类别到期量约束下最大化 R。这些是必要的汇总条件，但当作业时间窗交叉时构成放松：为一个较早释放、较晚到期的作业完成的工作，可能满足另一个作业的累计到期不等式。因此，保留的最优值给出放松模型的规划界限，并非一般都能满足实际作业时间窗的容量。100 个情景中的第二顺序统计量，是该放松量在 95%/95% 条件下的容忍统计量，实际达到的置信度为 0.96292。<sup>33</sup> 它不保证存在可行作业调度。控制器报价则来自独立种子上的完整队列模拟；交付与服务联合概率用单侧 95% Wilson 下界评价，要求达到 0.95。<sup>34,35</sup> 以下新增可行性诊断使用每个工作组自身的释放时间与期限。",
+      "id": "M078"
+    },
+    "after": {
+      "en": "The aggregate PI programme maximised R under cumulative class-release and class-deadline constraints. These are necessary aggregate conditions, but are a relaxation when job windows cross: work executed for an earlier, later-deadline job can satisfy a cumulative due-work inequality for a different job. Its retained optima therefore define relaxed planning envelopes, not generally job-feasible capacities. Their second order statistic among 100 scenarios is a 95%/95% tolerance statistic of that relaxed quantity, with achieved confidence 0.96292.<sup>33</sup> It does not guarantee feasible work scheduling. Controller offers instead use completed queue simulations on independent seeds; their joint delivery-and-service probability is assessed by a one-sided 95% Wilson lower bound, required to reach 0.95.<sup>34,35</sup> The strict-window feasibility diagnostics use each work group’s own release and deadline.",
+      "zh": "累计 PI 程序在累计类别释放量与累计类别到期量约束下最大化 R。这些是必要的汇总条件，但当作业时间窗交叉时构成放松：为一个较早释放、较晚到期的作业完成的工作，可能满足另一个作业的累计到期不等式。因此，保留的最优值给出放松模型的规划界限，并非一般都能满足实际作业时间窗的容量。100 个情景中的第二顺序统计量，是该放松量在 95%/95% 条件下的容忍统计量，实际达到的置信度为 0.96292。<sup>33</sup> 它不保证存在可行作业调度。控制器报价则来自独立种子上的完整队列模拟；交付与服务联合概率用单侧 95% Wilson 下界评价，要求达到 0.95。<sup>34,35</sup> 以下新增可行性诊断使用每个工作组自身的释放时间与期限。",
+      "id": "M078"
+    }
+  },
+  {
+    "id": "M155",
+    "before": {
+      "en": "**a,** Locally refined offers at 10% eligibility, 65% offered utilisation, reference deadlines, 10% GPU allocation and four calls at 16-h start spacing. Points and lower whiskers are confirmation success fractions and one-sided 95% Wilson lower bounds (300 new seeds); labels give model capacity. Both service standards selected the same request for each duration. **b,** Zero-loss fixed-request diagnoses for the first three prespecified structural seeds at 5.90 kW. Counts distinguish instantaneous shortage, infeasibility after that necessary condition passes, a feasible PI schedule with causal failure, and feasibility with causal success; these are diagnostic cases, not frequencies in a population. **c,** Earlier eight-week chronological count test, cross-scored under both standards. Stacked segments show successes and instantaneous-shortage failures at 4.42 kW; the 2.95-kW request has 10/10 successes in every week under either score. **d,** New paired chronological count versus resource-time tests at 2.95 kW, with eight observed weeks and ten synthetic realisations per week. Every failure shown for resource-time weighting triggers instantaneous shortage; all baselines are zero-loss feasible. Work totals, synthetic deadline rules, community and event clocks are matched within each comparison. Source Data retain every trial and the prespecified candidate grid.",
+      "zh": "**a，** 在 10% 工作可参与、65% 工作供给利用率、参考期限、10% GPU 分配及四次调用开始间隔 16 h 条件下，局部加密后的报价。点与下须分别为确认成功率及单侧 95% Wilson 下界（300 个新种子）；标签给出模型容量。两种服务标准对每个时长选择相同请求。**b，** 对预先指定的前三个结构种子，在 5.90 kW 固定请求下进行零损失诊断。计数区分即时不足、通过该必要条件后的不可行、PI 可行而因果控制失败，以及 PI 可行且因果控制成功；这些是诊断条件，不是总体发生率。**c，** 早期八周原序次数测试在两种标准下交叉评分。堆叠部分显示 4.42 kW 的成功与即时不足失败；2.95 kW 在两种评分下每周均成功 10/10。**d，** 新配对原序次数与资源时间测试，固定 2.95 kW，八个实际观察周各十次合成实现。资源时间加权下所示每次失败均触发即时不足；所有基线均满足零损失。各对照内部匹配工作总量、合成期限规则、社区及事件时刻。源数据保留所有试验与事先指定的候选网格。",
+      "id": "M155"
+    },
+    "after": {
+      "en": "**a,** Independently confirmed offers at 10% eligibility, 65% offered utilisation, reference deadlines, 10% GPU allocation and four calls at 16-h start spacing. Points and lower whiskers are success fractions and one-sided 95% Wilson lower bounds (300 scenarios); capacity labels apply to both service standards. Zero missed work defines a successful series under the zero-miss criterion; qualification targets a 95% success probability. **b,** Zero-miss diagnoses at 5.90 kW for three prespecified seeds per configuration. Categories separate instantaneous shortage, other strict-window infeasibility, PI feasibility with causal failure and feasibility with causal success; these are mechanism cases, not population frequencies. **c,** Matched submission-count and task-resource-time tests at 2.95 kW in chronological and permuted hourly order, scored at both service standards. GPU-h labels denote task-resource-time weights. **d,** Chronological zero-miss success by observed week for both weights. Panels c,d include eight observed weeks and ten synthetic realisations per week; pooled counts are descriptive and have no binomial confidence bars. Each comparison preserves weekly class totals and uses matched service rules, community and event clocks. Permutation changes hourly order and alignment together. All no-response baselines pass zero-miss service; all 49 chronological resource-time failures encounter instantaneous shortage.",
+      "zh": "**a，** 在 10% 工作允许参与、65% 工作供给利用率、参考期限、10% GPU 分配及四次调用开始间隔 16 h 条件下，独立确认的报价。点和下须为成功比例与单侧 95% Wilson 下界（300 个情景）；容量标签适用于两种服务标准。零漏期判据规定一次成功序列不得有漏期工作；资格检验的整体成功概率目标为 95%。**b，** 每个配置三个预先指定种子在 5.90 kW 下的零漏期诊断。类别区分即时不足、其他严格时间窗不可行、PI 可行但因果控制失败，以及 PI 可行且因果控制成功；这些是机制案例，不是总体频率。**c，** 固定 2.95 kW 的配对次数和任务资源时间测试，分别采用原序与置乱小时顺序，并按两种服务标准评分。GPU-h 标签表示任务资源时间权重。**d，** 两种权重在原序下逐观察周的零漏期成功数。c,d 包括八个观察周、每周十次合成实现；合并计数为描述性结果，不绘制二项置信条。各比较保留类别周工作总量并匹配服务规则、社区及事件时刻。置乱同时改变小时顺序和对齐。全部无响应基线通过零漏期服务；原序资源时间的全部 49 次失败均遇到即时不足。",
+      "id": "M155"
+    }
+  },
+  {
+    "id": "M156",
+    "before": {
+      "en": "### Figure 4 | PV hosting and utilisation across eligibility scenarios",
+      "zh": "### 图 4 | 不同资格下的光伏承载与利用率",
+      "id": "M156"
+    },
+    "after": {
+      "en": "### Figure 4 | Supply margins and the decisions behind a commitment",
+      "zh": "### 图 4 | 供给余量与承诺背后的决策",
+      "id": "M156"
+    }
+  },
+  {
+    "id": "M157",
+    "before": {
+      "en": "**a,** Flexible-minus-rigid all-scenario PV hosting gain at at most 5% curtailment. Each boundary is the minimum of 100 scenario capacities; the plotted difference of minima is not a mean effect and has no sampling-error bar. **b,** Mean paired change in PV utilisation for a fixed 500-kW installation, in percentage points, with pointwise 95% intervals from 10,000 paired bootstrap resamples of 100 scenario seeds. Sampling intervals exclude optimisation uncertainty; small signed BESS differences near the relative MIP-gap scale are not resolved benefits or physical losses. Both panels retain the actual power model at fixed GPU count, zero deadline misses and the common 1,100-kW import limit. BESS has 100-kW power and 200-kWh energy. These are full-information planning outcomes, separate from causal-controller qualification.",
+      "zh": "**a，**弃光不超过 5% 时，灵活减刚性的全情景光伏承载增量。各边界为 100 个情景容量的最小值；绘制的是两个最小值之差，不是均值效应，不附抽样误差线。**b，**固定 500 kW 光伏装置的平均配对利用率变化，单位为百分点，区间为对 100 个种子作 10,000 次配对自助重采样得到的逐项 95% 区间。抽样区间不包含优化不确定性；接近相对 MIP 间隙尺度的微小储能正负差异不解释为已分辨的收益或物理损失。两面板均固定 GPU 数，保留实际功率模型，要求截止时间损失为零，采用共同的 1,100 kW 进口限制。储能功率 100 kW、容量 200 kWh。这是完整信息下的规划结果，与因果控制器资格检验相区分。",
+      "id": "M157"
+    },
+    "after": {
+      "en": "**a,** Paired minimum event-hour supply margins for all 80 task-resource-time realisations at 2.95 kW, comparing chronological and permuted orders. Margin is baseline PCC power minus community and fixed data-centre power minus 95% of the request, minimised over all four calls. Dashed zero lines separate scenarios with and without an instantaneous shortage; counts are descriptive, with no population-frequency inference. **b,** Available baseline reduction under chronological count and resource-time weighting for the lowest protocol seed (990000). The horizontal line is the 95% delivery requirement and shading marks the four calls. The displayed arrival horizon is 168 h; all 216 h remain in the data. Selection is by seed, not outcome. **c,** Evidence-to-decision sequence. A deficit identifies an impossible series, not automatic rejection of a probabilistic contract. Strict-window PI diagnoses distinguish infeasibility from a causal-control gap; an unresolved solve supplies no feasibility conclusion. Only a fixed causal offer that passes independent qualification enters the operating-price comparison. No supply screen or PI witness alone certifies causal reliability.",
+      "zh": "**a，** 固定 2.95 kW，全部 80 个任务资源时间实现的配对事件小时最小供给余量，比较原序与置乱。余量定义为基线 PCC 功率减去社区功率、固定数据中心功率及请求的 95%，再对全部四次调用取最小值。零虚线区分是否出现即时不足；计数为描述性结果，不推断总体频率。**b，** 最低协议种子 990000 在原序次数和资源时间权重下的基线可削功率。横线为 95% 交付要求，阴影表示四次调用。图示为 168 h 到达时域，全部 216 h 仍在数据中。按种子编号而非结果选取。**c，** 从证据到决策的顺序。缺口识别不可能成功的序列，并不自动拒绝概率性合同。严格时间窗 PI 诊断区分不可行与因果控制差距；未解决的求解不提供可行性结论。只有固定因果报价通过独立资格检验后，才进入运行价格比较。供给检查或 PI 见证本身均不能认证因果可靠性。",
+      "id": "M157"
+    }
+  },
+  {
+    "id": "M159",
+    "before": {
+      "en": "**a,b,** Four- and eight-hour PI tolerance lower bounds across flexible GPU allocations or unmeasured rigid-class active-power proxies, retaining 10% eligibility, the same 576-GPU installation and paired jobs. Each bound uses 100 confirmation scenarios. Lines join evaluated control settings. **c,d,** Conditional four-hour slack-participation costs at the unchanged primary offer, using all 300 confirmation ledgers, 50 independent calls per annual draw and 1-MW accounting. Crosses would indicate an offer that did not qualify. Costs are the 95th-percentile annual-net-cost decision threshold, not confidence limits. Fixed-request success and PV controls are in Supplementary Fig. 4. Rigid power proxies are not measurements of online inference.",
+      "zh": "**a、b，**改变灵活 GPU 分配或未测刚性类别活动功率代理时的四/八小时 放松 PI 容忍统计量，保持 10% 资格、相同的 576 GPU 设施及配对作业。每个下界使用 100 个确认情景，线连接实际检验设置。**c、d，**固定主体原承诺下，四小时自然空闲参与的条件成本，采用全部 300 份确认账本、每次年度抽样 50 个独立调用及 1 MW 会计尺度。若承诺不合格则标叉。成本为年度净成本第 95 百分位的决策门槛，不是置信限。固定请求成功率及光伏对照见补充图 4。刚性功率代理不是在线推理测量。",
+      "id": "M159"
+    },
+    "after": {
+      "en": "**a,b,** Four- and eight-hour relaxed-PI tolerance statistics across flexible GPU allocations or unmeasured rigid-class active-power proxies, retaining 10% eligibility, the same 576-GPU installation and paired jobs. Each statistic uses 100 confirmation scenarios and aggregate release/deadline constraints; it does not guarantee work-group-feasible capacity. Lines join evaluated settings. **c,d,** Conditional four-hour single-event participation costs at the unchanged primary offer, using all 300 confirmation ledgers, 50 independent calls per annual draw and proportional 1-MW accounting. Crosses would indicate an unqualified offer. Costs are 95th-percentile annual-net-cost thresholds, not confidence limits. Fixed-request success and PV allocation controls appear in Supplementary Fig. 4c,d. Rigid power proxies are not measurements of online inference.",
+      "zh": "**a,b，** 四小时和八小时放松 PI 容忍统计量随灵活 GPU 分配或未测刚性类别活动功率代理的变化，保留 10% 工作允许参与、相同 576 块 GPU 与配对作业。每项统计量采用 100 个确认情景和累计释放／期限约束，不保证工作组可行容量。线连接已测试设定。**c,d，** 不变主要报价下的四小时单次事件条件参与成本，使用全部 300 条确认账本、每次年度抽样 50 个独立调用，并按比例折算至 1 MW。叉号表示未合格报价。成本是年度净成本第 95 百分位门槛，不是置信界。固定请求成功与光伏分配对照见补充图 4c,d。刚性功率代理不是在线推理测量值。",
+      "id": "M159"
+    }
+  },
+  {
+    "id": "M161",
+    "before": {
+      "en": "**a,** Additional waiting exposure per complete four-call series for the refined four- and eight-hour products (300 confirmation scenarios each); points are means and whiskers are scenario 5th–95th percentiles, not confidence intervals. **b,** Net operating cost components at the total annual 95th-percentile rank, with no site fee and US$0.005/GPU-h/h waiting. **c,** Participation thresholds as waiting price varies. **d,** Minimum eight-hour capacity price that matches both the four-hour product and opting out, at three waiting prices. All panels use zero-loss-qualified products of 5.60 and 4.42 model kW, reference deadlines and 16-h start spacing. Monetary panels use proportional 1-MW accounting, twelve independent four-call series per year, US$0.10/kWh electricity, US$50/MWh capped delivered-energy revenue, zero missed-work price and 2,000 annual draws including failures. Price curves are conditional on the reference workload; they are not transferable offers for the failed resource-time tests.",
+      "zh": "**a，** 加密后的四小时与八小时产品每组完整四次调用的额外等待暴露（各 300 个确认情景）；点为均值，须为情景第 5–95 百分位，并非置信区间。**b，** 无场站费、等待价格每 GPU-h 每小时 0.005 美元时，总年度第 95 百分位排序位置对应的净运行成本组成。**c，** 随等待价格变化的参与门槛。**d，** 三种等待价格下，同时达到四小时产品与不参与价值的最低八小时容量价格。全部面板采用零损失资格产品，模型报价分别为 5.60 和 4.42 kW，使用参考期限及 16 h 开始间隔。金额面板按比例折算至 1 MW，每年十二组独立四次调用，电价每 kWh 0.10 美元，截顶交付电量收入每 MWh 50 美元，漏期工作价格为零；2,000 次年度抽样包括失败。价格曲线以参考工作负载为条件，不能作为资源时间测试失败后的可转用报价。",
+      "id": "M161"
+    },
+    "after": {
+      "en": "**a,** Additional waiting exposure per complete four-call series for the refined four- and eight-hour products (300 confirmation scenarios each); points are means and whiskers are scenario 5th–95th percentiles, not confidence intervals. **b,** Net operating cost components at the total annual 95th-percentile rank, with no site fee and US$0.005/GPU-h/h waiting. **c,** Participation thresholds as waiting price varies. **d,** Minimum eight-hour capacity price that matches both the four-hour product and opting out, at three waiting prices. All panels use products qualified at a 95% success-probability target with zero missed work required for success: 5.60 and 4.42 model kW, reference deadlines and 16-h start spacing. Failed series remain in the ledgers. Monetary panels use proportional 1-MW accounting, twelve independent four-call series per year, US$0.10/kWh electricity, US$50/MWh capped delivered-energy revenue, zero missed-work price and 2,000 annual draws including failures. Price curves are conditional on the reference workload; they are not transferable offers for the failed resource-time tests.",
+      "zh": "**a，** 加密后的四小时与八小时产品每组完整四次调用的额外等待暴露（各 300 个确认情景）；点为均值，须为情景第 5–95 百分位，并非置信区间。**b，** 无场站费、等待价格每 GPU-h 每小时 0.005 美元时，总年度第 95 百分位排序位置对应的净运行成本组成。**c，** 随等待价格变化的参与门槛。**d，** 三种等待价格下，同时达到四小时产品与不参与价值的最低八小时容量价格。全部面板采用以 95% 成功概率为目标、且成功序列要求零漏期的合格产品，模型报价分别为 5.60 和 4.42 kW，使用参考期限及 16 h 开始间隔。失败序列仍保留在账本内。金额面板按比例折算至 1 MW，每年十二组独立四次调用，电价每 kWh 0.10 美元，截顶交付电量收入每 MWh 50 美元，漏期工作价格为零；2,000 次年度抽样包括失败。价格曲线以参考工作负载为条件，不能作为资源时间测试失败后的可转用报价。",
+      "id": "M161"
+    }
+  },
+  {
+    "id": "S20_002",
+    "before": {
+      "id": "S20_002",
+      "en": "## Job constraints and participation costs define firm data-centre demand response",
+      "zh": "## 作业约束与参与成本界定数据中心可承诺的需求响应"
+    },
+    "after": {
+      "id": "S20_002",
+      "en": "## Workload timing limits reliable demand response from AI data centres",
+      "zh": "## 工作量的时间分布限制人工智能数据中心的可靠需求响应"
+    }
+  },
+  {
+    "id": "S20_005",
+    "before": {
+      "id": "S20_005",
+      "en": "The notes and tables distinguish the original five-workload comparison, controller repair, structural study and focused commitment diagnostics. Tables 18–21 report local refinement, exact-window feasibility, matched count/resource-time transfer and the physical exposures and costs of the refined products. Earlier tables retain their original designs; their selected requests do not replace the newer reference choices. Source Data include frozen inputs, all successes and failures, direct plotting tables and replay code.",
+      "zh": "说明与表格区分原五档工作负载比较、控制器修复、结构研究及集中的承诺诊断。表 18–21 报告局部加密、严格时间窗可行性、次数与资源时间配对适用检验，以及新产品的物理暴露与费用。早期表保留原设计，其所选请求不替代较新的参考选择。源数据包括冻结输入、全部成功与失败、直接绘图表和重放代码。"
+    },
+    "after": {
+      "id": "S20_005",
+      "en": "Read the commitment evidence in sequence: independent duration qualification (Table 18), matched workload weights and hourly order (Table 20), strict task-window diagnosis (Table 19), and physical operating exposure and conditional prices (Table 21). The remaining tables provide workload assumptions, structural controls and complete design provenance. Source Data retain frozen inputs, every successful and failed trajectory, direct plotting tables and replay code. Supplementary Note 7 distinguishes the historical designs from the reference products used in the main text.",
+      "zh": "按以下顺序阅读承诺证据：独立时长资格检验（表 18）、配对工作量权重与小时顺序（表 20）、严格任务时间窗诊断（表 19），以及物理运行暴露和条件价格（表 21）。其余表提供工作负载假设、结构对照与完整设计溯源。源数据保留冻结输入、每条成功和失败轨迹、直接绘图表与重放代码。补充说明 7 区分历史设计与正文采用的参考产品。"
+    }
+  },
+  {
+    "id": "S20_006",
+    "before": {
+      "id": "S20_006",
+      "en": "| Question | Methods | Displays |\n|---|---|---|\n| Work composition | 1–3 | Fig. 1; Tables 1–3 |\n| Single offers | 4–5 | Fig. 2; Table 4 |\n| Repeated calls | 6 | Fig. 3; Supplementary Fig. 3; Tables 5, 10–11, 13–16 |\n| PV integration | 7 | Fig. 4; Table 6 |\n| Allocation and power | 8 | Fig. 5; Supplementary Fig. 4; Table 8 |\n| Participation costs | 9 | Fig. 6; Supplementary Fig. 5; Tables 7, 9, 12, 17 |",
+      "zh": "| 问题 | 方法 | 图表 |\n|---|---|---|\n| 工作构成 | 1–3 | 图 1；表 1–3 |\n| 单次承诺 | 4–5 | 图 2；表 4 |\n| 重复调用 | 6 | 图 3；补充图 3；表 5、10–11、13–16 |\n| 光伏配合 | 7 | 图 4；表 6 |\n| 分配与功率 | 8 | 图 5；补充图 4；表 8 |\n| 参与成本 | 9 | 图 6；补充图 5；表 7、9、12、17 |"
+    },
+    "after": {
+      "id": "S20_006",
+      "en": "| Question | Methods | Displays |\n|---|---|---|\n| Work composition and power | 1–3 | Fig. 1; Supplementary Fig. 2; Tables 1–3 |\n| Single-event offers | 4–5 | Fig. 2; Table 4 |\n| Reference repeated offers | 6 | Fig. 3a; Supplementary Fig. 3a,b; Table 18 |\n| Workload weights and hourly order | 6 | Fig. 3c,d; Fig. 4a,b; Table 20 |\n| Supply and strict-window diagnosis | 6 | Fig. 3b; Fig. 4; Table 19 |\n| Structural and call-history controls | 6 | Supplementary Fig. 3c; Tables 5, 10–16 |\n| PV, allocation and power controls | 7–8 | Fig. 5; Supplementary Fig. 4; Tables 6, 8 |\n| Physical exposure and participation | 9 | Fig. 6; Supplementary Fig. 5; Table 21 |\n| Price assumptions and design provenance | 9; Note 7 | Tables 7, 9, 12, 17; Supplementary Fig. 3d |",
+      "zh": "| 问题 | 方法 | 图表 |\n|---|---|---|\n| 工作构成与功率 | 1–3 | 图 1；补充图 2；表 1–3 |\n| 单次事件报价 | 4–5 | 图 2；表 4 |\n| 参考重复报价 | 6 | 图 3a；补充图 3a,b；表 18 |\n| 工作量权重与小时顺序 | 6 | 图 3c,d；图 4a,b；表 20 |\n| 供给与严格时间窗诊断 | 6 | 图 3b；图 4；表 19 |\n| 结构与调用历史对照 | 6 | 补充图 3c；表 5、10–16 |\n| 光伏、分配与功率对照 | 7–8 | 图 5；补充图 4；表 6、8 |\n| 物理暴露与参与 | 9 | 图 6；补充图 5；表 21 |\n| 价格假设与设计溯源 | 9；说明 7 | 表 7、9、12、17；补充图 3d |"
+    }
+  },
+  {
+    "id": "S20_011",
+    "before": {
+      "id": "S20_011",
+      "en": "The earlier PI programme maximised R under cumulative class-release and class-deadline constraints. These are necessary aggregate conditions, but are a relaxation when job windows cross: work executed for an earlier, later-deadline job can satisfy a cumulative due-work inequality for a different job. Its retained optima therefore define relaxed planning envelopes, not generally job-feasible capacities. Their second order statistic among 100 scenarios is a 95%/95% tolerance statistic of that relaxed quantity, with achieved confidence 0.96292.<sup>33</sup> It does not guarantee feasible work scheduling. Controller offers instead use completed queue simulations on independent seeds; their joint delivery-and-service probability is assessed by a one-sided 95% Wilson lower bound, required to reach 0.95.<sup>34,35</sup> The new feasibility diagnostics below use each work group’s own release and deadline.",
+      "zh": "早期 PI 程序在累计类别释放量与累计类别到期量约束下最大化 R。这些是必要的汇总条件，但当作业时间窗交叉时构成放松：为一个较早释放、较晚到期的作业完成的工作，可能满足另一个作业的累计到期不等式。因此，保留的最优值给出放松模型的规划界限，并非一般都能满足实际作业时间窗的容量。100 个情景中的第二顺序统计量，是该放松量在 95%/95% 条件下的容忍统计量，实际达到的置信度为 0.96292。<sup>33</sup> 它不保证存在可行作业调度。控制器报价则来自独立种子上的完整队列模拟；交付与服务联合概率用单侧 95% Wilson 下界评价，要求达到 0.95。<sup>34,35</sup> 以下新增可行性诊断使用每个工作组自身的释放时间与期限。"
+    },
+    "after": {
+      "id": "S20_011",
+      "en": "The aggregate PI programme maximised R under cumulative class-release and class-deadline constraints. These are necessary aggregate conditions, but are a relaxation when job windows cross: work executed for an earlier, later-deadline job can satisfy a cumulative due-work inequality for a different job. Its retained optima therefore define relaxed planning envelopes, not generally job-feasible capacities. Their second order statistic among 100 scenarios is a 95%/95% tolerance statistic of that relaxed quantity, with achieved confidence 0.96292.<sup>33</sup> It does not guarantee feasible work scheduling. Controller offers instead use completed queue simulations on independent seeds; their joint delivery-and-service probability is assessed by a one-sided 95% Wilson lower bound, required to reach 0.95.<sup>34,35</sup> The strict-window feasibility diagnostics use each work group’s own release and deadline.",
+      "zh": "累计 PI 程序在累计类别释放量与累计类别到期量约束下最大化 R。这些是必要的汇总条件，但当作业时间窗交叉时构成放松：为一个较早释放、较晚到期的作业完成的工作，可能满足另一个作业的累计到期不等式。因此，保留的最优值给出放松模型的规划界限，并非一般都能满足实际作业时间窗的容量。100 个情景中的第二顺序统计量，是该放松量在 95%/95% 条件下的容忍统计量，实际达到的置信度为 0.96292。<sup>33</sup> 它不保证存在可行作业调度。控制器报价则来自独立种子上的完整队列模拟；交付与服务联合概率用单侧 95% Wilson 下界评价，要求达到 0.95。<sup>34,35</sup> 以下新增可行性诊断使用每个工作组自身的释放时间与期限。"
+    }
+  },
+  {
+    "id": "S20_055",
+    "before": {
+      "id": "S20_055",
+      "en": "![Supplementary Figure 1](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_1.png)",
+      "zh": "![补充图 1](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_1.png)"
+    },
+    "after": {
+      "id": "S20_055",
+      "en": "![Supplementary Figure 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_1.png)",
+      "zh": "![补充图 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_1.png)"
+    }
+  },
+  {
+    "id": "S20_058",
+    "before": {
+      "id": "S20_058",
+      "en": "![Supplementary Figure 2](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_2.png)",
+      "zh": "![补充图 2](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_2.png)"
+    },
+    "after": {
+      "id": "S20_058",
+      "en": "![Supplementary Figure 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_2.png)",
+      "zh": "![补充图 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_2.png)"
+    }
+  },
+  {
+    "id": "S20_061",
+    "before": {
+      "id": "S20_061",
+      "en": "![Supplementary Figure 3](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_3.png)",
+      "zh": "![补充图 3](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_3.png)"
+    },
+    "after": {
+      "id": "S20_061",
+      "en": "![Supplementary Figure 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_3.png)",
+      "zh": "![补充图 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_3.png)"
+    }
+  },
+  {
+    "id": "S20_062",
+    "before": {
+      "id": "S20_062",
+      "en": "**a,b,** Development one-sided 95% Wilson lower bounds for every refined four- and eight-hour candidate (100 new seeds each; 1% and zero-loss endpoints). The dashed line marks the selection criterion of 0.95; the 8-h grid ceiling is selected, not a bracketed maximum. **c,** Earlier 300-scenario full-request structural tests show instantaneous shortages and >1% deadline failures as overlapping categories. **d,** Earlier same-clock final-call electrical success counts with or without three preceding calls; all pairs coincide. The earlier controller repair and complete structural selections remain in Tables 10–15; new PI diagnoses use separate exact work-group constraints (Table 19).",
+      "zh": "**a,b，** 加密后每个四小时与八小时候选的开发单侧 95% Wilson 下界（每项 100 个新种子；1% 和零损失终点）。虚线为 0.95 选择标准；八小时选中了网格上端，并非夹定了最大值。**c，** 早期 300 情景全额请求结构检验，以可重叠类别显示即时不足与超过 1% 的期限违约。**d，** 早期对齐时刻的末次调用电力成功数，有无先前三次调用的全部配对结果重合。早期控制器修复与完整结构选择仍在表 10–15；新增 PI 诊断采用独立的严格工作组约束（表 19）。"
+    },
+    "after": {
+      "id": "S20_062",
+      "en": "**a,b,** Development one-sided 95% Wilson lower bounds for every four- and eight-hour local candidate (100 scenarios each, both service standards). The dashed line is the selection threshold of 0.95; the selected eight-hour grid ceiling is not a bracketed maximum. **c,** Full-request structural controls show instantaneous shortages and >1% deadline failures as potentially overlapping categories (300 scenarios). **d,** Chronological submission-count cross-scoring from the 986000-series study: stacked segments show successes and immediate shortages at 4.42 kW, and markers show 2.95-kW successes. Both service scores coincide at each request. Eight observed weeks have ten synthetic realisations each; counts are descriptive. Historical design interpretation is in Note 7; matched last-call outcomes, all of which coincide, remain in Table 15 and Source Data.",
+      "zh": "**a,b，** 每个四小时与八小时局部候选的开发单侧 95% Wilson 下界（各 100 个情景，两种服务标准）。虚线为 0.95 选择门槛；选中的八小时网格上端不代表夹定最大值。**c，** 全额请求结构对照中的即时不足与超过 1% 的期限违约，为可能重叠的类别（300 个情景）。**d，** 986000 系列研究的原序提交次数交叉评分：堆叠部分为 4.42 kW 的成功与即时不足，标记为 2.95 kW 成功数。每个请求的两种服务评分重合。八个观察周各有十次合成实现，计数为描述性结果。历史设计解释见说明 7；全部重合的末次调用配对结果保留在表 15 与源数据。"
+    }
+  },
+  {
+    "id": "S20_063",
+    "before": {
+      "id": "S20_063",
+      "en": "### Supplementary Figure 4 | Fixed-request and PV controls at 10% eligibility",
+      "zh": "### 补充图 4 | 10% 资格下的固定请求及光伏对照"
+    },
+    "after": {
+      "id": "S20_063",
+      "en": "### Supplementary Figure 4 | PV benefits and fixed-request controls",
+      "zh": "### 补充图 4 | 光伏收益与固定请求对照"
+    }
+  },
+  {
+    "id": "S20_064",
+    "before": {
+      "id": "S20_064",
+      "en": "![Supplementary Figure 4](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_4.png)",
+      "zh": "![补充图 4](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_4.png)"
+    },
+    "after": {
+      "id": "S20_064",
+      "en": "![Supplementary Figure 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_4.png)",
+      "zh": "![补充图 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_4.png)"
+    }
+  },
+  {
+    "id": "S20_065",
+    "before": {
+      "id": "S20_065",
+      "en": "**a,** Four- and eight-hour success at the unchanged primary requests, with one-sided 95% Wilson lower limits from 300 seeds. No control-specific offer is reselected. **b,** Difference between flexible and rigid all-scenario PV hosting capacities, with and without BESS, using 100 paired scenarios and zero deadline misses. Both displays change only GPU allocation or the declared rigid-power proxy around the 10% primary case.",
+      "zh": "**a，**保持主体请求不变时的四/八小时成功比例，附 300 个种子的单侧 95% Wilson 下界；不为各对照重选承诺。**b，**有/无储能时，灵活与刚性全情景光伏承载容量之差，采用 100 个配对情景并要求截止时间损失为零。两图均围绕主体 10% 配置，只改变 GPU 分配或声明的刚性功率代理。"
+    },
+    "after": {
+      "id": "S20_065",
+      "en": "**a,** Flexible minus rigid all-scenario PV hosting capacity across the five eligibility scenarios, with and without BESS; each capacity is the minimum over 100 scenarios. **b,** Paired gain in utilisation of a fixed 500-kW PV system; points are means and whiskers are 95% paired bootstrap intervals. The intervals cover sampling, not optimisation error; small storage contrasts remain unresolved at solver precision. **c,** Four- and eight-hour success at unchanged primary single-event requests across allocation and rigid-power controls, with one-sided 95% Wilson lower bounds from 300 scenarios. **d,** Corresponding gains in all-scenario PV hosting over 100 paired scenarios. Panels c,d retain 10% eligibility and vary only GPU allocation or the stated rigid-power proxy. PV schedules use full information and zero missed work; hosting differences are differences of minima, not mean effects or confidence intervals.",
+      "zh": "**a，** 五档工作参与比例下，有无储能时灵活运行减刚性运行的全情景光伏接纳容量；各容量为 100 个情景中的最小值。**b，** 固定 500 kW 光伏系统利用率的配对增益；点为均值，须为 95% 配对自助法区间。区间涵盖抽样而非优化误差；微小储能差异在求解精度下仍未分辨。**c，** 分配与刚性功率对照在不变主要单次报价下的四小时与八小时成功情况，附 300 个情景的单侧 95% Wilson 下界。**d，** 相应的全情景光伏接纳增益，采用 100 个配对情景。c,d 保持 10% 工作参与，仅改变 GPU 分配或声明的刚性功率代理。光伏调度使用完整信息且零漏期；接纳差异是两个最小值之差，不是均值效应或置信区间。"
+    }
+  },
+  {
+    "id": "S20_067",
+    "before": {
+      "id": "S20_067",
+      "en": "![Supplementary Figure 5](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_5.png)",
+      "zh": "![补充图 5](../docs/figures/commitment_mechanisms_v1/artwork/AIDRBench_Supplementary_Figure_5.png)"
+    },
+    "after": {
+      "id": "S20_067",
+      "en": "![Supplementary Figure 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_5.png)",
+      "zh": "![补充图 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_5.png)"
+    }
+  },
+  {
+    "id": "S20_078",
+    "before": {
+      "id": "S20_078",
+      "en": "### Supplementary Table 4 | Single-event planning bounds and independent qualification",
+      "zh": "### 补充表 4 | 单次规划下界与独立资格检验"
+    },
+    "after": {
+      "id": "S20_078",
+      "en": "### Supplementary Table 4 | Relaxed planning statistics and independent single-event qualification",
+      "zh": "### 补充表 4 | 放松规划统计量与独立单次事件资格检验"
+    }
+  },
+  {
+    "id": "S23_T16_note",
+    "before": {
+      "id": "S23_T16_note",
+      "en": "Chronological preserves hourly submission counts in eight observed weeks; permuted shuffles whole hours within each week. Each aggregate comprises ten synthetic realisations per week, not 80 independent production weeks. All observed-week results are supplied in temporal_week_summary.csv and Fig. 3c displays the primary pair. Work sizes, class allocation and deadlines remain synthetic. No external result retunes a request or establishes a new probability certificate; the direction of permutation effects varies with the request.",
+      "zh": "Chronological 保留八个真实周的逐小时提交计数，permuted 在每周内置乱完整小时。每个汇总由每周十次合成实现组成，不是 80 个独立生产周。逐周结果完整提供于 temporal_week_summary.csv，图 3c 展示主要配对。工作量、类别分配和期限仍为合成。没有根据外部结果调整请求或建立新的概率资格证明；置乱的影响方向随请求变化。"
+    },
+    "after": {
+      "id": "S23_T16_note",
+      "en": "Chronological preserves hourly submission counts in eight observed weeks; permuted shuffles whole hours within each week. Each aggregate comprises ten synthetic realisations per week, not 80 independent production weeks. All observed-week results are supplied in temporal_week_summary.csv and Supplementary Fig. 3d displays the chronological primary requests. Work sizes, class allocation and deadlines remain synthetic. No external result retunes a request or establishes a new probability certificate; the direction of permutation effects varies with the request.",
+      "zh": "Chronological 保留八个真实周的逐小时提交计数，permuted 在每周内置乱完整小时。每个汇总由每周十次合成实现组成，不是 80 个独立生产周。逐周结果完整提供于 temporal_week_summary.csv，补充图 3d 展示原序主要请求的对照。工作量、类别分配和期限仍为合成。没有根据外部结果调整请求或建立新的概率资格证明；置乱的影响方向随请求变化。"
+    }
+  }
+]

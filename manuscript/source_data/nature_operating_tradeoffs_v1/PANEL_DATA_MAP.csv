@@ -1,0 +1,15 @@
+figure,panel,table,filter,ready_value_columns
+3,a,selected_offers_confirmed.csv,H8P16; g10; six utilisation/deadline settings,selected_capacity_kw; endpoint; confirmation_lower
+3,b,confirmation_summary.csv,repeated; H8P16; fraction=1; success_1pct; g10,instantaneous_supply_limited_trials; failed_deadline_miss; trials
+3,c,temporal_week_summary.csv,g10; H8P16; fractions .5 and .75,week; ordering; successes_1pct; successes_zero
+6,a,cost_components.csv,single; H4; all five cases,net_operating_cost_per_kw_q95; fixed_fee_per_kw
+6,b,structural_economic_sensitivity.csv,u65d100g10; zero-selected; reference waiting/loss prices,site_fee_annual_usd; payment_per_kw
+6,c,structural_economic_primary.csv,same zero-selected products; fee=0,payment_per_kw
+6,d,ready_duration_price_curves.csv,H8P16; fee=0; both endpoints,short_price; required_long_price_vs_short_and_opt_out
+S3,a,../repeat_mechanism/confirmation_summary.csv,H8G12; fraction=1; old controllers,success_fraction; wilson_lower
+S3,b,target_call_pairs.csv,H8P16; g10,fresh_target_electrical_successes; repeated_target_electrical_successes
+S3,c,selected_offers_confirmed.csv,all H8 selections,selected_capacity_kw; confirmation_successes
+S5,a,structural_economic_sensitivity.csv,u65d100g10; zero-selected; fee=0; missed price=0,waiting_price; payment_per_kw
+S5,b,structural_economic_sensitivity.csv,u65d100g10; H8P16; fee=0; reference waiting,missed_work_price; payment_per_kw; offerable flags
+S5,c,structural_entry_examples.csv,reference zero-selected; equal price=250,fee; annual_net_value_lower
+S5,d,ready_duration_price_curves.csv,H8P16; zero; three fees,short_price; required_long_price_vs_short_and_opt_out

@@ -1,0 +1,5132 @@
+{
+  "frozen_at_utc": "2026-09-10T12:36:42.728288+00:00",
+  "runner_sha256": "0b38613595b3efeef9f53b74c02a31473027e6088b650446b8c67830186c14eb",
+  "parent_runner_sha256": "7e7916b40e2c81d03d6da769e5afbf6fbb6cec906ccbf8ff7a4a0b4f05d25b14",
+  "source_audit_sha256": "521ac22d221a311d8f8787298679f5819d2e0db12c90a577309fe6c8ae30d7df",
+  "hourly_weights_sha256": "19a88d18c4153d34e1096d6eddde3ecd5b2d5bd371065be3f2f23eee0fbbd54a",
+  "selection_sha256": "8be0511c808c61bd29bc4d52e5392f7d7140793128fb29704c926cede8d6f5ad",
+  "tasks": [
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990000,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990001,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990002,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990003,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990004,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990005,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990006,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990007,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990008,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_chronological_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_job_count_permuted_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_permuted_g10",
+      "seed": 990009,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990100,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990101,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990102,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990103,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990104,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990105,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990106,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990107,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990108,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_chronological_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_job_count_permuted_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_chronological_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w1_resource_gpu_h_permuted_g10",
+      "seed": 990109,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990200,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990201,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990202,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990203,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990204,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990205,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990206,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990207,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990208,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_chronological_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_job_count_permuted_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_chronological_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w2_resource_gpu_h_permuted_g10",
+      "seed": 990209,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990300,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990301,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990302,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990303,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990304,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990305,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990306,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990307,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990308,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_chronological_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_job_count_permuted_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_chronological_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w3_resource_gpu_h_permuted_g10",
+      "seed": 990309,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990400,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990401,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990402,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990403,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990404,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990405,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990406,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990407,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990408,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_chronological_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_job_count_permuted_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_chronological_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w4_resource_gpu_h_permuted_g10",
+      "seed": 990409,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990500,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990501,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990502,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990503,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990504,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990505,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990506,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990507,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990508,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_chronological_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_job_count_permuted_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_chronological_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w5_resource_gpu_h_permuted_g10",
+      "seed": 990509,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990600,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990601,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990602,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990603,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990604,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990605,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990606,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990607,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990608,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_chronological_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_job_count_permuted_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_chronological_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w6_resource_gpu_h_permuted_g10",
+      "seed": 990609,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990700,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990701,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990702,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990703,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990704,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990705,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990706,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990707,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990708,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_chronological_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_job_count_permuted_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_chronological_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.5,
+      "kind": "repeated"
+    },
+    {
+      "role": "workload",
+      "variant": "w7_resource_gpu_h_permuted_g10",
+      "seed": 990709,
+      "program": "H8P16",
+      "fraction": 0.75,
+      "kind": "repeated"
+    }
+  ],
+  "mapping": "same seeds, class sizes/deadlines, weekly class totals, community and events; only hourly submission weights change from counts to observed task resource-time; paired whole-hour permutations",
+  "inference": "eight observed weeks with ten synthetic realizations each; retain baseline failures, no external reselection, no reliability certification or application pause/restart measurement"
+}

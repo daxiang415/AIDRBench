@@ -1,0 +1,22 @@
+{
+  "backend": "Python/matplotlib",
+  "sources_sha256": {
+    "tradeoffs/selected_offers_confirmed.csv": "ccbc8880a2df6974f6f4bd59bcaa27676830aa54d3b54cfc8cd4b3d38313f6c1",
+    "tradeoffs/confirmation_summary.csv": "760c2b12a0fa15262b8227f2442a28815e87636f1d6e169cd893cdc967db60e4",
+    "tradeoffs/temporal_week_summary.csv": "fce3df697931223f85e54da364f1597e9ec52c0a91ab254ab9fd85d949f2d34d",
+    "tradeoffs/cost_components.csv": "8edf2014c9581a698ec01cb5108ff85e6145aa1b5391c0a3a31be8697cc184f6",
+    "tradeoffs/structural_economic_primary.csv": "b9e1c5b11d6fb41e9765d6fc66b5756abbf140323d5a08833f6504f61fc1d6cd",
+    "tradeoffs/ready_duration_price_curves.csv": "a4cf7bb9c03a98115f148eb8f99f0daabb95c4fd5b65414a357321f10b89747e",
+    "tradeoffs/structural_economic_sensitivity.csv": "81cdcb9f1402dcd0fe5a082628646b2ac00decac4d471dd9518e55e345fcdd25",
+    "previous/confirmation_summary.csv": "f5b7a90439a577f96e05652496cf4971919eb6520e8574edd3cf6e110e5e4562",
+    "tradeoffs/target_call_pairs.csv": "d07dc7f89e449dcd60207c5cbbfcd981d60a92527d66acc0217d0764e2d46edd",
+    "tradeoffs/structural_entry_examples.csv": "6635ffed3eecd9fe262af1f7d0fc54995dda8be37ef34a7d9846e280f0135483"
+  },
+  "figures": [
+    "3",
+    "6",
+    "S3",
+    "S5"
+  ],
+  "minimum_declared_font_pt": 6
+}

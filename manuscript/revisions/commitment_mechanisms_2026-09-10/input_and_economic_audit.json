@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "matched_weighted_input_variants": 320,
+  "resource_time_and_count_hourly_weights_reconstructed": true,
+  "paired_community_identical": true,
+  "all_baselines_zero_service": true,
+  "complete_economic_rows": 144,
+  "maximum_total_quantile_cost_error": 3.637978807091713e-12
+}

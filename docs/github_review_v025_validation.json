@@ -1,0 +1,39 @@
+{
+  "status": "PASS",
+  "manuscript": "v0.25",
+  "chinese": "v19",
+  "redrawn_figures": 11,
+  "all_pngs_match_local_release": true,
+  "unchanged_manuscript_and_pdf_hashes": {
+    "manuscript/nature_communications_article.md": "f4889e5c754721584a3766c6fe4bf17c7c6ed186bf6324d86b48eca003b1a34b",
+    "manuscript/supplementary_information.md": "b997ca2ec6c99110d831ba3c2ed97107642355c7733288d44789d89f21ec3a76",
+    "manuscript/exports/AIDRBench_Nature_Communications_v0.25_content_revision.pdf": "d7f6f9ded52e129e84095cbee01ffd004f74c8cb2613ecd13bb4161db778336a",
+    "manuscript/exports/AIDRBench_Nature_Communications_v0.25_Supplementary_Information_content_revision.pdf": "3876ec2b9b48abf2eb11f27c8f96a6e25d268d944c4f72765bb0104a01598f4f"
+  },
+  "english_chinese_alignment_verified": true,
+  "relative_figure_links_verified": true,
+  "reading_guide_links_verified": true,
+  "timing_counts_verified": true,
+  "new_scientific_simulations": 0,
+  "branch": "codex/manuscript-v025",
+  "base_commit": "3b86b199c7433be33a4cf16c9e53c57d334edf61",
+  "omitted": "Full raw/hourly/recovery data and TIFFs remain in the unchanged local v14 archive.",
+  "repository_checks": {
+    "ruff": "PASS",
+    "mypy": "PASS",
+    "pytest_passed": 169
+  },
+  "png_sha256": {
+    "AIDRBench_Figure_1": "dac1fad592e24f5b9dc522287591acc07e2a4c12c9c699237b8fd9e89ab65738",
+    "AIDRBench_Figure_2": "a792b1c49c2398d8c69256e387611180348f055a1d1b557b91863292dcda2f9a",
+    "AIDRBench_Figure_3": "d36a6a1576bd9e295d8a09bf82c0248a401919cef49853a07f0a94545a1e354d",
+    "AIDRBench_Figure_4": "0aed5ecdd8be4a859ee2e8b95f0474f0656dadd3408fdf4764d4c9fa13eb5279",
+    "AIDRBench_Figure_5": "f04443e5319da1fca336d544f83b5c75b23749114330998023fc44e7d788446b",
+    "AIDRBench_Figure_6": "ce2141410653f82ecdd8eff46fefe8f9661577288b28948fed4b939068e7aa2f",
+    "AIDRBench_Supplementary_Figure_1": "44666af5b40652685a768a2dc2ba137071fbcea8313059b95d7dac020e0bfe1e",
+    "AIDRBench_Supplementary_Figure_2": "2aaae875c920faee8d961260969287c90501c3d2cb161956182e78d0f1e1c92f",
+    "AIDRBench_Supplementary_Figure_3": "a30bb0a58344b99054278efbe8588f62afff2b45e9e96c717ca6b57b1fca89ba",
+    "AIDRBench_Supplementary_Figure_4": "7c5fcb33292eaf742b9b50559c01ad5cb5bea9b9a2fa68f9302d1eb4a35ec55b",
+    "AIDRBench_Supplementary_Figure_5": "c0b2dbc8176e965afcf1aab8845380eadaf0b557933681fc529dc19dea2c76a8"
+  }
+}

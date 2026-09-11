@@ -1,0 +1,54 @@
+{
+  "frozen_at_utc": "2026-09-10T12:29:58.459299+00:00",
+  "design_sha256": "5f4e518c8d0c1c9bcb59b2f6ce34a48fed59a3ff4c446929154603e5e25757c0",
+  "runner_sha256": "0c4137c6e4feeb5cfe9c3118389d4539b0d63ab23c258a0a2b4fdaf65a7dd18b",
+  "parent_runner_sha256": "7e7916b40e2c81d03d6da769e5afbf6fbb6cec906ccbf8ff7a4a0b4f05d25b14",
+  "parent_controller_sha256": "8100cd41124a1ac8d9fb6212a118fbc91aa6667e25805591151fbf3567bbca7d",
+  "development_seeds": [
+    988000,
+    988099
+  ],
+  "confirmation_seeds": [
+    989000,
+    989299
+  ],
+  "reference_capacity_kw": 5.898243186244942,
+  "grid": {
+    "H8P16": [
+      0.5,
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75
+    ],
+    "H4P16": [
+      0.75,
+      0.8,
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ]
+  },
+  "selection": "largest local-grid offer with development one-sided Wilson95 >= .95; two endpoints; no confirmation reselection",
+  "confirmation_comparators": {
+    "H4P16": [
+      0.75
+    ],
+    "H8P16": [
+      0.5,
+      0.75
+    ]
+  },
+  "variants": [
+    {
+      "name": "u65d100g10",
+      "utilization": 0.65,
+      "slack_multiplier": 1.0,
+      "gpu_share": 0.1
+    }
+  ],
+  "clock": "unchanged phase-matched four-call series",
+  "scope": "follow-up conditional model study, pointwise confidence; finite local grid, no physical boundary claim"
+}

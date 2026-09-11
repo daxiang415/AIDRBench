@@ -1,0 +1,41 @@
+{
+  "main": {
+    "blocks": 170,
+    "source_sha256": "f4889e5c754721584a3766c6fe4bf17c7c6ed186bf6324d86b48eca003b1a34b",
+    "words": 8917,
+    "abstract_words": 182,
+    "results_words": 1599,
+    "previous_results_words": 1805,
+    "subsection_words": [
+      {
+        "title": "### Workload composition limits which computing can support a commitment",
+        "words": 247
+      },
+      {
+        "title": "### Smaller eligible pools support smaller independently tested offers",
+        "words": 173
+      },
+      {
+        "title": "### Workload timing determines whether a repeated commitment transfers",
+        "words": 297
+      },
+      {
+        "title": "### Supply and feasibility checks identify what a failed request requires",
+        "words": 320
+      },
+      {
+        "title": "### Allocation changes system value without necessarily increasing the offer",
+        "words": 210
+      },
+      {
+        "title": "### Access fees and operating costs affect different participation decisions",
+        "words": 352
+      }
+    ]
+  },
+  "supplement": {
+    "blocks": 153,
+    "source_sha256": "b997ca2ec6c99110d831ba3c2ed97107642355c7733288d44789d89f21ec3a76",
+    "words": 11180
+  }
+}

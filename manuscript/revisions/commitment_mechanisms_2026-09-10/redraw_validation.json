@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "figures": [
+    {
+      "figure": "AIDRBench_Figure_1.png",
+      "png_sha256": "dac1fad592e24f5b9dc522287591acc07e2a4c12c9c699237b8fd9e89ab65738",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Figure_2.png",
+      "png_sha256": "a792b1c49c2398d8c69256e387611180348f055a1d1b557b91863292dcda2f9a",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Figure_3.png",
+      "png_sha256": "70482d0c97897fba5dccdb080c5a2af7a9300c0b43e6f588989a90d930f6d0de",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Figure_4.png",
+      "png_sha256": "e35200b692e182136997691bdf3f955db2b0757b6d584641edef15c5dc9572c6",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Figure_5.png",
+      "png_sha256": "f04443e5319da1fca336d544f83b5c75b23749114330998023fc44e7d788446b",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Figure_6.png",
+      "png_sha256": "ce2141410653f82ecdd8eff46fefe8f9661577288b28948fed4b939068e7aa2f",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_1.png",
+      "png_sha256": "44666af5b40652685a768a2dc2ba137071fbcea8313059b95d7dac020e0bfe1e",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_2.png",
+      "png_sha256": "2aaae875c920faee8d961260969287c90501c3d2cb161956182e78d0f1e1c92f",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_3.png",
+      "png_sha256": "969ab5e52271363553e7b4e2d8b733aabdbfad12838a551e7b5634657af2c529",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_4.png",
+      "png_sha256": "5132d7e197c71a4ec1c8d576093f986179e069051abc23aec9568f67ef7513ad",
+      "status": "PASS"
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_5.png",
+      "png_sha256": "c0b2dbc8176e965afcf1aab8845380eadaf0b557933681fc529dc19dea2c76a8",
+      "status": "PASS"
+    }
+  ],
+  "source": "Staged v13 package scripts and tables; complete eleven-figure launcher plus final four-figure refresh.",
+  "new_plot_script_sha256": "f629d2d19c235a20d3aa57e41a429275f2592211eb93eb530359cfd6a79c6ee8"
+}

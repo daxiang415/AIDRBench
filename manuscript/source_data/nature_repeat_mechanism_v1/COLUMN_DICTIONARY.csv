@@ -1,0 +1,233 @@
+column,unit,meaning,tables
+action_fraction,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+actual_dc_peak_fraction_of_pcc,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+actual_dc_peak_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+additional_cap_active,boolean,Final allocation is lower than the proposal by more than 1e-8,controller_audit/*.parquet
+additional_cap_hours,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_ledgers.csv;development_ledgers.csv
+allowed_window_peak_kw,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",illustration_windows.csv
+annual_series,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",economic_primary.csv;economic_sensitivity.csv
+arrival_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+arrived_offline_inference_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+arrived_training_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+background_community_peak_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+backlog_excess_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+backlog_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+backlog_offline_inference_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+backlog_training_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+baseline_backlog_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+baseline_pcc_power_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+baseline_peak_kw,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",illustration_windows.csv
+below_fixed_power_hours,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_ledgers.csv;development_ledgers.csv
+calibration_artifact_id,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+calibration_artifact_sha256,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+calibration_power_case,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+capacity_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv
+capped_delivered_energy_kwh,kWh,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+case,identifier,Declared workload / control configuration,confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv;hourly_full/*.parquet;hourly_partition_index.csv;illustration_windows.csv;paired_controller_contrasts.csv;ready_hourly_curves.csv;recovery_input_index.csv;selected_offers.csv
+ci_high_pp,percentage points,"Paired success difference or interval endpoint, as named",paired_controller_contrasts.csv
+ci_low_pp,percentage points,"Paired success difference or interval endpoint, as named",paired_controller_contrasts.csv
+columns,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",hourly_partition_index.csv
+community_episode_start,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+community_gross_power_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+community_power_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+community_profile_id,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+community_source,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+completed_recovery_event_count,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+compute_debt_kwh,kWh,"Legacy total controlled queue dynamic energy, not baseline-subtracted",hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+confirmation_qualified,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",economic_primary.csv;economic_sensitivity.csv
+conservation_error_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+contracted_energy_kwh,kWh,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+controlled_peak_kw,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",illustration_windows.csv
+controller,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv;hourly_full/*.parquet;hourly_partition_index.csv;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv;illustration_windows.csv;paired_controller_contrasts.csv;ready_hourly_curves.csv;selected_offers.csv
+controller_audit,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",hourly_partition_index.csv
+cumulative_missed_gpu_h,GPU-h,Within-trajectory cumulative missed work,hourly_full/*.parquet
+dc_energy_kwh,kWh,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+dc_peak_sizing_error_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+dc_power_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+deadline_feasibility_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+deadline_miss_rate,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv
+deadline_miss_rate_so_far,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+deadline_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+decision_backlog_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+decision_compute_debt_kwh,kWh,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+decision_event_notice_remaining_hours,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+decision_event_request_reference_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+decision_remaining_by_deadline_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+deferred_work_gpu_h,GPU-h,Positive execution shortfall during event hours; not permanent lost work,confirmation_ledgers.csv;development_ledgers.csv
+delay_exposure_gpu_h_h,GPU-h²,Positive paired excess backlog integrated once per hour,confirmation_ledgers.csv;development_ledgers.csv
+delivered_reduction_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+delivery_ratio,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv;hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+delivery_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+difference_pp,percentage points,"Paired success difference or interval endpoint, as named",paired_controller_contrasts.csv
+directory,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",recovery_input_index.csv
+displaced_value,US$/deferred GPU-h,"Assumed value exposure, not measured operator revenue",economic_primary.csv;economic_sensitivity.csv
+dr_events_path,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+dr_source,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+dr_tracking_error_fraction,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+duration_h,h,"Actual requested call duration, verified against event outcome",confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv;selected_offers.csv
+episode_seed,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+event_active,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+event_hours,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+event_id,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv;hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv;illustration_windows.csv
+event_notice_remaining_hours,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+event_remaining_hours,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+event_request_reference_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+event_source_id,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+event_window_active,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+events_last_24h,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+exact_mcnemar_p,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",paired_controller_contrasts.csv
+excess_backlog_gpu_h,GPU-h,Controlled queue minus matched baseline queue,hourly_full/*.parquet
+excess_backlog_shaping_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+executed_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+executed_offline_inference_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+executed_training_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+failure_deadline_miss,boolean,Named criterion failure; see unchanged six thresholds in FIELD_GUIDE and protocol,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv
+failure_interval_delivery,boolean,Named criterion failure; see unchanged six thresholds in FIELD_GUIDE and protocol,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv
+failure_mean_delivery,boolean,Named criterion failure; see unchanged six thresholds in FIELD_GUIDE and protocol,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv
+failure_rebound,boolean,Named criterion failure; see unchanged six thresholds in FIELD_GUIDE and protocol,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv
+failure_terminal_backlog,boolean,Named criterion failure; see unchanged six thresholds in FIELD_GUIDE and protocol,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv
+failure_window_peak_relief,boolean,Named criterion failure; see unchanged six thresholds in FIELD_GUIDE and protocol,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv
+failures_deadline_miss,scenarios,Number of complete scenarios failing named criterion at least once; non-exclusive,confirmation_summary.csv;development_summary.csv
+failures_interval_delivery,scenarios,Number of complete scenarios failing named criterion at least once; non-exclusive,confirmation_summary.csv;development_summary.csv
+failures_mean_delivery,scenarios,Number of complete scenarios failing named criterion at least once; non-exclusive,confirmation_summary.csv;development_summary.csv
+failures_rebound,scenarios,Number of complete scenarios failing named criterion at least once; non-exclusive,confirmation_summary.csv;development_summary.csv
+failures_terminal_backlog,scenarios,Number of complete scenarios failing named criterion at least once; non-exclusive,confirmation_summary.csv;development_summary.csv
+failures_window_peak_relief,scenarios,Number of complete scenarios failing named criterion at least once; non-exclusive,confirmation_summary.csv;development_summary.csv
+flexible_active_gpus,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+flexible_energy_kwh,kWh,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+flexible_workload_share,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+fraction,fraction,Request / frozen single-event offer; not the fraction of eligible work,confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv;hourly_partition_index.csv;paired_controller_contrasts.csv;ready_hourly_curves.csv
+frozen_scenario_hash,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+frozen_scenario_id,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+full_parquet,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_partition_index.csv
+gained,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",paired_controller_contrasts.csv
+gap_h,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv;selected_offers.csv
+group,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_partition_index.csv;ready_hourly_curves.csv
+guarded_fraction,fraction,Final allocation after all-window clipping and feasible-side rounding,controller_audit/*.parquet
+hardware_evidence_class,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+holm_p_all_reported_contrasts,probability,Exact paired McNemar P adjusted across all 16 controller contrasts,paired_controller_contrasts.csv
+hour,h,Absolute interval in the 216-hour episode,controller_audit/*.parquet;hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv;ready_hourly_curves.csv
+hours_since_previous_event,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+incremental_energy_kwh,kWh,Signed controlled-minus-no-response PCC energy through episode end,confirmation_ledgers.csv;development_ledgers.csv
+incremental_missed_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+incremental_power_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet
+is_clearance_tail,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+kind,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv
+limit_violation_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+lost,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",paired_controller_contrasts.csv
+max_incremental_missed_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_summary.csv;development_summary.csv
+mean,see metric,Mean across all scenarios in the stated group,ready_hourly_curves.csv
+mean_additional_cap_hours,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_summary.csv;development_summary.csv
+mean_delay_exposure_gpu_h_h,h,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_summary.csv;development_summary.csv
+mean_incremental_missed_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_summary.csv;development_summary.csv
+mean_overlapping_guard_hours,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_summary.csv;development_summary.csv
+mean_slack_h,h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+median,see metric,Median across all scenarios in the stated group,ready_hourly_curves.csv
+metadata_sha256,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",recovery_input_index.csv
+method,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+metric,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,ready_hourly_curves.csv
+minimum_interval_delivery_ratio,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv
+missed_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+missed_offline_inference_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+missed_training_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+n,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",ready_hourly_curves.csv
+new_deadline_failures,paired scenarios,Original passes deadline criterion; revised fails it,paired_controller_contrasts.csv
+node_fixed_overhead_power_case,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+observation_version,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+observed_active_windows,count,Observed calls whose event/recovery windows have not expired,controller_audit/*.parquet
+offer_fraction,fraction,Request / frozen single-event offer,hourly_full/*.parquet
+offerable_selected_option,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",economic_primary.csv;economic_sensitivity.csv
+only_window_peak_failure,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_ledgers.csv;development_ledgers.csv
+only_window_peak_failures,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_summary.csv;development_summary.csv
+operating_peak_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,economic_primary.csv;economic_sensitivity.csv
+original_successes,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",paired_controller_contrasts.csv
+original_window_only_failures,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",paired_controller_contrasts.csv
+overlapping_guard_hours,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_ledgers.csv;development_ledgers.csv
+p05,see metric,5th scenario percentile; not a confidence bound,ready_hourly_curves.csv
+p10_slack_h,h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+p95,see metric,95th scenario percentile; not a confidence bound,ready_hourly_curves.csv
+paired_baseline_backlog_gpu_h,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",hourly_full/*.parquet
+paired_baseline_executed_gpu_h,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",hourly_full/*.parquet
+paired_baseline_missed_gpu_h,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",hourly_full/*.parquet
+paired_compute_debt_kwh,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",hourly_full/*.parquet
+payment_usd_kw_year,US$/offered accounting kW/year,95th percentile of net annual cost divided by scaled offer,economic_primary.csv;economic_sensitivity.csv
+pcc_capacity_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+pcc_limit_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+pcc_power_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+peak_excess_backlog_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+plot_csv,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_partition_index.csv
+program,identifier,H4G8 or H8G12 four-call programme; single otherwise,confirmation_events.csv;confirmation_ledgers.csv;confirmation_summary.csv;development_events.csv;development_ledgers.csv;development_summary.csv;economic_primary.csv;economic_sensitivity.csv;hourly_full/*.parquet;hourly_partition_index.csv;paired_controller_contrasts.csv;ready_hourly_curves.csv;selected_offers.csv
+proposed_fraction,fraction,Allocation proposed before extra all-window clipping,controller_audit/*.parquet
+pv_generation_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+qualified,boolean,One-sided 95% Wilson lower bound reaches 0.95 in the stated sample; economic tables refer to confirmation only,confirmation_summary.csv;development_summary.csv
+rebound_excess_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+rebound_peak_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv
+rebound_ratio,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv
+rebound_ratio_proxy,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+rebound_reference_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+rebound_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+receipt_path,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_ledgers.csv;development_ledgers.csv
+recovery_active,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+recovery_complete,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+recovery_remaining_hours,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+recovery_stop_hour,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",illustration_windows.csv
+recovery_time_h,h or null,Time to baseline-relative recovery; null if unresolved within window,confirmation_events.csv;development_events.csv
+reference_mix_operating_peak_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+regime,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,economic_primary.csv;economic_sensitivity.csv
+requested_reduction_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv;hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+rescued_window_only_failures,paired scenarios,Original only fails window relief; revised passes every criterion,paired_controller_contrasts.csv
+revised_successes,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",paired_controller_contrasts.csv
+reward,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+reward_penalty,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+reward_version,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+role,category,development or confirmation,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv;hourly_partition_index.csv;ready_hourly_curves.csv;recovery_input_index.csv
+rows,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_partition_index.csv
+running_rebound_ratio,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+running_rebound_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+running_window_relief_fraction,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+running_window_relief_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+scale,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",economic_primary.csv;economic_sensitivity.csv
+scenario_hash,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv;recovery_input_index.csv
+scenario_provenance,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+scenario_seed,identifier,Independent model scenario seed,controller_audit/*.parquet;hourly_full/*.parquet
+seed,identifier,Independent model scenario seed,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv;illustration_windows.csv;recovery_input_index.csv
+selected_by_development,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",economic_primary.csv;economic_sensitivity.csv
+selected_capacity_kw,kW,Frozen development-selected repeated request,selected_offers.csv
+selected_fraction,fraction,Largest development-qualified tested request fraction; missing means none,selected_offers.csv
+shortfall_energy_kwh,kWh,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+site_cost,US$/year,Fixed site charge applied once after proportional scaling,economic_primary.csv;economic_sensitivity.csv
+start_hour,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv;illustration_windows.csv
+stop_hour,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",illustration_windows.csv
+success,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;confirmation_ledgers.csv;development_events.csv;development_ledgers.csv
+success_fraction,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",confirmation_summary.csv;development_summary.csv
+successes,scenarios,Number of complete successful scenarios,confirmation_summary.csv;development_summary.csv
+switching_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+target_below_fixed_power,boolean,Requested electrical ceiling is below fixed PCC demand,controller_audit/*.parquet
+target_dc_peak_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+target_pcc_kw,kW,Strictest current electrical ceiling; missing means no added ceiling,controller_audit/*.parquet
+terminal_backlog_excess_fraction,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+terminal_backlog_excess_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+terminal_backlog_fraction,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv
+terminal_backlog_penalty,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+terminal_backlog_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+terminal_incremental_backlog_gpu_h,GPU-h,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+trace_path,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+trace_sha256,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_ledgers.csv;development_ledgers.csv
+training_share,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+trials,scenarios,Number of independent scenario seeds,confirmation_summary.csv;development_summary.csv;hourly_partition_index.csv;paired_controller_contrasts.csv
+waiting_price,US$/GPU-h/h,Declared waiting-exposure unit price,economic_primary.csv;economic_sensitivity.csv
+weighted_deadline_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+weighted_delivery_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+weighted_excess_backlog_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+weighted_feasibility_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+weighted_rebound_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+weighted_switching_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+weighted_terminal_backlog_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+weighted_window_relief_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+wilson_lower,probability,One-sided 95% lower bound for joint success,confirmation_summary.csv;development_summary.csv
+window_peak_failure,field-specific,"See FIELD_GUIDE.md, literal field name and complete Supplementary Methods",illustration_windows.csv
+window_peak_relief_fraction,fraction,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv
+window_peak_relief_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,confirmation_events.csv;development_events.csv
+window_relief_violation_cost,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+workload_source,see table context,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv
+worst_class_peak_kw,kW,Literal named model/output field; equations and criteria in current Supplementary Methods,hourly_full/*.parquet;illustration_all_window_greedy.csv;illustration_all_window_mpc.csv;illustration_original.csv

@@ -115,3 +115,57 @@ PB  - USENIX Association
 UR  - https://www.usenix.org/conference/nsdi22/presentation/weng
 N1  - Verified against the official USENIX proceedings page.
 ER  -
+
+TY  - RPRT
+TI  - Annual Report (Form 10-K) for the Year Ended 31 December 2025
+AU  - CoreWeave, Inc.
+PY  - 2026
+PB  - US Securities and Exchange Commission
+UR  - https://www.sec.gov/Archives/edgar/data/1769628/000176962826000104/crwv-20251231.htm
+N1  - Official operator filing; used only as an accounting-life and financing-context range anchor.
+ER  -
+
+TY  - RPRT
+TI  - Annual Report (Form 10-K) for the Year Ended 31 December 2025
+AU  - Amazon.com, Inc.
+PY  - 2026
+PB  - US Securities and Exchange Commission
+UR  - https://www.sec.gov/Archives/edgar/data/1018724/000101872426000004/amzn-20251231.htm
+N1  - Official operator filing; used only as an accounting-life range anchor.
+ER  -
+
+TY  - RPRT
+TI  - Annual Report (Form 10-K) for the Fiscal Year Ended 30 June 2025
+AU  - Microsoft Corporation
+PY  - 2025
+PB  - US Securities and Exchange Commission
+UR  - https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm
+N1  - Official operator filing; used only as an accounting-life range anchor.
+ER  -
+
+TY  - RPRT
+TI  - 2024 Annual Technology Baseline: Financial Cases and Methods
+AU  - National Renewable Energy Laboratory
+PY  - 2024
+PB  - National Renewable Energy Laboratory
+UR  - https://atb.nrel.gov/electricity/2024/financial_cases_%26_methods
+N1  - Official finance-method record; infrastructure WACC ranges are not interpreted as an observed AI-operator WACC.
+ER  -
+
+TY  - RPRT
+TI  - Demand Response Advanced Controls Framework and Cost Assessment
+AU  - Lawrence Berkeley National Laboratory
+PY  - 2017
+PB  - Lawrence Berkeley National Laboratory
+UR  - https://eta-publications.lbl.gov/sites/default/files/demand_response_advanced_controls_framework_and_cost_assessment_final_published.pdf
+N1  - Historical commercial-building evidence used only to support separate fixed-site and capacity-dependent enablement sensitivity.
+ER  -
+
+TY  - RPRT
+TI  - 2027/2028 Base Residual Auction Report
+AU  - PJM Interconnection
+PY  - 2025
+PB  - PJM Interconnection
+UR  - https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2027-2028/2027-2028-bra-report.pdf
+N1  - Official product-price observation; no equivalence between AIDRBench K_cert and UCAP is assumed.
+ER  -

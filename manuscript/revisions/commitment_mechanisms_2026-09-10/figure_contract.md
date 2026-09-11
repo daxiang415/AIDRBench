@@ -1,0 +1,10 @@
+# Figure contract — Python, v0.24
+
+Scientific plots use the existing matplotlib workflow. No image-generation model or browser is involved. Use exact existing data for all eleven figures; build F3/F6/S3/S5 anew, inherit palette and typography only. F2/F5 retain data but clarify the relaxed status of the older PI statistic. F1/F4/S1/S2/S4 retain their prior scientific content.
+
+- F3 conclusion: qualification for one workload is insufficient for transfer; independent qualification, exact feasibility and workload-time diagnosis answer distinct questions. Panels: a refined probability limits; b mutually exclusive zero-loss diagnoses across all 15 predeclared full-request cases; c cross-scored older eight-week counts; d all eight paired new weeks at fixed 2.95 kW. No error bars on diagnostic cases or observed-week counts; n and nesting disclosed.
+- F6 conclusion: observed model operating exposure can be priced separately from access charges; service ranking depends on price. Panels: a all-trajectory waiting mean and scenario p05–p95; b additive cost attribution; c tested waiting-price sensitivity; d analytical duration price boundary including opt-out. Costs are conditional scenario quantiles, not observed market prices or statistical confidence intervals.
+- S3 preserves candidate-grid development data and old structural context; S5 prices the refined ledgers under fee and waiting alternatives. Every prior analysis remains in source tables even when no longer drawn.
+- Quantitative grids, 183 mm width, 160–180 mm height, minimum 6 pt glyphs; editable text in PDF/SVG, 300 dpi PNG and 600 dpi TIFF. Preserve complete per-panel CSV inputs, no hidden simulation in plotter.
+- Main manuscript and aligned Chinese captions must define service endpoints, model versus accounting kW, exact timing, seeds or observed-week unit, and whether displayed ranges are percentiles or confidence limits.
+- Exported PDF glyph audit, actual visual inspection, package-only redraw and complete source hashes are required. No automatic sub-agent review.

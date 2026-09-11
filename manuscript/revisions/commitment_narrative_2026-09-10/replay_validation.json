@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "role": "workload",
+  "variant": "w0_resource_gpu_h_chronological_g10",
+  "program": "H8P16",
+  "kind": "repeated",
+  "fraction": 0.5,
+  "seed": 990000,
+  "rows": 216,
+  "numeric_columns": 92,
+  "max_absolute_error": 0.0,
+  "missing_value_masks_match": true,
+  "scenario_hash": "4d76c918d7112a60d181cc0c47ac3fb95d637318eceab96f8e0afd18f4d1d869",
+  "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v14/04_code/aidrbench_project/src/aidrbench/__init__.py",
+  "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v14/04_code/repeat_mechanism/recovery_controller.py"
+}

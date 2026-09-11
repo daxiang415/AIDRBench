@@ -1,0 +1,20 @@
+{
+  "rows": 40522321,
+  "requested_gpu_hours": 254980926.32766664,
+  "source_sha256": "95c91a8035197e15f29e9c1d15a9147d07b2a6959b2bb08322cb9f033b029124",
+  "shares": {
+    "dev": 0.03355223213792447,
+    "offline_inference": 0.21519431042326148,
+    "online_inference": 0.5449500737914205,
+    "other": 0.009496465835424413,
+    "training": 0.19422560345519455,
+    "unknown": 0.0025813143567747603
+  },
+  "lp_batch_shares": {
+    "training": 0.011372996872916001,
+    "offline_inference": 0.20890842934874146
+  },
+  "lp_batch_total_share": 0.22028142622165747,
+  "denominator": "sum of requested GPU-equivalents times uncapped execution-span hours; not energy, useful work, or DR eligibility",
+  "source_scope": "released execution-summary spans; not an industry sample or a replay of pod-hourly telemetry"
+}

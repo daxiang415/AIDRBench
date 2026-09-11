@@ -1,0 +1,112 @@
+{
+  "AIDRBench_Figure_1.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_1.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.5,
+    "text_run_count": 47,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Figure_2.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_2.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.5,
+    "text_run_count": 56,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Figure_3.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_3.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.1,
+    "text_run_count": 84,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Figure_4.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_4.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.1,
+    "text_run_count": 89,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Figure_5.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_5.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.5,
+    "text_run_count": 56,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Figure_6.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_6.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.1,
+    "text_run_count": 88,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Supplementary_Figure_1.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_1.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.5,
+    "text_run_count": 27,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Supplementary_Figure_2.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_2.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.5,
+    "text_run_count": 42,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Supplementary_Figure_3.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_3.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.2,
+    "text_run_count": 88,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Supplementary_Figure_4.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_4.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.2,
+    "text_run_count": 96,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  },
+  "AIDRBench_Supplementary_Figure_5.pdf": {
+    "pdf": "docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_5.pdf",
+    "auditable": true,
+    "minimum_required_pt": 6.0,
+    "minimum_found_pt": 6.1,
+    "text_run_count": 98,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": []
+  }
+}

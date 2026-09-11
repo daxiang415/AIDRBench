@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "rule": "All eight model outcomes optimal; original relative/absolute MIP gap criterion met; retain original cached result if it finishes before reconciliation, otherwise first fully optimal multi-start by finish time; never choose by effect magnitude or benefit.",
+  "protocol_sha256": "a1959345f51fd23f79e79e07dd66034abe3da1fd0354a214f1d938c756dbb9bb",
+  "choices": [
+    {
+      "case": "f60",
+      "seed": 960037,
+      "source": "original",
+      "cache_sha256": "07027457f3606b1348808a9788958c03086ab9c52a8679c6a53fc518b2145cb1"
+    },
+    {
+      "case": "f10_g30",
+      "seed": 960048,
+      "source": "original",
+      "cache_sha256": "f5a9736019c7d13f574cefa2c283565c777d61942681c46c18e76273a4baf8af"
+    },
+    {
+      "case": "f10_g30",
+      "seed": 960065,
+      "source": "original",
+      "cache_sha256": "310a552fff0f5141c0020a94383fb12aeb4a15294052c33d40e7d886fad0af54"
+    },
+    {
+      "case": "f10_rigid225",
+      "seed": 960065,
+      "source": "original",
+      "cache_sha256": "753ffb36c102db451e71e1e252f27cc15bb6c9154ec78b91dfdaef85c3245650"
+    }
+  ],
+  "used_alternate_groups": 0
+}

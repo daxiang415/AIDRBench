@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "title_unified": true,
+  "requested_old_phrases_removed": true,
+  "table_navigation_18_to_21": true,
+  "zero_miss_and_probability_distinguished": true,
+  "english_chinese_blocks_match": true,
+  "main_figures": 6,
+  "supplementary_figures": 5,
+  "supplementary_tables": 21,
+  "timing_cross_counts_verified": true,
+  "paired_shortage_removed": 29,
+  "paired_shortage_created": 5,
+  "all_frozen_protocols_unchanged": true,
+  "new_simulations": 0
+}

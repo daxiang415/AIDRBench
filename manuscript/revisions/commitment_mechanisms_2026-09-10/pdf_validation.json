@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "documents": {
+    "main": {
+      "pages": 16,
+      "figures": 6,
+      "sha256": "117263de4e1fd1e39c034f28bbc73934628a5c848a2ba64a16b907da7a413393",
+      "no_page_edge_overflow": true
+    },
+    "supplement": {
+      "pages": 24,
+      "figures": 5,
+      "sha256": "d61e6d0bdd32432f5f9e1e0a757047bbce116025c12cabf8de03a02fe5d5a06c",
+      "no_page_edge_overflow": true
+    }
+  },
+  "supplementary_tables": 21
+}

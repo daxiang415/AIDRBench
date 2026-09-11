@@ -1,0 +1,200 @@
+{
+  "status": "posthoc_design_with_new_prospective_confirmation",
+  "parent_version": "0.22",
+  "variants": [
+    {
+      "name": "u50d50g10",
+      "utilization": 0.5,
+      "slack_multiplier": 0.5,
+      "gpu_share": 0.1
+    },
+    {
+      "name": "u50d100g10",
+      "utilization": 0.5,
+      "slack_multiplier": 1.0,
+      "gpu_share": 0.1
+    },
+    {
+      "name": "u65d50g10",
+      "utilization": 0.65,
+      "slack_multiplier": 0.5,
+      "gpu_share": 0.1
+    },
+    {
+      "name": "u65d100g10",
+      "utilization": 0.65,
+      "slack_multiplier": 1.0,
+      "gpu_share": 0.1
+    },
+    {
+      "name": "u80d50g10",
+      "utilization": 0.8,
+      "slack_multiplier": 0.5,
+      "gpu_share": 0.1
+    },
+    {
+      "name": "u80d100g10",
+      "utilization": 0.8,
+      "slack_multiplier": 1.0,
+      "gpu_share": 0.1
+    },
+    {
+      "name": "u65d50g20",
+      "utilization": 0.65,
+      "slack_multiplier": 0.5,
+      "gpu_share": 0.2
+    },
+    {
+      "name": "u80d50g20",
+      "utilization": 0.8,
+      "slack_multiplier": 0.5,
+      "gpu_share": 0.2
+    }
+  ],
+  "development_seeds": [
+    984000,
+    984099
+  ],
+  "confirmation_seeds": [
+    985000,
+    985299
+  ],
+  "pilot_seeds": [
+    984998,
+    984999
+  ],
+  "reference_capacity_kw": 5.898243186244942,
+  "fractions": [
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "programs": {
+    "u50d50g10": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      }
+    ],
+    "u50d100g10": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      }
+    ],
+    "u65d50g10": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      }
+    ],
+    "u65d100g10": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      },
+      {
+        "name": "H4P16",
+        "h": 4,
+        "period": 16
+      }
+    ],
+    "u80d50g10": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      }
+    ],
+    "u80d100g10": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      }
+    ],
+    "u65d50g20": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      }
+    ],
+    "u80d50g20": [
+      {
+        "name": "H8P16",
+        "h": 8,
+        "period": 16
+      },
+      {
+        "name": "H8P24",
+        "h": 8,
+        "period": 24
+      }
+    ]
+  },
+  "controller": "unchanged all-window MPC from v0.21",
+  "selection_criteria": [
+    "success_1pct",
+    "success_zero"
+  ],
+  "selection": "largest grid offer with one-sided Wilson95 >= .95; baseline failures retained in denominator",
+  "zero_deadline_miss_gpu_h_tolerance": 1e-07,
+  "other_criteria": {
+    "reliability_target": 0.95,
+    "confidence_level": 0.95,
+    "min_delivery_ratio": 0.95,
+    "min_interval_delivery_ratio": 0.95,
+    "max_deadline_miss_rate": 0.01,
+    "max_rebound_ratio": 0.25,
+    "min_window_peak_relief_fraction": 0.5,
+    "max_terminal_backlog_fraction": 0.02
+  },
+  "clock_design": "same random target start 111+UniformInteger(0,23), four backward-spaced calls, matched target-only fresh control",
+  "inference": "pointwise model-scenario qualification; earlier event clocks also move with period; no pure gap causation",
+  "design_sha256": "be923ca48287bbde1cedc732dd5313cfb8537eab82cff59e5800207eedcb5f2d",
+  "runner_sha256": "7e7916b40e2c81d03d6da769e5afbf6fbb6cec906ccbf8ff7a4a0b4f05d25b14",
+  "parent_controller_sha256": "8100cd41124a1ac8d9fb6212a118fbc91aa6667e25805591151fbf3567bbca7d",
+  "economic_scope": "new fee scenarios reuse full ledgers, all failures retained, no market profit claim",
+  "temporal_scope": "8 observed 2020 weeks x 10 new synthetic realizations, no new source/SLA claim"
+}

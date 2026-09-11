@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "path": "/home/user/projects/AIDRBench/results/exports/AIDRBench_All_Figures_2026-09-10_v14.zip",
+  "bytes": 13392344034,
+  "sha256": "e7d2095b32e3ad8af8ca396d7260a494120e52357b52342c6b395c91785cb923",
+  "files": 56521,
+  "changed_entries": 252,
+  "all_entry_sha256_verified": true,
+  "zip_crc_pass": true,
+  "duplicate_entries": false,
+  "extraction_version_hints_consistent": true,
+  "normalized_local_headers": 0,
+  "manuscript": "v0.25",
+  "chinese": "v19",
+  "current_figures": 11,
+  "previous_release_preserved": true,
+  "new_simulations": 0
+}

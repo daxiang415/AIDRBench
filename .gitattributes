@@ -1,0 +1,4 @@
+# Preserve the exact bytes and hashes of the frozen CSV source tables.
+*.csv -text whitespace=cr-at-eol
+# Matplotlib SVG path serialization has meaningful frozen bytes; keep its export intact.
+docs/figures/commitment_narrative_v1/artwork/*.svg -text -whitespace

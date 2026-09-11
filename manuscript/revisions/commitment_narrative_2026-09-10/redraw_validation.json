@@ -1,0 +1,63 @@
+{
+  "status": "PASS",
+  "figures": 11,
+  "all_png_sha256_identical": true,
+  "comparisons": [
+    {
+      "file": "AIDRBench_Figure_1.png",
+      "sha256": "dac1fad592e24f5b9dc522287591acc07e2a4c12c9c699237b8fd9e89ab65738",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Figure_2.png",
+      "sha256": "a792b1c49c2398d8c69256e387611180348f055a1d1b557b91863292dcda2f9a",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Figure_3.png",
+      "sha256": "d36a6a1576bd9e295d8a09bf82c0248a401919cef49853a07f0a94545a1e354d",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Figure_4.png",
+      "sha256": "0aed5ecdd8be4a859ee2e8b95f0474f0656dadd3408fdf4764d4c9fa13eb5279",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Figure_5.png",
+      "sha256": "f04443e5319da1fca336d544f83b5c75b23749114330998023fc44e7d788446b",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Figure_6.png",
+      "sha256": "ce2141410653f82ecdd8eff46fefe8f9661577288b28948fed4b939068e7aa2f",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_1.png",
+      "sha256": "44666af5b40652685a768a2dc2ba137071fbcea8313059b95d7dac020e0bfe1e",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_2.png",
+      "sha256": "2aaae875c920faee8d961260969287c90501c3d2cb161956182e78d0f1e1c92f",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_3.png",
+      "sha256": "a30bb0a58344b99054278efbe8588f62afff2b45e9e96c717ca6b57b1fca89ba",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_4.png",
+      "sha256": "7c5fcb33292eaf742b9b50559c01ad5cb5bea9b9a2fa68f9302d1eb4a35ec55b",
+      "match": true
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_5.png",
+      "sha256": "c0b2dbc8176e965afcf1aab8845380eadaf0b557933681fc529dc19dea2c76a8",
+      "match": true
+    }
+  ],
+  "new_simulations": 0
+}

@@ -1,0 +1,157 @@
+[
+  {
+    "name": "f05",
+    "fraction": 0.05,
+    "scope": "LP_batch_permission_scenario",
+    "shares": {
+      "dev": 0.03355223213792447,
+      "offline_inference": 0.21519431042326148,
+      "online_inference": 0.5449500737914205,
+      "other": 0.009496465835424413,
+      "training": 0.19422560345519455,
+      "unknown": 0.0025813143567747603
+    },
+    "flexible_fractions": {
+      "dev": 0.0,
+      "offline_inference": 0.22035215583704695,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.013291088962754261,
+      "unknown": 0.0
+    },
+    "eligible_shares": {
+      "dev": 0.0,
+      "offline_inference": 0.047418530225632374,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.002581469774367622,
+      "unknown": 0.0
+    },
+    "gpu_fraction": 0.05,
+    "rigid_utilization": 0.6502376599634369
+  },
+  {
+    "name": "f10",
+    "fraction": 0.1,
+    "scope": "LP_batch_permission_scenario",
+    "shares": {
+      "dev": 0.03355223213792447,
+      "offline_inference": 0.21519431042326148,
+      "online_inference": 0.5449500737914205,
+      "other": 0.009496465835424413,
+      "training": 0.19422560345519455,
+      "unknown": 0.0025813143567747603
+    },
+    "flexible_fractions": {
+      "dev": 0.0,
+      "offline_inference": 0.4407043116740939,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.026582177925508522,
+      "unknown": 0.0
+    },
+    "eligible_shares": {
+      "dev": 0.0,
+      "offline_inference": 0.09483706045126475,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.005162939548735244,
+      "unknown": 0.0
+    },
+    "gpu_fraction": 0.1,
+    "rigid_utilization": 0.6505019305019305
+  },
+  {
+    "name": "f20",
+    "fraction": 0.2,
+    "scope": "LP_batch_permission_scenario",
+    "shares": {
+      "dev": 0.03355223213792447,
+      "offline_inference": 0.21519431042326148,
+      "online_inference": 0.5449500737914205,
+      "other": 0.009496465835424413,
+      "training": 0.19422560345519455,
+      "unknown": 0.0025813143567747603
+    },
+    "flexible_fractions": {
+      "dev": 0.0,
+      "offline_inference": 0.8814086233481878,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.053164355851017045,
+      "unknown": 0.0
+    },
+    "eligible_shares": {
+      "dev": 0.0,
+      "offline_inference": 0.1896741209025295,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.010325879097470488,
+      "unknown": 0.0
+    },
+    "gpu_fraction": 0.2,
+    "rigid_utilization": 0.6497180043383948
+  },
+  {
+    "name": "f40",
+    "fraction": 0.4,
+    "scope": "near_all_batch_opt_in_counterfactual",
+    "shares": {
+      "dev": 0.03355223213792447,
+      "offline_inference": 0.21519431042326148,
+      "online_inference": 0.5449500737914205,
+      "other": 0.009496465835424413,
+      "training": 0.19422560345519455,
+      "unknown": 0.0025813143567747603
+    },
+    "flexible_fractions": {
+      "dev": 0.0,
+      "offline_inference": 0.9985452030041149,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.9531120013009948,
+      "unknown": 0.0
+    },
+    "eligible_shares": {
+      "dev": 0.0,
+      "offline_inference": 0.21488124638692616,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.1851187536130739,
+      "unknown": 0.0
+    },
+    "gpu_fraction": 0.4,
+    "rigid_utilization": 0.6492485549132948
+  },
+  {
+    "name": "f60",
+    "fraction": 0.6,
+    "scope": "batch_enriched_composition_counterfactual",
+    "shares": {
+      "dev": 0.03355223213792447,
+      "offline_inference": 0.40577439654480546,
+      "online_inference": 0.3543699876698765,
+      "other": 0.009496465835424413,
+      "training": 0.19422560345519455,
+      "unknown": 0.0025813143567747603
+    },
+    "flexible_fractions": {
+      "dev": 0.0,
+      "offline_inference": 1.0,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 1.0,
+      "unknown": 0.0
+    },
+    "eligible_shares": {
+      "dev": 0.0,
+      "offline_inference": 0.40577439654480546,
+      "online_inference": 0.0,
+      "other": 0.0,
+      "training": 0.19422560345519455,
+      "unknown": 0.0
+    },
+    "gpu_fraction": 0.6,
+    "rigid_utilization": 0.6511304347826087
+  }
+]

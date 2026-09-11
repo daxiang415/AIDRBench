@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "check": "development_counts_and_independent_Wilson",
+      "rows": 1200,
+      "status": "PASS"
+    },
+    {
+      "check": "confirmation_counts_and_independent_Wilson",
+      "rows": 1200,
+      "status": "PASS"
+    },
+    {
+      "check": "all_new_complete_trajectories",
+      "trials": 3040,
+      "hourly_rows": 656640,
+      "status": "PASS"
+    },
+    {
+      "check": "independent_job_edge_and_all_electrical_witness_constraints",
+      "witnesses": 11,
+      "worst_job_conservation_error": 8.72635297355373e-14,
+      "status": "PASS"
+    },
+    {
+      "check": "crossing_release_deadline_counterexample",
+      "status": "PASS",
+      "conclusion": "cumulative-only PI optima are relaxation envelopes, not generally exact job-feasible capacities"
+    },
+    {
+      "check": "cost_additivity_and_opt_out_boundary",
+      "status": "PASS",
+      "curves": 906
+    }
+  ]
+}

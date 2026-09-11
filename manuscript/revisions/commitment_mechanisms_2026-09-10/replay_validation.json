@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "checks": {
+    "reference": {
+      "status": "PASS",
+      "role": "confirmation",
+      "variant": "u65d100g10",
+      "program": "H8P16",
+      "kind": "repeated",
+      "fraction": 0.75,
+      "seed": 989000,
+      "rows": 216,
+      "numeric_columns": 92,
+      "max_absolute_error": 0.0,
+      "missing_value_masks_match": true,
+      "scenario_hash": "ea17aa5ea975e67e37575501e59af9548b6bb3b93558149a755188b5739f98aa",
+      "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v13/04_code/aidrbench_project/src/aidrbench/__init__.py",
+      "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v13/04_code/repeat_mechanism/recovery_controller.py"
+    },
+    "h4": {
+      "status": "PASS",
+      "role": "confirmation",
+      "variant": "u65d100g10",
+      "program": "H4P16",
+      "kind": "repeated",
+      "fraction": 0.95,
+      "seed": 989000,
+      "rows": 216,
+      "numeric_columns": 92,
+      "max_absolute_error": 0.0,
+      "missing_value_masks_match": true,
+      "scenario_hash": "5e9de902a63566abd43cfd8b33988c0c5c105e43dabb43551503dacabfffef80",
+      "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v13/04_code/aidrbench_project/src/aidrbench/__init__.py",
+      "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v13/04_code/repeat_mechanism/recovery_controller.py"
+    },
+    "weighted": {
+      "status": "PASS",
+      "role": "workload",
+      "variant": "w0_resource_gpu_h_chronological_g10",
+      "program": "H8P16",
+      "kind": "repeated",
+      "fraction": 0.5,
+      "seed": 990000,
+      "rows": 216,
+      "numeric_columns": 92,
+      "max_absolute_error": 0.0,
+      "missing_value_masks_match": true,
+      "scenario_hash": "4d76c918d7112a60d181cc0c47ac3fb95d637318eceab96f8e0afd18f4d1d869",
+      "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v13/04_code/aidrbench_project/src/aidrbench/__init__.py",
+      "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v13/04_code/repeat_mechanism/recovery_controller.py"
+    },
+    "pi": {
+      "solver_status": 1,
+      "solver_message": "Time limit reached. (HiGHS Status 13: Time limit reached)",
+      "seconds": 600.1507670329884,
+      "variables": 102488,
+      "execution_edges": 90614,
+      "work_groups": 5919,
+      "rows": 6677,
+      "request_kw": 5.898243186244942,
+      "miss_rate": 0.0,
+      "classification": "feasible_witness",
+      "max_constraint_violation": 3.8191672047105385e-14,
+      "missed_gpu_h": 0.0,
+      "terminal_backlog_gpu_h": 0.0,
+      "event_metrics": [
+        {
+          "event_id": 0,
+          "mean_delivery": 0.9562500000000027,
+          "minimum_delivery": 0.9499999999999948,
+          "rebound": 0.2500000000000011,
+          "window_relief": 0.9499999999999948
+        },
+        {
+          "event_id": 1,
+          "mean_delivery": 0.9562499999999955,
+          "minimum_delivery": 0.9499999999999948,
+          "rebound": 0.2500000000000023,
+          "window_relief": 0.5000000000000094
+        },
+        {
+          "event_id": 2,
+          "mean_delivery": 0.9562499999999967,
+          "minimum_delivery": 0.9499999999999948,
+          "rebound": 0.2500000000000023,
+          "window_relief": 0.5000000000000094
+        },
+        {
+          "event_id": 3,
+          "mean_delivery": 0.9562500000000027,
+          "minimum_delivery": 0.9499999999999948,
+          "rebound": 0.25,
+          "window_relief": 0.5000000000000094
+        }
+      ],
+      "status": "PASS",
+      "id": "u65d100g10_985002_f1.0_m0.0",
+      "scope": "classification reproduced; feasible schedules may be non-unique"
+    }
+  },
+  "scope": "Three complete causal trajectories and one feasible PI diagnosis replayed using staged-package imports. PI feasibility only, not objective optimality."
+}
