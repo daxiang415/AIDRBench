@@ -81,11 +81,11 @@ py -3.12 -m venv .venv
 
 核心库在 `src/aidrbench`，参数在 `configs`，测试在 `tests`。v0.27扩展的原研究驱动和冻结协议保留在 `manuscript/revisions` 的七个研究目录中。安装完整计算、分析和测试依赖：
 
-完整测试包含按历史Git提交重放的检查，请在 **Git克隆的目录** 中运行，并保留完整历史；GitHub的Download ZIP不含Git历史。ZIP仍可用于编辑论文、编辑代码和全部当前图件的重绘。
+`requirements-certificate.txt`固定该证据所用的十个运行库版本，防止重新安装时自动升级改变重放环境。完整测试包含按历史Git提交重放的检查，请在 **Git克隆的目录** 中运行，并保留完整历史；GitHub的Download ZIP不含Git历史。ZIP仍可用于编辑论文、编辑代码和全部当前图件的重绘。
 
 ```powershell
 $env:PYTHONUTF8 = "1"
-.\.venv\Scripts\python.exe -m pip install -e ".[control,analysis,dev,paper]"
+.\.venv\Scripts\python.exe -m pip install -c requirements-certificate.txt -e ".[control,analysis,dev,paper]"
 .\.venv\Scripts\python.exe -m pytest -q
 .\.venv\Scripts\python.exe -m ruff check src tests
 .\.venv\Scripts\python.exe -m mypy src

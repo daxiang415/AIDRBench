@@ -15,3 +15,5 @@ Bulk raw datasets, multi-GB hourly trajectories and per-scenario recovery inputs
 The GitHub edition's [manifest](../paper/v0.27/MANIFEST.csv) records editable release files. The [validation record](github_v027_validation.json) distinguishes local checks from GitHub Windows/Linux CI.
 
 GitHub packaging adaptation: main Figure 1 SVG references 15 byte-identical PNG/JPEG assets in its adjacent `Figure_1_assets` folder. Keep that folder with the SVG when copying it. The PDF, PNG, PowerPoint, vector geometry and scientific data are unchanged. This avoids a secret-scanning false match in inline JPEG encoding. `GITHUB_ADAPTATION.json` records original and current hashes; `ORIGINAL_FILE_MANIFEST.csv` preserves the earlier receipt.
+
+Certificate replay uses `requirements-certificate.txt`, derived from the historical certificate lockfile. Archive extraction explicitly disables Git newline conversion so Windows and Linux validate the same source bytes. Neither change relaxes source hashes or dependency checks.

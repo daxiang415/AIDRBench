@@ -60,5 +60,9 @@
     "new_visual_page_review": false,
     "bulk_raw_and_hourly_data_included": false,
     "author_metadata_completed": false
-  }
+  },
+  "compatibility_fixes": [
+    "Pin the ten certificate runtime dependencies when installing the full development environment.",
+    "Disable automatic Git newline conversion for hash-bound archive replay; regression test simulates core.autocrlf=true."
+  ]
 }

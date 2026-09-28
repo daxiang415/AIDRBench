@@ -1719,6 +1719,10 @@ def _prepare_certificate_runtime(
         archived = subprocess.run(
             [
                 "git",
+                "-c",
+                "core.autocrlf=false",
+                "-c",
+                "core.eol=lf",
                 "archive",
                 "--format=tar",
                 f"--output={archive_path}",

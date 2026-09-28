@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import replace
 from pathlib import Path
 
@@ -302,7 +303,14 @@ def test_ledger_manifest_captures_git_state_before_workspace_creation(
 
 
 @pytest.mark.usefixtures("portable_certificate_files")
-def test_certificate_git_runtime_replays_real_validation_scenario(tmp_path: Path) -> None:
+def test_certificate_git_runtime_replays_real_validation_scenario(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # A Windows-style Git setting must not rewrite the hash-bound archive.
+    config_index = int(os.environ.get("GIT_CONFIG_COUNT", "0"))
+    monkeypatch.setenv("GIT_CONFIG_COUNT", str(config_index + 1))
+    monkeypatch.setenv(f"GIT_CONFIG_KEY_{config_index}", "core.autocrlf")
+    monkeypatch.setenv(f"GIT_CONFIG_VALUE_{config_index}", "true")
     specification = load_economic_participation_specification(
         _REPOSITORY_ROOT / "configs/economics/economic_participation_v1.yaml"
     )

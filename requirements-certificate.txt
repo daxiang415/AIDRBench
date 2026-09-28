@@ -1,0 +1,12 @@
+# Solver/runtime versions bound by the original technical certificate.
+# Source: 5889405427b8f00f3cdd12b961b79d621b122e65:uv.lock
+cvxpy==1.9.2
+gymnasium==1.3.0
+highspy==1.15.1
+numpy==2.5.2
+osqp==1.1.3
+pandas==2.3.3
+pyarrow==21.0.0
+pydantic==2.13.4
+pyyaml==6.0.3
+scipy==1.18.0

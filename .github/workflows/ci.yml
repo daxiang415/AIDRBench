@@ -33,7 +33,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install project and editing dependencies
-        run: python -m pip install -e ".[control,analysis,dev,paper]"
+        run: python -m pip install -c requirements-certificate.txt -e ".[control,analysis,dev,paper]"
       - name: Lint
         run: python -m ruff check src tests scripts/check_v027_checkout.py scripts/rebuild_main_figures.py
       - name: Type check
