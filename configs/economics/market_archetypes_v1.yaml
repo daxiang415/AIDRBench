@@ -1,0 +1,31 @@
+schema_version: 1
+currency_basis: real_2026_usd
+analysis_status: illustrative_parameterized_sensitivity
+
+# Market-neutral payment archetypes.  Values are sensitivity coordinates, not
+# current tariff claims for any named ISO/RTO or utility.
+archetypes:
+  - archetype_id: capacity_only
+    capacity_payment_per_kw_year: [0, 500]
+    performance_payment_per_mwh: [0]
+    flexible_connection_value_per_year: [0]
+    shortfall_penalty_per_mwh: 100
+    failure_penalty_per_event: 0
+  - archetype_id: performance_only
+    capacity_payment_per_kw_year: [0]
+    performance_payment_per_mwh: [0, 50]
+    flexible_connection_value_per_year: [0]
+    shortfall_penalty_per_mwh: 100
+    failure_penalty_per_event: 0
+  - archetype_id: two_part
+    capacity_payment_per_kw_year: [0, 100, 250, 500, 750, 1000]
+    performance_payment_per_mwh: [50]
+    flexible_connection_value_per_year: [0]
+    shortfall_penalty_per_mwh: 100
+    failure_penalty_per_event: 0
+  - archetype_id: flexible_connection_value
+    capacity_payment_per_kw_year: [0]
+    performance_payment_per_mwh: [0]
+    flexible_connection_value_per_year: [0, 25000]
+    shortfall_penalty_per_mwh: 100
+    failure_penalty_per_event: 0

@@ -29,6 +29,19 @@ observation_and_trajectory:
   pre_event_hours: 12
   post_event_hours: 24
 
+external_artwork:
+  S5:
+    renderer: web_gpt
+    source_data_directory: manuscript/source_data/nature_mainline_v1
+    expected_bundle_id: nature_communications_model_a_v1
+    source_table_ids:
+      representative_curves: fig6_community_profile_representative_curves
+      pi_firm_boundaries: fig6_community_profile_pi_firm_boundaries
+      causal_transfer: fig6_community_profile_causal_transfer
+      pv_hosting_summary: fig6_community_profile_pv_hosting_summary
+    locked_sets_used: false
+    evidence_scope: paired_development_profile_sensitivity
+
 export:
   width_mm: 183.0
   formats: [svg, pdf, tiff, png]

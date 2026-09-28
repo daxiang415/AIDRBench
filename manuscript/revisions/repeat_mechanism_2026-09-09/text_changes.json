@@ -1,0 +1,249 @@
+[
+  {
+    "id": "M006",
+    "old": {
+      "en": "Artificial-intelligence data centres could support electricity grids by postponing computing, but online services limit how much work operators can allow to wait. Here we connect explicit workload permissions to response capacity, repeated delivery, photovoltaic integration and participation costs. An audit of production resource time identifies low-priority training and offline inference as a candidate pool, without treating priority as permission. In scenarios allowing 5–20% of total work to wait, independently tested four- and eight-hour offers are 2.95–11.80 kW for modelled operating peaks of 190–200 kW. Larger 40% and 60% comparisons require broader participation or a changed business mix. Reusing single-event offers passed the confirmation criterion for four-hour calls with eight-hour gaps, but failed for eight-hour calls with twelve-hour gaps; the separate development search selected no repeated candidate. Renewable benefits and compensation are recalculated for every configuration. Lower eligibility limits offered power and concentrates fixed participation costs on fewer kilowatts. Workload permission and call schedule must therefore accompany claims about data-centre flexibility.",
+      "zh": "人工智能数据中心可通过推迟计算支持电网，但在线服务限制了运营商能够允许等待的工作量。本文将明确的工作授权与响应容量、重复交付、光伏配合及参与成本连接起来。对生产资源时间的审计将低优先级训练和离线推理识别为候选池，但不把低优先级当作延后权限。在允许总工作量 5%–20% 等待的情景中，对应模型运行峰值为 190–200 kW，经独立检验的四小时和八小时承诺为 2.95–11.80 kW。40% 和 60% 的更高比例需要扩大参与范围或改变业务构成。重复使用单次承诺，在四小时调用、八小时间隔下通过确认标准，在八小时调用、十二小时间隔下则未通过；另行开展的开发搜索未选出重复候选。每种配置均重新计算可再生能源收益与补偿。较低资格限制承诺功率，也使固定参与费用集中于更少千瓦。因此，数据中心灵活性陈述必须附带工作授权和调用安排。",
+      "id": "M006"
+    },
+    "new": {
+      "en": "Artificial-intelligence data centres could support electricity grids by postponing computing, but online services limit how much work operators can allow to wait. Here we connect explicit workload permissions to response capacity, repeated delivery, photovoltaic integration and participation costs. A production resource-time audit identifies low-priority training and offline inference as a candidate pool, without equating priority with permission. With 5–20% of work eligible, independently tested single-event offers are 2.95–11.80 kW for modelled operating peaks of 190–200 kW. Repeated-call failures depend on both recovery control and service constraints. Preserving the power ceiling for every overlapping recovery window increased eight-hour programme success at 10% eligibility from 252/300 to 294/300 at the same request. A separate development selection and independent test qualified full four-hour offers and eight-hour offers at 75% of the single-event request across the five workload scenarios. Smaller commitments concentrate fixed participation costs on fewer kilowatts. Dependable flexibility therefore requires a declared workload permission, recovery policy and call schedule, together with compensation evaluated for that qualified offer.",
+      "zh": "人工智能数据中心可以通过推迟计算支持电网，但在线服务限制了运营者能够允许等待的工作量。本文将明确的工作延期权限与响应容量、重复交付、光伏接入和参与成本联系起来。生产资源时间审计将低优先级训练与离线推理识别为候选工作池，但不把低优先级等同于参与许可。在允许 5–20% 工作延后的情景中，独立检验的单次事件承诺为 2.95–11.80 kW，对应模型运行峰值 190–200 kW。重复调用失败同时取决于恢复控制和服务约束。在 10% 工作资格下，为每个重叠恢复窗口保留功率上限，使同一八小时响应请求的整组成功次数从 252/300 提高至 294/300。另行开展的开发选值与独立检验，在全部五档工作情景中支持四小时全额承诺，以及单次事件请求 75% 的八小时承诺。较小承诺使固定参与成本分摊到更少的千瓦上。因此，可靠灵活性需要明确工作延期权限、恢复策略与调用安排，并针对通过资格检验的承诺评估补偿。",
+      "id": "M006"
+    }
+  },
+  {
+    "id": "M009",
+    "old": {
+      "en": "Research on data-centre flexibility has established how operators can reshape electricity demand while serving computing jobs. Batch scheduling, server power management and workload migration have been used to reduce peaks and participate in demand response.<sup>3–7</sup> Carbon-aware scheduling extends these controls to hours and locations with lower emissions or greater renewable availability.<sup>8–11</sup> Other studies address pause-and-resume decisions and GPU power capping, which govern how workloads respond to electrical controls.<sup>12,13</sup> Trace-based and planning studies connect workload flexibility to demand-response programmes, advance notice and grid interconnection.<sup>14–17</sup> These advances make flexible operation credible, but the reduction achieved in a particular schedule does not specify a commitment for future calls. Grid operators need a power level, an event duration and evidence that the same offer can be delivered under declared service conditions.",
+      "zh": "已有研究说明了数据中心运营者如何在执行计算作业的同时调整用电需求。批处理调度、服务器功率管理和工作负载迁移已被用于削减峰值及参与需求响应。<sup>3–7</sup> 碳感知调度进一步将计算移至排放更低或可再生能源更充足的时段和地点。<sup>8–11</sup> 另一些研究关注暂停与恢复决策以及 GPU 功率上限控制，探讨计算负载如何响应电力控制。<sup>12,13</sup> 基于作业轨迹和电网规划的研究则将工作负载灵活性与需求响应项目、提前通知和电网接入联系起来。<sup>14–17</sup> 这些进展为灵活运行提供了依据，但某个调度方案实现的功率削减，并不能直接规定未来调用时可以承诺的响应。电网运营者需要明确的功率、持续时间，以及同一承诺能够在既定服务条件下兑现的证据。",
+      "id": "M009"
+    },
+    "new": {
+      "en": "Research on data-centre flexibility has established how operators can reshape electricity demand while serving computing jobs. Batch scheduling, server power management and workload migration have been used to reduce peaks and participate in demand response.<sup>3–7</sup> Carbon-aware scheduling extends these controls to hours and locations with lower emissions or greater renewable availability.<sup>8–11</sup> Other studies address pause-and-resume decisions and GPU power capping.<sup>12,13</sup> Trace-based and planning studies connect workload flexibility to demand-response programmes, advance notice and grid interconnection.<sup>14–17</sup> A recent preprint further distinguishes eligible workload power from dependable relief, using duration, reliability and portfolio structure and explicitly recognising delivery and recovery requirements.<sup>18</sup> The remaining operational question is how a declared offer performs when causal control carries unfinished work and overlapping recovery obligations through successive calls.",
+      "zh": "数据中心灵活性研究已经说明，运营者可以在服务计算作业的同时改变用电时序。批处理调度、服务器功率管理和工作负载迁移已被用于削峰和需求响应。<sup>3–7</sup> 碳感知调度进一步将工作安排到排放更低或可再生能源更充足的时段和地点。<sup>8–11</sup> 其他研究讨论了暂停与恢复决策以及 GPU 功率限制。<sup>12,13</sup> 基于轨迹的研究和规划研究把工作灵活性与需求响应项目、提前通知和电网接入联系起来。<sup>14–17</sup> 一篇近期预印本进一步依据持续时间、可靠性和资源组合结构区分了合资格工作功率与可靠减负，并明确认识到实际交付和恢复要求。<sup>18</sup> 仍需回答的运行问题是：当因果控制器将未完成工作及重叠恢复义务带入后续调用时，预先声明的功率承诺能够交付到什么程度。",
+      "id": "M009"
+    }
+  },
+  {
+    "id": "M012",
+    "old": {
+      "en": "Here we assess data-centre power commitments across declared workload compositions, following each configuration through service qualification, repeated dispatch, PV integration and participation costs. We audit the resource-time composition of a production execution summary and construct scenarios in which 5%, 10% or 20% of offered work may wait. Two higher-share comparisons, 40% and 60%, expose the additional permission and business-composition assumptions needed to obtain larger flexibility. AIDRBench combines these trace-informed job shapes with four-GPU power measurements and a modelled community electricity system. Full-information schedules quantify planning potential; independent causal-controller tests assess delivery. Separate controls distinguish the effects of GPU allocation and unmeasured rigid-load power. The analysis connects an explicit workload assumption to its downstream capacity, grid benefit and participation cost.",
+      "zh": "本文在明确声明的工作构成下评估数据中心功率承诺，对每种配置贯通服务资格、重复调用、光伏配合与参与成本。我们审计生产执行摘要的资源时间构成，建立总投入工作中 5%、10% 或 20% 可以等待的情景；再用 40% 和 60% 两项高比例对照，展示更大灵活性所需的额外授权和业务构成假设。AIDRBench 将受轨迹启发的作业形状、四 GPU 功率测量与模拟社区电力系统结合。完整未来信息下的调度量化规划潜力，独立因果控制器测试评估交付；另设对照区分 GPU 分配和未测刚性功率的影响。这项分析把明确的工作负载假设连接到其下游容量、电网收益和参与成本。",
+      "id": "M012"
+    },
+    "new": {
+      "en": "Here we assess data-centre power commitments across declared workload compositions, following each configuration through service qualification, repeated dispatch, PV integration and participation costs. We audit a production execution summary and construct scenarios in which 5%, 10% or 20% of offered work may wait. Higher-share comparisons at 40% and 60% expose the extra participation and business-composition assumptions needed for larger flexibility. AIDRBench combines trace-informed job shapes with four-GPU power measurements and a modelled community electricity system. Full-information schedules quantify planning potential, while independent causal-controller tests assess delivery. A recovery intervention then distinguishes failures caused by a controller limitation from remaining deadline pressure, and a frozen development-to-confirmation procedure tests revised repeated offers. The analysis connects workload permission to an independently tested operating choice and its downstream cost.",
+      "zh": "本文针对明确声明的工作构成评估数据中心功率承诺，并将每档配置贯穿服务资格检验、重复调用、光伏接入和参与成本分析。我们审计生产执行汇总，构建允许 5%、10% 或 20% 到达工作等待的情景。40% 和 60% 的较高比例比较揭示了获取更大灵活性所需的额外参与许可与业务构成假设。AIDRBench 将基于轨迹的作业形态、四 GPU 功率测量和社区电力系统模型结合起来。完整信息调度用于量化规划潜力，独立的因果控制器检验用于评估实际交付。随后通过恢复控制干预，将控制器局限导致的失败与剩余的期限压力区分开，并通过冻结的开发选值—确认流程检验调整后的重复承诺。这样，工作延期权限便与经过独立检验的运行选择及其后续成本相连接。",
+      "id": "M012"
+    }
+  },
+  {
+    "id": "M025",
+    "old": {
+      "en": "### Repeated delivery depends on the call programme",
+      "zh": "### 重复交付取决于具体调用安排",
+      "id": "M025"
+    },
+    "new": {
+      "en": "### Recovery control changes which repeated offers qualify",
+      "zh": "### 恢复控制改变了能够通过检验的重复承诺",
+      "id": "M025"
+    }
+  },
+  {
+    "id": "M026",
+    "old": {
+      "en": "Call history reduced reliability for the longer service. At 10% eligibility and the same 5.90-kW request, four four-hour calls with eight-hour gaps succeeded in all 300 confirmation scenarios, matching four isolated calls at the same clock times. Four eight-hour calls with twelve-hour gaps instead succeeded in 256/300 scenarios, compared with 297/300 for the isolated calls. The paired difference was -13.7 percentage points (95% interval, -17.7 to -9.7). Both conditions required all four calls to pass; Fig. 3 and Supplementary Table 5 report every workload configuration.",
+      "zh": "调用历史降低了较长服务的可靠性。在 10% 资格、相同 5.90 kW 请求下，四次四小时调用、间隔八小时，在全部 300 个确认情景中成功，与相同时刻分别运行的四次独立调用一致。四次八小时调用、间隔十二小时，则只有 256/300 成功，独立调用为 297/300。配对差异为 -13.7 个百分点（95% 区间 -17.7 至 -9.7）。两种条件都要求四次调用全部通过；五档工作配置均见图 3 和补充表 5。",
+      "id": "M026"
+    },
+    "new": {
+      "en": "The first repeated-call comparison showed why a single-event result cannot simply be reused. At 10% eligibility and a 5.90-kW request, four eight-hour calls with twelve-hour gaps succeeded in 256/300 original confirmation scenarios, compared with 297/300 when the four calls ran separately at the same clock times. The paired difference was −13.7 percentage points (95% interval, −17.7 to −9.7). However, a failure of the electrical recovery criterion is not evidence of lost computing work. Inspection revealed that the original controller retained only one binding recovery window. When windows overlapped, that window did not always impose the tightest allowable power ceiling (Fig. 3b).",
+      "zh": "首次重复调用比较说明，单次事件结果不能直接复用。在 10% 工作资格和 5.90 kW 请求下，四次八小时调用、调用间隔十二小时，在原确认集上的整组成功次数为 256/300；若在相同钟点分别运行这四次调用，则为 297/300。配对差异为 −13.7 个百分点（95% 区间，−17.7 至 −9.7）。但电力恢复指标失败并不等于计算工作丢失。检查发现，原控制器只保留一个起约束作用的恢复窗口；多个窗口重叠时，这个窗口不一定给出最严格的允许功率上限（图 3b）。",
+      "id": "M026"
+    }
+  },
+  {
+    "id": "M027",
+    "old": {
+      "en": "Across all five configurations, the prespecified original offers passed the four-hour repeated confirmation criterion (300/300; probability lower bound 0.9911), whereas eight-hour repeated success ranged from 241/300 to 268/300 and failed the criterion. Separately, the 100-scenario development search over 25%, 50%, 75% and 100% of each offer selected no repeated candidate: even its best observed success, 98/100, gave a lower bound of 0.9414. The successful four-hour confirmation is therefore evidence for the prespecified comparator, not a retrospectively selected candidate under the two-stage rule. Event-and-recovery peak-relief failures persisted at reduced requests; these electrical failures do not by themselves establish lost GPU work. The tests distinguish two schedules and do not imply zero repeated capacity.",
+      "zh": "五档配置的预设原承诺均通过四小时重复方案的确认标准（300/300，概率下界 0.9911），而八小时重复成功数为 241/300 至 268/300，均未通过。另行在 100 个开发情景中搜索各承诺的 25%、50%、75%、100%，没有选出重复候选：即使最好的观察成功数 98/100，下界也只有 0.9414。因此，四小时确认成功支持的是预设对照，不能事后把它改称为按两阶段规则选出的候选。降低请求后仍出现事件及恢复窗口的峰值削减失败；这些电气失败本身不能证明 GPU 工作损失。检验区分了两种安排，不意味着重复容量为零。",
+      "id": "M027"
+    },
+    "new": {
+      "en": "We therefore retained every observed call’s recovery ceiling while keeping the request, workload, MPC policy and success criteria fixed. On 300 new paired scenarios, eight-hour programme success at 10% eligibility increased from 252/300 to 294/300: 14.0 percentage points (95% paired interval, 10.3 to 18.0; Fig. 3a). All 42 rescued scenarios originally failed only window peak relief; no new scenario exceeded the deadline-miss criterion. The same guards around a greedy proposal also achieved 294/300, so the gain was not specific to MPC. Tighter recovery still has a service cost: with eight-hour gaps, full-request deadline failures increased from 7/100 to 33/100 in development (Supplementary Fig. 3; Supplementary Table 11).",
+      "zh": "因此，我们为每次已观察到的调用保留恢复功率上限，同时保持请求、工作负载、MPC 策略和成功标准不变。在 300 个新的配对情景中，10% 工作资格下的八小时整组成功次数从 252/300 增至 294/300，即提高 14.0 个百分点（95% 配对区间，10.3 至 18.0；图 3a）。挽救的 42 个情景原先均仅因窗口峰值减负不足而失败，没有新增情景超过错过期限比例标准。同样的约束用于贪心提议策略也达到 294/300，说明收益并非 MPC 特有。但更严格恢复仍有服务代价：在八小时间隔的开发比较中，全额请求的期限失败从 7/100 增至 33/100（补充图 3；补充表 11）。",
+      "id": "M027"
+    }
+  },
+  {
+    "id": "M043_series",
+    "old": {
+      "id": "M043_series",
+      "en": "Repeated-programme ledgers retained every hour once across all four calls and the clearance tail, including failed trajectories. Their conditional prices are shown for all five configurations at twelve independent series per year (Fig. 6c). Filled markers identify original offers passing the four-hour confirmation criterion; crosses identify the eight-hour failures. Neither price changes the separate finding that the development rule selected no repeated candidate. Non-performance penalties are unpriced, and independent series do not represent a continuously operating year.",
+      "zh": "重复方案账本将四次调用及清空尾段中的每小时仅计一次，并保留失败轨迹。五档均给出每年十二个独立序列下的条件价格（图 6c）。实心标记表示通过四小时确认标准的原承诺，叉号表示八小时未通过。两种价格都不改变开发规则没有选出重复候选这一独立结果。不履约罚金未定价，独立序列也不代表连续全年运行。"
+    },
+    "new": {
+      "id": "M043_series",
+      "en": "The selected repeated offers connect recovery requirements to participation costs (Fig. 6c). At 10% eligibility, the full 5.90-kW four-hour programme requires US$984 per offered accounting kW-year; the qualified 4.42-kW eight-hour programmes require US$1349–1408 under the same reference prices. All use twelve independent four-call series per year. Longer service and a smaller offer increase the required payment through waiting exposure and fixed-cost allocation. Complete ledgers count every hour once and retain failed trajectories. Non-performance penalties remain unpriced, and independent series do not represent a continuously operating year.",
+      "zh": "选出的重复承诺将恢复要求与参与成本联系起来（图 6c）。在 10% 工作资格下，四小时全额 5.90 kW 调用安排需要每个报价核算千瓦每年 984 美元；在相同参考价格下，通过检验的八小时 4.42 kW 安排需要 1349–1408 美元。各安排均按每年十二组相互独立、每组四次调用核算。更长服务和较小承诺通过等待暴露及固定成本分摊提高所需补偿。完整账本对每小时只计一次，并保留失败轨迹。合同违约罚款仍未定价，独立序列也不等于连续运行的一整年。"
+    }
+  },
+  {
+    "id": "M047",
+    "old": {
+      "en": "Repeated operation exposed the limits of transferring a single-event certificate. The four-hour programme passed independent confirmation at the original offer, whereas the eight-hour programme did not. The development grid nevertheless selected no repeated candidate, demonstrating that the prespecified selection outcome and a successful independent comparator test must be reported separately. Peak relief over event-and-recovery windows remained a limiting electrical condition even at reduced requests. These failures do not justify attributing every unsuccessful programme to lost computing work or inferring a universal derating factor. A different controller, finer capacity search or revised schedule would require a new independent test.",
+      "zh": "重复运行暴露了单次证书迁移的限制。四小时方案在原承诺下通过独立确认，八小时方案则未通过；开发网格仍未选出重复候选，说明必须分别报告预设选值规则的结果与独立对照检验成功。即使请求降低，事件及恢复窗口峰值削减仍是限制性的电气条件。这些失败不能支持把所有未成功方案归因于计算工作损失，也不能据此推断通用降额系数。不同控制器、更细容量搜索或改变安排，都需要新的独立检验。",
+      "id": "M047"
+    },
+    "new": {
+      "en": "Repeated operation makes recovery policy part of the commitment. The intervention separates two causes that an aggregate failure rate would obscure: incomplete enforcement of overlapping electrical obligations and deadline pressure under tighter recovery control. Correcting the first is an implementation repair, not a new physical limit. Independent selection and confirmation then establish feasible operating choices rather than attributing every failure to compute debt. This complements trace-based estimates of eligible and dependable workload power,<sup>18</sup> by following causal execution, service failures and accounting through a specified multi-call programme. The tested 75% candidates do not establish a universal derating rule, and the model does not prove optimality.",
+      "zh": "重复运行使恢复策略成为承诺的一部分。干预区分了总失败率会掩盖的两种原因：重叠电力义务没有被完整执行，以及更严格恢复控制下的作业期限压力。纠正前者是实现修正，并非发现了新的物理极限。随后通过独立选值和确认建立可行运行选择，而不是将所有失败都归因于计算债务。这通过追踪特定多次调用安排中的因果执行、服务失败和完整账目，补充了基于轨迹估计合资格工作功率及可靠功率的研究。<sup>18</sup> 所测 75% 候选不构成普适降额规则，模型也没有证明最优性。",
+      "id": "M047"
+    }
+  },
+  {
+    "id": "M051",
+    "old": {
+      "en": "These numerical results remain conditional model evidence. Requested GPU-hours from one production infrastructure are not energy measurements or an industry workload census. Deferral permission and deadlines were assumed; hourly divisible jobs, constant rigid demand and a small board-power calibration do not reproduce online latency, checkpoint overhead or facility response. The 40% and 60% cases add unverified participation and business-composition assumptions. The repeated tests cover two four-call schedules followed by a clearance tail, and annual costs sample independent episodes rather than a continuous year. Actual GPU procurement, ageing and contractual failure penalties require operator data. These limitations constrain numerical transfer while leaving the five-scenario comparisons reproducible.",
+      "zh": "这些数值仍是有条件的模型证据。单个生产基础设施的申请 GPU 小时不是能耗测量或行业工作负载普查。延后授权和截止时间为假设；小时级可分割作业、恒定刚性需求及小规模板卡校准，不能复现在线延迟、检查点开销或设施响应。40% 和 60% 情景增加了未经验证的参与和业务构成假设。重复测试覆盖两种四调用安排及之后的清空尾段，年度成本抽样独立情景，未模拟连续全年。真实 GPU 采购、老化及合同违约罚金需要运营商数据。这些限制约束了数值外推，同时保留五档比较的可复现性。",
+      "id": "M051"
+    },
+    "new": {
+      "en": "These numerical results remain conditional model evidence. Requested GPU-hours from one production infrastructure are not energy measurements or an industry workload census. Deferral permission and deadlines were assumed; hourly divisible jobs, constant rigid demand and a small board-power calibration do not reproduce online latency, checkpoint overhead or facility response. The 40% and 60% cases add unverified participation and business-composition assumptions. Recovery interventions were developed after inspecting earlier failures and then tested on fresh scenarios. The four-call programmes span only four declared schedules; annual costs sample independent series rather than a continuous year. Actual GPU procurement, ageing and contractual failure penalties require operator data. These limitations constrain numerical transfer while leaving the comparisons reproducible.",
+      "zh": "这些数值结果仍是以模型假设为条件的证据。单一生产设施中的请求 GPU 小时并非实测电能，也不代表行业工作构成普查。延期权限和期限由情景设定；按小时可分割的作业、恒定刚性需求与小规模板卡功率标定不能复现在线时延、检查点开销或设施响应。40% 和 60% 情景增加了未经验证的参与和业务构成假设。恢复干预是在检查既有失败后开发的，随后才在新情景上检验。四次调用仅覆盖四种明确安排；年度成本抽样独立序列，并非连续全年运行。实际 GPU 采购、老化和合同违约罚款需要运营者数据。这些限制约束了数值外推，但各项比较仍可复现。",
+      "id": "M051"
+    }
+  },
+  {
+    "id": "M154",
+    "old": {
+      "en": "### Figure 3 | Repeated-programme confirmation and development selection",
+      "zh": "### 图 3 | 重复方案的确认与开发选择",
+      "id": "M154"
+    },
+    "new": {
+      "en": "### Figure 3 | Recovery mechanism and independently tested repeated offers",
+      "zh": "### 图 3 | 恢复机制与独立检验的重复承诺",
+      "id": "M154"
+    }
+  },
+  {
+    "id": "M155",
+    "old": {
+      "en": "**a,b,** All-four-call success for four-hour calls with eight-hour gaps and eight-hour calls with twelve-hour gaps. Grey bars combine four isolated calls at the same clock times; blue bars carry the queue through all four calls. Both conditions use the original selected single-event offer. Bars show observed success and one-sided 95% Wilson lower limits across 300 paired complete scenario seeds. Paired difference intervals are in Supplementary Table 5. **c,d,** One-sided 95% Wilson lower bounds for all four development candidates, expressed as fractions of the single-event offer, on 100 development seeds. The dashed 95% target was not reached by any candidate. This selection outcome is separate from confirmation of the prespecified original offer; it does not imply zero physical repeated capacity. The two programmes retain their own gaps and do not estimate a general gap-response curve.",
+      "zh": "**a、b，**四小时调用/八小时间隔及八小时调用/十二小时间隔的四次全成功比例。灰柱将相同时刻的四个单独调用组合，蓝柱将队列贯穿四次调用；两者均采用原已选单次承诺。柱为观察成功比例，附 300 个配对完整情景种子的单侧 95% Wilson 下界；配对差异区间见补充表 5。**c、d，**全部四个开发候选（以单次承诺的比例表示）在 100 个开发种子上的单侧 95% Wilson 下界。没有候选达到虚线标出的 95% 目标。这项选值结果与预设原承诺的确认结果分开，不能据此推断物理重复容量为零。两个方案各自保留其间隔，未估计一般的间隔响应曲线。",
+      "id": "M155"
+    },
+    "new": {
+      "en": "**a,** Full single-event requests reused for four eight-hour calls with twelve-hour gaps. Points show original MPC and MPC with per-call recovery on 300 new paired complete scenarios per workload configuration; whiskers are one-sided 95% Wilson lower limits. **b,** The lowest development seed for which the original programme failed and per-call recovery passed at 10% eligibility (seed 930012). The zoom shows a recovery peak relative to the illustrated call’s event-and-recovery baseline peak. The dashed ceiling requires relief of half the request. This selected development example explains the mechanism and does not estimate its frequency. **c,** Development-selected offers at 10% eligibility, by call duration and gap; a cross would mark independent confirmation failure. None selected denotes the outcome of the tested grid, not zero physical capacity. All four calls must satisfy every unchanged electrical and service criterion. Full selections and failure counts are in Supplementary Tables 10 and 11.",
+      "zh": "**a，** 将单次事件全额请求用于四次八小时调用、十二小时间隔。点表示各工作配置下原 MPC 与逐次保留恢复约束的 MPC 在 300 个新配对完整情景中的成功率；误差线为单侧 95% Wilson 下界。**b，** 10% 工作资格下，原安排失败而逐次恢复约束方案成功的最小开发种子（930012）。局部图将恢复峰值相对于所示调用的事件及恢复期基准峰值表示；虚线功率上限要求至少削减请求的一半。这个按规则选择的开发示例用于解释机制，不能估计出现频率。**c，** 10% 工作资格下，按调用时长和间隔列出开发选出的承诺；如独立确认失败，则标叉。“未选出”表示测试网格中的选值结果，不代表物理容量为零。四次调用均须满足全部未改变的电力和服务标准。完整选值和失败计数见补充表 10、11。",
+      "id": "M155"
+    }
+  },
+  {
+    "id": "M161",
+    "old": {
+      "en": "**a,b,** Required annual capacity payment per offered accounting kilowatt for four- and eight-hour single events, with 50 independently sampled calls per year. Existing slack, reserved headroom and an assumed US$0.25 per deferred GPU-h displaced-value exposure use the same physical ledger. **c,** Complete four-call programmes at 12 independent series per year: original single-event offers reused repeatedly, and smaller selected repeated offers when available. Filled circles mark passage of the pointwise confirmation criterion; crosses mark failure. None of the repeated offers was selected by the separate development rule. A conditional price does not alter either statistical outcome. **d,** Delay-price sensitivity at 10% eligibility. All panels use 1-MW proportional accounting, a US$25,000 annual site charge applied once, and 2,000 common annual draws. Thresholds make the fifth percentile of annual net value non-negative. Contract-specific failure penalties are unpriced; series independence does not simulate a continuous year.",
+      "zh": "**a、b，**四小时与八小时单次事件每会计承诺千瓦所需的年度容量补偿，每年独立抽样 50 次。现有空闲、预留容量，以及每推迟 GPU 小时假设 0.25 美元挤占价值的情景使用同一物理账本。**c，**每年 12 个独立序列的完整四调用方案：重复使用原单次承诺，以及有候选时采用较小已选重复承诺。实心圆表示通过逐项确认标准，叉号表示未通过。重复承诺均未通过另行开展的开发选值规则。条件价格不改变这两项统计结果。**d，**10% 资格下的延迟价格敏感性。各面板均采用 1 MW 比例会计尺度、每年仅计一次的 25,000 美元站点费用及 2,000 次共同年度抽样，门槛使年度净值的第 5 百分位不为负。合同特定失败罚金未定价；序列独立不等于连续全年模拟。",
+      "id": "M161"
+    },
+    "new": {
+      "en": "**a,b,** Required annual capacity payment per offered accounting kilowatt for four- and eight-hour single events, with 50 independent calls per year. Existing slack, reserved headroom and an assumed US$0.25 per deferred GPU-h displaced-value exposure use the same physical ledger. **c,** Development-selected repeated offers for MPC with per-call recovery, at twelve independent four-call series per year. Shape and colour identify call duration and gap. Symbols denote passage of the independent pointwise confirmation criterion; crosses would denote failure. **d,** Delay-price sensitivity at 10% eligibility. All panels use 1-MW proportional accounting, one US$25,000 annual site charge and 2,000 common annual draws. Thresholds make the fifth percentile of annual net value non-negative. Complete trajectories, including failures, enter every price calculation. Contract-specific failure penalties are unpriced; series independence does not simulate a continuous year.",
+      "zh": "**a,b，** 四小时和八小时单次事件每个报价核算千瓦所需的年度容量补偿，每年抽样 50 次独立调用。现有余量、预留容量以及假设每延后 GPU 小时 0.25 美元的被挤出价值暴露使用同一物理账本。**c，** 逐次保留恢复约束的 MPC 经开发选出的重复承诺，每年抽样十二组独立的四调用序列。形状和颜色表示时长与间隔。符号表示通过独立、逐项确认标准；如未通过则标叉。**d，** 10% 工作资格下的等待价格敏感性。所有面板采用 1 MW 比例核算、每年仅一次 25,000 美元场地费用和 2,000 次共同年度抽样。门槛使年度净值第五百分位不低于零。每次定价均使用包括失败在内的完整轨迹。合同特定违约罚款未定价，独立序列不等于连续全年模拟。",
+      "id": "M161"
+    }
+  },
+  {
+    "id": "S20_005",
+    "old": {
+      "id": "S20_005",
+      "en": "The six notes follow the main results. Methods give the complete five-scenario design; nine tables provide its numerical evidence. Capacity, repeated-programme, renewable and cost results follow the same five workload configurations. Source Data retain all trial-level outcomes, complete hourly trajectories, planning solutions and paired ledgers, together with frozen input templates and code.",
+      "zh": "六项说明对应正文结果，方法给出完整的五档设计，九张表列出数值证据。容量、重复方案、可再生能源与成本结果贯穿相同五档工作负载配置。源数据保留所有试验级结果、完整小时轨迹、规划解、配对账本，以及冻结输入模板和代码。"
+    },
+    "new": {
+      "id": "S20_005",
+      "en": "The six notes follow the main results. Methods describe the five workload configurations and the subsequent recovery intervention; twelve tables provide their numerical evidence. Tables 5 and 7 retain the original controller’s matched-fresh comparison and accounts, whereas Tables 10–12 report the new selection, independent confirmation, mechanism contrasts and costs. All input scenarios, trial outcomes, complete hourly trajectories, controller-window audits and ready-to-plot summaries accompany Source Data.",
+      "zh": "六条说明对应正文结果。方法描述五档工作配置及随后开展的恢复干预；十二张表给出数值证据。表 5、7 保留原控制器的配对独立调用比较与账目；表 10–12 报告新的选值、独立确认、机制比较和成本。源数据包含全部输入情景、逐次结果、完整小时轨迹、控制器窗口审计和现成绘图汇总。"
+    }
+  },
+  {
+    "id": "S20_043",
+    "old": {
+      "id": "S20_043",
+      "en": "Four event starts were 63 + j(H + G), j = 0, 1, 2, 3, for (H,G) = (4,8) or (8,12) hours. Development tested 25%, 50%, 75% and 100% of the selected single-event offer without assuming monotonic success. Confirmation tested the prespecified original single offer repeated, plus four single-call counterfactuals at matching clock times. The protocol additionally provided for testing a development-selected repeated offer if one qualified; none did. The no-response reference was the same full-capacity schedule in every paired comparison. The experiment covers two declared programmes, not every recovery gap or a continuous-year guarantee.",
+      "zh": "四次事件起点为 63 + j(H + G)，j = 0、1、2、3，其中 (H,G) 为 (4,8) 或 (8,12) 小时。开发检验所选单次承诺的 25%、50%、75% 和 100%，不假定成功率单调。确认检验重复使用的预设原单次承诺，并配有四个相同时刻的单调用反事实。协议还规定，如开发选出重复候选则另外确认；实际没有候选通过开发门槛。每项配对比较都使用相同的全容量无响应参考调度。实验覆盖两种声明的方案，未穷尽所有恢复间隔，也不构成连续全年保证。"
+    },
+    "new": {
+      "id": "S20_043",
+      "en": "For the original controller study (confirmation seeds 960000–960299): Four event starts were 63 + j(H + G), j = 0, 1, 2, 3, for (H,G) = (4,8) or (8,12) hours. Development tested 25%, 50%, 75% and 100% of the selected single-event offer without assuming monotonic success. Confirmation tested the prespecified original single offer repeated, plus four single-call counterfactuals at matching clock times. The protocol additionally provided for testing a development-selected repeated offer if one qualified; none did. The no-response reference was the same full-capacity schedule in every paired comparison. The experiment covers two declared programmes, not every recovery gap or a continuous-year guarantee.",
+      "zh": "对于原控制器研究（确认种子 960000–960299）：四次事件起点为 63 + j(H + G)，j = 0、1、2、3，其中 (H,G) 为 (4,8) 或 (8,12) 小时。开发检验所选单次承诺的 25%、50%、75% 和 100%，不假定成功率单调。确认检验重复使用的预设原单次承诺，并配有四个相同时刻的单调用反事实。协议还规定，如开发选出重复候选则另外确认；实际没有候选通过开发门槛。每项配对比较都使用相同的全容量无响应参考调度。实验覆盖两种声明的方案，未穷尽所有恢复间隔，也不构成连续全年保证。"
+    }
+  },
+  {
+    "id": "S20_060",
+    "old": {
+      "id": "S20_060",
+      "en": "### Supplementary Figure 3 | Complete repeated-call trajectories at 10% eligibility",
+      "zh": "### 补充图 3 | 10% 资格下的完整重复调用轨迹"
+    },
+    "new": {
+      "id": "S20_060",
+      "en": "### Supplementary Figure 3 | Recovery control, unfinished work and offer qualification",
+      "zh": "### 补充图 3 | 恢复控制、未完成工作与承诺资格"
+    }
+  },
+  {
+    "id": "S20_062",
+    "old": {
+      "id": "S20_062",
+      "en": "**a,b,** Excess controlled-minus-baseline queued GPU-hours through four calls and the complete clearance tail. **c,d,** Signed PCC-power change over the same period. The original selected single-event offer is used in both programmes. Curves are means and bands are descriptive 5th–95th scenario percentiles over all 300 confirmation seeds, including failed scenarios; they are not confidence intervals. Shading marks event hours. The raw controlled-queue energy field is baseline-subtracted before it is called excess debt in Source Data.",
+      "zh": "**a、b，**四次调用及完整清空尾段中，受控减基准的额外积压 GPU 小时。**c、d，**同期有符号的 PCC 功率变化。两个方案均使用原已选单次承诺。曲线为全部 300 个确认种子的均值，带为描述性第 5–95 百分位，保留失败情景；它们不是置信区间。阴影表示事件时段。源数据将原始受控队列能量减去基准后，才称为额外债务。"
+    },
+    "new": {
+      "id": "S20_062",
+      "en": "**a,b,** Excess queued GPU-hours and cumulative missed GPU-hours at the full request, 10% eligibility, eight-hour calls and twelve-hour gaps, for original MPC, MPC with per-call recovery and the greedy diagnostic with the same guards. Curves are means and bands descriptive 5th–95th scenario percentiles across all 300 new confirmation seeds, including failures; bands are not confidence intervals. Cumulative misses are summed within each trajectory before the percentiles are calculated. Event hours are shaded. **c,** Deadline and window-peak failure counts at the full request for all four programmes on 100 development seeds at 10% eligibility. Failure categories can overlap. **d,** Development-selected fractions for all five workload configurations, two MPC versions and four programmes. A tick denotes passage of independent confirmation; a cross would denote failure; a dash means no candidate passed development. Selected fractions are tested grid points, not maximum capacities.",
+      "zh": "**a,b，** 全额请求、10% 工作资格、八小时调用和十二小时间隔下，原 MPC、逐次恢复约束 MPC 及使用同样约束的贪心诊断的超额排队 GPU 小时与累计错过期限 GPU 小时。曲线为全部 300 个新确认种子的均值，色带为描述性的第 5–95 情景百分位，包含失败情景，不能解读为置信区间。先在每条轨迹内累计错过期限工作，再计算百分位。阴影表示调用时段。**c，** 10% 工作资格、全额请求下，四种安排在 100 个开发种子中的期限失败和窗口峰值失败计数，失败类别可以重叠。**d，** 五档工作配置、两种 MPC 和四种安排中经开发选出的比例。勾号表示通过独立确认，叉号表示失败，横线表示没有候选通过开发。选出的比例是已测网格点，不是最大容量。"
+    }
+  },
+  {
+    "id": "S20_077",
+    "old": {
+      "id": "S20_077",
+      "en": "Development seeds are 930000–930099; confirmation seeds are 960000–960299. Repeat-duration runtime checks verify all four- and eight-hour calls. Earlier one-hour repeat diagnostics are excluded. Protocols, controller and runner hashes, scenario identities, all trial outcomes and hourly manifests accompany Source Data. No run count should replace the number of independent seeds in statistical inference.",
+      "zh": "开发种子为 930000–930099，确认种子为 960000–960299。重复方案通过运行时检查核实所有四小时和八小时调用，更早的一小时重复诊断予以排除。源数据附协议、控制器及运行程序哈希、情景标识、全部试验结果与小时清单。统计推断不能用运行次数替代独立种子数。"
+    },
+    "new": {
+      "id": "S20_077",
+      "en": "For the original controller study (confirmation seeds 960000–960299): Development seeds are 930000–930099; confirmation seeds are 960000–960299. Repeat-duration runtime checks verify all four- and eight-hour calls. Earlier one-hour repeat diagnostics are excluded. Protocols, controller and runner hashes, scenario identities, all trial outcomes and hourly manifests accompany Source Data. No run count should replace the number of independent seeds in statistical inference.",
+      "zh": "对于原控制器研究（确认种子 960000–960299）：开发种子为 930000–930099，确认种子为 960000–960299。重复方案通过运行时检查核实所有四小时和八小时调用，更早的一小时重复诊断予以排除。源数据附协议、控制器及运行程序哈希、情景标识、全部试验结果与小时清单。统计推断不能用运行次数替代独立种子数。"
+    }
+  },
+  {
+    "id": "S20_083",
+    "old": {
+      "id": "S20_083",
+      "en": "Each success count is out of 300 complete programmes and requires all four calls to pass. The comparison reuses the Table 4 single-event offer. A selected repeated offer is the largest qualifying development-grid candidate; its separate confirmation lower bound determines qualification. None denotes no qualifying development candidate, not zero true capacity. All original four-hour repeated offers passed confirmation (300/300; lower 0.9911), whereas the eight-hour originals did not. None passed the separate development selection rule. Paired intervals resample complete seeds.",
+      "zh": "各成功数分母均为 300 个完整方案，并要求四次全通过。比较复用表 4 的单次承诺。已选重复承诺是满足开发门槛的最大网格候选，其独立确认下界决定是否合格。None 表示开发无合格候选，不是实际容量为零。原四小时重复承诺均通过确认（300/300；下界 0.9911），八小时原承诺则未通过；另行开展的开发选值规则没有选中候选。配对区间按完整种子重采样。"
+    },
+    "new": {
+      "id": "S20_083",
+      "en": "For the original controller study (confirmation seeds 960000–960299): Each success count is out of 300 complete programmes and requires all four calls to pass. The comparison reuses the Table 4 single-event offer. A selected repeated offer is the largest qualifying development-grid candidate; its separate confirmation lower bound determines qualification. None denotes no qualifying development candidate, not zero true capacity. All original four-hour repeated offers passed confirmation (300/300; lower 0.9911), whereas the eight-hour originals did not. None passed the separate development selection rule. Paired intervals resample complete seeds.",
+      "zh": "对于原控制器研究（确认种子 960000–960299）：各成功数分母均为 300 个完整方案，并要求四次全通过。比较复用表 4 的单次承诺。已选重复承诺是满足开发门槛的最大网格候选，其独立确认下界决定是否合格。None 表示开发无合格候选，不是实际容量为零。原四小时重复承诺均通过确认（300/300；下界 0.9911），八小时原承诺则未通过；另行开展的开发选值规则没有选中候选。配对区间按完整种子重采样。"
+    }
+  },
+  {
+    "id": "S20_089",
+    "old": {
+      "id": "S20_089",
+      "en": "All payments are US$ per offered accounting kW-year at a proportional 1-MW operating peak. Single events use 50 independent calls/year; repeated programmes use 12 independent four-call series/year. The site charge is US$25,000 once yearly. The displacement illustration assumes US$0.25 per deferred GPU-h. The repeated-pass column applies the confirmation Wilson criterion only; the separate development rule selected no repeated candidate. Conditional costs do not change either outcome. All price-grid rows and failed-trajectory service losses are retained in Source Data.",
+      "zh": "所有补偿单位为每会计承诺 kW 每年的美元，按运行峰值比例缩放到 1 MW。单次为每年 50 个独立调用，重复为每年 12 个独立四调用序列，站点费每年只计一次 25,000 美元。挤占示例假设每推迟 GPU 小时 0.25 美元。重复通过列仅采用确认集 Wilson 标准，另行开展的开发规则没有选出重复候选。条件成本不改变这两项结果。全部价格网格及失败轨迹的服务损失均保留在源数据中。"
+    },
+    "new": {
+      "id": "S20_089",
+      "en": "For the original controller study (confirmation seeds 960000–960299): All payments are US$ per offered accounting kW-year at a proportional 1-MW operating peak. Single events use 50 independent calls/year; repeated programmes use 12 independent four-call series/year. The site charge is US$25,000 once yearly. The displacement illustration assumes US$0.25 per deferred GPU-h. The repeated-pass column applies the confirmation Wilson criterion only; the separate development rule selected no repeated candidate. Conditional costs do not change either outcome. All price-grid rows and failed-trajectory service losses are retained in Source Data.",
+      "zh": "对于原控制器研究（确认种子 960000–960299）：所有补偿单位为每会计承诺 kW 每年的美元，按运行峰值比例缩放到 1 MW。单次为每年 50 个独立调用，重复为每年 12 个独立四调用序列，站点费每年只计一次 25,000 美元。挤占示例假设每推迟 GPU 小时 0.25 美元。重复通过列仅采用确认集 Wilson 标准，另行开展的开发规则没有选出重复候选。条件成本不改变这两项结果。全部价格网格及失败轨迹的服务损失均保留在源数据中。"
+    }
+  }
+]

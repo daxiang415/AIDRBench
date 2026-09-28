@@ -1,0 +1,3 @@
+﻿duration_h,successes_per_condition,trials_per_condition,success_fraction,wilson_lower_one_sided_95,notice_hours,eligibility_pct,display
+4,295,300,0.98333333333333328,0.96616252724937679,"0,2,6","5,10,20,40,60",4 h: 295/300 successes   |   lower bound 0.9662
+8,292,300,0.97333333333333338,0.95329497805997565,"0,2,6","5,10,20,40,60",8 h: 292/300 successes   |   lower bound 0.9533

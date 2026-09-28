@@ -1,0 +1,511 @@
+{
+  "a": {
+    "title": "All board-level run means",
+    "xlabel": "",
+    "ylabel": "Board power (W/GPU)",
+    "xlim": [
+      -0.294875,
+      3.332375
+    ],
+    "ylim": [
+      200.0,
+      315.0
+    ],
+    "xticks": [
+      0.0,
+      1.0,
+      2.0,
+      3.0
+    ],
+    "xticklabels": [
+      "Train\n1 GPU",
+      "Train\n4 GPUs",
+      "Offline\n1 GPU",
+      "Offline\n4 GPUs"
+    ],
+    "yticks": [
+      200.0,
+      220.0,
+      240.0,
+      260.0,
+      280.0,
+      300.0,
+      320.0
+    ],
+    "yticklabels": [
+      "200",
+      "220",
+      "240",
+      "260",
+      "280",
+      "300",
+      "320"
+    ],
+    "artists": [
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            -0.13,
+            299.990588235
+          ]
+        ],
+        "label": "_child0"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.0,
+            299.988823529
+          ]
+        ],
+        "label": "_child1"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.13,
+            299.993888889
+          ]
+        ],
+        "label": "_child2"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.8325,
+            275.095625
+          ]
+        ],
+        "label": "_child3"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.8574999999999999,
+            245.895
+          ]
+        ],
+        "label": "_child4"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.8825,
+            256.4625
+          ]
+        ],
+        "label": "_child5"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.9075,
+            248.403125
+          ]
+        ],
+        "label": "_child6"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.9625,
+            276.621176471
+          ]
+        ],
+        "label": "_child7"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            0.9875,
+            250.602941176
+          ]
+        ],
+        "label": "_child8"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            1.0125,
+            264.377058824
+          ]
+        ],
+        "label": "_child9"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            1.0375,
+            255.202352941
+          ]
+        ],
+        "label": "_child10"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            1.0925,
+            278.803125
+          ]
+        ],
+        "label": "_child11"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            1.1175,
+            256.39375
+          ]
+        ],
+        "label": "_child12"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            1.1425,
+            270.4025
+          ]
+        ],
+        "label": "_child13"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            1.1675,
+            260.98875
+          ]
+        ],
+        "label": "_child14"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            1.87,
+            299.994705882
+          ]
+        ],
+        "label": "_child15"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.0,
+            299.991176471
+          ]
+        ],
+        "label": "_child16"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.13,
+            299.991176471
+          ]
+        ],
+        "label": "_child17"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.8325,
+            299.995
+          ]
+        ],
+        "label": "_child18"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.8575,
+            299.9975
+          ]
+        ],
+        "label": "_child19"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.8825,
+            299.996875
+          ]
+        ],
+        "label": "_child20"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.9075,
+            299.99625
+          ]
+        ],
+        "label": "_child21"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.9625,
+            299.984705882
+          ]
+        ],
+        "label": "_child22"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            2.9875,
+            299.991176471
+          ]
+        ],
+        "label": "_child23"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            3.0125,
+            300.218823529
+          ]
+        ],
+        "label": "_child24"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            3.0375,
+            299.997058824
+          ]
+        ],
+        "label": "_child25"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            3.0925,
+            299.994375
+          ]
+        ],
+        "label": "_child26"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            3.1175,
+            299.993125
+          ]
+        ],
+        "label": "_child27"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            3.1425,
+            300.00125
+          ]
+        ],
+        "label": "_child28"
+      },
+      {
+        "kind": "scatter",
+        "xy": [
+          [
+            3.1675,
+            299.99375
+          ]
+        ],
+        "label": "_child29"
+      }
+    ],
+    "text": [
+      {
+        "text": "a",
+        "position": [
+          -0.13,
+          1.09
+        ]
+      }
+    ]
+  },
+  "b": {
+    "title": "Calibration uncertainty",
+    "xlabel": "",
+    "ylabel": "Active coefficient (W/GPU)",
+    "xlim": [
+      -0.5,
+      1.5
+    ],
+    "ylim": [
+      200.0,
+      315.0
+    ],
+    "xticks": [
+      0.0,
+      1.0
+    ],
+    "xticklabels": [
+      "Training",
+      "Offline inference"
+    ],
+    "yticks": [
+      200.0,
+      220.0,
+      240.0,
+      260.0,
+      280.0,
+      300.0,
+      320.0
+    ],
+    "yticklabels": [
+      "200",
+      "220",
+      "240",
+      "260",
+      "280",
+      "300",
+      "320"
+    ],
+    "artists": [
+      {
+        "kind": "line",
+        "xy": [
+          [
+            0.0,
+            259.082472426
+          ],
+          [
+            1.0,
+            300.022173713
+          ]
+        ],
+        "label": "_nolegend_",
+        "drawstyle": "default"
+      },
+      {
+        "kind": "line",
+        "xy": [
+          [
+            0.0,
+            225.812419818
+          ],
+          [
+            1.0,
+            299.69476705
+          ]
+        ],
+        "label": "_nolegend_",
+        "drawstyle": "default"
+      },
+      {
+        "kind": "line",
+        "xy": [
+          [
+            0.0,
+            292.352525035
+          ],
+          [
+            1.0,
+            300.349580377
+          ]
+        ],
+        "label": "_nolegend_",
+        "drawstyle": "default"
+      },
+      {
+        "kind": "segments",
+        "segments": [
+          [
+            [
+              0.0,
+              225.812419818
+            ],
+            [
+              0.0,
+              292.352525035
+            ]
+          ],
+          [
+            [
+              1.0,
+              299.69476705
+            ],
+            [
+              1.0,
+              300.349580377
+            ]
+          ]
+        ]
+      },
+      {
+        "kind": "errorbar",
+        "xy": [
+          [
+            0.0,
+            259.082472426
+          ],
+          [
+            1.0,
+            300.022173713
+          ]
+        ],
+        "segments": [
+          [
+            [
+              0.0,
+              225.812419818
+            ],
+            [
+              0.0,
+              292.352525035
+            ]
+          ],
+          [
+            [
+              1.0,
+              299.69476705
+            ],
+            [
+              1.0,
+              300.349580377
+            ]
+          ]
+        ]
+      }
+    ],
+    "text": [
+      {
+        "text": "b",
+        "position": [
+          -0.13,
+          1.09
+        ]
+      }
+    ]
+  }
+}

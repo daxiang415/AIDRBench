@@ -1,0 +1,9 @@
+weight,ordering,fraction,trials,successes_1pct,successes_zero,instantaneous_shortage
+job_count,chronological,0.5,80,80,80,0
+job_count,chronological,0.75,80,61,60,19
+job_count,permuted,0.5,80,80,80,0
+job_count,permuted,0.75,80,72,66,8
+resource_gpu_h,chronological,0.5,80,31,31,49
+resource_gpu_h,chronological,0.75,80,0,0,80
+resource_gpu_h,permuted,0.5,80,55,54,25
+resource_gpu_h,permuted,0.75,80,11,9,69

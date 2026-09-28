@@ -1,0 +1,46 @@
+schema_version: 1
+study: repeated_capacity_extension_v1
+status: prospective_extension_after_v0_17_not_original_preregistration
+development_environment: configs/env/nature_mainline_development.yaml
+confirmation_environment: configs/env/nature_mainline_validation.yaml
+controller_config: configs/controller/nature_robust_mpc_v1.yaml
+reference_certificates: results/nature_mainline/locked_id_certificate_q95/causal_certificates.parquet
+development_seeds: [900000, 900099]
+confirmation_seeds: [910000, 910299]
+duration_hours: [4, 8]
+recovery_gaps_hours: [2, 4, 8, 12, 24]
+event_count: 4
+first_event_start_hour: 63
+notice_hours: 0
+offer_fractions: [0.25, 0.50, 0.75, 0.90, 1.00]
+reliability_target: 0.95
+confidence_level: 0.95
+selection_rule: largest_tested_fraction_with_development_Wilson_lower_bound_at_least_q
+confirmation_rule: pointwise_one_sided_Wilson_lower_bound_at_least_q
+confirmation_comparisons: [original_single_event_offer_repeated, selected_repeated_offer, matched_fresh_calls_at_original_offer]
+success_rule: all_four_events_pass_original_six_criteria
+mechanism_models:
+  - contract_only
+  - contract_plus_baseline_relative_queue_energy
+  - contract_plus_queue_energy_and_deadline_pressure
+mechanism_endpoint: local_event_success_excluding_episode_wide_deadline_and_terminal_criteria
+mechanism_validation: fit_development_only_score_confirmation_with_episode_cluster_bootstrap
+economics:
+  scope: complete_four_call_episode_single_nonoverlapping_ledger
+  fixed_site_cost_usd_year: 25000
+  performance_usd_per_mwh: 50
+  energy_usd_per_kwh: 0.10
+  delay_usd_per_gpu_h_h: 0.005
+  annual_series_counts: [1, 12]
+  bootstrap_draws: 2000
+  risk_quantile: 0.05
+  annualisation_boundary: independent_complete_series_not_continuous_year
+  facility_scale_mw: 1.0
+guardrails:
+  - retain_all_existing_locked_inputs_outputs_and_certificates
+  - fresh_counterfactual_same_seed_jobs_community_and_event_clock_time
+  - no_monotonicity_assumption_between_tested_offer_fractions
+  - largest_tested_qualified_offer_is_not_continuous_maximum_capacity
+  - zero_selected_offer_is_no_qualification_not_certified_zero_capacity
+  - no_counting_shared_hours_multiple_times_in_repeated_economic_ledger
+  - no_claim_of_new_hardware_or_operator_cost_validation

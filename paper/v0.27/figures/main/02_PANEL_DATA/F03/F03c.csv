@@ -1,0 +1,6 @@
+﻿variant,y_position,category_0_count,category_0_left,category_1_count,category_1_left,category_2_count,category_2_left,category_3_count,category_3_left
+u50d100g10,0,2,0,1,2,0,3,0,3
+u65d100g10,1,2,0,0,2,1,2,0,3
+u65d50g10,2,2,0,1,2,0,3,0,3
+u65d50g20,3,2,0,1,2,0,3,0,3
+u80d100g10,4,0,0,0,0,0,0,3,0

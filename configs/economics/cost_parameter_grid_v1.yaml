@@ -1,0 +1,125 @@
+schema_version: 2
+currency_basis: real_2026_usd
+analysis_status: illustrative_parameterized_sensitivity
+reserved_capacity_basis: abstract_pcc_side_kw_sensitivity
+
+# All facility rows are a proportional replication of the frozen reference
+# module's operating peak. They are accounting sensitivities only: no new
+# 0.2--20 MW technical certificate, hardware extrapolation, or portfolio
+# diversification claim is implied.
+reference_module_operating_peak_kw: 201.0007839840303
+facility_site_scales_mw: [0.2, 1.0, 5.0, 20.0]
+facility_scale_interpretation: proportional_reference_module_accounting_sensitivity_no_portfolio_diversification
+
+# These are declared research-design ranges for the MVP, not vendor quotes or
+# a claim about a named operator's cost base.  Each item is registered in
+# data/economics/source_register.csv and must be replaced by sourced evidence
+# before any real-market profitability claim.
+capital_cases:
+  # Primary life axis: WACC and salvage are fixed, so changes can be
+  # attributed to economic life rather than a bundled capital scenario.
+  - case_id: life_3y_fixed_finance
+    sensitivity_axis: economic_life
+    economic_life_years: 3
+    discount_rate: 0.08
+    salvage_fraction: 0.10
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    # C_enable = C_fixed_site + c_variable_per_offer_kw * K_offer.  The
+    # fixed coordinate is site-wide and therefore allocated over the scaled
+    # site's offered capacity, never over a hard-coded 39.65 kW reference.
+    fixed_site_enablement_annual_cost: 25000
+    # Explicit lower-bound coordinate, not a sourced marginal cost estimate.
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+  - case_id: base_life_4y
+    sensitivity_axis: reference
+    economic_life_years: 4
+    discount_rate: 0.08
+    salvage_fraction: 0.10
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    fixed_site_enablement_annual_cost: 25000
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+  - case_id: life_5y_fixed_finance
+    sensitivity_axis: economic_life
+    economic_life_years: 5
+    discount_rate: 0.08
+    salvage_fraction: 0.10
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    fixed_site_enablement_annual_cost: 25000
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+  - case_id: life_6y_fixed_finance
+    sensitivity_axis: economic_life
+    economic_life_years: 6
+    discount_rate: 0.08
+    salvage_fraction: 0.10
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    fixed_site_enablement_annual_cost: 25000
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+
+  # Orthogonal one-factor financial sensitivities at the 4-year reference.
+  - case_id: wacc_4pct_fixed_life_salvage
+    sensitivity_axis: discount_rate
+    economic_life_years: 4
+    discount_rate: 0.04
+    salvage_fraction: 0.10
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    fixed_site_enablement_annual_cost: 25000
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+  - case_id: wacc_12pct_fixed_life_salvage
+    sensitivity_axis: discount_rate
+    economic_life_years: 4
+    discount_rate: 0.12
+    salvage_fraction: 0.10
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    fixed_site_enablement_annual_cost: 25000
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+  - case_id: salvage_0pct_fixed_life_wacc
+    sensitivity_axis: salvage_fraction
+    economic_life_years: 4
+    discount_rate: 0.08
+    salvage_fraction: 0.00
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    fixed_site_enablement_annual_cost: 25000
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+  - case_id: salvage_20pct_fixed_life_wacc
+    sensitivity_axis: salvage_fraction
+    economic_life_years: 4
+    discount_rate: 0.08
+    salvage_fraction: 0.20
+    installed_cost_per_reserved_kw: 2500
+    annual_om_fraction: 0.03
+    fixed_site_enablement_annual_cost: 25000
+    variable_enablement_cost_per_offer_kw: 0
+    checkpoint_cost_per_event: 0
+
+operating_cases:
+  - case_id: base_incremental_cost
+    value_per_gpu_h: 0.50
+    delay_cost_per_gpu_h_h: 0.005
+    missed_work_cost_per_gpu_h: 0
+    terminal_backlog_cost_per_gpu_h: 0
+    electricity_price_per_kwh: 0.10
+
+regimes:
+  - regime: slack_backed
+    reserved_capacity_fractions: [0.0]
+    opportunity_exposure_alphas: [0.0]
+  - regime: reserved_headroom
+    reserved_capacity_fractions: [0.05, 0.15, 0.30]
+    opportunity_exposure_alphas: [0.0]
+  - regime: throughput_displacing
+    reserved_capacity_fractions: [0.0]
+    opportunity_exposure_alphas: [0.10, 0.25, 0.50, 1.00]

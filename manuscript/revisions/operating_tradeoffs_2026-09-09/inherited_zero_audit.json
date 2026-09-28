@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "rows": 35,
+  "selected_offer_rows": 30,
+  "selected_joint_success_counts_unchanged": true,
+  "scope": "retrospective scoring of existing confirmation data; no new certification or capacity reselection",
+  "zero_tolerance_gpu_h": 1e-07,
+  "new_repeated_baselines_individually_checked": 1500
+}

@@ -82,6 +82,19 @@ def _write_manifest(destination: Path, records: list[dict[str, object]]) -> dict
     return manifest
 
 
+def _prepare_destination(destination: Path) -> None:
+    """Require a fresh panel-data directory so obsolete figure files cannot survive."""
+
+    if destination.exists():
+        if not destination.is_dir():
+            raise FileExistsError(f"panel-data destination is not a directory: {destination}")
+        if any(destination.iterdir()):
+            raise FileExistsError(
+                f"panel-data destination must be empty to prevent stale files: {destination}"
+            )
+    destination.mkdir(parents=True, exist_ok=True)
+
+
 def _complete_duration_display_grid(
     frame: pd.DataFrame,
     *,
@@ -137,6 +150,61 @@ def _complete_duration_display_grid(
     ].sort_values([*group_columns, "duration_h"])
 
 
+def _supplementary_s5_source(
+    specification: dict[str, object],
+    *,
+    repository_root: Path,
+) -> tuple[Path, dict[str, object], dict[str, str]]:
+    """Resolve the hash-verified source bundle declared for external S5 artwork."""
+
+    raw_external = specification.get("external_artwork")
+    if not isinstance(raw_external, dict) or set(raw_external) != {"S5"}:
+        raise ValueError("supplementary specification must declare external_artwork.S5")
+    raw_s5 = raw_external["S5"]
+    if not isinstance(raw_s5, dict):
+        raise ValueError("external_artwork.S5 must be a mapping")
+    if raw_s5.get("renderer") != "web_gpt":
+        raise ValueError("Supplementary Figure S5 must use the declared Web-GPT route")
+    if raw_s5.get("locked_sets_used") is not False:
+        raise ValueError("Supplementary Figure S5 must remain non-locked")
+    if raw_s5.get("evidence_scope") != "paired_development_profile_sensitivity":
+        raise ValueError("Supplementary Figure S5 evidence scope mismatch")
+
+    raw_source = raw_s5.get("source_data_directory")
+    if not isinstance(raw_source, str) or not raw_source:
+        raise ValueError("external_artwork.S5.source_data_directory must be a path")
+    source = (repository_root / raw_source).resolve()
+    try:
+        source.relative_to(repository_root)
+    except ValueError as error:
+        raise ValueError("Supplementary Figure S5 source bundle escapes repository root") from error
+    if "locked" in source.as_posix().lower():
+        raise ValueError("Supplementary Figure S5 must not read a locked source-data path")
+
+    _manifest_path, loaded_manifest = _load_manifest(source)
+    manifest: dict[str, object] = dict(loaded_manifest)
+    expected_bundle = raw_s5.get("expected_bundle_id")
+    if not isinstance(expected_bundle, str) or manifest.get("bundle_id") != expected_bundle:
+        raise ValueError("Supplementary Figure S5 source-data bundle identity mismatch")
+
+    raw_table_ids = raw_s5.get("source_table_ids")
+    if not isinstance(raw_table_ids, dict):
+        raise ValueError("external_artwork.S5.source_table_ids must be a mapping")
+    required_roles = {
+        "representative_curves",
+        "pi_firm_boundaries",
+        "causal_transfer",
+        "pv_hosting_summary",
+    }
+    if set(raw_table_ids) != required_roles or not all(
+        isinstance(value, str) and bool(value) for value in raw_table_ids.values()
+    ):
+        raise ValueError("Supplementary Figure S5 source-table declaration mismatch")
+    return source, manifest, {
+        str(role): str(table_id) for role, table_id in raw_table_ids.items()
+    }
+
+
 def export_main_figure_panel_plot_data(
     source_data_directory: str | Path,
     output_directory: str | Path,
@@ -145,7 +213,7 @@ def export_main_figure_panel_plot_data(
 
     source = Path(source_data_directory).resolve()
     destination = Path(output_directory).resolve()
-    destination.mkdir(parents=True, exist_ok=True)
+    _prepare_destination(destination)
     _manifest_path, manifest = _load_manifest(source)
     def table(table_id: str) -> pd.DataFrame:
         return _verified_table(source, manifest, table_id)
@@ -518,69 +586,6 @@ def export_main_figure_panel_plot_data(
         )
     )
 
-    profiles = table("fig6_community_profile_representative_curves").copy()
-    profile_frames: list[pd.DataFrame] = []
-    for zone in ("3A", "3C", "5A"):
-        selected = profiles[profiles["climate_zone"].astype(str) == zone].copy()
-        selected["timestamp"] = pd.to_datetime(selected["timestamp"])
-        selected = selected.sort_values("timestamp").head(168)
-        if len(selected) != 168:
-            raise ValueError(f"Figure 6a climate zone {zone} needs exactly 168 plotted rows")
-        selected["elapsed_hour"] = np.arange(168, dtype=int)
-        selected["elapsed_day"] = selected["elapsed_hour"] / 24.0
-        profile_frames.append(selected)
-    records.append(
-        _write_panel(
-            destination,
-            figure="6",
-            panel="a",
-            frame=pd.concat(profile_frames, ignore_index=True),
-            source_tables=("fig6_community_profile_representative_curves",),
-            selection="earliest 168 chronological hours within each climate zone",
-            transformation="timestamp mapped to elapsed hour/day; no smoothing",
-        )
-    )
-    firm = table("fig6_community_profile_pi_firm_boundaries")
-    firm = _complete_duration_display_grid(
-        firm,
-        group_columns=("climate_zone",),
-    )
-    records.append(
-        _write_panel(
-            destination,
-            figure="6",
-            panel="b",
-            frame=firm.sort_values(["climate_zone", "duration_h"]),
-            source_tables=("fig6_community_profile_pi_firm_boundaries",),
-            selection="all three climate zones and complete 1-8 h display grid at q == 0.95",
-            transformation="no aggregation; maximum spread annotation is max(zone) - min(zone) within evaluated duration; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
-        )
-    )
-    causal = table("fig6_community_profile_causal_transfer")
-    records.append(
-        _write_panel(
-            destination,
-            figure="6",
-            panel="c",
-            frame=causal.sort_values(["climate_zone", "duration_h"]),
-            source_tables=("fig6_community_profile_causal_transfer",),
-            selection="all three climate zones; H in {4, 8}",
-            transformation="filled marker = empirical success; open marker = Wilson lower bound",
-        )
-    )
-    hosting = table("fig6_community_profile_pv_hosting_summary")
-    records.append(
-        _write_panel(
-            destination,
-            figure="6",
-            panel="d",
-            frame=hosting.sort_values(["bess_enabled", "climate_zone", "dc_operation"]),
-            source_tables=("fig6_community_profile_pv_hosting_summary",),
-            selection="complete 3 climate zone × 2 BESS × 2 operation design",
-            transformation="open marker = rigid; filled marker = flexible; connecting segment is the paired planning gain",
-        )
-    )
-
     return _write_manifest(destination, records)
 
 
@@ -596,7 +601,7 @@ def export_supplementary_panel_plot_data(
     source = Path(source_data_directory).resolve()
     root = Path(repository_root).resolve()
     destination = Path(output_directory).resolve()
-    destination.mkdir(parents=True, exist_ok=True)
+    _prepare_destination(destination)
     specification = yaml.safe_load(Path(specification_path).read_text(encoding="utf-8"))
     if not isinstance(specification, dict):
         raise ValueError("supplementary figure specification must be a mapping")
@@ -681,22 +686,112 @@ def export_supplementary_panel_plot_data(
     )
     start = int(metadata["event_start_hour"])
     stop = int(metadata["event_stop_hour"])
-    trajectory_window = trajectory[
-        (trajectory["hour"] >= start - 12) & (trajectory["hour"] < stop + 24)
-    ].copy()
-    trajectory_window["relative_hour"] = _numeric(trajectory_window, "hour") - start
+    pre = int(metadata.get("plot_window_pre_event_h", 12))
+    post = int(metadata.get("plot_window_post_event_h", 24))
+    required_columns = {"relative_hour", "hour"}
+    missing_columns = sorted(required_columns.difference(trajectory.columns))
+    if missing_columns:
+        raise ValueError(
+            "Supplementary Figure S4 plot data are missing columns: "
+            + ", ".join(missing_columns)
+        )
+    observed_relative_hours = _numeric(trajectory, "relative_hour").to_numpy(dtype=int)
+    expected_relative_hours = np.arange(-pre, stop - start + post, dtype=int)
+    if not np.array_equal(observed_relative_hours, expected_relative_hours):
+        raise ValueError("Supplementary Figure S4 relative-hour window is incomplete")
+    absolute_hours = _numeric(trajectory, "hour").to_numpy(dtype=int)
+    if not np.array_equal(observed_relative_hours, absolute_hours - start):
+        raise ValueError("Supplementary Figure S4 absolute and relative hours disagree")
     records.append(
         _write_panel(
             destination,
             figure="S4",
             panel="a_b_c_d",
-            frame=trajectory_window,
+            frame=trajectory,
             source_tables=(
                 "supplementary_figure_4_trajectory.csv",
                 "representative_trajectory_metadata.json",
             ),
-            selection="12 h before event start through 24 h after event stop",
-            transformation="hour shifted so event start is relative hour 0; the same rows feed panels a-d",
+            selection="exact stored window from 12 h before event start through 24 h after event stop",
+            transformation="no additional filtering; relative_hour equals absolute hour minus event_start_hour and the same rows feed panels a-d",
+        )
+    )
+
+    s5_source, s5_manifest, s5_table_ids = _supplementary_s5_source(
+        specification,
+        repository_root=root,
+    )
+
+    def s5_table(role: str) -> pd.DataFrame:
+        return _verified_table(s5_source, s5_manifest, s5_table_ids[role])
+
+    profiles = s5_table("representative_curves").copy()
+    profile_frames: list[pd.DataFrame] = []
+    for zone in ("3A", "3C", "5A"):
+        selected = profiles[profiles["climate_zone"].astype(str) == zone].copy()
+        selected["timestamp"] = pd.to_datetime(selected["timestamp"])
+        selected = selected.sort_values("timestamp").head(168)
+        if len(selected) != 168:
+            raise ValueError(
+                f"Supplementary Figure S5a climate zone {zone} needs exactly "
+                "168 plotted rows"
+            )
+        selected["elapsed_hour"] = np.arange(168, dtype=int)
+        selected["elapsed_day"] = selected["elapsed_hour"] / 24.0
+        profile_frames.append(selected)
+    records.append(
+        _write_panel(
+            destination,
+            figure="S5",
+            panel="a",
+            frame=pd.concat(profile_frames, ignore_index=True),
+            source_tables=(s5_table_ids["representative_curves"],),
+            selection="earliest 168 chronological hours within each climate zone",
+            transformation="timestamp mapped to elapsed hour/day; no smoothing",
+        )
+    )
+
+    firm = _complete_duration_display_grid(
+        s5_table("pi_firm_boundaries"),
+        group_columns=("climate_zone",),
+    )
+    records.append(
+        _write_panel(
+            destination,
+            figure="S5",
+            panel="b",
+            frame=firm.sort_values(["climate_zone", "duration_h"]),
+            source_tables=(s5_table_ids["pi_firm_boundaries"],),
+            selection="all three climate zones and complete 1-8 h display grid at q == 0.95",
+            transformation="no aggregation; maximum spread annotation is max(zone) - min(zone) within evaluated duration; H=5 and H=7 are explicit not_evaluated rows with no interpolation",
+        )
+    )
+
+    causal = s5_table("causal_transfer")
+    records.append(
+        _write_panel(
+            destination,
+            figure="S5",
+            panel="c",
+            frame=causal.sort_values(["climate_zone", "duration_h"]),
+            source_tables=(s5_table_ids["causal_transfer"],),
+            selection="all three climate zones; H in {4, 8}",
+            transformation="filled marker = empirical success; open marker = Wilson lower bound",
+        )
+    )
+
+    hosting = s5_table("pv_hosting_summary")
+    records.append(
+        _write_panel(
+            destination,
+            figure="S5",
+            panel="d",
+            frame=hosting.sort_values(
+                ["bess_enabled", "climate_zone", "dc_operation"]
+            ),
+            source_tables=(s5_table_ids["pv_hosting_summary"],),
+            selection="complete 3 climate zone × 2 BESS × 2 operation design",
+            transformation="open marker = rigid; filled marker = flexible; connecting segment is the paired planning gain",
         )
     )
 

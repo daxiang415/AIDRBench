@@ -1,0 +1,101 @@
+schema_version: 2
+analysis_id: nature_economic_development_screening_v1
+analysis_role: development_parameterized_screening
+monetary_basis: real_2026_usd
+
+# The trajectory replay uses the non-locked validation set.  Existing locked-ID
+# causal certificates define K_cert but are not re-opened as a new economic
+# validation; all v1 monetary outputs are explicitly parameterized screening.
+technical:
+  scenario_directory: results/nature_mainline/validation_nominal
+  expected_scenario_count: 100
+  expected_episode_seed_range: [20000, 20099]
+  scenario_set_sha256: 925d0b22d41b24f1db8a500ca1eda69c3351edbd540b36117bee627765fe9f20
+  controller: robust_mpc
+  controller_config: configs/controller/nature_robust_mpc_v1.yaml
+  controller_config_sha256: 73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf
+  technical_certificate_path: results/nature_mainline/locked_id_certificate_q95/causal_certificates.parquet
+  technical_certificate_sha256: 7953c686ab7c5a7a33272d506d618e0ccccb00c85f01d8aba8b990d9de048670
+  technical_certificate_manifest: results/nature_mainline/locked_id_certificate_q95/causal_certificate.json
+  technical_certificate_manifest_sha256: 122dc0dd82e5cd86fe00465468ecbf37340ebae65d415a0f431a91a3f075f842
+  technical_selection_path: results/nature_mainline/causal_selection_q95/causal_selection.json
+  technical_selection_sha256: ddd0094907e34f7f137856169c5fd6b84a33cf37cfc48e5158ceb5502fdd470b
+  validation_scenario_receipt: data/manifests/nature_mainline_validation_scenarios_v1.yaml
+  validation_scenario_receipt_sha256: b891bb16cb667298e8c1b51b1f3680889e9a5b456645a0819489fa0f29462f6f
+  locked_id_receipt: data/manifests/nature_mainline_locked_id_results_v1.yaml
+  locked_id_receipt_sha256: e8c2b0d60a2ba1f06e5fef53853054883986451c81363df6bef4e3063a36a039
+  # The technical ceiling was certified with this exact source tree. Replaying
+  # validation scenarios in that immutable runtime preserves the controller and
+  # environment semantics without reopening any locked-ID/OOD scenario.
+  replay_runtime_mode: certificate_git_commit
+  replay_git_commit: 5889405427b8f00f3cdd12b961b79d621b122e65
+  duration_hours: [2, 4, 8]
+  notice_hours: [0]
+  reliability_target: 0.95
+  confidence_level: 0.95
+  event_id: 0
+  # Mainline v1 is the safest binary offer: no participation or the one
+  # independently certified ceiling. The implementation can label lower
+  # development fractions, but this formal configuration does not replay them.
+  offer_fractions: [1.00]
+  workers: 4
+  criteria:
+    min_delivery_ratio: 0.95
+    min_interval_delivery_ratio: 0.95
+    max_deadline_miss_rate: 0.01
+    max_rebound_ratio: 0.25
+    min_window_peak_relief_fraction: 0.50
+    max_terminal_backlog_fraction: 0.02
+
+ledger:
+  baseline_type: paired_no_control_replay
+  paired_pcc_tolerance_kw: 0.00000001
+  work_conservation_tolerance_gpu_h: 0.000001
+  include_interval_ledger: true
+
+evaluation:
+  # This annualises independent fresh-state calls. It is not a continuous DR
+  # programme and therefore does not represent repeated-event compute debt.
+  dispatch_sampling: independent_fresh_event_screening_bootstrap
+  bootstrap_draws: 200
+  bootstrap_seed: 20260904
+  risk_quantile: 0.05
+  annual_event_counts: [1, 12, 50, 100, 250]
+  primary_duration_h: 4
+  primary_notice_h: 0
+  primary_reliability_target: 0.95
+  primary_offer_fraction: 1.00
+  primary_capital_case_id: base_life_4y
+  primary_operating_case_id: base_incremental_cost
+  primary_market_archetype_id: two_part
+  primary_annual_event_count: 50
+  # This is a display coordinate within the proportional-reference-module
+  # accounting sensitivity. It is not a 1 MW technical capacity certificate.
+  primary_facility_site_scale_mw: 1.0
+  # Zero is a reference coordinate. The primary boundary is the calculated
+  # risk-adjusted break-even payment, not an assumed market payment.
+  primary_capacity_payment_per_kw_year: 0
+  primary_performance_payment_per_mwh: 50
+  primary_regime_exposures:
+    slack_backed:
+      reserved_capacity_fraction: 0.00
+      opportunity_exposure_alpha: 0.00
+    reserved_headroom:
+      reserved_capacity_fraction: 0.15
+      opportunity_exposure_alpha: 0.00
+    throughput_displacing:
+      reserved_capacity_fraction: 0.00
+      opportunity_exposure_alpha: 0.50
+
+inputs:
+  cost_parameter_grid: configs/economics/cost_parameter_grid_v1.yaml
+  cost_parameter_grid_sha256: e7124d58e5e96b68a13d708fc0522f8a76ab9e4e7d3b518bdb4a01b479a1a6ca
+  market_archetypes: configs/economics/market_archetypes_v1.yaml
+  market_archetypes_sha256: a034220e80432ff5e22407701eb962b2fd61f59d25ffaec548ee933b3767acd6
+  source_register: data/economics/source_register.csv
+  source_register_sha256: d841d3eeec745eda3f21da495e3573ad26d6baa1d3b1dcea8eef711856c18145
+  # This evidence register constrains provenance wording and source-data
+  # export only.  It is deliberately economics-only and never changes the
+  # physical paired-event ledger contract.
+  external_parameter_evidence: data/economics/external_parameter_evidence.csv
+  external_parameter_evidence_sha256: 0ba7937dc0c155be34eda00277f4044cbb5a927d01a70f2431c1683be9cc2609

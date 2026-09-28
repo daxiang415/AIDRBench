@@ -10,10 +10,10 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 20724,
+      "bytes": 20646,
       "format": "svg",
       "path": "supplementary_figure_3.svg",
-      "sha256": "bc8978111b31417b758434032ee89184c148b8899dba90823fdd956cf945425b"
+      "sha256": "9e5bed18d94b57deecc460a254af4404679ce3b4b4219f6efea904002272f112"
     },
     {
       "bytes": 25346,

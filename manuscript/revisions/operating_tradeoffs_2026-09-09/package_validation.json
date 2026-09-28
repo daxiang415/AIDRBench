@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "path": "/home/user/projects/AIDRBench/results/exports/AIDRBench_All_Figures_2026-09-10_v12.zip",
+  "staging": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12",
+  "bytes": 12566282310,
+  "sha256": "1afbe5cf6503f5f5d07b4d9e8d50898e8c2cf2c70eb1d4f2aaffa0c9590603ed",
+  "files": 50742,
+  "changed_entries": 25814,
+  "zip_crc_pass": true,
+  "duplicate_entries": false,
+  "manuscript": "v0.23",
+  "chinese": "v17",
+  "current_figures": 11,
+  "previous_release_preserved": true,
+  "all_current_image_links_portable": true,
+  "caption_portability_amendment_files": 14
+}

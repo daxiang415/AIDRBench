@@ -1,0 +1,46 @@
+{
+  "status": "PASS",
+  "version": "0.27",
+  "current_manifest_files": 433,
+  "full_data_manifest_files": 15138,
+  "archives": [
+    {
+      "file": "AIDRBench_LaTeX_v0.27_2026-09-11.zip",
+      "bytes": 1236385,
+      "entries": 24,
+      "sha256": "92b17a55be60a0a3ff43cbad22c7a505f0f35e3d75fd8c6c9bba7d0d397a91cc",
+      "crc_pass": true
+    },
+    {
+      "file": "AIDRBench_Chinese_MD_v0.27_2026-09-11.zip",
+      "bytes": 4058694,
+      "entries": 21,
+      "sha256": "3b025059dbb82b624cb7e54edcd707ec531329a2a5d0a5ecfe25f4555e519843",
+      "crc_pass": true
+    },
+    {
+      "file": "AIDRBench_Redraw_Ready_v0.27_2026-09-11.zip",
+      "bytes": 26977168,
+      "entries": 344,
+      "sha256": "1df6915e7385e13925fd94bc44665b1eed481791d0f0d0c9154bd4c867f629f7",
+      "crc_pass": true
+    },
+    {
+      "file": "AIDRBench_Submission_v0.27_2026-09-11_CORE.zip",
+      "bytes": 33274483,
+      "entries": 435,
+      "sha256": "95739d14c7850e86c2d872dee8d9482c1fa3ad737477f5030caa6cf15f1afbb9",
+      "crc_pass": true
+    },
+    {
+      "file": "AIDRBench_All_Figures_2026-09-11_v16.zip",
+      "bytes": 14723079092,
+      "entries": 15575,
+      "sha256": "91228d36267ca85b3cda8eaacbaa46e347421b68bc4667af02045d5a1ad595eb",
+      "crc_pass": true
+    }
+  ],
+  "preserved_v14_sha256": "e7d2095b32e3ad8af8ca396d7260a494120e52357b52342c6b395c91785cb923",
+  "all_archives_crc_verified": true,
+  "cache_files_excluded": true
+}

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "primary_no_response_scenarios": 2000,
+  "control_no_response_scenarios": 1200,
+  "formal_controller_replays": {
+    "single_dev": 4000,
+    "single_confirm": 9000,
+    "repeat_dev": 4000,
+    "repeat_confirm": 15000,
+    "control_confirm": 2400
+  },
+  "all_formal_event_durations_verified": true,
+  "inspected_ledger_traces": 444,
+  "renewable_optimisations": 7200,
+  "finite_core_columns_verified_hourly_rows": 7430400,
+  "renewable_max_deadline_miss_gpu_h": 0.0,
+  "numerical_alternate_groups_used": 0,
+  "controller_sha256": "8e2b8e7e86141a550ceeaf6201e4c7dd803e7dd2dadfafc32ca0b6e06ce813a0",
+  "repeat_runner_sha256": "19880580b75538588a58c52e786a0c0ddda4774dadd23ac534d808005c0a196d",
+  "no_confirmatory_offer_reselection": true,
+  "old_one_hour_repeat_diagnostics_excluded": true
+}

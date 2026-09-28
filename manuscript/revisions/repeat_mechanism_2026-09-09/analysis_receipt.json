@@ -1,0 +1,34 @@
+{
+  "development_replays": 10100,
+  "confirmation_replays": 13800,
+  "development_events": 40400,
+  "confirmation_events": 55200,
+  "summary_rows": 46,
+  "paired_contrasts": 16,
+  "primary": [
+    {
+      "case": "f10",
+      "program": "H8G12",
+      "fraction": 1.0,
+      "controller": "all_window_mpc",
+      "trials": 300,
+      "original_successes": 252,
+      "revised_successes": 294,
+      "gained": 42,
+      "lost": 0,
+      "difference_pp": 14.000000000000002,
+      "ci_low_pp": 10.333333333333334,
+      "ci_high_pp": 18.0,
+      "exact_mcnemar_p": 4.547473508864641e-13,
+      "original_window_only_failures": 42,
+      "rescued_window_only_failures": 42,
+      "new_deadline_failures": 0,
+      "holm_p_all_reported_contrasts": 5.9117155615240335e-12
+    }
+  ],
+  "illustrated_development_case": {
+    "seed": 930012,
+    "selection": "lowest development seed with original failure and all-window MPC success at f10/H8G12/full offer",
+    "not_statistical_unit_selection": true
+  }
+}

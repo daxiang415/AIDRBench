@@ -1,4 +1,10 @@
-"""Reproducible Supplementary Figures for the Nature Communications manuscript."""
+"""Reproducible supporting figures for the Nature Communications manuscript.
+
+Supplementary Figures S1--S4 are rendered locally. Supplementary Figure S5 is
+an externally assembled Web-GPT figure whose exact panel CSVs are exported by
+``figure_panel_data``; keeping that boundary explicit prevents a local preview
+renderer from silently becoming the publication artwork.
+"""
 # ruff: noqa: E402, E501
 
 from __future__ import annotations
@@ -48,6 +54,8 @@ _FIGURE_WIDTH_MM = 183.0
 _FIGURE_WIDTH_IN = _FIGURE_WIDTH_MM / 25.4
 _EXPORT_SUFFIXES = (".svg", ".pdf", ".tiff", ".png")
 _TIFF_DPI = 600
+_TRAJECTORY_PRE_EVENT_H = 12
+_TRAJECTORY_POST_EVENT_H = 24
 
 
 def _supplementary_publication_style() -> None:
@@ -90,6 +98,7 @@ def _load_specification(path: str | Path) -> dict[str, Any]:
         "environment_flow",
         "calibration",
         "observation_and_trajectory",
+        "external_artwork",
         "export",
     }
     if set(document) != expected:
@@ -102,6 +111,39 @@ def _load_specification(path: str | Path) -> dict[str, Any]:
     scenario_set = Path(str(trajectory["scenario_set"]))
     if "locked" in str(scenario_set).lower() or "validation" not in scenario_set.name.lower():
         raise ValueError("representative trajectory must use the non-locked validation set")
+    external = _mapping(document["external_artwork"], "external_artwork")
+    if set(external) != {"S5"}:
+        raise ValueError("external_artwork must declare only Supplementary Figure S5")
+    s5 = _mapping(external["S5"], "external_artwork.S5")
+    expected_s5_fields = {
+        "renderer",
+        "source_data_directory",
+        "expected_bundle_id",
+        "source_table_ids",
+        "locked_sets_used",
+        "evidence_scope",
+    }
+    if set(s5) != expected_s5_fields:
+        raise ValueError("external_artwork.S5 fields mismatch")
+    if s5["renderer"] != "web_gpt":
+        raise ValueError("Supplementary Figure S5 must use the declared Web-GPT route")
+    s5_source = str(s5["source_data_directory"])
+    if "locked" in s5_source.lower():
+        raise ValueError("Supplementary Figure S5 must not read a locked source-data path")
+    if s5["locked_sets_used"] is not False:
+        raise ValueError("Supplementary Figure S5 must remain a non-locked sensitivity")
+    if s5["evidence_scope"] != "paired_development_profile_sensitivity":
+        raise ValueError("Supplementary Figure S5 evidence scope mismatch")
+    if not isinstance(s5["expected_bundle_id"], str) or not s5["expected_bundle_id"]:
+        raise ValueError("Supplementary Figure S5 expected bundle ID must be declared")
+    table_ids = _mapping(s5["source_table_ids"], "external_artwork.S5.source_table_ids")
+    if set(table_ids) != {
+        "representative_curves",
+        "pi_firm_boundaries",
+        "causal_transfer",
+        "pv_hosting_summary",
+    }:
+        raise ValueError("Supplementary Figure S5 source-table declaration mismatch")
     export = _mapping(document["export"], "export")
     if float(export["width_mm"]) != 183.0 or float(export["minimum_font_pt"]) < 5.0:
         raise ValueError("supplementary figure export contract mismatch")
@@ -595,6 +637,8 @@ def _build_observation_and_trajectory(
         "event_id": int(trajectory["event_id"]),
         "event_start_hour": event_start,
         "event_stop_hour": event_stop,
+        "plot_window_pre_event_h": _TRAJECTORY_PRE_EVENT_H,
+        "plot_window_post_event_h": _TRAJECTORY_POST_EVENT_H,
         "duration_h": int(trajectory["duration_h"]),
         "notice_h": int(trajectory["notice_h"]),
         "candidate_reduction_kw": capacity_kw,
@@ -616,6 +660,31 @@ def _build_observation_and_trajectory(
         _source_record(_REPOSITORY_ROOT / "src/aidrbench/evaluation/hourly_rollout.py"),
     ]
     return observation, trajectory_frame, metadata, sources
+
+
+def _trajectory_plot_data(
+    trajectory: pd.DataFrame,
+    metadata: Mapping[str, Any],
+) -> pd.DataFrame:
+    """Return the exact event-relative rows and coordinates rendered in Supplementary Figure 4."""
+
+    start = int(metadata["event_start_hour"])
+    stop = int(metadata["event_stop_hour"])
+    pre = int(metadata["plot_window_pre_event_h"])
+    post = int(metadata["plot_window_post_event_h"])
+    window = trajectory[
+        (trajectory["hour"] >= start - pre) & (trajectory["hour"] < stop + post)
+    ].copy()
+    window.insert(
+        0,
+        "relative_hour",
+        window["hour"].to_numpy(dtype=int) - start,
+    )
+    expected_relative_hours = np.arange(-pre, stop - start + post, dtype=int)
+    observed_relative_hours = window["relative_hour"].to_numpy(dtype=int)
+    if not np.array_equal(observed_relative_hours, expected_relative_hours):
+        raise RuntimeError("representative trajectory plot window is incomplete or non-contiguous")
+    return window.reset_index(drop=True)
 
 
 def _plot_observation(
@@ -718,10 +787,7 @@ def _plot_trajectory(
     _supplementary_publication_style()
     start = int(metadata["event_start_hour"])
     stop = int(metadata["event_stop_hour"])
-    pre = 12
-    post = 24
-    window = trajectory[(trajectory["hour"] >= start - pre) & (trajectory["hour"] < stop + post)]
-    relative_hour = window["hour"].to_numpy(dtype=float) - start
+    relative_hour = trajectory["relative_hour"].to_numpy(dtype=float)
     figure, axes = plt.subplots(
         4,
         1,
@@ -735,30 +801,30 @@ def _plot_trajectory(
         axis.axvline(stop - start, color=_COLORS["red"], linewidth=0.7)
         axis.grid(axis="y", color=_COLORS["grid"], linewidth=0.5)
 
-    axes[0].plot(relative_hour, window["arrival_gpu_h"], color=_COLORS["gold"], linewidth=1.4, label="Arrivals")
-    axes[0].plot(relative_hour, window["executed_gpu_h"], color=_COLORS["blue"], linewidth=1.6, label="Executed")
+    axes[0].plot(relative_hour, trajectory["arrival_gpu_h"], color=_COLORS["gold"], linewidth=1.4, label="Arrivals")
+    axes[0].plot(relative_hour, trajectory["executed_gpu_h"], color=_COLORS["blue"], linewidth=1.6, label="Executed")
     axes[0].set_ylabel("GPU-h")
     axes[0].legend(loc="upper right", ncol=2)
     axes[0].set_title("Released and executed flexible work", loc="left", fontweight="bold")
     _panel_label(axes[0], "a", x=-0.07, y=1.05)
 
-    axes[1].step(relative_hour, window["action_fraction"], where="post", color=_COLORS["purple"], linewidth=1.7)
+    axes[1].step(relative_hour, trajectory["action_fraction"], where="post", color=_COLORS["purple"], linewidth=1.7)
     axes[1].set_ylim(-0.05, 1.05)
     axes[1].set_ylabel("Action")
     axes[1].set_title("Robust-MPC execution fraction", loc="left", fontweight="bold")
     _panel_label(axes[1], "b", x=-0.07, y=1.05)
 
-    axes[2].plot(relative_hour, window["baseline_pcc_power_kw"], color=_COLORS["neutral"], linewidth=1.3, label="No-DR baseline")
-    axes[2].plot(relative_hour, window["pcc_power_kw"], color=_COLORS["blue"], linewidth=1.7, label="Controlled PCC")
-    axes[2].plot(relative_hour, window["pcc_limit_kw"], color=_COLORS["red"], linewidth=1.0, linestyle="--", label="Event/PCC limit")
+    axes[2].plot(relative_hour, trajectory["baseline_pcc_power_kw"], color=_COLORS["neutral"], linewidth=1.3, label="No-DR baseline")
+    axes[2].plot(relative_hour, trajectory["pcc_power_kw"], color=_COLORS["blue"], linewidth=1.7, label="Controlled PCC")
+    axes[2].plot(relative_hour, trajectory["pcc_limit_kw"], color=_COLORS["red"], linewidth=1.0, linestyle="--", label="Event/PCC limit")
     axes[2].set_ylabel("Power (kW)")
     axes[2].legend(loc="upper right", ncol=3, columnspacing=0.8)
     axes[2].set_title("Baseline-relative power delivery", loc="left", fontweight="bold")
     _panel_label(axes[2], "c", x=-0.07, y=1.05)
 
-    axes[3].plot(relative_hour, window["backlog_gpu_h"], color=_COLORS["purple"], linewidth=1.5, label="Backlog")
+    axes[3].plot(relative_hour, trajectory["backlog_gpu_h"], color=_COLORS["purple"], linewidth=1.5, label="Backlog")
     debt_axis = axes[3].twinx()
-    debt_axis.plot(relative_hour, window["compute_debt_kwh"], color=_COLORS["red"], linewidth=1.5, label="Compute debt")
+    debt_axis.plot(relative_hour, trajectory["compute_debt_kwh"], color=_COLORS["red"], linewidth=1.5, label="Compute debt")
     axes[3].set_ylabel("Backlog (GPU-h)")
     debt_axis.set_ylabel("Compute debt (kWh)", color=_COLORS["red"])
     debt_axis.tick_params(axis="y", colors=_COLORS["red"])
@@ -800,12 +866,15 @@ def plot_nature_supplementary_figures(
     figures: Sequence[int] = (1, 2, 3, 4),
     formats: Sequence[str] | None = None,
 ) -> dict[str, object]:
-    """Generate the declared four Supplementary Figures and provenance bundle."""
+    """Render S1--S4; S5 publication artwork is intentionally Web-GPT-only."""
 
     specification = _load_specification(specification_path)
     requested = tuple(int(value) for value in figures)
     if not requested or set(requested).difference({1, 2, 3, 4}):
-        raise ValueError("supplementary figure numbers must be drawn from 1, 2, 3, 4")
+        raise ValueError(
+            "locally rendered supplementary figures must be drawn from 1, 2, 3, 4; "
+            "S5 uses Web-GPT with the exact exported panel CSVs"
+        )
     export = _mapping(specification["export"], "export")
     selected_formats = tuple(str(value) for value in (formats or export["formats"]))
     output = Path(output_directory).resolve()
@@ -822,8 +891,9 @@ def plot_nature_supplementary_figures(
         observation_record = _write_csv(
             observation, output / "supplementary_figure_3_observation.csv"
         )
+        trajectory_plot_data = _trajectory_plot_data(trajectory, metadata)
         trajectory_record = _write_csv(
-            trajectory, output / "supplementary_figure_4_trajectory.csv"
+            trajectory_plot_data, output / "supplementary_figure_4_trajectory.csv"
         )
         metadata_path = output / "representative_trajectory_metadata.json"
         metadata_path.write_text(
@@ -844,7 +914,7 @@ def plot_nature_supplementary_figures(
         if 4 in requested:
             records.append(
                 _plot_trajectory(
-                    trajectory,
+                    trajectory_plot_data,
                     metadata,
                     output=output,
                     formats=selected_formats,
@@ -874,6 +944,11 @@ def plot_nature_supplementary_figures(
         "schema_version": _SCHEMA_VERSION,
         "specification": _source_record(specification_path),
         "locked_sets_used": False,
+        "external_artwork": {
+            "figure": "S5",
+            "renderer": "web_gpt",
+            "panel_data_exported_separately": True,
+        },
         "figure_count": len(portable),
         "figures": portable,
     }

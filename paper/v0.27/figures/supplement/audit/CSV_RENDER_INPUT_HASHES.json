@@ -1,0 +1,142 @@
+{
+  "figures": [
+    {
+      "figure": "S01",
+      "panels": 2,
+      "tables": [
+        "S01a",
+        "S01b"
+      ]
+    },
+    {
+      "figure": "S02",
+      "panels": 2,
+      "tables": [
+        "S02a",
+        "S02b"
+      ]
+    },
+    {
+      "figure": "S03",
+      "panels": 4,
+      "tables": [
+        "S03a",
+        "S03b",
+        "S03c",
+        "S03d"
+      ]
+    },
+    {
+      "figure": "S04",
+      "panels": 4,
+      "tables": [
+        "S04a",
+        "S04b",
+        "S04c",
+        "S04d"
+      ]
+    },
+    {
+      "figure": "S05",
+      "panels": 4,
+      "tables": [
+        "S05a",
+        "S05b",
+        "S05c",
+        "S05d_fee0",
+        "S05d_fee2500",
+        "S05d_fee25000"
+      ]
+    },
+    {
+      "figure": "S06",
+      "panels": 4,
+      "tables": [
+        "S06a",
+        "S06b",
+        "S06c",
+        "S06d"
+      ]
+    },
+    {
+      "figure": "S07",
+      "panels": 4,
+      "tables": [
+        "S07a",
+        "S07b",
+        "S07c",
+        "S07d"
+      ]
+    },
+    {
+      "figure": "S08",
+      "panels": 4,
+      "tables": [
+        "S08a",
+        "S08b",
+        "S08c",
+        "S08d"
+      ]
+    },
+    {
+      "figure": "S09",
+      "panels": 3,
+      "tables": [
+        "S09a",
+        "S09b",
+        "S09c"
+      ]
+    },
+    {
+      "figure": "S10",
+      "panels": 4,
+      "tables": [
+        "S10a",
+        "S10b",
+        "S10c",
+        "S10d"
+      ]
+    }
+  ],
+  "csv_sha256": {
+    "S01/S01a.csv": "29a1dcab16f2d5cdd906dcfbe3f9d96f44ded1c5f9d738edf2449d19df18c43c",
+    "S01/S01b.csv": "19a944cfe7343c92812a5da6f61bf35d6549bb6a6ddc121a7e0df77d0bf1be80",
+    "S02/S02a.csv": "5e5d1bd90c1354a8b6044f2f8e136fe7a2ad193402465e80ae0d99c343b41f8c",
+    "S02/S02b.csv": "eb014cf61d01abab8071ad5067315c4af301a90823bb8e131ef8f79f1a9674b5",
+    "S03/S03a.csv": "69679cfc42f8169b6687aff5ac3a373451be62245e95f308d8aa9eb638f1e10a",
+    "S03/S03b.csv": "8bd08bbf59f94ff200111c689c26906f522a23fa352832a3a3c148c9ebe01b64",
+    "S03/S03c.csv": "ec75d52e7ba6b8f513deea59be7432ec6ccefcfd5f81a153cc90102aa9421af2",
+    "S03/S03d.csv": "c45dde4c7b3fa598c1b9d15ac33fdac717e89cad518fdfce8342981e4caa30ee",
+    "S04/S04a.csv": "3d16aee6df1951c23d0784565ecb61d0ad38bb14d13aea00188fe5b7a04425f5",
+    "S04/S04b.csv": "d29353e4d0d71342fc0c9a19675dd83b10997a59c1bec6b1e191616774662c65",
+    "S04/S04c.csv": "deeb6efe892286ca55ab26952ebb482f340fd89f9d3dbccb4fd60abc9bdd78ed",
+    "S04/S04d.csv": "23ea587c5a2a4b493975e807fb0cd63b8bbf03c5d5e3b1b553fe4916c237af6e",
+    "S05/S05a.csv": "9ed342a8efe39b1317b36a531fcd21c3fdbf905c98af7ac654a556b7e446467f",
+    "S05/S05b.csv": "ed665b08de5a68d75ded52730f9febd54bca49a8fee1ddb42585a81be43be5f5",
+    "S05/S05c.csv": "5dd43aa0de1aa64641d9ce193a0bfd7101c038b27678b8ce898f34f35aaffdb8",
+    "S05/S05d_fee0.csv": "c3bce4e80f6d909ac43bf7edbd2d38b85d314186c24632f5cd3c9ab8c39f2d4e",
+    "S05/S05d_fee2500.csv": "ed145cb6600bfe08d41cebcca9ff04e999042ab6cc6320439cfae5e07cc13076",
+    "S05/S05d_fee25000.csv": "3e76e6889d65d03a2f80d87bab2eb56387a6b6cf49cd65e518655a40a98d894a",
+    "S06/S06a.csv": "0821a540c6de4612e644ba39d9b2b511e1314b3fa891e708864d013f58d8806f",
+    "S06/S06b.csv": "ba155482ffb2aed7717bdd05b07045a1b66d8f1b4d8c3d910fcced6b31bc655e",
+    "S06/S06c.csv": "346966890fe93523cd9488ceecb31c004c36ba7ea502c8654ece892ea74d1f1f",
+    "S06/S06d.csv": "c650caf746778a5dd856781eaedb7d70b0e9ec5ce74b734652f03f2b72887bac",
+    "S07/S07a.csv": "6bb1b2e7f8fb21adbd2c2c14c36e019c60e728e2b74ff6652d488d8ec3b1b66a",
+    "S07/S07b.csv": "57aa26932e82c21351991d2ba77ca2e5555077b6f4ad371af74ad21e33ad3b1b",
+    "S07/S07c.csv": "9798f9357651cf75dfb948fab9800e48958853d72f9a75ba5d976afa88f3f074",
+    "S07/S07d.csv": "4e79056b24122eee18af20b71731408580179c3a9b74a739305f4ff7ba481ec1",
+    "S08/S08a.csv": "12352f7e5dabfec48f214db797f96b6e70f9978176381621c1f5033c4a2dbefa",
+    "S08/S08b.csv": "c4012ee7fd6129efb7de3b5bb5fd3c193e0232a83c7da6eda479c7cb14eab7b3",
+    "S08/S08c.csv": "cccf5ef8c7c549c00a4094700beef2f1b13efaf32c73440f74b631b5e8d148a7",
+    "S08/S08d.csv": "34b0d2e22bf0284ff69da0520aae5391a9da441e463bf89ff0623950d8a8edc5",
+    "S09/S09a.csv": "40af3f2f28d63264f86bd9a6f85b4ea3eb8bf79367dfbfc97898bd408872762b",
+    "S09/S09b.csv": "f2021b75864b6b4f93a10e35ca7f0890985bf4cc64715fc7f228f2d555ed7125",
+    "S09/S09c.csv": "b02ba0c557c559c8699a92e42c4434ce27f817f56f5699016fcd6dba88d600f1",
+    "S10/S10a.csv": "1aecbc87cece9c82ae57282f067e97034a34eb15d6cbd2ceb25dd92adb3821f0",
+    "S10/S10b.csv": "6787caee5c0b4024f304b05a42fe1ac0828a043f45579c25e615ab59abd4caec",
+    "S10/S10c.csv": "c639515306cf2c0267b7e46046cfa037bd5c51172e9c7dc2c0d6c67ad014001d",
+    "S10/S10d.csv": "3ebbb874aacc04c46bf778a8af3568ef7ef961aa3c541024f892783785225865"
+  },
+  "input_mode": "direct_panel_csv_only",
+  "new_simulations": 0
+}

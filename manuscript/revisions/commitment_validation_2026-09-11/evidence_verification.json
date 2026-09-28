@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "complete_trace_hashes_checked": 2700,
+  "paired_scenario_inputs_checked": 800,
+  "weekly_class_totals_and_community_pairing": true,
+  "independent_Wilson_recomputation": true,
+  "finite_grid_selected_capacity_ratio": 2.0,
+  "observed_weeks": 8,
+  "original_week_successes": [
+    1,
+    6,
+    1,
+    0,
+    3,
+    0,
+    10,
+    10
+  ],
+  "overhead_same_success_flags": true,
+  "PV_primary_bounds": 1000,
+  "PV_unresolved_nonlimiting_hosting": 34,
+  "Chinese_English_alignment": true
+}

@@ -1,0 +1,562 @@
+{
+  "bundle_id": "nature_economic_development_screening_v1",
+  "schema_version": "aidrbench.manuscript_source_data_manifest.v1",
+  "software": {
+    "git": {
+      "commit": "50dad4e37d725d9cae1e8313b9c7db51459aec9f",
+      "working_tree_dirty": false
+    }
+  },
+  "source_specification": {
+    "path": "configs/paper/nature_economic_source_data_v1.yaml",
+    "schema_version": "aidrbench.manuscript_source_data_specification.v1",
+    "sha256": "e84035a4b91ee0329d103603f57d6635fc8b4d0879ef5be6ae3610761a9cd09b"
+  },
+  "tables": [
+    {
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "currency_basis",
+        "annualization_scope",
+        "performance_payment_basis",
+        "reserved_capacity_basis",
+        "facility_scale_interpretation",
+        "technical_certificate_scope",
+        "reference_module_operating_peak_kw",
+        "facility_site_scale_mw",
+        "proportional_reference_module_scale_factor",
+        "regime",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "annual_event_count",
+        "annual_event_count_class",
+        "annual_event_count_is_stress",
+        "technical_capacity_ceiling_kw",
+        "candidate_reduction_kw",
+        "scaled_accounting_technical_capacity_ceiling_kw",
+        "scaled_accounting_candidate_reduction_kw",
+        "technical_qualification",
+        "economic_offer_definition",
+        "break_even_capacity_payment_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year",
+        "break_even_capacity_payment_excluding_fixed_site_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_excluding_fixed_site_per_kw_year",
+        "break_even_performance_payment_per_mwh",
+        "risk_adjusted_break_even_performance_payment_per_mwh",
+        "break_even_performance_payment_excluding_fixed_site_per_mwh",
+        "risk_adjusted_break_even_performance_payment_excluding_fixed_site_per_mwh",
+        "fixed_site_enablement_cost",
+        "variable_enablement_cost",
+        "enablement_cost",
+        "fixed_site_enablement_cost_per_offer_kw",
+        "annual_net_value",
+        "annual_net_value_excluding_fixed_site",
+        "annual_net_value_p05",
+        "annual_net_value_excluding_fixed_site_p05"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/evaluation/technical_economic_boundary.csv",
+          "rows_read": 3,
+          "sha256": "dc7542fcadbff32c59f2c043da32d6c6f5e1c543f44a7b3e4749f217c81955f5"
+        }
+      ],
+      "output": "fig6_technical_economic_boundary.csv",
+      "output_sha256": "a79f17e8dcd54397a5d4271d04ba1fc08919fbb7266113d9b7d0dd5f98658bc8",
+      "panels": [
+        "supporting"
+      ],
+      "row_count": 3,
+      "table_id": "fig6_technical_economic_boundary"
+    },
+    {
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "currency_basis",
+        "annualization_scope",
+        "performance_payment_basis",
+        "reserved_capacity_basis",
+        "facility_scale_interpretation",
+        "technical_certificate_scope",
+        "reference_module_operating_peak_kw",
+        "facility_site_scale_mw",
+        "proportional_reference_module_scale_factor",
+        "regime",
+        "driver_id",
+        "driver_label",
+        "driver_value",
+        "driver_unit",
+        "driver_value_display",
+        "driver_normalized_position",
+        "duration_h",
+        "annual_event_count",
+        "annual_event_count_class",
+        "annual_event_count_is_stress",
+        "reliability_target",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year",
+        "technical_capacity_ceiling_kw",
+        "candidate_reduction_kw",
+        "scaled_accounting_technical_capacity_ceiling_kw",
+        "scaled_accounting_candidate_reduction_kw",
+        "technical_qualification",
+        "opportunity_exposure_alpha",
+        "value_per_gpu_h",
+        "effective_displaced_compute_value_per_gpu_h"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/evaluation/mechanism_sensitivity.csv",
+          "rows_read": 13,
+          "sha256": "ddb0ce7e59924da669949648d8f4610f452b858253a2c981253ad7d306128cf9"
+        }
+      ],
+      "output": "fig6_mechanism_sensitivity.csv",
+      "output_sha256": "27dc025112bd3863528779599c41d561b74141eb906f48b55582cc42057a0b37",
+      "panels": [
+        "b"
+      ],
+      "row_count": 13,
+      "table_id": "fig6_mechanism_sensitivity"
+    },
+    {
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "currency_basis",
+        "annualization_scope",
+        "performance_payment_basis",
+        "reserved_capacity_basis",
+        "facility_scale_interpretation",
+        "technical_certificate_scope",
+        "reference_module_operating_peak_kw",
+        "facility_site_scale_mw",
+        "proportional_reference_module_scale_factor",
+        "regime",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "annual_event_count",
+        "annual_event_count_class",
+        "annual_event_count_is_stress",
+        "technical_capacity_ceiling_kw",
+        "candidate_reduction_kw",
+        "scaled_accounting_technical_capacity_ceiling_kw",
+        "scaled_accounting_candidate_reduction_kw",
+        "technical_qualification",
+        "component_id",
+        "component_label",
+        "contribution_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/evaluation/break_even_decomposition.csv",
+          "rows_read": 36,
+          "sha256": "efddb1ca2314e055e0ab3453a6c227627ac5b13ebd9b5c19491aaf017b9a66fc"
+        }
+      ],
+      "output": "fig6_break_even_decomposition.csv",
+      "output_sha256": "83ca58f3b7cad22fb7f5f02e23704f97d838a777d44108f0508e09b894bc9ee0",
+      "panels": [
+        "c"
+      ],
+      "row_count": 36,
+      "table_id": "fig6_break_even_decomposition"
+    },
+    {
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "currency_basis",
+        "annualization_scope",
+        "performance_payment_basis",
+        "reserved_capacity_basis",
+        "facility_scale_interpretation",
+        "technical_certificate_scope",
+        "reference_module_operating_peak_kw",
+        "facility_site_scale_mw",
+        "proportional_reference_module_scale_factor",
+        "regime",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "annual_event_count",
+        "annual_event_count_class",
+        "annual_event_count_is_stress",
+        "technical_capacity_ceiling_kw",
+        "candidate_reduction_kw",
+        "scaled_accounting_technical_capacity_ceiling_kw",
+        "scaled_accounting_candidate_reduction_kw",
+        "technical_qualification",
+        "break_even_capacity_payment_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year",
+        "break_even_capacity_payment_excluding_fixed_site_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_excluding_fixed_site_per_kw_year"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/evaluation/duration_break_even.csv",
+          "rows_read": 9,
+          "sha256": "f000e74925c1bcdb4c20c52a4a343d1c7dc7ea9603baeb08db81e15e2497689d"
+        }
+      ],
+      "output": "fig6_duration_break_even.csv",
+      "output_sha256": "a31903fa47e6777c1e12d7c7c7552082d1aaeb5d4f1a77efef7e9f01449cf8e3",
+      "panels": [
+        "d"
+      ],
+      "row_count": 9,
+      "table_id": "fig6_duration_break_even"
+    },
+    {
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "currency_basis",
+        "annualization_scope",
+        "performance_payment_basis",
+        "reserved_capacity_basis",
+        "facility_scale_interpretation",
+        "technical_certificate_scope",
+        "reference_module_operating_peak_kw",
+        "facility_site_scale_mw",
+        "proportional_reference_module_scale_factor",
+        "regime",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "annual_event_count",
+        "annual_event_count_class",
+        "annual_event_count_is_stress",
+        "technical_capacity_ceiling_kw",
+        "candidate_reduction_kw",
+        "scaled_accounting_technical_capacity_ceiling_kw",
+        "scaled_accounting_candidate_reduction_kw",
+        "technical_qualification",
+        "fixed_site_enablement_annual_cost",
+        "variable_enablement_cost_per_offer_kw",
+        "fixed_site_enablement_cost",
+        "variable_enablement_cost",
+        "enablement_cost",
+        "fixed_site_enablement_cost_per_offer_kw",
+        "accounting_perspective",
+        "annual_net_value_usd_per_year",
+        "annual_net_value_p05_usd_per_year",
+        "break_even_capacity_payment_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/evaluation/fixed_site_overlay_scale_sensitivity.csv",
+          "rows_read": 24,
+          "sha256": "18c07e22497629ebe9cd0ea4b20830a1fd05c8a96598eb732f5caf0d65a12b87"
+        }
+      ],
+      "output": "fig6_fixed_site_overlay_scale_sensitivity.csv",
+      "output_sha256": "6ca9651f166e49514003a43a486820ab38fc5b9973bd2206d96f0c06259f5716",
+      "panels": [
+        "a"
+      ],
+      "row_count": 24,
+      "table_id": "fig6_fixed_site_overlay_scale_sensitivity"
+    },
+    {
+      "columns": [
+        "evaluation_split",
+        "scenario_id",
+        "scenario_hash",
+        "episode_seed",
+        "event_id",
+        "event_start_hour",
+        "event_stop_hour",
+        "recovery_stop_hour",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "confidence_level",
+        "technical_capacity_ceiling_kw",
+        "offer_fraction_of_technical_ceiling",
+        "candidate_reduction_kw",
+        "technical_success",
+        "technical_failure_reasons",
+        "delivery_ratio",
+        "minimum_interval_delivery_ratio",
+        "delivered_energy_kwh",
+        "capped_delivered_energy_kwh",
+        "shortfall_energy_kwh",
+        "deferred_gpu_h",
+        "recovered_within_recovery_window_gpu_h",
+        "recovered_through_episode_end_gpu_h",
+        "unrecovered_at_recovery_stop_gpu_h_proxy",
+        "unrecovered_at_episode_end_gpu_h_proxy",
+        "missed_gpu_h",
+        "backlog_at_recovery_stop_gpu_h",
+        "terminal_backlog_gpu_h",
+        "incremental_backlog_area_within_recovery_gpu_h_h",
+        "incremental_backlog_area_through_episode_end_gpu_h_h",
+        "incremental_energy_within_recovery_kwh",
+        "incremental_energy_through_episode_end_kwh",
+        "event_peak_delta_kw",
+        "recovery_peak_delta_kw",
+        "checkpoint_count_or_proxy",
+        "checkpoint_proxy_method",
+        "paired_pcc_match_max_abs_kw",
+        "controlled_work_conservation_error_gpu_h",
+        "no_dr_work_conservation_error_gpu_h"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/ledger/episode_ledger.parquet",
+          "rows_read": 300,
+          "sha256": "7f9b64bc5b8cea1026e279f83d9cb15bbbf0c980d256f7bb7215896ffc5d3a02"
+        }
+      ],
+      "output": "fig6_paired_event_ledger.csv",
+      "output_sha256": "d2f61d96d20f6ea5478abf4b65f1794eb60d9f9736272a5468ae2ea7572ababb",
+      "panels": [
+        "supporting"
+      ],
+      "row_count": 300,
+      "table_id": "fig6_paired_event_ledger"
+    },
+    {
+      "columns": [
+        "scenario_id",
+        "scenario_hash",
+        "episode_seed",
+        "event_id",
+        "duration_h",
+        "notice_h",
+        "candidate_reduction_kw",
+        "hour",
+        "relative_hour",
+        "event_active",
+        "recovery_active",
+        "within_recovery_window",
+        "clearance_tail_active",
+        "controlled_pcc_power_kw",
+        "no_dr_pcc_power_kw",
+        "controlled_executed_gpu_h",
+        "no_dr_executed_gpu_h",
+        "controlled_backlog_gpu_h",
+        "no_dr_backlog_gpu_h",
+        "controlled_missed_gpu_h",
+        "no_dr_missed_gpu_h",
+        "pcc_delta_kw",
+        "execution_delta_gpu_h",
+        "backlog_delta_gpu_h"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/ledger/interval_ledger.parquet",
+          "rows_read": 33414,
+          "sha256": "90b9172a2d84fe02605d41b5ba46ddb44c5fd36e92da2e70b24ec2f841b8e2dd"
+        }
+      ],
+      "output": "fig6_paired_interval_ledger.csv",
+      "output_sha256": "b0de0e9c3033b4f3a57e75dba5e6cc4efeb87167d8f5169b0cdf3f84ee45ba97",
+      "panels": [
+        "supporting"
+      ],
+      "row_count": 33414,
+      "table_id": "fig6_paired_interval_ledger"
+    },
+    {
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "monetary_basis",
+        "input_id",
+        "description",
+        "value_or_range",
+        "unit",
+        "currency_basis",
+        "source_type",
+        "source_reference",
+        "source_url",
+        "access_date",
+        "status",
+        "permitted_interpretation",
+        "support_level",
+        "replaceability",
+        "original_currency_year",
+        "external_evidence_reference",
+        "external_evidence_url",
+        "external_evidence_value_or_range",
+        "forbidden_interpretation",
+        "specification_sha256",
+        "physical_ledger_contract_sha256",
+        "controller_config_sha256",
+        "technical_certificate_manifest_sha256",
+        "ledger_event_sha256",
+        "ledger_manifest_sha256",
+        "external_parameter_evidence_path",
+        "external_parameter_evidence_sha256",
+        "input_source_path",
+        "input_source_sha256",
+        "formula"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/evaluation/economic_parameter_provenance.csv",
+          "rows_read": 7,
+          "sha256": "21fe85d0b788c8c4a719de8023cfd6ddc4bcb8b32e709adee8ab93ef48a607a1"
+        }
+      ],
+      "output": "fig6_economic_parameter_provenance.csv",
+      "output_sha256": "e717ff8f5ff4ea94a411789f26dd12b285114cc1c1b8ad88d986ea4aac17b96b",
+      "panels": [
+        "supporting"
+      ],
+      "row_count": 7,
+      "table_id": "fig6_economic_parameter_provenance"
+    },
+    {
+      "columns": [
+        "evidence_id",
+        "input_id",
+        "parameter_family",
+        "source_title",
+        "source_organization",
+        "source_url",
+        "publication_or_reporting_year",
+        "access_date",
+        "observed_value",
+        "unit",
+        "currency_year",
+        "support_level",
+        "replaceability",
+        "permitted_use",
+        "forbidden_interpretation"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "data/economics/external_parameter_evidence.csv",
+          "rows_read": 37,
+          "sha256": "0ba7937dc0c155be34eda00277f4044cbb5a927d01a70f2431c1683be9cc2609"
+        }
+      ],
+      "output": "fig6_external_parameter_evidence.csv",
+      "output_sha256": "863b5c83b3924859c39849a23b639329a7d75cdc7169e54cea1262eccb6e925c",
+      "panels": [
+        "supporting"
+      ],
+      "row_count": 37,
+      "table_id": "fig6_external_parameter_evidence"
+    },
+    {
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "duration_h",
+        "notice_h",
+        "offer_fraction_of_technical_ceiling",
+        "technical_capacity_ceiling_kw",
+        "candidate_reduction_kw",
+        "event_sample_count",
+        "technical_success_count",
+        "technical_success_rate",
+        "event_debt_quantile",
+        "event_debt_quantile_label",
+        "event_end_paired_backlog_debt_gpu_h",
+        "event_debt_definition",
+        "recovery_target_h",
+        "recovery_execution_efficiency",
+        "continuous_recovery_throughput_equivalent_gpu_count",
+        "recovery_throughput_equivalent_gpu_count_node_rounded",
+        "recovery_throughput_equivalent_node_count",
+        "gpus_per_node",
+        "gpu_count_interpretation",
+        "active_power_case",
+        "active_power_class_weights_json",
+        "active_board_power_w_per_gpu",
+        "active_board_power_lower_w_per_gpu",
+        "active_board_power_upper_w_per_gpu",
+        "active_board_power_parameter_status",
+        "idle_board_power_w_per_gpu",
+        "idle_board_power_lower_w_per_gpu",
+        "idle_board_power_upper_w_per_gpu",
+        "idle_board_power_parameter_status",
+        "node_overhead_case",
+        "node_overhead_w_per_node",
+        "node_overhead_parameter_status",
+        "pue",
+        "pue_parameter_status",
+        "installed_it_power_kw",
+        "installed_it_power_lower_kw",
+        "installed_it_power_upper_kw",
+        "installed_facility_power_kw",
+        "installed_facility_power_lower_kw",
+        "installed_facility_power_upper_kw",
+        "recovery_dynamic_facility_power_kw",
+        "recovery_dynamic_facility_power_lower_kw",
+        "recovery_dynamic_facility_power_upper_kw",
+        "power_uncertainty_interpretation",
+        "capital_cost_evaluation",
+        "capital_cost",
+        "hardware_identifier",
+        "topology_identifier",
+        "calibration_artifact_id",
+        "calibration_artifact_sha256",
+        "calibration_evidence_class"
+      ],
+      "figures": [
+        6
+      ],
+      "inputs": [
+        {
+          "labels": {},
+          "path": "results/economics/economic_participation_v1/reserve_mapping/reserve_mapping_summary.csv",
+          "rows_read": 810,
+          "sha256": "839da9d652f713b7d3e61c47c8bce8227fa2683cd107839fa93006f2f2f362b4"
+        }
+      ],
+      "output": "fig6_reserve_mapping_summary.csv",
+      "output_sha256": "839da9d652f713b7d3e61c47c8bce8227fa2683cd107839fa93006f2f2f362b4",
+      "panels": [
+        "supporting"
+      ],
+      "row_count": 810,
+      "table_id": "fig6_reserve_mapping_summary"
+    }
+  ]
+}

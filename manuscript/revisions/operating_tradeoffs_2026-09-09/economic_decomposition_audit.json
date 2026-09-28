@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "reference_thresholds_reproduced": 30,
+  "max_absolute_error": 9.094947017729282e-13,
+  "cost_component_rows": 30,
+  "fee_sensitivity_rows": 1080,
+  "net_value_rows": 1800,
+  "choice_rows": 600,
+  "fixed_fee_invariant_conditional_programme_order": true,
+  "duration_price_frontier_rows": 270,
+  "quantile_decomposition": "shared total-cost rank interpolation, not sum of marginal quantiles",
+  "annual_scope": "50 independent single calls or 12 independent four-call series; no continuously simulated year",
+  "monetary_scope": "declared accounting scenarios; fee sharing does not certify aggregate reliability"
+}

@@ -6,10 +6,10 @@
       "manifest": "supplementary_figure_1_manifest.json",
       "outputs": [
         {
-          "bytes": 25197,
+          "bytes": 24952,
           "format": "svg",
           "path": "supplementary_figure_1.svg",
-          "sha256": "24d079f803be4a26ad4f7e1ded3d30b4b472f0d21e4c2abf214201fd209e60f0"
+          "sha256": "b525a1d2a4ac11291beaffc9937c39ba6e5044db11203029686711c7482de808"
         },
         {
           "bytes": 29108,
@@ -36,10 +36,10 @@
       "manifest": "supplementary_figure_2_manifest.json",
       "outputs": [
         {
-          "bytes": 26435,
+          "bytes": 26295,
           "format": "svg",
           "path": "supplementary_figure_2.svg",
-          "sha256": "2209cdc73b63bf8bbcbaf6bf9d6ff948ea7b70a22435101b902304f2c30fd5b8"
+          "sha256": "02c63d160e81453aba7beb64f96f5a7185786ea8fe0d8a322428f7a0e6bcca06"
         },
         {
           "bytes": 28032,
@@ -66,10 +66,10 @@
       "manifest": "supplementary_figure_3_manifest.json",
       "outputs": [
         {
-          "bytes": 20724,
+          "bytes": 20646,
           "format": "svg",
           "path": "supplementary_figure_3.svg",
-          "sha256": "bc8978111b31417b758434032ee89184c148b8899dba90823fdd956cf945425b"
+          "sha256": "9e5bed18d94b57deecc460a254af4404679ce3b4b4219f6efea904002272f112"
         },
         {
           "bytes": 25346,
@@ -96,10 +96,10 @@
       "manifest": "supplementary_figure_4_manifest.json",
       "outputs": [
         {
-          "bytes": 43704,
+          "bytes": 43220,
           "format": "svg",
           "path": "supplementary_figure_4.svg",
-          "sha256": "12dbe9c9ef61e698faa12278328ab4e65938e9a98debf050f943a207897fff44"
+          "sha256": "d557a47d26924f8626ef27fe99cc84135b3ad24b37faad07d8bc7b83087a1a1a"
         },
         {
           "bytes": 28269,

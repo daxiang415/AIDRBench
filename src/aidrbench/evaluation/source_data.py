@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
+import shutil
 import subprocess
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -13,6 +16,7 @@ import pandas as pd
 import yaml
 
 Scalar = str | int | float | bool
+FigureIdentifier = int | str
 
 _TABLE_ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_]*$")
 
@@ -30,7 +34,7 @@ class SourceTableSpecification:
     """Exact projection used to construct one manuscript source-data table."""
 
     table_id: str
-    figures: tuple[int, ...]
+    figures: tuple[FigureIdentifier, ...]
     panels: tuple[str, ...]
     output: str
     inputs: tuple[SourceInputSpecification, ...]
@@ -84,12 +88,34 @@ def _string_sequence(
     return tuple(value)
 
 
-def _integer_sequence(value: object, *, field: str) -> tuple[int, ...]:
+def _figure_identifier_sequence(
+    value: object,
+    *,
+    field: str,
+) -> tuple[FigureIdentifier, ...]:
+    """Accept main-figure integers and explicit Supplementary identifiers.
+
+    A bare integer always denotes a main figure. Supplementary placement must
+    be written as ``S<number>`` so that a migrated table cannot silently look
+    like it still belongs to the main-text figure with the same number.
+    """
+
     if not isinstance(value, list) or not value:
-        raise ValueError(f"{field} must be a non-empty list of integers")
-    if not all(isinstance(item, int) and not isinstance(item, bool) and item > 0 for item in value):
-        raise ValueError(f"{field} must contain positive integers")
-    return tuple(value)
+        raise ValueError(
+            f"{field} must be a non-empty list of positive integers or S<number> strings"
+        )
+    identifiers: list[FigureIdentifier] = []
+    for item in value:
+        if isinstance(item, int) and not isinstance(item, bool) and item > 0:
+            identifiers.append(item)
+            continue
+        if isinstance(item, str) and re.fullmatch(r"S[1-9][0-9]*", item):
+            identifiers.append(item)
+            continue
+        raise ValueError(
+            f"{field} must contain positive integers or S<number> strings"
+        )
+    return tuple(identifiers)
 
 
 def _labels(value: object, *, field: str) -> dict[str, Scalar]:
@@ -143,7 +169,9 @@ def _load_table(value: object, *, field: str) -> SourceTableSpecification:
 
     return SourceTableSpecification(
         table_id=table_id,
-        figures=_integer_sequence(document.get("figures"), field=f"{field}.figures"),
+        figures=_figure_identifier_sequence(
+            document.get("figures"), field=f"{field}.figures"
+        ),
         panels=_string_sequence(document.get("panels"), field=f"{field}.panels"),
         output=output,
         inputs=inputs,
@@ -218,11 +246,12 @@ def _git_state(repository_root: Path) -> dict[str, object]:
     }
 
 
-def export_manuscript_source_data(
+def _export_manuscript_source_data_into(
     specification_path: str | Path,
     output_directory: str | Path,
     *,
     repository_root: str | Path = ".",
+    run_git_state: dict[str, object],
 ) -> dict[str, object]:
     """Export exactly declared figure data and write a hash-bound manifest."""
 
@@ -319,7 +348,10 @@ def export_manuscript_source_data(
             "schema_version": specification.schema_version,
             "sha256": _sha256(source_path),
         },
-        "software": {"git": _git_state(root)},
+        # This must describe the repository before this export created its
+        # staging/output directories.  Re-querying Git here would mark a
+        # clean invocation dirty when the destination lives inside the repo.
+        "software": {"git": dict(run_git_state)},
         "tables": table_records,
     }
     manifest_path = destination / "source_data_manifest.json"
@@ -334,3 +366,46 @@ def export_manuscript_source_data(
         "manifest": str(manifest_path),
         "output_directory": str(destination),
     }
+
+
+def export_manuscript_source_data(
+    specification_path: str | Path,
+    output_directory: str | Path,
+    *,
+    repository_root: str | Path = ".",
+) -> dict[str, object]:
+    """Atomically publish an exact source-data bundle into a new directory."""
+
+    root = Path(repository_root).resolve()
+    # Capture provenance before this function creates a destination parent or
+    # staging directory.  Source-data bundles are commonly exported inside the
+    # repository, where either would otherwise contaminate git status.
+    run_git_state = _git_state(root)
+    destination = Path(output_directory).resolve()
+    if destination.exists():
+        raise FileExistsError(
+            f"source-data output already exists; use a new output directory: {destination}"
+        )
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    staging = Path(
+        tempfile.mkdtemp(
+            prefix=f".{destination.name}.",
+            suffix=".source-data.tmp",
+            dir=destination.parent,
+        )
+    )
+    try:
+        summary = _export_manuscript_source_data_into(
+            specification_path,
+            staging,
+            repository_root=root,
+            run_git_state=run_git_state,
+        )
+        os.replace(staging, destination)
+    except Exception:
+        shutil.rmtree(staging, ignore_errors=True)
+        raise
+    summary["manifest"] = str(destination / "source_data_manifest.json")
+    summary["output_directory"] = str(destination)
+    summary["final_publish"] = "atomic_directory_rename"
+    return summary

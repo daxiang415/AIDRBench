@@ -30,7 +30,7 @@ def test_clean_main_figure_source_data_bundle_is_complete_and_hash_bound() -> No
         3,
         4,
         5,
-        6,
+        "S5",
     }
     outputs = [str(table["output"]) for table in manifest["tables"]]
     assert len(outputs) == len(set(outputs))

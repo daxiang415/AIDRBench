@@ -1,0 +1,262 @@
+[
+  {
+    "id": "M020",
+    "before": {
+      "en": "![Figure 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_1.png)",
+      "zh": "![图 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_1.png)",
+      "id": "M020"
+    },
+    "after": {
+      "en": "![Figure 1](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_1.png)",
+      "zh": "![图 1](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_1.png)",
+      "id": "M020"
+    }
+  },
+  {
+    "id": "M024",
+    "before": {
+      "en": "![Figure 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_2.png)",
+      "zh": "![图 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_2.png)",
+      "id": "M024"
+    },
+    "after": {
+      "en": "![Figure 2](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_2.png)",
+      "zh": "![图 2](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_2.png)",
+      "id": "M024"
+    }
+  },
+  {
+    "id": "M028",
+    "before": {
+      "en": "![Figure 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_3.png)",
+      "zh": "![图 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_3.png)",
+      "id": "M028"
+    },
+    "after": {
+      "en": "![Figure 3](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_3.png)",
+      "zh": "![图 3](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_3.png)",
+      "id": "M028"
+    }
+  },
+  {
+    "id": "M031",
+    "before": {
+      "en": "Strict task-window feasibility then distinguished failures beyond that supply condition. At a fixed 5.90-kW request, a reference scenario that passed the supply screen failed under causal control but admitted a full-information schedule meeting all electrical obligations with zero missed work (Fig. 3b; Supplementary Table 19). Halving its deadline slack made the request infeasible under the same delivery and recovery criteria; doubling GPU allocation did not restore feasibility. Each variant used its own matched baseline. The feasible reference case leaves room for controller improvement, whereas proven infeasibility calls for changing the request or operating terms. Neither finding follows from the causal failure alone.",
+      "zh": "随后，严格任务时间窗可行性区分了即时供给条件之外的失败。在固定 5.90 kW 请求下，一个通过供给检查的参考情景在因果控制下失败，却存在满足全部电气义务且零漏期的完整信息调度（图 3b；补充表 19）。将其期限余量减半后，在相同交付和恢复判据下，请求变为不可行；将 GPU 分配加倍也没有恢复可行性。各变体采用各自匹配的基线。参考情景的可行解说明仍有改进控制器的空间，而已证明的不可行则要求改变请求或运行条款。这两种判断都不能仅从因果控制失败得出。",
+      "id": "M031"
+    },
+    "after": {
+      "en": "Strict task-window feasibility then distinguished failures beyond that supply condition. At a fixed 5.90-kW request, a reference scenario that passed the supply screen failed under causal control but admitted a full-information schedule meeting all electrical obligations with zero missed work (Fig. 3b; Supplementary Table 19). Halving its deadline slack made the request infeasible under the same delivery and recovery criteria; doubling GPU allocation did not restore feasibility. Each variant used its own matched baseline. The feasible reference case leaves room for controller improvement, whereas proven infeasibility calls for changing the request or operating terms. Neither finding follows from the causal failure alone. The broader structural confirmation separates joint success from overlapping supply and deadline failures (Supplementary Fig. 6).",
+      "zh": "随后，严格任务时间窗可行性区分了即时供给条件之外的失败。在固定 5.90 kW 请求下，一个通过供给检查的参考情景在因果控制下失败，却存在满足全部电气义务且零漏期的完整信息调度（图 3b；补充表 19）。将其期限余量减半后，在相同交付和恢复判据下，请求变为不可行；将 GPU 分配加倍也没有恢复可行性。各变体采用各自匹配的基线。参考情景的可行解说明仍有改进控制器的空间，而已证明的不可行则要求改变请求或运行条款。这两种判断都不能仅从因果控制失败得出。 更广泛的结构确认将联合成功与可重叠的供给、期限失败分开报告（补充图 6）。",
+      "id": "M031"
+    }
+  },
+  {
+    "id": "M025_decision",
+    "before": {
+      "id": "M025_decision",
+      "en": "These checks define different decisions (Fig. 4c). Supply deficits identify series that cannot succeed; strict-window tests diagnose whether the remaining constraints admit a schedule. A feasible PI schedule is a diagnostic opportunity, not a deployable controller. A fixed causal policy must still pass independent qualification for its declared scenario distribution before its operating ledger enters price comparison. A single failed series is not automatically a rejection of a probabilistic contract: qualification retains the complete success and failure sample. In the matched same-clock control, removing preceding calls left final-call electrical outcomes unchanged (Supplementary Table 15), further limiting explanations based only on accumulated call history.",
+      "zh": "这些检查对应不同决策（图 4c）。供给缺口识别不可能成功的序列；严格时间窗检验诊断其余约束下是否存在调度。PI 可行解提供诊断与改进机会，但不是可部署的控制器。固定因果策略仍须在声明的情景分布上通过独立资格检验，其运行账本才能进入价格比较。一次序列失败并不自动否定概率性合同：资格检验保留完整成功与失败样本。在配对同一时刻的对照中，移除先前调用并未改变末次调用的电力结果（补充表 15），这也限制了仅用累计调用历史解释失败的说法。"
+    },
+    "after": {
+      "id": "M025_decision",
+      "en": "These checks define different decisions (Fig. 1c). Supply deficits identify series that cannot succeed; strict-window tests diagnose whether the remaining constraints admit a schedule. A feasible PI schedule is a diagnostic opportunity, not a deployable controller. A fixed causal policy must still pass independent qualification for its declared scenario distribution before its operating ledger enters price comparison. A single failed series is not automatically a rejection of a probabilistic contract: qualification retains the complete success and failure sample. In the matched same-clock control, removing preceding calls left final-call electrical outcomes unchanged (Supplementary Table 15), further limiting explanations based only on accumulated call history.",
+      "zh": "这些检查对应不同决策（图 1c）。供给缺口识别不可能成功的序列；严格时间窗检验诊断其余约束下是否存在调度。PI 可行解提供诊断与改进机会，但不是可部署的控制器。固定因果策略仍须在声明的情景分布上通过独立资格检验，其运行账本才能进入价格比较。一次序列失败并不自动否定概率性合同：资格检验保留完整成功与失败样本。在配对同一时刻的对照中，移除先前调用并未改变末次调用的电力结果（补充表 15），这也限制了仅用累计调用历史解释失败的说法。"
+    }
+  },
+  {
+    "id": "M033",
+    "before": {
+      "en": "![Figure 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_4.png)",
+      "zh": "![图 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_4.png)",
+      "id": "M033"
+    },
+    "after": {
+      "en": "![Figure 4](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_4.png)",
+      "zh": "![图 4](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_4.png)",
+      "id": "M033"
+    }
+  },
+  {
+    "id": "M036",
+    "before": {
+      "en": "The same allocation could matter more for a different service. At 10% eligibility, raising the flexible GPU share from 10% to 20% increased the no-BESS PV hosting gain from 5.40 to 24.99 kW (Supplementary Fig. 4d). The primary 10% case nevertheless improved utilisation of a fixed 500-kW PV installation by only 0.0057 percentage points (95% paired interval, 0.0019–0.0106; Supplementary Fig. 4a,b). Hosting and utilisation therefore measure different benefits. All PV comparisons used separate full-information schedules; small storage contrasts remained limited by solver precision (Supplementary Table 6).",
+      "zh": "相同分配对另一种服务可能更重要。在 10% 工作参与比例下，将灵活 GPU 比例由 10% 提高至 20%，使无储能光伏接纳增量由 5.40 kW 增至 24.99 kW（补充图 4d）。然而，主要 10% 情景对固定 500 kW 光伏设施利用率的提高仅为 0.0057 个百分点（95% 配对区间 0.0019–0.0106；补充图 4a,b）。因此，接纳容量与利用率衡量不同收益。全部光伏比较采用独立的完整信息调度；微小储能差异仍受求解精度限制（补充表 6）。",
+      "id": "M036"
+    },
+    "after": {
+      "en": "The same allocation could matter more for a different service. At 10% eligibility, raising the flexible GPU share from 10% to 20% increased the no-BESS PV hosting gain from 5.40 to 24.99 kW (Supplementary Fig. 4d). The primary 10% case nevertheless improved utilisation of a fixed 500-kW PV installation by only 0.0057 percentage points (95% paired interval, 0.0019–0.0106; Supplementary Fig. 4a,b). Hosting and utilisation therefore measure different benefits; absolute hosting, curtailment and grid imports are shown in Supplementary Fig. 7. All PV comparisons used separate full-information schedules; small storage contrasts remained limited by solver precision (Supplementary Table 6).",
+      "zh": "相同分配对另一种服务可能更重要。在 10% 工作参与比例下，将灵活 GPU 比例由 10% 提高至 20%，使无储能光伏接纳增量由 5.40 kW 增至 24.99 kW（补充图 4d）。然而，主要 10% 情景对固定 500 kW 光伏设施利用率的提高仅为 0.0057 个百分点（95% 配对区间 0.0019–0.0106；补充图 4a,b）。因此，接纳容量与利用率衡量不同收益。全部光伏比较采用独立的完整信息调度；微小储能差异仍受求解精度限制（补充表 6）。 绝对接纳容量、弃光与电网购电见补充图 7。",
+      "id": "M036"
+    }
+  },
+  {
+    "id": "M038",
+    "before": {
+      "en": "![Figure 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_5.png)",
+      "zh": "![图 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_5.png)",
+      "id": "M038"
+    },
+    "after": {
+      "en": "![Figure 5](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_5.png)",
+      "zh": "![图 5](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_5.png)",
+      "id": "M038"
+    }
+  },
+  {
+    "id": "M043",
+    "before": {
+      "en": "The economic result is a price-dependent choice among services qualified for the reference scenario distribution. The failed resource-time transfer prevents treating those prices as offers for the observed-week workload. Waiting and missed-work valuations are varied explicitly; contract penalties, application checkpoint costs and actual hardware ageing remain unpriced. Independent annual series provide a conditional accounting screen, rather than a continuous-year operating forecast.",
+      "zh": "经济性结果是在参考情景分布中合格的服务之间，随价格变化而改变的选择。资源时间测试中的适用失败，使这些价格不能直接作为所观察周工作负载的参与报价。等待和漏期估值均被明确改变；合同违约罚款、应用检查点成本与实际硬件老化仍未定价。独立年度序列提供条件性核算筛选，并非全年连续运行预测。",
+      "id": "M043"
+    },
+    "after": {
+      "en": "The economic result is a price-dependent choice among services qualified for the reference scenario distribution. The failed resource-time transfer prevents treating those prices as offers for the observed-week workload. Waiting and missed-work valuations are varied explicitly, with single-event hardware and monetary sensitivity in Supplementary Fig. 8; contract penalties, application checkpoint costs and actual hardware ageing remain unpriced. Independent annual series provide a conditional accounting screen, rather than a continuous-year operating forecast.",
+      "zh": "经济性结果是在参考情景分布中合格的服务之间，随价格变化而改变的选择。资源时间测试中的适用失败，使这些价格不能直接作为所观察周工作负载的参与报价。等待和漏期估值均被明确改变；合同违约罚款、应用检查点成本与实际硬件老化仍未定价。独立年度序列提供条件性核算筛选，并非全年连续运行预测。 单次事件的硬件与货币敏感性见补充图 8。",
+      "id": "M043"
+    }
+  },
+  {
+    "id": "M044",
+    "before": {
+      "en": "![Figure 6](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_6.png)",
+      "zh": "![图 6](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Figure_6.png)",
+      "id": "M044"
+    },
+    "after": {
+      "en": "![Figure 6](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_6.png)",
+      "zh": "![图 6](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_6.png)",
+      "id": "M044"
+    }
+  },
+  {
+    "id": "M150",
+    "before": {
+      "en": "### Figure 1 | Workload composition and declared permission to defer",
+      "zh": "### 图 1 | 工作构成与声明的延后权限",
+      "id": "M150"
+    },
+    "after": {
+      "en": "### Figure 1 | Workload composition and commitment assessment",
+      "zh": "### 图 1 | 工作负载构成与承诺评估",
+      "id": "M150"
+    }
+  },
+  {
+    "id": "M151",
+    "before": {
+      "en": "**a,** Requested GPU-hour shares from all 40,522,321 released execution spans, using uncapped duration. The denominator includes online inference, offline inference, training, development, other and unknown work. These are descriptive source totals, not energy shares or an industry estimate. **b,** Training and offline-inference contributions to each eligibility scenario. At 5–20%, a common fraction of low-priority batch work is permitted to wait. The 40% case assumes nearly all batch work opts in; the 60% case replaces 19.058 percentage points of online work with offline work before granting eligibility. Online jobs are never deferred. Source Data retain class-by-priority totals and full-precision scenario definitions.",
+      "zh": "**a，**采用未截尾时长统计全部 40,522,321 个公开执行区段的申请 GPU 小时份额。分母包含在线推理、离线推理、训练、开发、其他和未知工作。这是源数据总量的描述，不是能耗份额或行业估计。**b，**每档资格中训练与离线推理的贡献。5%–20% 对低优先级批处理采用共同获准等待比例；40% 假定几乎全部批处理同意参与；60% 先将总工作量的 19.058 个百分点由在线替换为离线，再授予资格。在线作业始终不延后。源数据保留类别与优先级交叉汇总及完整精度的情景定义。",
+      "id": "M151"
+    },
+    "after": {
+      "en": "**a,** Requested GPU-hour shares from all 40,522,321 released execution spans, using uncapped duration. The denominator includes online inference, offline inference, training, development, other and unknown work. These are descriptive source totals, not energy shares or an industry estimate. **b,** Training and offline-inference contributions to each eligibility scenario. At 5–20%, a common fraction of low-priority batch work is permitted to wait. The 40% case assumes nearly all batch work opts in; the 60% case replaces 19.058 percentage points of online work with offline work before granting eligibility. Online jobs are never deferred. Source Data retain class-by-priority totals and full-precision scenario definitions. **c,** Evidence-to-decision sequence, from event-hour supply and strict-window feasibility to independent causal qualification and pricing. A supply deficit rules out a successful series, but qualification retains all successes and failures when assessing a probabilistic contract. A feasible PI witness is not a deployable controller or a causal reliability certificate; an unresolved solve supplies no feasibility conclusion.",
+      "zh": "**a，**采用未截尾时长统计全部 40,522,321 个公开执行区段的申请 GPU 小时份额。分母包含在线推理、离线推理、训练、开发、其他和未知工作。这是源数据总量的描述，不是能耗份额或行业估计。**b，**每档资格中训练与离线推理的贡献。5%–20% 对低优先级批处理采用共同获准等待比例；40% 假定几乎全部批处理同意参与；60% 先将总工作量的 19.058 个百分点由在线替换为离线，再授予资格。在线作业始终不延后。源数据保留类别与优先级交叉汇总及完整精度的情景定义。 **c，** 从事件时段供给和严格时间窗可行性，到独立因果资格检验与定价的证据—决策流程。供给不足排除该序列成功的可能，但概率性合同资格评估仍保留全部成功与失败。可行 PI 见证不是可部署控制器，也不是因果可靠性证书；未解决的求解不提供可行性结论。",
+      "id": "M151"
+    }
+  },
+  {
+    "id": "M156",
+    "before": {
+      "en": "### Figure 4 | Supply margins and the decisions behind a commitment",
+      "zh": "### 图 4 | 供给余量与承诺背后的决策",
+      "id": "M156"
+    },
+    "after": {
+      "en": "### Figure 4 | Supply limits and the response–recovery trajectory",
+      "zh": "### 图 4 | 供给限制与响应—恢复轨迹",
+      "id": "M156"
+    }
+  },
+  {
+    "id": "M157",
+    "before": {
+      "en": "**a,** Paired minimum event-hour supply margins for all 80 task-resource-time realisations at 2.95 kW, comparing chronological and permuted orders. Margin is baseline PCC power minus community and fixed data-centre power minus 95% of the request, minimised over all four calls. Dashed zero lines separate scenarios with and without an instantaneous shortage; counts are descriptive, with no population-frequency inference. **b,** Available baseline reduction under chronological count and resource-time weighting for the lowest protocol seed (990000). The horizontal line is the 95% delivery requirement and shading marks the four calls. The displayed arrival horizon is 168 h; all 216 h remain in the data. Selection is by seed, not outcome. **c,** Evidence-to-decision sequence. A deficit identifies an impossible series, not automatic rejection of a probabilistic contract. Strict-window PI diagnoses distinguish infeasibility from a causal-control gap; an unresolved solve supplies no feasibility conclusion. Only a fixed causal offer that passes independent qualification enters the operating-price comparison. No supply screen or PI witness alone certifies causal reliability.",
+      "zh": "**a，** 固定 2.95 kW，全部 80 个任务资源时间实现的配对事件小时最小供给余量，比较原序与置乱。余量定义为基线 PCC 功率减去社区功率、固定数据中心功率及请求的 95%，再对全部四次调用取最小值。零虚线区分是否出现即时不足；计数为描述性结果，不推断总体频率。**b，** 最低协议种子 990000 在原序次数和资源时间权重下的基线可削功率。横线为 95% 交付要求，阴影表示四次调用。图示为 168 h 到达时域，全部 216 h 仍在数据中。按种子编号而非结果选取。**c，** 从证据到决策的顺序。缺口识别不可能成功的序列，并不自动拒绝概率性合同。严格时间窗 PI 诊断区分不可行与因果控制差距；未解决的求解不提供可行性结论。只有固定因果报价通过独立资格检验后，才进入运行价格比较。供给检查或 PI 见证本身均不能认证因果可靠性。",
+      "id": "M157"
+    },
+    "after": {
+      "en": "**a,** Paired minimum event-hour supply margins for all 80 task-resource-time realisations at 2.95 kW, comparing chronological and permuted orders. Margin is baseline PCC power minus community and fixed data-centre power minus 95% of the request, minimised over all four calls. Dashed zero lines separate scenarios with and without an instantaneous shortage; counts are descriptive, with no population-frequency inference. **b,** Available baseline reduction under chronological count and resource-time weighting for the lowest protocol seed (990000). The horizontal line is the 95% delivery requirement and shading marks the four calls. The displayed arrival horizon is 168 h; all 216 h remain in the data. Selection is by seed, not outcome. **c,d,** Full 216-h power difference from the paired baseline and additional backlog at the independently qualified reference offers of 5.60 kW (four hours) and 4.42 kW (eight hours), both with four calls at 16-h start spacing. The example is the lowest common confirmation seed, 989000, chosen by identifier without inspecting outcomes. Solid lines show operation, dotted lines in c show requests, and the grey 168–216-h interval is the clearance tail. Negative power differences denote recovery above baseline; positive backlog denotes additional waiting work. Both illustrated series finish with zero missed work. These single trajectories explain operation; the 300-scenario qualification evidence is in Fig. 3a. Panels a,b use the external workload tests, whereas c,d use the reference distribution; they are not the same experiment.",
+      "zh": "**a，** 固定 2.95 kW，全部 80 个任务资源时间实现的配对事件小时最小供给余量，比较原序与置乱。余量定义为基线 PCC 功率减去社区功率、固定数据中心功率及请求的 95%，再对全部四次调用取最小值。零虚线区分是否出现即时不足；计数为描述性结果，不推断总体频率。**b，** 最低协议种子 990000 在原序次数和资源时间权重下的基线可削功率。横线为 95% 交付要求，阴影表示四次调用。图示为 168 h 到达时域，全部 216 h 仍在数据中。按种子编号而非结果选取。 **c,d，** 在独立合格参考报价下，相对配对基线的完整 216 h 功率差与额外积压：四小时为 5.60 kW，八小时为 4.42 kW，均为开始间隔 16 h 的四调用序列。示例采用最低共同确认种子 989000，按编号选择，未查看结果后挑选。实线为运行，c 中点线为请求，灰色 168–216 h 区域为清空尾段。负功率差表示恢复阶段功率高于基线；正积压表示额外等待工作。两个示例序列均以零漏期结束。单条轨迹用于解释运行；300 个情景的资格证据见图 3a。a,b 使用外部工作负载测试，c,d 使用参考分布，二者不是同一试验。",
+      "id": "M157"
+    }
+  },
+  {
+    "id": "S20_006",
+    "before": {
+      "id": "S20_006",
+      "en": "| Question | Methods | Displays |\n|---|---|---|\n| Work composition and power | 1–3 | Fig. 1; Supplementary Fig. 2; Tables 1–3 |\n| Single-event offers | 4–5 | Fig. 2; Table 4 |\n| Reference repeated offers | 6 | Fig. 3a; Supplementary Fig. 3a,b; Table 18 |\n| Workload weights and hourly order | 6 | Fig. 3c,d; Fig. 4a,b; Table 20 |\n| Supply and strict-window diagnosis | 6 | Fig. 3b; Fig. 4; Table 19 |\n| Structural and call-history controls | 6 | Supplementary Fig. 3c; Tables 5, 10–16 |\n| PV, allocation and power controls | 7–8 | Fig. 5; Supplementary Fig. 4; Tables 6, 8 |\n| Physical exposure and participation | 9 | Fig. 6; Supplementary Fig. 5; Table 21 |\n| Price assumptions and design provenance | 9; Note 7 | Tables 7, 9, 12, 17; Supplementary Fig. 3d |",
+      "zh": "| 问题 | 方法 | 图表 |\n|---|---|---|\n| 工作构成与功率 | 1–3 | 图 1；补充图 2；表 1–3 |\n| 单次事件报价 | 4–5 | 图 2；表 4 |\n| 参考重复报价 | 6 | 图 3a；补充图 3a,b；表 18 |\n| 工作量权重与小时顺序 | 6 | 图 3c,d；图 4a,b；表 20 |\n| 供给与严格时间窗诊断 | 6 | 图 3b；图 4；表 19 |\n| 结构与调用历史对照 | 6 | 补充图 3c；表 5、10–16 |\n| 光伏、分配与功率对照 | 7–8 | 图 5；补充图 4；表 6、8 |\n| 物理暴露与参与 | 9 | 图 6；补充图 5；表 21 |\n| 价格假设与设计溯源 | 9；说明 7 | 表 7、9、12、17；补充图 3d |"
+    },
+    "after": {
+      "id": "S20_006",
+      "en": "| Question | Methods | Displays |\n|---|---|---|\n| Work composition and power | 1–3 | Fig. 1; Supplementary Fig. 2; Tables 1–3 |\n| Single-event offers | 4–5 | Fig. 2; Table 4 |\n| Reference repeated offers | 6 | Fig. 3a; Fig. 4c,d; Supplementary Fig. 3a,b; Table 18 |\n| Workload weights and hourly order | 6 | Fig. 3c,d; Fig. 4a,b; Table 20 |\n| Supply and strict-window diagnosis | 6 | Fig. 3b; Fig. 4; Table 19 |\n| Structural and call-history controls | 6 | Supplementary Figs. 3c, 6; Tables 5, 10–16 |\n| PV, allocation and power controls | 7–8 | Fig. 5; Supplementary Figs. 4, 7; Tables 6, 8 |\n| Physical exposure and participation | 9 | Fig. 6; Supplementary Fig. 5; Table 21 |\n| Price assumptions and design provenance | 9; Note 7 | Supplementary Fig. 8; Tables 7, 9, 12, 17; Supplementary Fig. 3d |",
+      "zh": "| 问题 | 方法 | 图表 |\n|---|---|---|\n| 工作构成与功率 | 1–3 | 图 1；补充图 2；表 1–3 |\n| 单次事件报价 | 4–5 | 图 2；表 4 |\n| 参考重复报价 | 6 | 图 3a；图 4c,d；补充图 3a,b；表 18 |\n| 工作量权重与小时顺序 | 6 | 图 3c,d；图 4a,b；表 20 |\n| 供给与严格时间窗诊断 | 6 | 图 3b；图 4；表 19 |\n| 结构与调用历史对照 | 6 | 补充图 3c、6；表 5、10–16 |\n| 光伏、分配与功率对照 | 7–8 | 图 5；补充图 4、7；表 6、8 |\n| 物理暴露与参与 | 9 | 图 6；补充图 5；表 21 |\n| 价格假设与设计溯源 | 9；说明 7 | 补充图 8；表 7、9、12、17；补充图 3d |"
+    }
+  },
+  {
+    "id": "S20_055",
+    "before": {
+      "id": "S20_055",
+      "en": "![Supplementary Figure 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_1.png)",
+      "zh": "![补充图 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_1.png)"
+    },
+    "after": {
+      "id": "S20_055",
+      "en": "![Supplementary Figure 1](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_1.png)",
+      "zh": "![补充图 1](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_1.png)"
+    }
+  },
+  {
+    "id": "S20_058",
+    "before": {
+      "id": "S20_058",
+      "en": "![Supplementary Figure 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_2.png)",
+      "zh": "![补充图 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_2.png)"
+    },
+    "after": {
+      "id": "S20_058",
+      "en": "![Supplementary Figure 2](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_2.png)",
+      "zh": "![补充图 2](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_2.png)"
+    }
+  },
+  {
+    "id": "S20_061",
+    "before": {
+      "id": "S20_061",
+      "en": "![Supplementary Figure 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_3.png)",
+      "zh": "![补充图 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_3.png)"
+    },
+    "after": {
+      "id": "S20_061",
+      "en": "![Supplementary Figure 3](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_3.png)",
+      "zh": "![补充图 3](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_3.png)"
+    }
+  },
+  {
+    "id": "S20_064",
+    "before": {
+      "id": "S20_064",
+      "en": "![Supplementary Figure 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_4.png)",
+      "zh": "![补充图 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_4.png)"
+    },
+    "after": {
+      "id": "S20_064",
+      "en": "![Supplementary Figure 4](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_4.png)",
+      "zh": "![补充图 4](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_4.png)"
+    }
+  },
+  {
+    "id": "S20_067",
+    "before": {
+      "id": "S20_067",
+      "en": "![Supplementary Figure 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_5.png)",
+      "zh": "![补充图 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_5.png)"
+    },
+    "after": {
+      "id": "S20_067",
+      "en": "![Supplementary Figure 5](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_5.png)",
+      "zh": "![补充图 5](../docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_5.png)"
+    }
+  }
+]

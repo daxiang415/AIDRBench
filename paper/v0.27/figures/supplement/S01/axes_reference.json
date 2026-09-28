@@ -1,0 +1,194 @@
+{
+  "a": {
+    "title": "From workload composition to electrical response",
+    "xlabel": "",
+    "ylabel": "",
+    "xlim": [
+      0.0,
+      1.0
+    ],
+    "ylim": [
+      0.0,
+      1.0
+    ],
+    "xticks": [
+      0.0,
+      0.2,
+      0.4,
+      0.6000000000000001,
+      0.8,
+      1.0
+    ],
+    "xticklabels": [
+      "0.0",
+      "0.2",
+      "0.4",
+      "0.6",
+      "0.8",
+      "1.0"
+    ],
+    "yticks": [
+      0.0,
+      0.2,
+      0.4,
+      0.6000000000000001,
+      0.8,
+      1.0
+    ],
+    "yticklabels": [
+      "0.0",
+      "0.2",
+      "0.4",
+      "0.6",
+      "0.8",
+      "1.0"
+    ],
+    "text": [
+      {
+        "text": "Source class shares\n+ declared permission",
+        "position": [
+          0.14,
+          0.55
+        ]
+      },
+      {
+        "text": "Paired job templates\n+ GPU / power model",
+        "position": [
+          0.5,
+          0.55
+        ]
+      },
+      {
+        "text": "Hourly deadline queue\n+ community PCC",
+        "position": [
+          0.86,
+          0.55
+        ]
+      },
+      {
+        "text": "",
+        "position": [
+          0.27,
+          0.55
+        ]
+      },
+      {
+        "text": "",
+        "position": [
+          0.63,
+          0.55
+        ]
+      },
+      {
+        "text": "5%, 10%, 20%: source mix retained     40%: wider opt-in     60%: changed business mix",
+        "position": [
+          0.5,
+          0.09
+        ]
+      },
+      {
+        "text": "a",
+        "position": [
+          -0.065,
+          1.09
+        ]
+      }
+    ]
+  },
+  "b": {
+    "title": "Evidence flow and independent qualification",
+    "xlabel": "",
+    "ylabel": "",
+    "xlim": [
+      0.0,
+      1.0
+    ],
+    "ylim": [
+      0.0,
+      1.0
+    ],
+    "xticks": [
+      0.0,
+      0.2,
+      0.4,
+      0.6000000000000001,
+      0.8,
+      1.0
+    ],
+    "xticklabels": [
+      "0.0",
+      "0.2",
+      "0.4",
+      "0.6",
+      "0.8",
+      "1.0"
+    ],
+    "yticks": [
+      0.0,
+      0.2,
+      0.4,
+      0.6000000000000001,
+      0.8,
+      1.0
+    ],
+    "yticklabels": [
+      "0.0",
+      "0.2",
+      "0.4",
+      "0.6",
+      "0.8",
+      "1.0"
+    ],
+    "text": [
+      {
+        "text": "100 development seeds\nPI → candidate selection",
+        "position": [
+          0.14,
+          0.6
+        ]
+      },
+      {
+        "text": "300 confirmation seeds\nSingle + repeated tests",
+        "position": [
+          0.5,
+          0.6
+        ]
+      },
+      {
+        "text": "Complete paired ledgers\n+ participation costs",
+        "position": [
+          0.86,
+          0.6
+        ]
+      },
+      {
+        "text": "",
+        "position": [
+          0.27,
+          0.6
+        ]
+      },
+      {
+        "text": "",
+        "position": [
+          0.63,
+          0.6
+        ]
+      },
+      {
+        "text": "Separate full-information branch: PV hosting and utilisation, with / without BESS (100 seeds)",
+        "position": [
+          0.5,
+          0.08
+        ]
+      },
+      {
+        "text": "b",
+        "position": [
+          -0.065,
+          1.09
+        ]
+      }
+    ]
+  }
+}

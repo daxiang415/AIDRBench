@@ -1,0 +1,7 @@
+{
+  "status": "controller_analysis_complete_renewable_pending",
+  "single_confirmation_replays": 9000,
+  "repeat_confirmation_replays": 15000,
+  "control_confirmation_replays": 2400,
+  "selected_repeat_candidates": 0
+}

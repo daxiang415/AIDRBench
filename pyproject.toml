@@ -22,6 +22,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+paper = ["matplotlib>=3.9,<4", "pillow>=11,<13", "PyMuPDF>=1.24,<2"]
 control = ["cvxpy>=1.6,<2", "highspy>=1.8,<2", "osqp>=0.6,<2"]
 analysis = [
   "joblib>=1.4,<2",

@@ -1,0 +1,64 @@
+{
+  "date": "2026-09-28",
+  "manuscript": "v0.27",
+  "main_artwork": "R8 (2026-09-17)",
+  "local_platform": "Linux, Python 3.12",
+  "checks": {
+    "pytest": {
+      "status": "PASS",
+      "passed": 274
+    },
+    "ruff": {
+      "status": "PASS"
+    },
+    "mypy": {
+      "status": "PASS",
+      "source_files": 75
+    },
+    "frozen_main_figure_pack": {
+      "status": "PASS before SVG packaging adaptation",
+      "original_files": 81,
+      "adaptation": "Figure 1 raster payloads extracted unchanged; current manifest includes 15 assets and provenance"
+    },
+    "frozen_latex_pack": {
+      "status": "PASS",
+      "files": 26
+    },
+    "frozen_supplement_pack": {
+      "status": "PASS",
+      "files": 139
+    },
+    "latex_build": {
+      "status": "PASS",
+      "engine": "Tectonic",
+      "main_pages": 18,
+      "supplement_pages": 32,
+      "supplied_pdfs_preserved": true
+    },
+    "supplement_direct_redraw": {
+      "status": "PASS",
+      "figures": 10,
+      "numeric_series_checked": 63,
+      "numeric_series_passed": 63,
+      "quantitative_panels": 33
+    },
+    "main_panels_and_pptx_rebuild": {
+      "status": "PASS",
+      "corrected_panels": 11
+    },
+    "markdown_review_renderers": {
+      "status": "PASS",
+      "documents": 2
+    }
+  },
+  "windows_ci": {
+    "status": "See GitHub Actions for execution on each commit; no local Windows execution claimed",
+    "url": "https://github.com/daxiang415/AIDRBench/actions/workflows/ci.yml"
+  },
+  "scope": {
+    "new_simulations": 0,
+    "new_visual_page_review": false,
+    "bulk_raw_and_hourly_data_included": false,
+    "author_metadata_completed": false
+  }
+}

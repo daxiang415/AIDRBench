@@ -1,0 +1,160 @@
+{
+  "schema_version": "aidrbench.economic_cost_robustness.v1",
+  "analysis_id": "nature_economic_cost_robustness_v1",
+  "analysis_role": "post_hoc_development_parameterized_sensitivity",
+  "software": {
+    "git_commit": "52d96a2565a02783b9322a5e1fe0fb8b4ec42816",
+    "working_tree_dirty": false
+  },
+  "runtime_source_sha256": {
+    "src/aidrbench/cli.py": "5ec89c815b034654734159fa50111c1eac8d842044511cc8e6a14c0812a4a8bf",
+    "src/aidrbench/data/splits.py": "2ec665770e181cf8c52f93d8f17d7370e56d1b8020a8f910d7fa563153396ec1",
+    "src/aidrbench/economics/__init__.py": "2cc4c93a8b832cf574e4bfacaaf87dc98f922e22c945f52811660a7cd7a658ed",
+    "src/aidrbench/economics/accounting.py": "f5576b37b11c4cc877a2524948e135e64be0b75fa049be3bacb1e85b92032de9",
+    "src/aidrbench/economics/capital.py": "d4539c99921caac82a85ab0ea2ef5c56c1a849f70f4f7db1231d23c679c8905e",
+    "src/aidrbench/economics/opportunity_cost.py": "a765b7e7b579abf86760b2cf92b99a2d8500514a208173f4a693a09070664f03",
+    "src/aidrbench/economics/specification.py": "08ba187f5ea215a216d0df1fb1770763695c90f9441b3bb36ddca9c784edd0e0",
+    "src/aidrbench/economics/tariffs.py": "b2532675f123ff73d8fbb647c5d5035933460cbf20bab4d1c0893ab2c5924d7a",
+    "src/aidrbench/evaluation/economic_cost_robustness.py": "fe0ba5e16662814635663b5fe01acbe39cdbb1d4149c3d2d23079306e0601b66",
+    "src/aidrbench/evaluation/economic_participation.py": "36121d13d59f87c7e371172ba50d343709f13daa8c52ccaf6c6fb48f6a1b325e"
+  },
+  "specification": {
+    "path": "configs/economics/cost_robustness_v1.yaml",
+    "sha256": "eb50a645dbe4ec60744588b216f9742b59ad79be0e5d5324295bbe56f2258a98"
+  },
+  "bound_input_sha256": {
+    "configs/economics/economic_participation_v1.yaml": "187ee05954d93ed3f4e8f292f7c868d787ecb69eadfbc2faf69be43039dfc8c2",
+    "results/economics/economic_participation_v1/ledger/episode_ledger.parquet": "7f9b64bc5b8cea1026e279f83d9cb15bbbf0c980d256f7bb7215896ffc5d3a02",
+    "manuscript/source_data/nature_economic_v1/fig6_duration_break_even.csv": "a31903fa47e6777c1e12d7c7c7552082d1aaeb5d4f1a77efef7e9f01449cf8e3"
+  },
+  "economic_input_sha256": {
+    "cost_parameter_grid": "e7124d58e5e96b68a13d708fc0522f8a76ab9e4e7d3b518bdb4a01b479a1a6ca",
+    "market_archetypes": "a034220e80432ff5e22407701eb962b2fd61f59d25ffaec548ee933b3767acd6",
+    "source_register": "d841d3eeec745eda3f21da495e3573ad26d6baa1d3b1dcea8eef711856c18145",
+    "external_parameter_evidence": "0ba7937dc0c155be34eda00277f4044cbb5a927d01a70f2431c1683be9cc2609"
+  },
+  "ledger_manifest_sha256": "deaa3c1f2325a3963f2232fc3df9e1b0a4c29f65a37ca44aa8fab85f007be967",
+  "physical_ledger_contract_sha256": "3db17d548cb226ce3e6d9c8ff71b75f18bcbc93c15591f5b6a57926b49a3acaf",
+  "scenario_count": 100,
+  "paired_event_count": 300,
+  "locked_scenario_payloads_read": false,
+  "technical_capacity_reselected": false,
+  "original_figure6_tables_modified": false,
+  "interpretation": {
+    "cost_axes": "research_design_coordinates_not_observed_operator_prices",
+    "draws": "nested_common_random_draws_not_independent_validation_or_confidence_intervals",
+    "service": "incremental_missed_and_terminal_work_not_operator_revenue_observations",
+    "delay": "USD_per_GPU_hour_of_backlog_per_hour_of_waiting",
+    "zero_floor": "signed_threshold_retained_separately_from_nonnegative_capacity_payment"
+  },
+  "tables": [
+    {
+      "output": "economic_cost_sensitivity.csv",
+      "row_count": 1728,
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "currency_basis",
+        "annualization_scope",
+        "facility_scale_interpretation",
+        "regime",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "annual_event_count",
+        "facility_site_scale_mw",
+        "candidate_reduction_kw",
+        "scaled_accounting_candidate_reduction_kw",
+        "bootstrap_draws",
+        "risk_quantile",
+        "delay_cost_multiplier",
+        "delay_cost_per_gpu_h_h",
+        "fixed_site_cost_multiplier",
+        "fixed_site_enablement_annual_cost",
+        "performance_payment_per_mwh",
+        "reserved_capacity_fraction",
+        "effective_displaced_compute_value_per_gpu_h",
+        "mean_delay_cost_per_offer_kw_year",
+        "break_even_capacity_payment_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year",
+        "unclipped_risk_threshold_per_kw_year",
+        "annual_net_value_at_zero_capacity_payment_p05"
+      ],
+      "output_sha256": "c7b56698f4e312e552930e3e85cd040a5766493b1d29c1ca9928f4b0ead470e1"
+    },
+    {
+      "output": "economic_bootstrap_stability.csv",
+      "row_count": 27,
+      "columns": [
+        "analysis_id",
+        "analysis_role",
+        "currency_basis",
+        "annualization_scope",
+        "facility_scale_interpretation",
+        "regime",
+        "duration_h",
+        "notice_h",
+        "reliability_target",
+        "annual_event_count",
+        "facility_site_scale_mw",
+        "candidate_reduction_kw",
+        "scaled_accounting_candidate_reduction_kw",
+        "bootstrap_draws",
+        "risk_quantile",
+        "delay_cost_multiplier",
+        "delay_cost_per_gpu_h_h",
+        "fixed_site_cost_multiplier",
+        "fixed_site_enablement_annual_cost",
+        "performance_payment_per_mwh",
+        "reserved_capacity_fraction",
+        "effective_displaced_compute_value_per_gpu_h",
+        "mean_delay_cost_per_offer_kw_year",
+        "break_even_capacity_payment_per_kw_year",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year",
+        "unclipped_risk_threshold_per_kw_year",
+        "annual_net_value_at_zero_capacity_payment_p05",
+        "original_draw_count_threshold_per_kw_year",
+        "change_from_original_draw_count_per_kw_year"
+      ],
+      "output_sha256": "a2cc4213b990da85767169f8319db4deb4fef89a8d689d368a19110531a52adc"
+    },
+    {
+      "output": "economic_service_outcomes.csv",
+      "row_count": 3,
+      "columns": [
+        "analysis_role",
+        "duration_h",
+        "scenario_count",
+        "technical_success_count",
+        "work_zero_tolerance_gpu_h",
+        "opportunity_cost_interpretation",
+        "mean_incremental_missed_gpu_h",
+        "max_incremental_missed_gpu_h",
+        "incremental_missed_gpu_h_above_tolerance_count",
+        "mean_incremental_terminal_backlog_gpu_h",
+        "max_incremental_terminal_backlog_gpu_h",
+        "incremental_terminal_backlog_gpu_h_above_tolerance_count",
+        "mean_deferred_gpu_h",
+        "mean_incremental_backlog_area_within_recovery_gpu_h_h",
+        "mean_incremental_backlog_area_through_episode_end_gpu_h_h",
+        "mean_incremental_energy_within_recovery_kwh",
+        "mean_incremental_energy_through_episode_end_kwh"
+      ],
+      "output_sha256": "b3515d26d9ee69e3ee709a7a32c6f7a450f1dadabd04db142b546960defe2590"
+    },
+    {
+      "output": "economic_reference_reconciliation.csv",
+      "row_count": 9,
+      "columns": [
+        "duration_h",
+        "regime",
+        "annual_event_count",
+        "facility_site_scale_mw",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year_recomputed",
+        "risk_adjusted_break_even_capacity_payment_per_kw_year_published",
+        "absolute_difference_per_kw_year"
+      ],
+      "output_sha256": "dd6b39e1401e5f05ff425b6a79a995054b60cedb50709b70463871718fa84fd1"
+    }
+  ]
+}

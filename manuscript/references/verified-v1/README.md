@@ -1,7 +1,5 @@
 # Verified manuscript references
 
-This is the historical reference-manager export. For the current v0.25 paper, use the 42 numbered entries in `../../nature_communications_article.md`; the original 1–40 mapping below describes the earlier export and is not the current citation order.
-
 - `references.ris` contains the 30 DOI records retrieved through the
   `nature-citation` DOI-whitelist workflow.
 - `references_manual_verified.ris` contains ten official data/report and

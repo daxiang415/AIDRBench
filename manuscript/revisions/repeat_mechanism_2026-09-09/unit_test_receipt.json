@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "tests": 3,
+  "command": ".venv/bin/python -m pytest -q manuscript/revisions/repeat_mechanism_2026-09-09/test_recovery_controller.py",
+  "coverage": [
+    "strictest overlapping window",
+    "window expiry and reset",
+    "no advance knowledge of later calls"
+  ]
+}

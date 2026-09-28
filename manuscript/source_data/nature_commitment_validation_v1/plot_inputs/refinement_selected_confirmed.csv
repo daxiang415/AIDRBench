@@ -1,0 +1,5 @@
+variant,program,endpoint,selected_fraction,selected_capacity_kw,development_successes,confirmation_successes,confirmation_lower,offerable
+u65d100g10,H8P16,success_1pct,0.75,4.423682389683707,100,300,0.9910621278248719,True
+u65d100g10,H8P16,success_zero,0.75,4.423682389683707,99,296,0.9706334470345127,True
+u65d100g10,H4P16,success_1pct,0.95,5.603331026932695,100,297,0.9752442459680568,True
+u65d100g10,H4P16,success_zero,0.95,5.603331026932695,100,297,0.9752442459680568,True

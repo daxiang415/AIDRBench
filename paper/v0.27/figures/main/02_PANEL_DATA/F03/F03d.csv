@@ -1,0 +1,5 @@
+﻿weight,ordering,successes_zero,successes_1pct,y_position,trials
+job_count,chronological,80,80,0,80
+job_count,permuted,80,80,1,80
+resource_gpu_h,chronological,31,31,2,80
+resource_gpu_h,permuted,54,55,3,80

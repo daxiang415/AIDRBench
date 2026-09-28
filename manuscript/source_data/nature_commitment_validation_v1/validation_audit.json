@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "new_capacity_replays": 2700,
+  "independent_confirmation_draws": 300,
+  "source_observed_weeks": 8,
+  "unit": "conditional simulated draws from fixed empirical-week mixture",
+  "pv_repeat_optimizations": 1000,
+  "pv_unresolved_hosting_solves": 34,
+  "all_fixed_PV_solves_resolved": true,
+  "hosting_boundary_gains_bounded_within_kw": 0.001,
+  "overhead_witness_schedule_rescores": 2400,
+  "power_sum_absolute_error_kw": 2.842170943040401e-14,
+  "sources": {
+    "capacity_selected_confirmed.csv": "fae96131566222fa7f9f4de60d8fdbcef29670cb3f3075e533d26a3c3769d1de",
+    "capacity_confirmation_summary.csv": "aedbbac9cdc4bb6c4b4b22f66e1ffd9288594c6d8bf1cae93fc06c40abc07ae2",
+    "capacity_development_summary.csv": "956f59d5bfe7010401fdd5a3552dac37a052ab7f692366ef044a5730f29141d9",
+    "capacity_confirmation_by_week.csv": "be8579044f748cb68dc3a10e470bd2bc9c025ff2944903cff03e6c18cd81a6f1",
+    "power_reconciliation.json": "0515da6d542c527685482c80fcaa53863a516f3ae92457e579e1c8ab52c90fce",
+    "fixed_overhead_summary.csv": "32297699f7976bdfdefb530e6a63bb0f8507fe3dc21c78e46f40baea0201073d",
+    "pv_precision_pairs.csv": "cb21c22207b70b5cab924d4913b83ed49156a536c829ad5b0f5e9d141a6bb17d",
+    "pv_precision_summary.csv": "3ca0db976ed8a694da1fbc134af96d3aef13d7aa852518729fa689245e872651"
+  }
+}

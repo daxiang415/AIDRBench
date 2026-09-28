@@ -1,0 +1,78 @@
+{
+  "version": "v0.27 / R8",
+  "source": "figure0915.zip supplied by author; corrected from frozen v17.3 panel data",
+  "outputs": {
+    "AIDRBench_Figure_1.pdf": {
+      "sha256": "ff541d875cedc1b7c3e12f42b22deadd46c8fb94949fb4e799d8e698b90e4d79",
+      "bytes": 1502060
+    },
+    "AIDRBench_Figure_1.png": {
+      "sha256": "c984267b1b751ce217b1721e07b1d1ba143e5b46694ac8386e1e233f9c12d158",
+      "bytes": 903677
+    },
+    "AIDRBench_Figure_1.svg": {
+      "sha256": "4784f705d74ee3e920e3ea237495d58292e4215d2a1bc80913d3bb91ac2c1b59",
+      "bytes": 1998780
+    },
+    "AIDRBench_Figure_2.pdf": {
+      "sha256": "1a6fba5e2b2aa9274df411fc13dd74d6a01bdfb07769bd7504d5ecbc8381b715",
+      "bytes": 1501003
+    },
+    "AIDRBench_Figure_2.png": {
+      "sha256": "d5490f17d96cb5d1826577065ff60e585f78e4d6b18a0bd222271ab1bc202c5e",
+      "bytes": 209931
+    },
+    "AIDRBench_Figure_2.svg": {
+      "sha256": "6a454b746403072bf1f260e2674df964043b49ae61e1f719a65bcefbb6c4fc9c",
+      "bytes": 61892
+    },
+    "AIDRBench_Figure_3.pdf": {
+      "sha256": "593d2a5ed69b28a69e21e986de568c80006ea54f8452a25252a51a6ac161664b",
+      "bytes": 1504607
+    },
+    "AIDRBench_Figure_3.png": {
+      "sha256": "c5d050b7fbefc82451f7d3401d8321c86926bedc009c961dea3058dd943e4a4b",
+      "bytes": 321547
+    },
+    "AIDRBench_Figure_3.svg": {
+      "sha256": "4ba643a2ab9a191c038a1a59c159e10c42b446e3c9abfbd55cbdb3bbcad88cf1",
+      "bytes": 123983
+    },
+    "AIDRBench_Figure_4.pdf": {
+      "sha256": "8bb9ef181e94b2cece220f7389f63a8b9624b387296c2c688ac545ae5f066330",
+      "bytes": 1558851
+    },
+    "AIDRBench_Figure_4.png": {
+      "sha256": "7190565fc66eafa916d765a1b01a561a314b6895ed63441b158e5b415f3d0592",
+      "bytes": 517173
+    },
+    "AIDRBench_Figure_4.svg": {
+      "sha256": "ba52798d941814d83449f0e30ccc33b22698cd9e703772d385a0b0b09744e30a",
+      "bytes": 481444
+    },
+    "AIDRBench_Figure_5.pdf": {
+      "sha256": "3811cfe1c6a9068b55194f80b0584572f1d433f11baf150966d5a39a427b126f",
+      "bytes": 1510321
+    },
+    "AIDRBench_Figure_5.png": {
+      "sha256": "a2d06df59898a2797122ac7ccf6ad5ed629bea3e0c2079e6692d12bf02e70811",
+      "bytes": 277828
+    },
+    "AIDRBench_Figure_5.svg": {
+      "sha256": "f73ff8b3b8068f167661edcc8d036f9a323375e926fd1ec3d35db0de0a986c83",
+      "bytes": 114920
+    },
+    "AIDRBench_Figure_6.pdf": {
+      "sha256": "d5036e212296e131f3b502c5daf922a7c5ae53802ee72827499af9c29897ff55",
+      "bytes": 1512098
+    },
+    "AIDRBench_Figure_6.png": {
+      "sha256": "398f9d06b461129052cfb70cabc112032a9223c68f674aa39f87ff1cc0fa262c",
+      "bytes": 287486
+    },
+    "AIDRBench_Figure_6.svg": {
+      "sha256": "e2670e8e38a0e5ffc6a07876cf87f86c05226ebb1762b3fc42db214d766e210a",
+      "bytes": 93732
+    }
+  }
+}

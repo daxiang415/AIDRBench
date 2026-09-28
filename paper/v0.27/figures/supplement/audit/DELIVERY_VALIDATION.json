@@ -1,0 +1,72 @@
+{
+  "date": "2026-09-17",
+  "figures": 10,
+  "tables": 37,
+  "panels": 35,
+  "quantitative_series": 63,
+  "combined_xlsx_cells_verified": 5569,
+  "individual_xlsx_cells_verified": 5379,
+  "current_latex_matches": [
+    {
+      "figure": "S01",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "49a81f806d47c9c5230893e392e78e2609cbaef752080ea2fd2ba139ebaf29e9"
+    },
+    {
+      "figure": "S02",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "92efe349c9b4ef08cb917ea4351d693f12317d7a98514c8ba189795009e6db6f"
+    },
+    {
+      "figure": "S03",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "d35044e291ba86e9867b1e813957430c8a63c2dd5e189611aa6d113663191652"
+    },
+    {
+      "figure": "S04",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "f0544818f6f70ee5fb94d5844f840c5857c8b6ed407e8b41d452b6875c5ab512"
+    },
+    {
+      "figure": "S05",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "dfa34dda0fff791d9384e5535c1f6193fb7af0252c007ef632d321390b7c5869"
+    },
+    {
+      "figure": "S06",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "91a37b26d76f344aacf3d05f4b9ba1c57c1a9e2e2de3d4f657f939ecf9d53089"
+    },
+    {
+      "figure": "S07",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "eccd5ac5876a2af7042133175b4131fd43177bec8e8f0ec10e72b67ba690b384"
+    },
+    {
+      "figure": "S08",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "28c85554e1e83ba29b79f93ec288e6e44702901612e3f668f475718b78d7a6bc"
+    },
+    {
+      "figure": "S09",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "0e83f11a37be2119e555edaa1c85a5bd8f353fc94c641ffa24b12c4c3b06c63a"
+    },
+    {
+      "figure": "S10",
+      "matches_current_latex_pdf": true,
+      "pdf_sha256": "77f111ab1bf36179175713a921d3a47eba18d744b1f7f9cd05be714a576330cc"
+    }
+  ],
+  "new_scientific_simulations": 0,
+  "numeric_values_changed": false,
+  "original_artist_coordinate_checks": 63,
+  "direct_csv_renderer_coordinate_checks": 63,
+  "all_33_quantitative_panels_covered": true,
+  "all_10_csv_figures_rendered": true,
+  "reference_and_redraw_pdfs_font_checked": 20,
+  "visual_review": "All 10 figures reviewed; S2/S3/S10 inspected again after corrections.",
+  "source_table_values_unchanged": true,
+  "dependency_runtime": "Python 3.12.13",
+  "panel_csv_count_verified_against_frozen_source": 37
+}

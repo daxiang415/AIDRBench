@@ -1,0 +1,122 @@
+[
+  {
+    "pdf": "docs/figure_integration_2026-09-17/artwork/AIDRBench_Figure_1.pdf",
+    "auditable": true,
+    "minimum_required_pt": 5.0,
+    "minimum_found_pt": 18.0,
+    "text_run_count": 65,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": [
+      "stream 7 uses an unsupported PDF filter",
+      "stream 9 uses an unsupported PDF filter",
+      "stream 11 uses an unsupported PDF filter",
+      "stream 13 uses an unsupported PDF filter",
+      "stream 17 uses an unsupported PDF filter",
+      "stream 19 uses an unsupported PDF filter",
+      "stream 20 uses an unsupported PDF filter",
+      "stream 22 uses an unsupported PDF filter",
+      "stream 24 uses an unsupported PDF filter"
+    ]
+  },
+  {
+    "pdf": "docs/figure_integration_2026-09-17/artwork/AIDRBench_Figure_2.pdf",
+    "auditable": true,
+    "minimum_required_pt": 5.0,
+    "minimum_found_pt": 17.968,
+    "text_run_count": 83,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": [
+      "stream 7 uses an unsupported PDF filter",
+      "stream 9 uses an unsupported PDF filter",
+      "stream 11 uses an unsupported PDF filter",
+      "stream 13 uses an unsupported PDF filter",
+      "stream 17 uses an unsupported PDF filter",
+      "stream 19 uses an unsupported PDF filter",
+      "stream 20 uses an unsupported PDF filter",
+      "stream 22 uses an unsupported PDF filter",
+      "stream 24 uses an unsupported PDF filter"
+    ]
+  },
+  {
+    "pdf": "docs/figure_integration_2026-09-17/artwork/AIDRBench_Figure_3.pdf",
+    "auditable": true,
+    "minimum_required_pt": 5.0,
+    "minimum_found_pt": 13.94,
+    "text_run_count": 176,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": [
+      "stream 7 uses an unsupported PDF filter",
+      "stream 9 uses an unsupported PDF filter",
+      "stream 11 uses an unsupported PDF filter",
+      "stream 13 uses an unsupported PDF filter",
+      "stream 17 uses an unsupported PDF filter",
+      "stream 19 uses an unsupported PDF filter",
+      "stream 20 uses an unsupported PDF filter",
+      "stream 22 uses an unsupported PDF filter",
+      "stream 24 uses an unsupported PDF filter"
+    ]
+  },
+  {
+    "pdf": "docs/figure_integration_2026-09-17/artwork/AIDRBench_Figure_4.pdf",
+    "auditable": true,
+    "minimum_required_pt": 5.0,
+    "minimum_found_pt": 13.974,
+    "text_run_count": 192,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": [
+      "stream 7 uses an unsupported PDF filter",
+      "stream 9 uses an unsupported PDF filter",
+      "stream 11 uses an unsupported PDF filter",
+      "stream 13 uses an unsupported PDF filter",
+      "stream 17 uses an unsupported PDF filter",
+      "stream 19 uses an unsupported PDF filter",
+      "stream 20 uses an unsupported PDF filter",
+      "stream 22 uses an unsupported PDF filter",
+      "stream 24 uses an unsupported PDF filter"
+    ]
+  },
+  {
+    "pdf": "docs/figure_integration_2026-09-17/artwork/AIDRBench_Figure_5.pdf",
+    "auditable": true,
+    "minimum_required_pt": 5.0,
+    "minimum_found_pt": 18.0,
+    "text_run_count": 201,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": [
+      "stream 7 uses an unsupported PDF filter",
+      "stream 9 uses an unsupported PDF filter",
+      "stream 11 uses an unsupported PDF filter",
+      "stream 13 uses an unsupported PDF filter",
+      "stream 17 uses an unsupported PDF filter",
+      "stream 19 uses an unsupported PDF filter",
+      "stream 20 uses an unsupported PDF filter",
+      "stream 22 uses an unsupported PDF filter",
+      "stream 24 uses an unsupported PDF filter"
+    ]
+  },
+  {
+    "pdf": "docs/figure_integration_2026-09-17/artwork/AIDRBench_Figure_6.pdf",
+    "auditable": true,
+    "minimum_required_pt": 5.0,
+    "minimum_found_pt": 14.998,
+    "text_run_count": 187,
+    "below_minimum_count": 0,
+    "below_minimum": [],
+    "warnings": [
+      "stream 7 uses an unsupported PDF filter",
+      "stream 9 uses an unsupported PDF filter",
+      "stream 11 uses an unsupported PDF filter",
+      "stream 13 uses an unsupported PDF filter",
+      "stream 17 uses an unsupported PDF filter",
+      "stream 19 uses an unsupported PDF filter",
+      "stream 20 uses an unsupported PDF filter",
+      "stream 22 uses an unsupported PDF filter",
+      "stream 24 uses an unsupported PDF filter"
+    ]
+  }
+]

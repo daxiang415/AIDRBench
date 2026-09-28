@@ -24,20 +24,11 @@ parser.add_argument(
 )
 parser.add_argument("--web-figures", type=Path, help="insert accepted, hash-verified web artwork")
 parser.add_argument(
-    "--current-figures", type=Path, help="insert five current data-driven supplementary PDFs"
+    "--current-figures", type=Path, help="insert the current data-driven supplementary PDFs"
 )
 args = parser.parse_args()
 if args.current_figures is None and args.local_figures is None and args.web_figures is None:
-    if "docs/figures/commitment_narrative_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/commitment_narrative_v1/artwork"
-    elif "docs/figures/commitment_mechanisms_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/commitment_mechanisms_v1/artwork"
-    elif "docs/figures/operating_tradeoffs_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/operating_tradeoffs_v1/artwork"
-    elif "docs/figures/repeat_mechanism_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/repeat_mechanism_v1/artwork"
-    elif "docs/figures/workload_composition_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/workload_composition_v1/artwork"
+    args.current_figures = ROOT / "paper/v0.27/latex/figures"
 if args.local_figures is not None and args.web_figures is not None:
     parser.error("choose local drafts or accepted web figures")
 LOCAL = args.local_figures is not None
@@ -78,15 +69,34 @@ if WEB:
     review_notice = "Content revised; five existing supplementary figures retained pending redraw."
 
 if CURRENT:
+    figure_numbers = [int(n) for n in re.findall(r"^### Supplementary Figure (\d+) \|", SOURCE.read_text(), re.M)]
+    if figure_numbers != list(range(1, len(figure_numbers) + 1)):
+        raise ValueError("Supplementary figure headings must be consecutive and unique")
     review_status = f"Revised Supplementary Information v{VERSION}"
     review_notice = (
-        "Current methods, supporting tables and five supplementary figures. "
+        f"Current methods, supporting tables and {len(figure_numbers)} supplementary figures. "
         "Author metadata pending."
     )
-    current_manifest = json.loads(
-        (args.current_figures / "supplement_source_manifest.json").read_text()
+    # R6/R7 releases freeze main and supplementary artwork together. The
+    # per-stage supplementary receipt retained alongside them is historical.
+    release_manifest_path = args.current_figures / "source_manifest.json"
+    release_manifest = (
+        json.loads(release_manifest_path.read_text())
+        if release_manifest_path.is_file()
+        else {}
     )
-    for n in range(1, 6):
+    required_outputs = {
+        f"AIDRBench_Supplementary_Figure_{n}.pdf" for n in figure_numbers
+    }
+    if release_manifest.get("figure_revision") and required_outputs.issubset(
+        release_manifest.get("outputs", {})
+    ):
+        current_manifest = release_manifest
+    else:
+        current_manifest = json.loads(
+            (args.current_figures / "supplement_source_manifest.json").read_text()
+        )
+    for n in figure_numbers:
         path = args.current_figures / f"AIDRBench_Supplementary_Figure_{n}.pdf"
         if (
             hashlib.sha256(path.read_bytes()).hexdigest()
@@ -182,9 +192,7 @@ def table_widths(rows: list[list[str]]) -> list[float]:
     for column in range(column_count):
         maximum = max(len(re.sub(r"[*`]", "", row[column])) for row in rows if column < len(row))
         maxima.append(max(4.0, min(11.0, math.sqrt(maximum))))
-    available = {2: 0.95, 3: 0.93, 4: 0.91, 5: 0.89, 7: 0.83, 8: 0.80, 10: 0.75}.get(
-        column_count, 0.86
-    )
+    available = {2: 0.95, 3: 0.93, 4: 0.91, 5: 0.89, 7: 0.83, 8: 0.80, 10: 0.75}.get(column_count, 0.86)
     total = sum(maxima)
     return [available * value / total for value in maxima]
 
@@ -314,7 +322,7 @@ pdftitle={{Supplementary Information: {inline_latex(paper_title)}}}}}
 {review_notice}
 \end{{center}}
 \clearpage
-{{\small\setlength{{\parskip}}{{0pt}}\tableofcontents}}
+{{\fontsize{{9}}{{10}}\selectfont\setlength{{\parskip}}{{0pt}}\tableofcontents}}
 \clearpage
 """
 
@@ -422,11 +430,10 @@ while index < len(lines):
         close_itemize()
         flush_image()
         current_section = stripped[3:]
-        if current_section in {
-            "Supplementary Methods",
-            "Supplementary Figures",
-            "Supplementary Tables",
-        }:
+        if current_section == "Supplementary Figures":
+            # Keep a short methods tail with the first figure when it fits.
+            output.append("\\ifdim\\pagetotal>0.25\\textheight\\clearpage\\fi\n")
+        elif current_section in {"Supplementary Methods", "Supplementary Tables"}:
             output.append("\\clearpage\n")
         output.append("\\section{" + inline_latex(current_section) + "}\n")
         index += 1
@@ -452,7 +459,9 @@ while index < len(lines):
                     "Supplementary Table 20",
                 )
             ):
-                output.append("\\clearpage\n")
+                # A table footnote spilling onto a fresh page should not
+                # be stranded by the former fixed table-group boundaries.
+                output.append("\\ifdim\\pagetotal>0.25\\textheight\\clearpage\\fi\n")
             else:
                 output.append("\\pagebreak[2]\n")
         # The titleformat hook places the anchor after any heading page break.

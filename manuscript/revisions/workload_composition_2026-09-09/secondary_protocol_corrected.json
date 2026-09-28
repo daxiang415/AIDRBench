@@ -1,0 +1,42 @@
+{
+  "status": "original control design retained; fresh confirmation seeds after development-based implementation correction",
+  "purpose": "separate_GPU_allocation_from_eligibility_and_check_unmeasured_rigid_power_proxy",
+  "base_case": "f10",
+  "controls": [
+    {
+      "name": "f10_g20",
+      "flexible_gpu_fraction": 0.2
+    },
+    {
+      "name": "f10_g30",
+      "flexible_gpu_fraction": 0.3
+    },
+    {
+      "name": "f10_rigid150",
+      "rigid_proxy_power_w": 150.0
+    },
+    {
+      "name": "f10_rigid225",
+      "rigid_proxy_power_w": 225.0
+    }
+  ],
+  "paired_inputs": "reuse_f10_confirmation_arrivals_community_deadlines_and_event_anchor",
+  "confirmation_seeds": [
+    950000,
+    950299
+  ],
+  "planning_seeds": [
+    950000,
+    950099
+  ],
+  "durations_h": [
+    4,
+    8
+  ],
+  "notice_h": 0,
+  "request": "use_primary_f10_development_selected_capacity_without_reselection",
+  "renewable": "first_100_seeds_both_BESS_conditions_paired_rigid_flexible_hosting_and_500kW_operation_zero_misses",
+  "economics": "paired_full_hourly_ledger_and_same_prices_annual_draws_as_primary; report_new_operating_peak_for_1MW_accounting",
+  "interpretation": "allocation_controls_change_pool_sizes_only; rigid_power_controls_change_unmeasured_online_dev_other_unknown_coefficients_only; neither_is_new_online_power_measurement",
+  "controller": "delivery-consistent corrected controller; primary requests selected on development only"
+}

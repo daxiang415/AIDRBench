@@ -1,0 +1,16 @@
+figure,panel,table,selection,columns,uncertainty
+3,a,refinement_selected_confirmed.csv,Both durations and both service endpoints,selected_capacity_kw;confirmation_successes;confirmation_lower,One-sided 95% Wilson; n=300; no test-set reselection
+3,b,ready_pi_categories.csv,Five variants; zero-miss full 5.90 kW; three diagnostic seeds each,variant;category;cases,Mechanism counts; not prevalence
+3,c,timing_cross_summary.csv,fraction=0.5; both weights and both orders,weight;ordering;successes_1pct;successes_zero,Descriptive counts from eight observed weeks x ten synthetic realisations
+3,d,weighted_week_summary.csv,fraction=0.5; ordering=chronological; both weights,week;weight;successes_zero,Ten realisations per observed week; no binomial confidence inference
+4,a,paired_resource_supply_margins.csv,All 80 paired resource-time realisations at 2.95 kW,week;seed;chronological;permuted,Every paired point; zero defines necessary supply condition
+4,b,supply_hourly_example.csv,Lowest seed 990000; chronological; hour<168; both weights,hour;weight;event_active;available_reduction_kw;request_kw,Illustrative raw step traces; all 216 h are retained in table
+4,c,decision_steps.csv,All four steps in order,step;criterion;decision,Qualitative decision logic; not experimental estimates
+S3,"a,b",refinement_development_summary.csv,All four/eight-hour candidates and both endpoints,program;capacity_kw;wilson_lower,One-sided 95% Wilson; n=100
+S3,c,confirmation_summary.csv,H8P16; repeated; fraction=1; success_1pct; six baseline structural variants,variant;instantaneous_supply_limited_trials;failed_deadline_miss,Potentially overlapping failure families; n=300
+S3,d,external_cross_score_weekly.csv,fraction=0.75 with prescribed 0.5 comparator,week;successes_zero;instantaneous_shortage,Separate 986000-series; both scores coincide
+S4,a,renewable_paired_comparisons.csv,pv_hosting; five primary cases; both BESS modes,case;bess_enabled;difference_of_all_scenario_minima,Difference of two minima over n=100; no mean/CI interpretation
+S4,b,renewable_paired_comparisons.csv,fixed_pv_operation; five primary cases; both BESS modes,case;bess_enabled;mean_paired_gain;gain_ci_low;gain_ci_high,Mean and 95% paired bootstrap CI; excludes optimisation error
+S4,c,single_confirm_summary.csv,f10; notice_h=0; both durations,case;duration_h;successes;trials;wilson_lower,One-sided 95% Wilson; n=300
+S4,c,control_causal_summary.csv,GPU 20/30 and rigid proxy 150/225; both durations,case;duration_h;successes;trials;wilson_lower,One-sided 95% Wilson; n=300
+S4,d,renewable_paired_comparisons.csv,pv_hosting; f10 and four allocation/power controls,case;bess_enabled;difference_of_all_scenario_minima,Difference of minima; n=100

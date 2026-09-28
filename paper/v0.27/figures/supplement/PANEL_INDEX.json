@@ -1,0 +1,658 @@
+[
+  {
+    "id": "S02a",
+    "figure": "S02",
+    "panel": "a",
+    "file": "S02/S02a.csv",
+    "rows": 30,
+    "columns": [
+      "mode",
+      "gpu_count",
+      "repeat",
+      "gpu_index",
+      "calibration_role",
+      "x_position",
+      "board_power_w"
+    ],
+    "meaning_zh": "所有板卡级运行均值，保留拟合/留出标签与原图横向错位。",
+    "plot_instructions_zh": "X=x_position，Y=board_power_w；fit实心、holdout空心。分类刻度0训练1GPU、1训练4GPU、2离线1GPU、3离线4GPU。没有误差条。",
+    "auxiliary": false
+  },
+  {
+    "id": "S02b",
+    "figure": "S02",
+    "panel": "b",
+    "file": "S02/S02b.csv",
+    "rows": 2,
+    "columns": [
+      "workload_class",
+      "estimate_w_per_gpu",
+      "interval_lower_w_per_gpu",
+      "interval_upper_w_per_gpu",
+      "x_position",
+      "error_minus_w",
+      "error_plus_w"
+    ],
+    "meaning_zh": "功率系数及95% Student t区间。",
+    "plot_instructions_zh": "X=x_position，Y=estimate_w_per_gpu；上下误差长度分别为error_minus_w、error_plus_w。两次独立四GPU运行均值用于拟合；不是四块板卡作为独立重复。",
+    "auxiliary": false
+  },
+  {
+    "id": "S03a",
+    "figure": "S03",
+    "panel": "a",
+    "file": "S03/S03a.csv",
+    "rows": 6,
+    "columns": [
+      "request_kw",
+      "success_1pct_lower",
+      "success_zero_lower"
+    ],
+    "meaning_zh": "参考重复产品局部网格的开发评分。",
+    "plot_instructions_zh": "X=request_kw，Y=两列lower，分别为1%与零漏期标准；Y=.95参考线。100开发情景/点。该图不是图3a的八周容量。",
+    "auxiliary": false
+  },
+  {
+    "id": "S03b",
+    "figure": "S03",
+    "panel": "b",
+    "file": "S03/S03b.csv",
+    "rows": 6,
+    "columns": [
+      "request_kw",
+      "success_1pct_lower",
+      "success_zero_lower"
+    ],
+    "meaning_zh": "参考重复产品局部网格的开发评分。",
+    "plot_instructions_zh": "X=request_kw，Y=两列lower，分别为1%与零漏期标准；Y=.95参考线。100开发情景/点。该图不是图3a的八周容量。",
+    "auxiliary": false
+  },
+  {
+    "id": "S03c",
+    "figure": "S03",
+    "panel": "c",
+    "file": "S03/S03c.csv",
+    "rows": 6,
+    "columns": [
+      "variant",
+      "x_position",
+      "x_shortage",
+      "x_deadline",
+      "shortage_pct",
+      "deadline_miss_pct"
+    ],
+    "meaning_zh": "结构对照中即时不足与期限失败的百分比。",
+    "plot_instructions_zh": "两组柱：X=x_shortage/x_deadline，Y=shortage_pct/deadline_miss_pct；数值已从300案例计数换算为%。两类失败可以重叠，不做堆叠。",
+    "auxiliary": false
+  },
+  {
+    "id": "S03d",
+    "figure": "S03",
+    "panel": "d",
+    "file": "S03/S03d.csv",
+    "rows": 8,
+    "columns": [
+      "week_position",
+      "week_label",
+      "successes_at_4p42",
+      "shortage_at_4p42",
+      "successes_at_2p95",
+      "shortage_bottom"
+    ],
+    "meaning_zh": "早期次数权重对照的逐周成功与供给不足。",
+    "plot_instructions_zh": "X=week_position，刻度=week_label；successes_at_4p42与shortage_at_4p42堆叠，后者起点shortage_bottom。successes_at_2p95为菱形点。",
+    "auxiliary": false
+  },
+  {
+    "id": "S04a",
+    "figure": "S04",
+    "panel": "a",
+    "file": "S04/S04a.csv",
+    "rows": 5,
+    "columns": [
+      "case",
+      "x_position",
+      "x_label",
+      "x_no_BESS",
+      "no_BESS_hosting_gain_kw",
+      "x_with_BESS",
+      "with_BESS_hosting_gain_kw"
+    ],
+    "meaning_zh": "五档工作许可下的PV接纳增量。",
+    "plot_instructions_zh": "分类X用x_no_BESS/x_with_BESS，刻度用x_position与x_label；Y=hosting_gain_kw。差值是两个最小接纳容量之差，不画误差条。",
+    "auxiliary": false
+  },
+  {
+    "id": "S04b",
+    "figure": "S04",
+    "panel": "b",
+    "file": "S04/S04b.csv",
+    "rows": 5,
+    "columns": [
+      "case",
+      "x_position",
+      "x_label",
+      "x_no_BESS",
+      "no_BESS_mean_pp",
+      "no_BESS_lower_pp",
+      "no_BESS_upper_pp",
+      "no_BESS_error_minus_pp",
+      "no_BESS_error_plus_pp",
+      "x_with_BESS",
+      "with_BESS_mean_pp",
+      "with_BESS_lower_pp",
+      "with_BESS_upper_pp",
+      "with_BESS_error_minus_pp",
+      "with_BESS_error_plus_pp"
+    ],
+    "meaning_zh": "固定500kW光伏系统利用率增量及配对95%区间。",
+    "plot_instructions_zh": "Y=mean_pp；误差长度使用error_minus_pp/error_plus_pp，已算好。单位百分点，不要再次乘100。X与S04a对应。",
+    "auxiliary": false
+  },
+  {
+    "id": "S04c",
+    "figure": "S04",
+    "panel": "c",
+    "file": "S04/S04c.csv",
+    "rows": 5,
+    "columns": [
+      "case",
+      "x_position",
+      "x_label",
+      "x_4h",
+      "success_4h_pct",
+      "lower_4h_pct",
+      "error_minus_4h_pct",
+      "error_plus_4h_pct",
+      "x_8h",
+      "success_8h_pct",
+      "lower_8h_pct",
+      "error_minus_8h_pct",
+      "error_plus_8h_pct"
+    ],
+    "meaning_zh": "固定10%工作许可下，不重新选报价的独立成功率。",
+    "plot_instructions_zh": "Y=success_4h_pct/success_8h_pct；仅向下的误差长度为error_minus，向上为0。参考线95%。X已包含两组的轻微错位。",
+    "auxiliary": false
+  },
+  {
+    "id": "S04d",
+    "figure": "S04",
+    "panel": "d",
+    "file": "S04/S04d.csv",
+    "rows": 5,
+    "columns": [
+      "case",
+      "x_position",
+      "x_label",
+      "x_no_BESS",
+      "no_BESS_hosting_gain_kw",
+      "x_with_BESS",
+      "with_BESS_hosting_gain_kw"
+    ],
+    "meaning_zh": "同一组硬件对照的PV接纳增量。",
+    "plot_instructions_zh": "分类横轴同S04c；Y=两列hosting_gain_kw，分别无储能/有储能。",
+    "auxiliary": false
+  },
+  {
+    "id": "S05a",
+    "figure": "S05",
+    "panel": "a",
+    "file": "S05/S05a.csv",
+    "rows": 152,
+    "columns": [
+      "equal_capacity_price",
+      "annual_value_8h_minus_4h_usd"
+    ],
+    "meaning_zh": "等待估值为零时两产品年净值之差。",
+    "plot_instructions_zh": "X=equal_capacity_price，Y=annual_value_8h_minus_4h_usd。保留程序输入的全部点；原图视窗X=0–75，Y=-330–220。Y=0与X≈25.57交点作说明。",
+    "auxiliary": false
+  },
+  {
+    "id": "S05b",
+    "figure": "S05",
+    "panel": "b",
+    "file": "S05/S05b.csv",
+    "rows": 2,
+    "columns": [
+      "program",
+      "x_position",
+      "x_missed_price_0",
+      "threshold_missed_price_0",
+      "x_missed_price_1",
+      "threshold_missed_price_1"
+    ],
+    "meaning_zh": "漏期工作估值0/1 USD/GPU-h的重复产品门槛。",
+    "plot_instructions_zh": "两组柱，X和Y按missed_price_0/1对应。单位USD/报价kW·年；失败轨迹已保留。",
+    "auxiliary": false
+  },
+  {
+    "id": "S05c",
+    "figure": "S05",
+    "panel": "c",
+    "file": "S05/S05c.csv",
+    "rows": 3,
+    "columns": [
+      "fee_usd",
+      "x_4h",
+      "x_8h",
+      "net_4h_thousand_usd",
+      "net_8h_thousand_usd"
+    ],
+    "meaning_zh": "三种固定费用下的年净值第五百分位。",
+    "plot_instructions_zh": "X=x_4h/x_8h，Y=两列net，已经除以1000，单位千美元。柱允许负值。",
+    "auxiliary": false
+  },
+  {
+    "id": "S05d_fee0",
+    "figure": "S05",
+    "panel": "d",
+    "file": "S05/S05d_fee0.csv",
+    "rows": 302,
+    "columns": [
+      "price_4h",
+      "required_price_8h"
+    ],
+    "meaning_zh": "固定费用为0美元时的解析产品选择边界。",
+    "plot_instructions_zh": "X=price_4h，Y=required_price_8h；三份fee文件分别画一条线，已包含相应拐点，无需计算公式。原图X视窗0–1500。",
+    "auxiliary": false
+  },
+  {
+    "id": "S05d_fee2500",
+    "figure": "S05",
+    "panel": "d",
+    "file": "S05/S05d_fee2500.csv",
+    "rows": 302,
+    "columns": [
+      "price_4h",
+      "required_price_8h"
+    ],
+    "meaning_zh": "固定费用为2500美元时的解析产品选择边界。",
+    "plot_instructions_zh": "X=price_4h，Y=required_price_8h；三份fee文件分别画一条线，已包含相应拐点，无需计算公式。原图X视窗0–1500。",
+    "auxiliary": false
+  },
+  {
+    "id": "S05d_fee25000",
+    "figure": "S05",
+    "panel": "d",
+    "file": "S05/S05d_fee25000.csv",
+    "rows": 302,
+    "columns": [
+      "price_4h",
+      "required_price_8h"
+    ],
+    "meaning_zh": "固定费用为25000美元时的解析产品选择边界。",
+    "plot_instructions_zh": "X=price_4h，Y=required_price_8h；三份fee文件分别画一条线，已包含相应拐点，无需计算公式。原图X视窗0–1500。",
+    "auxiliary": false
+  },
+  {
+    "id": "S06a",
+    "figure": "S06",
+    "panel": "a",
+    "file": "S06/S06a.csv",
+    "rows": 8,
+    "columns": [
+      "variant",
+      "row_label",
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "meaning_zh": "1%标准联合成功，每格300场景中的计数。",
+    "plot_instructions_zh": "取后三列组成8×3矩阵，行标签row_label；色标0–300，显示整数。列依次为仅末次调用、16h起始间隔四次调用、24h起始间隔四次调用。",
+    "auxiliary": false
+  },
+  {
+    "id": "S06b",
+    "figure": "S06",
+    "panel": "b",
+    "file": "S06/S06b.csv",
+    "rows": 8,
+    "columns": [
+      "variant",
+      "row_label",
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "meaning_zh": "零漏期标准联合成功，每格300场景中的计数。",
+    "plot_instructions_zh": "取后三列组成8×3矩阵，行标签row_label；色标0–300，显示整数。列依次为仅末次调用、16h起始间隔四次调用、24h起始间隔四次调用。",
+    "auxiliary": false
+  },
+  {
+    "id": "S06c",
+    "figure": "S06",
+    "panel": "c",
+    "file": "S06/S06c.csv",
+    "rows": 8,
+    "columns": [
+      "variant",
+      "row_label",
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "meaning_zh": "即时供给不足，每格300场景中的计数。",
+    "plot_instructions_zh": "取后三列组成8×3矩阵，行标签row_label；色标0–300，显示整数。列依次为仅末次调用、16h起始间隔四次调用、24h起始间隔四次调用。",
+    "auxiliary": false
+  },
+  {
+    "id": "S06d",
+    "figure": "S06",
+    "panel": "d",
+    "file": "S06/S06d.csv",
+    "rows": 8,
+    "columns": [
+      "variant",
+      "row_label",
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "meaning_zh": "超过1%漏期，每格300场景中的计数。",
+    "plot_instructions_zh": "取后三列组成8×3矩阵，行标签row_label；色标0–300，显示整数。列依次为仅末次调用、16h起始间隔四次调用、24h起始间隔四次调用。",
+    "auxiliary": false
+  },
+  {
+    "id": "S07a",
+    "figure": "S07",
+    "panel": "a",
+    "file": "S07/S07a.csv",
+    "rows": 5,
+    "columns": [
+      "eligible_work_pct",
+      "rigid_hosting_kw",
+      "flexible_hosting_kw"
+    ],
+    "meaning_zh": "有无储能分别展示的绝对光伏接纳容量。",
+    "plot_instructions_zh": "X=eligible_work_pct（按实际百分比数值位置），Y=rigid_hosting_kw/flexible_hosting_kw；连接已计算点。值为100个场景中的最小接纳容量，非均值或误差界。",
+    "auxiliary": false
+  },
+  {
+    "id": "S07b",
+    "figure": "S07",
+    "panel": "b",
+    "file": "S07/S07b.csv",
+    "rows": 5,
+    "columns": [
+      "eligible_work_pct",
+      "rigid_hosting_kw",
+      "flexible_hosting_kw"
+    ],
+    "meaning_zh": "有无储能分别展示的绝对光伏接纳容量。",
+    "plot_instructions_zh": "X=eligible_work_pct（按实际百分比数值位置），Y=rigid_hosting_kw/flexible_hosting_kw；连接已计算点。值为100个场景中的最小接纳容量，非均值或误差界。",
+    "auxiliary": false
+  },
+  {
+    "id": "S07c",
+    "figure": "S07",
+    "panel": "c",
+    "file": "S07/S07c.csv",
+    "rows": 5,
+    "columns": [
+      "eligible_work_pct",
+      "rigid_no_BESS_kwh",
+      "flexible_no_BESS_kwh",
+      "rigid_with_BESS_kwh",
+      "flexible_with_BESS_kwh"
+    ],
+    "meaning_zh": "固定500kW光伏下的平均弃光电量。",
+    "plot_instructions_zh": "X=eligible_work_pct；四个Y列为调度×储能组合。刚性虚线、灵活实线；有无储能用颜色区分。单位已换算为kwh。",
+    "auxiliary": false
+  },
+  {
+    "id": "S07d",
+    "figure": "S07",
+    "panel": "d",
+    "file": "S07/S07d.csv",
+    "rows": 5,
+    "columns": [
+      "eligible_work_pct",
+      "rigid_no_BESS_mwh",
+      "flexible_no_BESS_mwh",
+      "rigid_with_BESS_mwh",
+      "flexible_with_BESS_mwh"
+    ],
+    "meaning_zh": "固定500kW光伏下的平均电网购电量。",
+    "plot_instructions_zh": "X=eligible_work_pct；四个Y列为调度×储能组合。刚性虚线、灵活实线；有无储能用颜色区分。单位已换算为mwh。",
+    "auxiliary": false
+  },
+  {
+    "id": "S08a",
+    "figure": "S08",
+    "panel": "a",
+    "file": "S08/S08a.csv",
+    "rows": 4,
+    "columns": [
+      "x_plot",
+      "original_parameter_value",
+      "threshold_4h_usd_per_kw_year",
+      "threshold_8h_usd_per_kw_year"
+    ],
+    "meaning_zh": "单次响应的预留经济寿命敏感性。",
+    "plot_instructions_zh": "X=x_plot，Y=两个threshold列；c横轴已乘1000，d横轴已除以1000，其余原单位。original_parameter_value仅供核对。点为成本门槛，不是统计区间。",
+    "auxiliary": false
+  },
+  {
+    "id": "S08b",
+    "figure": "S08",
+    "panel": "b",
+    "file": "S08/S08b.csv",
+    "rows": 4,
+    "columns": [
+      "x_plot",
+      "original_parameter_value",
+      "threshold_4h_usd_per_kw_year",
+      "threshold_8h_usd_per_kw_year"
+    ],
+    "meaning_zh": "单次响应的被挤占工作价值敏感性。",
+    "plot_instructions_zh": "X=x_plot，Y=两个threshold列；c横轴已乘1000，d横轴已除以1000，其余原单位。original_parameter_value仅供核对。点为成本门槛，不是统计区间。",
+    "auxiliary": false
+  },
+  {
+    "id": "S08c",
+    "figure": "S08",
+    "panel": "c",
+    "file": "S08/S08c.csv",
+    "rows": 4,
+    "columns": [
+      "x_plot",
+      "original_parameter_value",
+      "threshold_4h_usd_per_kw_year",
+      "threshold_8h_usd_per_kw_year"
+    ],
+    "meaning_zh": "单次响应的等待价格敏感性。",
+    "plot_instructions_zh": "X=x_plot，Y=两个threshold列；c横轴已乘1000，d横轴已除以1000，其余原单位。original_parameter_value仅供核对。点为成本门槛，不是统计区间。",
+    "auxiliary": false
+  },
+  {
+    "id": "S08d",
+    "figure": "S08",
+    "panel": "d",
+    "file": "S08/S08d.csv",
+    "rows": 3,
+    "columns": [
+      "x_plot",
+      "original_parameter_value",
+      "threshold_4h_usd_per_kw_year",
+      "threshold_8h_usd_per_kw_year"
+    ],
+    "meaning_zh": "单次响应的固定场站费敏感性。",
+    "plot_instructions_zh": "X=x_plot，Y=两个threshold列；c横轴已乘1000，d横轴已除以1000，其余原单位。original_parameter_value仅供核对。点为成本门槛，不是统计区间。",
+    "auxiliary": false
+  },
+  {
+    "id": "S09a",
+    "figure": "S09",
+    "panel": "a",
+    "file": "S09/S09a.csv",
+    "rows": 2,
+    "columns": [
+      "program",
+      "x_position",
+      "x_success_1pct",
+      "success_1pct_fraction",
+      "success_1pct_lower",
+      "success_1pct_error_minus",
+      "success_1pct_error_plus",
+      "x_success_zero",
+      "success_zero_fraction",
+      "success_zero_lower",
+      "success_zero_error_minus",
+      "success_zero_error_plus",
+      "capacity_kw"
+    ],
+    "meaning_zh": "参考工作负载两种时长产品的独立确认。",
+    "plot_instructions_zh": "X=x_success_1pct/x_success_zero，Y=对应fraction；仅向下误差长度error_minus，上误差0。Y=.95参考线。capacity_kw是点上方容量标注。",
+    "auxiliary": false
+  },
+  {
+    "id": "S09b",
+    "figure": "S09",
+    "panel": "b",
+    "file": "S09/S09b.csv",
+    "rows": 9,
+    "columns": [
+      "request_kw",
+      "job_count_success_1pct_lower",
+      "job_count_success_zero_lower",
+      "resource_gpu_h_success_1pct_lower",
+      "resource_gpu_h_success_zero_lower"
+    ],
+    "meaning_zh": "八周经验分布上的开发网格。",
+    "plot_instructions_zh": "X=request_kw；四条Y为两个权重×两个成功标准的Wilson单侧下界。圆点实线1%，方点虚线零漏期。Y=.95参考线；仅连接已测试点。",
+    "auxiliary": false
+  },
+  {
+    "id": "S09c",
+    "figure": "S09",
+    "panel": "c",
+    "file": "S09/S09c.csv",
+    "rows": 3,
+    "columns": [
+      "weight",
+      "fraction",
+      "x_position",
+      "x_success_1pct",
+      "success_1pct_fraction",
+      "success_1pct_lower",
+      "success_1pct_error_minus",
+      "success_1pct_error_plus",
+      "success_1pct_successes",
+      "success_1pct_trials",
+      "x_success_zero",
+      "success_zero_fraction",
+      "success_zero_lower",
+      "success_zero_error_minus",
+      "success_zero_error_plus",
+      "success_zero_successes",
+      "success_zero_trials"
+    ],
+    "meaning_zh": "八周经验分布上两种已选容量与固定比较请求的确认。",
+    "plot_instructions_zh": "X分别用两个x_标准列，Y=对应fraction，单侧误差如S09a。三类依次为次数2.95已选、资源时间1.47已选、资源时间2.95固定比较。",
+    "auxiliary": false
+  },
+  {
+    "id": "S10a",
+    "figure": "S10",
+    "panel": "a",
+    "file": "S10/S10a.csv",
+    "rows": 4,
+    "columns": [
+      "component",
+      "y_position",
+      "facility_power_kw"
+    ],
+    "meaning_zh": "包含PUE的设施峰值功率分项。",
+    "plot_instructions_zh": "横向柱：X=facility_power_kw，Y=y_position，按component从上到下。四项合计193.44kW附近的完整精度峰值。",
+    "auxiliary": false
+  },
+  {
+    "id": "S10b",
+    "figure": "S10",
+    "panel": "b",
+    "file": "S10/S10b.csv",
+    "rows": 4,
+    "columns": [
+      "node_overhead_w",
+      "single_offer_pct_peak",
+      "operating_peak_kw"
+    ],
+    "meaning_zh": "节点固定开销改变峰值及同一报价的占比。",
+    "plot_instructions_zh": "X=node_overhead_w，Y=single_offer_pct_peak（已为%），operating_peak_kw用于标签；无误差条。",
+    "auxiliary": false
+  },
+  {
+    "id": "S10c",
+    "figure": "S10",
+    "panel": "c",
+    "file": "S10/S10c.csv",
+    "rows": 100,
+    "columns": [
+      "case",
+      "bess_enabled",
+      "analysis",
+      "seed",
+      "gain_lower",
+      "gain_upper",
+      "previous_gain",
+      "strict_gain",
+      "original_utilisation_gain_pp",
+      "strict_utilisation_gain_pp"
+    ],
+    "meaning_zh": "常规与严格求解的100组PV利用率增量对照。",
+    "plot_instructions_zh": "X=original_utilisation_gain_pp，Y=strict_utilisation_gain_pp，均为百分点；每行一对，全部100点保留。画Y=X虚线，不强行把接近零的值截为零。",
+    "auxiliary": false
+  },
+  {
+    "id": "S10d",
+    "figure": "S10",
+    "panel": "d",
+    "file": "S10/S10d.csv",
+    "rows": 100,
+    "columns": [
+      "case",
+      "bess_enabled",
+      "analysis",
+      "seed",
+      "gain_lower",
+      "gain_upper",
+      "previous_gain",
+      "strict_gain",
+      "original_utilisation_gain_pp",
+      "strict_utilisation_gain_pp"
+    ],
+    "meaning_zh": "常规与严格求解的100组PV利用率增量对照。",
+    "plot_instructions_zh": "X=original_utilisation_gain_pp，Y=strict_utilisation_gain_pp，均为百分点；每行一对，全部100点保留。画Y=X虚线，不强行把接近零的值截为零。",
+    "auxiliary": false
+  },
+  {
+    "id": "S01a",
+    "figure": "S01",
+    "panel": "a",
+    "file": "S01/S01a.csv",
+    "rows": 4,
+    "columns": [
+      "text",
+      "x_canvas",
+      "y_canvas"
+    ],
+    "meaning_zh": "示意面板的原始文字和布局坐标。",
+    "plot_instructions_zh": "这是概念图，没有实测曲线或可统计的数值。text为原图文字；x_canvas/y_canvas仅为画布布局。直接修改同文件夹的SVG，可完整保留箭头、机架、方框与任务条。不要把示意长度当作测量值。",
+    "auxiliary": false
+  },
+  {
+    "id": "S01b",
+    "figure": "S01",
+    "panel": "b",
+    "file": "S01/S01b.csv",
+    "rows": 4,
+    "columns": [
+      "text",
+      "x_canvas",
+      "y_canvas"
+    ],
+    "meaning_zh": "示意面板的原始文字和布局坐标。",
+    "plot_instructions_zh": "这是概念图，没有实测曲线或可统计的数值。text为原图文字；x_canvas/y_canvas仅为画布布局。直接修改同文件夹的SVG，可完整保留箭头、机架、方框与任务条。不要把示意长度当作测量值。",
+    "auxiliary": false
+  }
+]

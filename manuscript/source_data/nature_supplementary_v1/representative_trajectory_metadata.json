@@ -10,6 +10,8 @@
   "max_event_rebound_ratio": 0.11226773311733468,
   "minimum_interval_delivery_ratio": 0.9711699336575695,
   "notice_h": 0,
+  "plot_window_post_event_h": 24,
+  "plot_window_pre_event_h": 12,
   "representative_rule": "minimum_episode_seed",
   "scenario_hash": "c53ae573b0664487ef9674ac8f746f47e59c1e10b31f872f34607fdfd247e7e8",
   "scenario_id": "hourly_seed_20000",

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "checks_present_in_package": [
+    "numerical_audit",
+    "economic_arithmetic_audit",
+    "text_audit",
+    "figure_validation",
+    "pdf_validation",
+    "unit_test_receipt",
+    "redraw_validation",
+    "delivered_replay_validation"
+  ],
+  "frozen_controller_unchanged": true,
+  "author_fields_unchanged": true,
+  "no_subagents_used": true,
+  "archive_validation_recorded_separately": true
+}

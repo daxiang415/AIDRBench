@@ -1,0 +1,7 @@
+﻿workload_class,y_position,requested_gpu_hours_pct
+online_inference,0,54.495007379142045
+offline_inference,1,21.519431042326147
+training,2,19.422560345519454
+dev,3,3.3552232137924474
+other,4,0.94964658354244125
+unknown,5,0.25813143567747604

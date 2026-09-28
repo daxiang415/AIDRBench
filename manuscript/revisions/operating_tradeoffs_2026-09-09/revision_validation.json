@@ -1,0 +1,18 @@
+{
+  "main": {
+    "status": "PASS",
+    "blocks": 170,
+    "source_sha256": "f3859aaf476921223484cd6cfcb638534dc46f2b54002733b586bac906ae8a55",
+    "old_words": 8539,
+    "new_words": 8808,
+    "abstract_words": 190,
+    "results_words": 1877
+  },
+  "supplement": {
+    "status": "PASS",
+    "blocks": 135,
+    "source_sha256": "a30e3b6b8608ae5498caebecbc0bfc04f41e3d885f70387c6897eedfd66dbcb0",
+    "old_words": 6794,
+    "new_words": 9434
+  }
+}

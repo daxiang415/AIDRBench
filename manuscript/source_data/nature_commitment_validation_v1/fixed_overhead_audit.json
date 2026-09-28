@@ -1,0 +1,9 @@
+{
+  "method": "exact additive power transformation and event re-scoring of 600 frozen causal schedules; no controller re-optimization or offer selection",
+  "power_offset_formula": "PUE*Nnodes*(Pnode-300)/1000",
+  "all_success_flags_preserved": true,
+  "minimum_pcc_margin_kw": 219.48886300131528,
+  "minimum_baseline_pcc_margin_kw": 219.67555395648264,
+  "scope": "feasibility witnesses for unchanged schedules with all other assumptions fixed; different fixed fees and absolute PCC limits remain consequential",
+  "runner_sha256": "2386b18fec53cad8560125aded47aec870e8173d5b8cfef881138851bfe688cd"
+}

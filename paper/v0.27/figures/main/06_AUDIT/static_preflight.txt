@@ -1,0 +1,33 @@
+Nature Figure Static Preflight
+source: docs/figure_integration_2026-09-17/integrate_figures.py
+backend: python
+
+[PASS] SOURCE-SYNTAX: Python source parses successfully
+[FAIL] FONT-FAMILY: No explicit publication-safe font family found in matplotlib rcParams
+[PASS] FONT-SIZE: All detected text sizes are at least 5 pt (minimum 14 pt)
+[PASS] FONT-GLYPH-FLOOR: No mathtext superscript/subscript expression detected
+[WARN] LEGEND-LABEL-CASE: Literal legend labels should start with display-style capitalization while preserving canonical model names
+  - 4 h
+  - 8 h
+  - ≤1% missed work
+  - 95% delivery requirement
+[PASS] COLOR-MAP: No rainbow/jet/hsv color mapping detected
+[PASS] EDITABLE-TEXT: SVG and PDF editable-text settings are configured
+[PASS] EXPORT-VECTOR: Both SVG and PDF exports are present
+[WARN] EXPORT-RASTER: PNG preview is present but no TIFF submission raster was found
+[WARN] RASTER-DPI: Raster export meets the 300 dpi floor but not the 600 dpi default
+  - 300
+[WARN] FINAL-WIDTH: No static final width detected; verify the target journal's current specification
+[PASS] DATA-SAMPLING: No high-confidence row-sampling operation detected
+[PASS] DATA-EXCLUSION: No high-confidence missing-data exclusion detected
+[PASS] DEMO-DATA: No obvious simulated-data generator detected
+[PASS] LOG-GUARD: No logarithmic transform or axis detected
+[PASS] INTERP-MONOTONIC: No NumPy interpolation requiring an increasing x-grid detected
+[PASS] UNCERTAINTY-ENCODING: No stochastic aggregate requiring a variability audit was inferred
+[PASS] ROTATION-ANCHOR: No rotated Matplotlib text detected
+[PASS] ANNOTATION-WORKAROUND: No high-risk hard-coded label height or opaque white text mask detected
+[PASS] BACKEND-EXCLUSIVE: No obvious cross-backend plotting reference found for python
+
+summary: 15 pass, 4 warn, 1 fail
+verdict: FIX BEFORE DELIVERY
+note: static preflight does not validate statistics, source-data truth, or rendered appearance

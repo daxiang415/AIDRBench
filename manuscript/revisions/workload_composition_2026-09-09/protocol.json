@@ -1,0 +1,130 @@
+{
+  "status": "prospective_extension_after_v0_19_not_original_preregistration",
+  "fractions": [
+    0.05,
+    0.1,
+    0.2,
+    0.4,
+    0.6
+  ],
+  "source_audit": {
+    "rows": 40522321,
+    "requested_gpu_hours": 254980926.32766664,
+    "source_sha256": "95c91a8035197e15f29e9c1d15a9147d07b2a6959b2bb08322cb9f033b029124",
+    "shares": {
+      "dev": 0.03355223213792447,
+      "offline_inference": 0.21519431042326148,
+      "online_inference": 0.5449500737914205,
+      "other": 0.009496465835424413,
+      "training": 0.19422560345519455,
+      "unknown": 0.0025813143567747603
+    },
+    "lp_batch_shares": {
+      "training": 0.011372996872916001,
+      "offline_inference": 0.20890842934874146
+    },
+    "lp_batch_total_share": 0.22028142622165747,
+    "denominator": "sum of requested GPU-equivalents times uncapped execution-span hours; not energy, useful work, or DR eligibility",
+    "source_scope": "released execution-summary spans; not an industry sample or a replay of pod-hourly telemetry"
+  },
+  "pool_rule": "flexible_GPU_fraction_equals_deferrable_work_fraction; integer rounding retained",
+  "low_share_rule": "common_permission_fraction_of_LP_training_and_LP_offline_inference",
+  "high_40_rule": "all_LP_batch_plus_equal_permission_fraction_of_remaining_batch_work; no_online_deferral",
+  "high_60_rule": "counterfactual_replace_online_work_by_offline_work_until_batch_share_is_60%; all_batch_eligible",
+  "total_gpus": 576,
+  "total_work_gpu_h_per_hour": 374.4,
+  "rigid_online_and_other_active_power_w": 300.0221737132353,
+  "rigid_power_evidence": "engineering_proxy_equal_to_measured_offline_coefficient; not_online_measurement",
+  "job_shape_scope": "existing_LP_class_sampler_and_synthetic_deadlines_for_all_scenarios; HP_opt_in_and_60%_composition_are_counterfactual",
+  "development_seeds": [
+    930000,
+    930099
+  ],
+  "confirmation_seeds": [
+    940000,
+    940299
+  ],
+  "pilot_seeds": [
+    949998,
+    949999
+  ],
+  "durations_h": [
+    4,
+    8
+  ],
+  "notices_h": [
+    0,
+    2,
+    6
+  ],
+  "fractions_of_development_PI_bound": [
+    0.5,
+    0.75,
+    0.9,
+    1.0
+  ],
+  "selection": "largest_tested_offer_with_development_one_sided_Wilson95_lower_bound_at_least_0.95; no_confirmation_reselection",
+  "repeat_programs": [
+    {
+      "duration_h": 4,
+      "gap_h": 8
+    },
+    {
+      "duration_h": 8,
+      "gap_h": 12
+    }
+  ],
+  "repeat_first_start": 63,
+  "repeat_event_count": 4,
+  "repeat_fractions_of_selected_single": [
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "repeat_confirmation": [
+    "original_selected_single_offer_repeated",
+    "development_selected_repeat_offer",
+    "four_separate_same_clock_fresh_calls"
+  ],
+  "renewable_confirmation_seeds": [
+    940000,
+    940099
+  ],
+  "renewable_pv_kw": 500,
+  "renewable_curtailment": 0.05,
+  "renewable_zero_deadline_miss": true,
+  "economics": {
+    "facility_mw": 1.0,
+    "fixed_site_usd_year": 25000.0,
+    "energy_usd_kwh": 0.1,
+    "performance_usd_mwh": 50.0,
+    "delay_usd_gpu_h_h": 0.005,
+    "single_annual_calls": 50,
+    "repeat_annual_series": 12,
+    "bootstrap_draws": 2000,
+    "risk_quantile": 0.95,
+    "regimes": [
+      "slack",
+      "reserve_15pct_4year",
+      "hypothetical_displacement_0.5_USD_per_deferred_GPUh"
+    ]
+  },
+  "controller_sha256": "73041f55b7ac4aab0a1f6fa799cfa94f0a8c71d6e6bb3a7f39eadda212839dcf",
+  "runner_sha256": "ec0ff7b9a7c9591ca76ccbcd022bb6af5d71553690da49fdec2f1850f61575b6",
+  "source_files": {
+    "configs/env/nature_mainline_development.yaml": "c48e70b46f82da4eed80e58b040aa95091dbc03497456745b1c370817bd032e5",
+    "configs/env/nature_mainline_validation.yaml": "d7dab9f8b3640100456c427acf720898d09f5b70af29b8875ccd670bec6281a9",
+    "data/calibration/rtx6000pro_4gpu_v1.yaml": "92eae659e628ed3bd76e07f9667235de96a3672bd9dd2a931b9617932ac1d856"
+  },
+  "pairing": "generate_f60_job_templates_once_per_seed_then_scale_class_GPUhours; retain_release_times_deadlines_community_and_event_anchor",
+  "pre_formal_revision": "Fix common-seed pairing before formal runs: varying Poisson record counts would otherwise change deadlines across fractions. No fraction, event programme, selection criterion, or sample count changed.",
+  "common_pcc_capacity_kw": 1100.0,
+  "baseline_gate_amendment": {
+    "reason": "At 576 GPUs the high-share modules exceed the old 201-kW full-pool peak. The f20/f40/f60 no-DR baselines for development seed 930096 reached 1000.31/1012.39/1026.59 kW; all deadlines and terminal queues passed. Set one common 1.1-MW PCC rating for ALL five configurations before PI or controller selection. This changes the shared site, not eligibility-dependent limits.",
+    "previous_output": "results/nature_mainline/workload_composition_v1",
+    "new_output": "results/nature_mainline/workload_composition_v2",
+    "all_initial_scenarios_retained": true,
+    "no_formal_PI_or_capacity_selection_had_run": true
+  }
+}

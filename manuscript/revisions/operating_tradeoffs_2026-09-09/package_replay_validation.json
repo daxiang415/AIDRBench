@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "replays": [
+    {
+      "status": "PASS",
+      "role": "confirmation",
+      "variant": "u65d100g10",
+      "program": "H8P16",
+      "kind": "repeated",
+      "fraction": 0.5,
+      "seed": 985000,
+      "rows": 216,
+      "numeric_columns": 92,
+      "max_absolute_error": 0.0,
+      "missing_value_masks_match": true,
+      "scenario_hash": "ff3267fb98305e2cd539d081510bb772d87422aa0cf9505f3ee3e9024525e9c8",
+      "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/aidrbench_project/src/aidrbench/__init__.py",
+      "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/repeat_mechanism/recovery_controller.py"
+    },
+    {
+      "status": "PASS",
+      "role": "confirmation",
+      "variant": "u65d100g10",
+      "program": "H4P16",
+      "kind": "repeated",
+      "fraction": 0.75,
+      "seed": 985000,
+      "rows": 216,
+      "numeric_columns": 92,
+      "max_absolute_error": 0.0,
+      "missing_value_masks_match": true,
+      "scenario_hash": "db9c94ca297bc71aa1716572cc9347abbec32f3633165aadde2cd5adafc9ea46",
+      "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/aidrbench_project/src/aidrbench/__init__.py",
+      "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/repeat_mechanism/recovery_controller.py"
+    },
+    {
+      "status": "PASS",
+      "role": "confirmation",
+      "variant": "u65d100g10",
+      "program": "H8P16",
+      "kind": "fresh",
+      "fraction": 1.0,
+      "seed": 985000,
+      "rows": 216,
+      "numeric_columns": 92,
+      "max_absolute_error": 0.0,
+      "missing_value_masks_match": true,
+      "scenario_hash": "ff3267fb98305e2cd539d081510bb772d87422aa0cf9505f3ee3e9024525e9c8",
+      "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/aidrbench_project/src/aidrbench/__init__.py",
+      "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/repeat_mechanism/recovery_controller.py"
+    },
+    {
+      "status": "PASS",
+      "role": "temporal",
+      "variant": "w0_chronological_g10",
+      "program": "H8P24",
+      "kind": "repeated",
+      "fraction": 0.5,
+      "seed": 986000,
+      "rows": 216,
+      "numeric_columns": 92,
+      "max_absolute_error": 0.0,
+      "missing_value_masks_match": true,
+      "scenario_hash": "6eeb2aaf2609f887e5ee87d4cf7b68c5e01cbfe80291e484b7c70e7fa9b1a4fd",
+      "simulator_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/aidrbench_project/src/aidrbench/__init__.py",
+      "controller_source": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v12/04_code/repeat_mechanism/recovery_controller.py"
+    }
+  ],
+  "all_92_numeric_columns_exact": true
+}

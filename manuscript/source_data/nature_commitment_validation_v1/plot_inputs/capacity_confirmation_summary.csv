@@ -1,0 +1,7 @@
+weight,fraction,capacity_kw,endpoint,trials,successes,wilson_lower,qualified,baseline_failures,baseline_nonzero,supply_shortages
+job_count,0.5,2.949121593122471,success_1pct,300,300,0.9910621278248719,True,0,0,0
+job_count,0.5,2.949121593122471,success_zero,300,300,0.9910621278248719,True,0,0,0
+resource_gpu_h,0.25,1.4745607965612355,success_1pct,300,300,0.9910621278248719,True,0,0,0
+resource_gpu_h,0.25,1.4745607965612355,success_zero,300,300,0.9910621278248719,True,0,0,0
+resource_gpu_h,0.5,2.949121593122471,success_1pct,300,120,0.3545700548806107,False,0,0,180
+resource_gpu_h,0.5,2.949121593122471,success_zero,300,120,0.3545700548806107,False,0,0,180

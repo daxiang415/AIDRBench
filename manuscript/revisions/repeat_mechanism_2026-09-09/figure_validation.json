@@ -1,0 +1,128 @@
+{
+  "status": "PASS",
+  "figures": [
+    {
+      "figure": "AIDRBench_Figure_1",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 38,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Figure_2",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 44,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Figure_3",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 56,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Figure_4",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 41,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Figure_5",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 54,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Figure_6",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 74,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_1",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 19,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_2",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 30,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_3",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 116,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_4",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 43,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    },
+    {
+      "figure": "AIDRBench_Supplementary_Figure_5",
+      "min_visible_font_pt": 6.5,
+      "text_spans": 41,
+      "page_width_mm": 183.00700344509548,
+      "editable_formats": [
+        "pdf",
+        "svg"
+      ],
+      "all_four_output_hashes_match": true
+    }
+  ],
+  "figure_count": 11,
+  "visual_review": "recorded separately after viewing all eleven PNG figures"
+}

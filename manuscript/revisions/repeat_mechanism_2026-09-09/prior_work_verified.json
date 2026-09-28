@@ -1,0 +1,25 @@
+{
+  "verified_on": "2026-09-09",
+  "source_type": "arXiv preprint, not asserted peer-reviewed",
+  "title": "Beyond Scalar Flexibility: From Eligible AI Workloads to Dependable Load Relief",
+  "authors": [
+    {
+      "given": "Meiyi",
+      "family": "Li"
+    }
+  ],
+  "submitted": "2026-09-04",
+  "version": "v1",
+  "url": "https://arxiv.org/abs/2609.05406",
+  "full_text": "https://arxiv.org/html/2609.05406v1",
+  "doi": "10.48550/arXiv.2609.05406",
+  "support": "Production-trace eligibility represented by duration, reliability and portfolio; illustrative rebound and recovery terms; authors explicitly distinguish historical eligibility from verified controlled delivery.",
+  "comparison_boundary": "Does not establish absence of comparable controller/repeated-call work across the literature; no first/only claim.",
+  "checked_sections": [
+    "Abstract",
+    "2.3",
+    "3.6",
+    "5",
+    "Appendix D"
+  ]
+}

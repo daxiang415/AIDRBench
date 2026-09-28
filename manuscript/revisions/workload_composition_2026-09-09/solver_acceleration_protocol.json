@@ -1,0 +1,39 @@
+{
+  "status": "prospective_numerical_acceleration_of_unfinished_problems_only",
+  "created_utc": "2026-09-09T09:12:09.080093+00:00",
+  "reason": "Four unchanged PV/BESS groups remain computational stragglers after other896groups completed. Numerical multi-starts seek the same original optimality criterion; no model or scientific parameter changes.",
+  "cases": [
+    {
+      "case": "f60",
+      "seed": 960037
+    },
+    {
+      "case": "f10_g30",
+      "seed": 960048
+    },
+    {
+      "case": "f10_g30",
+      "seed": 960065
+    },
+    {
+      "case": "f10_rigid225",
+      "seed": 960065
+    }
+  ],
+  "solver": "HiGHS1.15.1",
+  "solver_random_seeds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "threads_per_solve": 1,
+  "mip_rel_gap": 0.0001,
+  "mip_abs_gap": 1e-06,
+  "wall_time_limit_per_attempt_seconds": 600,
+  "acceptance": "All eight model outcomes optimal; original relative/absolute MIP gap criterion met; retain original cached result if it finishes before reconciliation, otherwise first fully optimal multi-start by finish time; never choose by effect magnitude or benefit.",
+  "excluded": "No user_limit, infeasible or partially completed group accepted; original runs continue independently until all missing keys have valid coverage.",
+  "model_source_sha256": "271fbddf0b119cd4211ec9e42a02610ca1ede64f827c8a4aa969cefab5f0962b",
+  "runner_sha256": "ea4a0eab440cd0506d1ba04d1ee39d0064fd36540fddb6d458fd11916baba0e7",
+  "parent_protocol_sha256": "3e0cbff2eb4430121a71900208552e4b5b6c24d5fe46ac6f1d3a2b7a5813a919"
+}

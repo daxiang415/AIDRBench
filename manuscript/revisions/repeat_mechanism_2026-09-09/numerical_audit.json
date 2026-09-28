@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "summary_rows": 147,
+  "stratified_full_trajectories": 294,
+  "events": 1176,
+  "checked_hours": 63504,
+  "all_frozen_code_hashes_match": true,
+  "original_thresholds_unchanged": true,
+  "confirmation_selection_not_revised": true,
+  "scope": "all counts and Wilson bounds; first and last seed in every complete group independently recomputed for all event criteria and core ledger terms"
+}

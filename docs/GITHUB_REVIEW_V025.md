@@ -1,3 +1,5 @@
+> **Current version: v0.27.** Start with the [current paper, Chinese readers and figure packs](../WINDOWS_START_HERE.md). The material below describes an earlier release and is retained for history.
+
 # Current manuscript and runnable figure review: v0.25
 
 This is the current **2026-09-10 manuscript/SI v0.25**, Chinese **v19**, copied from the checked local release for GitHub access on 2026-09-11. It is a review snapshot, not a journal submission or a new set of experiments. No author identities, funding or licence have been supplied on the author's behalf.

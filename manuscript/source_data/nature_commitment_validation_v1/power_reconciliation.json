@@ -1,0 +1,53 @@
+{
+  "parameters": {
+    "data_center": {
+      "gpus_per_node": 4,
+      "node_count": 144,
+      "flexible_gpu_fraction": 0.1
+    },
+    "idle_power_w_per_gpu": 13.935625,
+    "flexible_active_power_w_per_gpu": 297.9084816843669,
+    "rigid_active_power_w_per_gpu": 291.4219859523348,
+    "node_fixed_overhead_w": 300.0,
+    "rigid_gpu_utilization": 0.6505019305019306,
+    "pue": 1.2,
+    "flexible_active_power_w_per_gpu_by_class": [
+      [
+        "dev",
+        300.0221737132353
+      ],
+      [
+        "offline_inference",
+        300.0221737132353
+      ],
+      [
+        "online_inference",
+        300.0221737132353
+      ],
+      [
+        "other",
+        300.0221737132353
+      ],
+      [
+        "training",
+        259.0824724264706
+      ],
+      [
+        "unknown",
+        300.0221737132353
+      ]
+    ]
+  },
+  "facility_components": {
+    "node_overhead_kw": 51.83999999999999,
+    "all_gpu_idle_kw": 9.632303999999998,
+    "rigid_increment_kw": 112.2021650237985,
+    "flexible_reference_increment_kw": 19.764510825231934
+  },
+  "component_sum_kw": 193.43897984903043,
+  "implemented_operating_peak_kw": 193.4389798490304,
+  "zero_flexible_execution_floor_kw": 173.67446902379848,
+  "formula": "PUE/1000 * [Nnodes*Pnode + NGPU*Pidle + Nrigid*urig*(Prigid-Pidle) + sum_c (Pactive,c-Pidle)*Xc/dt]",
+  "scope": "reference-mix full-flexible-pool operating peak, not maximum across every possible class mix",
+  "source_scenario_hash": "5e9de902a63566abd43cfd8b33988c0c5c105e43dabb43551503dacabfffef80"
+}

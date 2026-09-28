@@ -1,0 +1,23 @@
+{
+  "version": "0.26",
+  "simulation_rerun": false,
+  "offer_reselected": false,
+  "example_selection": "lowest common frozen confirmation seed 989000, irrespective of outcome",
+  "pv_summary": "100 paired scenarios per cell; minimum or arithmetic mean; quantiles descriptive",
+  "sources": {
+    "nature_commitment_mechanisms_v1/hourly_partition_index.csv": "9c50c251b1d73f5003840ba503c92f525d96090f1a08feadbd800bda97db5570",
+    "nature_commitment_mechanisms_v1/confirmation_ledgers.csv": "1157228b39e72adb10ad97bbea06bb527a7534bc5ea758b46a9e6e18b97de36e",
+    "nature_commitment_mechanisms_v1/hourly_full/confirmation_u65d100g10_H4P16_repeated_f0p95.parquet": "207876504c62d6ef379d6cfb8fe0d591d80c533cb047ad60405fd5928bb7cb96",
+    "nature_commitment_mechanisms_v1/hourly_full/confirmation_u65d100g10_H8P16_repeated_f0p75.parquet": "1971c334ee07e26e0eaf5dea2e2ebcc90c0304369a5340bf79e2b955e3b7394c",
+    "nature_operating_tradeoffs_v1/confirmation_summary.csv": "760c2b12a0fa15262b8227f2442a28815e87636f1d6e169cd893cdc967db60e4",
+    "nature_workload_composition_v1/renewable_scenarios.csv": "26bef0a1637671c66ccfaebcbee856c0477eb32bc6c9f147c54264f63fc72c54",
+    "nature_workload_composition_v1/reserve_life_sensitivity.csv": "4730b2c28c9ed5070f796af317abb3c3cd7980850c8893bc96513b821573d5aa",
+    "nature_workload_composition_v1/economic_price_sensitivity.csv": "4793548278ac23585f83d75e00072c386fcdf68a01b2fb856b5918f2bcf9dac4",
+    "nature_workload_composition_v1/economic_primary.csv": "e562688d522e60f2be41406af05e955461b48cf66aeac57d9d252835a2c42c57",
+    "nature_workload_composition_v1/source_audit.json": "c5a138a43a0505271f61d2ac9c76af2a3776af66fef772e6da522fc57c2b86ae",
+    "nature_workload_composition_v1/case_definitions.json": "298d6486e530ce87fda86613d9531a3a9fe0b929cc14e827c51e6465caaec1b0",
+    "nature_commitment_narrative_v1/decision_steps.csv": "565f5becaf1da063e7bbb29beb0040511d2dcf5bed7d83ace6698c83d072dd2d",
+    "nature_commitment_narrative_v1/paired_resource_supply_margins.csv": "97ffaced32b7716a6c9ad6678c5ba87811c514eaa0748a88fb6fa7fe70378f4d",
+    "nature_commitment_narrative_v1/supply_hourly_example.csv": "a8648fb48beaa0ed09f07148ecb6566a2f0f918a6e6fe3ac2e6d6408512ec1dc"
+  }
+}

@@ -598,7 +598,7 @@ def test_plot_all_nature_mainline_figures_write_editable_svg(tmp_path: Path) -> 
         formats=("svg",),
     )
 
-    assert summary["figure_count"] == 6
+    assert summary["figure_count"] == 5
     for record in summary["figures"]:
         svg_path = Path(str(record["outputs"][0]["path"]))
         assert svg_path.stat().st_size > 10_000
@@ -623,6 +623,18 @@ def test_plot_all_nature_mainline_figures_write_editable_svg(tmp_path: Path) -> 
         assert (
             Path(str(record["manifest"])).read_bytes()
             == Path(str(replay_record["manifest"])).read_bytes()
+        )
+
+
+def test_community_profile_sensitivity_no_longer_occupies_main_figure_6(
+    tmp_path: Path,
+) -> None:
+    with pytest.raises(ValueError, match="unsupported Nature mainline figures: \\[6\\]"):
+        plot_nature_mainline_figures(
+            tmp_path / "unused_source_data",
+            tmp_path / "unused_figures",
+            figures=(6,),
+            formats=("svg",),
         )
 
 

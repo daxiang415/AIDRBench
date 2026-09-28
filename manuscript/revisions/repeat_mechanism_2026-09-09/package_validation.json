@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "path": "/home/user/projects/AIDRBench/results/exports/AIDRBench_All_Figures_2026-09-09_v10.zip",
+  "bytes": 8229492527,
+  "sha256": "3f636fea762202904885d8cd7d0bae2b2d4bd87623e1ea4de23e96702a3983c3",
+  "staging": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v10",
+  "files": 24947,
+  "all_eleven_redraws_identical": true,
+  "delivered_replay_pass": true,
+  "all_payload_checksums_pass": true,
+  "zip_crc_pass": true
+}

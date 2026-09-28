@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "case": "f10",
+  "seed": 960000,
+  "duration_h": 4,
+  "restored_input_hashes_match": true,
+  "matched_hourly_rows": 216,
+  "matched_numeric_columns": 87,
+  "absolute_tolerance": 1e-10,
+  "original_trace_sha256": "0f301d6aa490c527e10b4d20299b4bbe9679b6951f5d1b608ddfba33d5e6194e"
+}

@@ -1,102 +1,141 @@
 <!--
-Working supplement, version 0.25, 2026-09-10.
-Workload weighting, hourly order and commitment decisions. Existing frozen experiments.
+Working supplement, version 0.27, title revision R3, figures revision R7, 2026-09-12.
+Independent workload-specific capacity confirmation; power and solver-precision audit.
+Supplementary prose clarified on 2026-09-12; numerical results and R7 artwork retained.
 Author metadata remain pending.
 -->
 
 # Supplementary Information
 
-## Workload timing limits reliable demand response from AI data centres
+## Reliable demand-response commitments from AI data centres under service constraints
 
 [AUTHOR NAMES]
 
 ## Reader guide
 
-Read the commitment evidence in sequence: independent duration qualification (Table 18), matched workload weights and hourly order (Table 20), strict task-window diagnosis (Table 19), and physical operating exposure and conditional prices (Table 21). The remaining tables provide workload assumptions, structural controls and complete design provenance. Source Data retain frozen inputs, every successful and failed trajectory, direct plotting tables and replay code. Supplementary Note 7 distinguishes the historical designs from the reference products used in the main text.
+The supplement explains how we constructed the workloads, tested power-reduction requests and calculated participation costs. An offer is the power reduction promised to the grid, in kW. Work eligibility specifies which computing work may wait; offer qualification tests whether a selected request meets both delivery and service requirements.
+
+For the main findings, read Table 22 for the capacity supported by each workload representation, then Table 20 for the weight and hourly-order comparisons. Table 19 distinguishes insufficient available load, infeasible task schedules and failures of the tested controller. Table 21 prices the separately qualified reference products. Tables 23–24 check facility-power accounting and optimisation precision. Note 7 identifies earlier comparisons retained for reproducibility.
 
 | Question | Methods | Displays |
 |---|---|---|
-| Work composition and power | 1–3 | Fig. 1; Supplementary Fig. 2; Tables 1–3 |
-| Single-event offers | 4–5 | Fig. 2; Table 4 |
-| Reference repeated offers | 6 | Fig. 3a; Supplementary Fig. 3a,b; Table 18 |
-| Workload weights and hourly order | 6 | Fig. 3c,d; Fig. 4a,b; Table 20 |
-| Supply and strict-window diagnosis | 6 | Fig. 3b; Fig. 4; Table 19 |
-| Structural and call-history controls | 6 | Supplementary Fig. 3c; Tables 5, 10–16 |
-| PV, allocation and power controls | 7–8 | Fig. 5; Supplementary Fig. 4; Tables 6, 8 |
-| Physical exposure and participation | 9 | Fig. 6; Supplementary Fig. 5; Table 21 |
-| Price assumptions and design provenance | 9; Note 7 | Tables 7, 9, 12, 17; Supplementary Fig. 3d |
+| Which work may wait and how power is calculated | 1–3, 8 | Fig. 1; Supplementary Figs. 2, 10; Tables 1–3, 23 |
+| How much a single call can request and whether notice helps | 4–5 | Fig. 2; Table 4 |
+| Whether the reference workload supports repeated calls | 6 | Fig. 4c,d; Supplementary Fig. 9a; Table 18 |
+| What to offer after changing the workload representation | 6 | Fig. 3a; Supplementary Fig. 9b,c; Table 22 |
+| How task size and hourly order affect delivery | 6 | Fig. 3d,e; Fig. 4a,b; Table 20 |
+| Whether failure comes from supply, deadlines or control | 6 | Fig. 3c; Fig. 4; Table 19 |
+| How utilisation, deadlines and preceding calls affect delivery | 6 | Supplementary Figs. 3, 6; Tables 5, 10–16 |
+| How GPU allocation affects solar benefits | 7–8 | Fig. 5; Supplementary Figs. 4, 7, 10; Tables 6, 8, 24 |
+| How much extra waiting occurs and what payment is required | 9 | Fig. 6; Supplementary Figs. 5, 8; Tables 7, 9, 12, 17, 21 |
 
 ## Supplementary Notes
 
-### 1. Eligibility is an operating permission
+### 1. Which computing work may be deferred
 
-The source audit multiplies each released execution span's requested GPU-equivalents by its uncapped duration. It retains development, other and unknown work in the denominator. Counting records would assign 79.45% to offline inference, whereas requested resource time assigns 21.52%; these are different estimands. Low priority identifies a candidate class of work, not a production deadline or permission to postpone service. At 5–20% eligibility, the common permission multiplier preserves the relative contributions of low-priority training and offline inference. The 40% case expands permission beyond that pool, while 60% explicitly changes business composition. None is a measurement of deployed demand-response eligibility.
+We describe workload composition using requested GPU-equivalents multiplied by each execution span's full duration. Development, other and unknown jobs remain in the denominator. Offline inference accounts for 79.45% of records but 21.52% of requested resource-time: counting jobs and measuring their requested computing work answer different questions.
 
-### 2. Planning and qualification answer different questions
+Low priority identifies a potential source of deferrable work, but the production records do not grant permission to delay it or specify production deadlines. The 5%–20% scenarios authorise the same fraction of low-priority training and offline inference, preserving their relative contributions. The 40% scenario includes additional batch work, and the 60% scenario also changes the business mix. These are stated operator-permission assumptions, rather than measured participation rates.
 
-The aggregate PI programme maximised R under cumulative class-release and class-deadline constraints. These are necessary aggregate conditions, but are a relaxation when job windows cross: work executed for an earlier, later-deadline job can satisfy a cumulative due-work inequality for a different job. Its retained optima therefore define relaxed planning envelopes, not generally job-feasible capacities. Their second order statistic among 100 scenarios is a 95%/95% tolerance statistic of that relaxed quantity, with achieved confidence 0.96292.<sup>33</sup> It does not guarantee feasible work scheduling. Controller offers instead use completed queue simulations on independent seeds; their joint delivery-and-service probability is assessed by a one-sided 95% Wilson lower bound, required to reach 0.95.<sup>34,35</sup> The strict-window feasibility diagnostics use each work group’s own release and deadline.
+### 2. Planning estimates and independently tested offers
 
-### 3. Service standards and call history must be tested together
+We use two different calculations. The aggregate perfect-information (PI) programme searches for the largest request R while enforcing cumulative arrivals and due work within each class. It assumes that future inputs are known. However, these aggregate constraints can credit work completed for an early-arriving, late-deadline job towards another job's earlier deadline. They therefore relax the requirement that every job execute within its own time window.
 
-Four calls in one evolving queue are not four independent observations. The matched fresh comparison runs each call alone at the same clock time, then asks whether all four isolated calls passed. Both conditions therefore have the same all-four-success endpoint. Their difference estimates the consequence of call history within the specified model and schedule. A development-selected repeated candidate receives its own independent test. If no tested candidate qualifies, this is a search-grid outcome, not evidence that all positive capacities are impossible. Complete hourly series, including failures and clearance after the last call, are retained.
+The retained PI values describe this relaxed planning model. Sorting the values from 100 scenarios and taking the second smallest gives the reported 95%/95% tolerance statistic, with achieved confidence 0.96292.<sup>34</sup> The two percentages specify scenario coverage and the confidence required for that coverage statement. That statistical statement concerns the relaxed quantity; it does not establish a feasible schedule for every job.
 
-The follow-up distinguishes electrical non-compliance from computing loss. The original observation selected the active window with the smallest achieved peak-relief fraction. That ranking need not select the smallest allowable power ceiling, so clipping only against its ceiling can violate another overlapping window. Keeping a ceiling for each observed call repairs this omission. The same-request paired comparison isolates this change within the MPC implementation; the greedy diagnostic asks whether the gain requires the MPC proposal. Stronger electrical guards can withhold capacity from urgent jobs, so deadline failures are reported separately. Qualified revised offers, rather than failure counts alone, provide the operational result.
+We test controller offers separately by replaying the complete queue on independent seeds. An offer qualifies when the one-sided 95% Wilson lower bound on joint delivery-and-service success reaches 0.95.<sup>35,36</sup> The strict feasibility checks additionally restrict each work group's execution to its own release-to-deadline window.
 
-The new structural test begins after that repair. Tightened deadlines and low instantaneous eligible power are separate failure mechanisms; a scenario may fail both. Zero total missed work is a stricter endpoint than a 1% allowance and receives its own development selection. In every new same-clock final-call contrast, the electrical outcome was identical with or without preceding calls. This prevents attributing all programme failure to damaged recovery. Chronological and permuted production submissions change temporal structure without changing class totals; neither ordering is asserted to be universally harder.
+### 3. Testing all calls and the work left between them
 
-### 4. PV hosting and utilisation have different denominators
+A call leaves a queue that affects subsequent calls, so four calls in one evolving queue are evaluated as one sequence. The comparison runs each call separately at the same clock time and asks whether all four separate runs succeed. Both conditions therefore use the same all-four-success outcome. Their difference measures the effect of preceding calls under the specified workload and schedule.
 
-Hosting maximises PV nameplate at the unchanged GPU installation. The reported all-scenario boundary is the minimum of the 100 scenario capacities within each operating mode. Its gain is min(flexible) minus min(rigid), not the minimum or mean of paired differences. Fixed-PV utilisation instead divides locally used PV energy by available generation from a 500-kW installation. Its effect is reported in percentage points with paired bootstrap intervals. All current renewable programmes impose zero missed GPU-hours. They use full future information and a separately optimised dispatch; their benefit is not attributed to the causal demand-response controller.
+Repeated offers selected during development receive a separate independent test. If no tested candidate qualifies, the result applies to that search grid. It does not exclude every positive request. Every replay retains failed sequences and the work-clearance period after the last call.
 
-### 5. Controls separate allocation from eligibility
+Overlapping recovery windows impose more than one power ceiling. The earlier controller tracked the live window with the smallest achieved peak-relief ratio, which need not have the lowest allowable power. Limiting power for that window could therefore violate another active window. The revised controller retains a ceiling for every observed call.
 
-The primary f-to-f GPU allocation rule maintains similar mean utilisation as eligibility changes. It does not make the five cases a pure one-factor experiment. At fixed 10% eligibility, the allocation controls move the flexible GPU fraction from 10% to 20% and 30%, retaining total work, hardware, releases and deadlines. The power controls retain the same allocation but change only unmeasured rigid-class active power to 150 or 225 W per GPU. Every control is tested at the original 10% configuration's selected requests; offers are not reselected after observing its results. The controls therefore compare planning potential and transfer of a fixed offer, not separately optimised controller capacities.
+We compare the two MPC implementations at the same request and use a greedy-controller check to determine whether improvement depends on MPC's proposed actions. Deadline failures are reported separately because tighter power ceilings can also reduce the processing capacity available to urgent jobs. Operational conclusions use independently tested offers, alongside these failure diagnoses.
 
-### 6. Cost thresholds are conditional participation screens
+The utilisation, deadline and allocation tests start from the corrected controller. They distinguish an event-hour shortage of reducible load from insufficient time to complete jobs; both can occur in one scenario. Requiring zero missed work is stricter than allowing 1%, so offers are selected separately under each rule.
 
-The physical ledger pairs each controlled trajectory with its own no-response baseline. Positive extra backlog accumulates waiting exposure; delayed work during events and permanently missed work remain separate quantities. Each hour is counted once across a repeated programme. Performance revenue credits only non-negative reduction capped at the request. Fixed annual site costs are applied once after proportional accounting at a 1-MW operating peak. A small offer can therefore have a high price per offered kilowatt even when its total delayed work is small. The 95th percentile of annual net cost is a risk-screening choice, not a confidence limit or observed tariff. Unqualified offers remain unqualified even if their conditional cost is low.
+At matched final-call times, the tested electrical outcomes were identical with and without preceding calls. Thus, sequence failures cannot all be attributed to impaired recovery. Reordering the observed hourly submission blocks preserves class totals but changes their timing and alignment with calls; neither order is assumed to be universally harder.
 
-The new decomposition confirms that approximately 95% of the reference single-event threshold is a fixed-site allocation. Operating components are attributed at the rank of total net cost so that they add back exactly. A shared fee changes the value relative to opting out, but a common fee cancels between two participating products. Product choice must compare annual net values at stated duration-specific prices, with only independently qualified choices eligible. The figures retain zero/low fees and operating costs separately to expose these different decisions.
+### 4. Installed solar capacity and use of a fixed solar system
 
-### 7. Design provenance and interpretation of superseded comparisons
+PV hosting capacity is the largest rated solar capacity allowed by the model while the GPU facility remains fixed. We optimise each of 100 scenarios and report the smallest capacity for each scheduling mode. The hosting gain is min(flexible) minus min(rigid), rather than the minimum or mean of paired gains.
 
-Tables 14 and 17 retain the structural study’s coarse-grid selections and prices; Tables 18 and 21 report the locally refined reference products on new development and confirmation seeds. At 4.423682 kW, the zero-miss development count was 98/100 in the former study and 99/100 in the latter, crossing the fixed Wilson selection threshold. The resulting historical 4.42-to-2.95-kW selection change is not evidence of a stable physical capacity penalty. Both standards select 5.603331 and 4.423682 kW for the reference four- and eight-hour products in Table 18; their capacity ratio is 19/15, rather than the coarse-grid ratio of 1.5. The eight-hour selection is at the tested grid ceiling and does not bracket a continuous maximum.
+PV utilisation instead fixes the solar system at 500 kW and divides locally used solar energy by available solar generation. We report the paired change in percentage points and its bootstrap interval. Both analyses require zero missed GPU-hours and use full future information with separately optimised schedules. Their gains therefore describe the planning model, not the causal demand-response controller.
 
-The 986000-series chronological submission-count test is distinct from the 990000-series matched weight/order test. In the former, 4.423682 kW succeeds in 63/80 realisations under either service score, and all 17 failures encounter immediate shortage; 2.949122 kW succeeds in 80/80 under both (Supplementary Fig. 3d; Table 16). Thus, changing the score at a fixed request does not explain the difference between those requests. The matched 990000-series results in Table 20 compare weights and hourly order without pooling either series or selecting an external offer. The cumulative PI model retained in Figs. 2 and 5 and Tables 4 and 8 is a relaxation for crossing job windows (Note 2), whereas the strict-window diagnoses in Table 19 use work-group execution edges. This distinction does not alter the independent causal queue trajectories or the separate edge-based PV optimiser.
+### 5. Separating permission to defer work from GPU allocation
+
+The primary scenarios increase the GPU allocation alongside the permitted-work share, keeping average utilisation similar in both pools. They consequently change both permission and allocation. To isolate allocation, we keep work eligibility at 10% and assign 10%, 20% or 30% of GPUs to the flexible pool. Total work, installed hardware, release times and deadlines remain matched.
+
+Separate power controls retain the same allocation and set the unmeasured rigid-class active-power proxy to 150 or 225 W per GPU. All controls use the request previously selected for the reference 10% configuration. We assess planning statistics and whether that fixed request still succeeds, without selecting a new optimal controller offer for each control.
+
+### 6. From operating records to a required participation payment
+
+For each simulation we compare demand-response operation with the matched no-response run. The operating ledger records their hourly differences in waiting work, energy use, missed work and remaining backlog. Additional waiting exposure sums positive excess backlog over time. Work delayed during calls is kept distinct from work that misses its deadline, and each hour is counted once within a repeated sequence.
+
+Delivery revenue credits only non-negative reductions capped at the requested amount. Work, energy and offered capacity are scaled in proportion to a 1-MW operating peak, after which the annual fixed site fee is added once. Dividing that fee by a small offered capacity can produce a high payment per offered kW. The participation threshold uses the 95th percentile of annual net cost as a stated risk criterion. A low calculated cost cannot make an unqualified request deliverable.
+
+In the reference single-event case, the fixed site fee accounts for about 95% of the participation threshold. To separate that assumption from operating effects, we attribute costs at the same rank in the total-net-cost distribution. The components then add back to the reported total.
+
+Sharing an access fee changes the comparison with not participating. A fee common to two participating products cancels when those products are compared with each other. We therefore show operating costs separately and compare qualified products under explicitly stated duration-specific prices and zero, low or shared fees.
+
+### 7. How the retained earlier comparisons relate to the final results
+
+Tables 14 and 17 retain requests selected on the earlier coarse grid and their associated costs. Tables 18 and 21 use a finer reference grid with new development and confirmation seeds. At 4.423682 kW, the earlier zero-miss development sample had 98/100 successes and the later sample had 99/100. These counts fall on opposite sides of the fixed Wilson selection threshold. The earlier selection of 2.95 instead of 4.42 kW therefore does not establish a stable physical penalty from the stricter service rule.
+
+In Table 18, both service rules select 5.603331 kW for four hours and 4.423682 kW for eight hours. Their capacity ratio is 19/15; the earlier coarse-grid ratio was 1.5. The eight-hour selection is the highest tested candidate, so the continuous maximum remains undetermined.
+
+The 986000-series test uses chronological submission counts. At 4.423682 kW it succeeds in 63/80 runs under either service rule, with all 17 failures encountering immediate shortage. At 2.949122 kW both rules give 80/80 successes (Supplementary Fig. 3d; Table 16). Thus, changing the service score at a fixed request does not explain the difference between those requests.
+
+The 990000-series test in Table 20 instead pairs workload weights and hourly orders. Its results are kept separate from the earlier series and do not select a new workload-specific offer. Figures 2 and 5 and Tables 4 and 8 retain the aggregate PI relaxation described in Note 2. Table 19 uses execution variables restricted to each work group's own time window. This distinction leaves the independently replayed causal queues and the solar optimiser's separate execution variables unchanged.
 
 ## Supplementary Methods
 
-### 1. Source audit and permissions
+### 1. Measuring workload composition and assigning deferral permission
 
 The local jobs_summary.parquet contained 40,522,321 execution-span records. Streaming batches of one million rows were aggregated by workload class and priority, using requested GPU-equivalents times the original duration. The total was 254,980,926.33 requested GPU-h. The audit checked the stored raw work against this product and retained all classes. The source SHA-256 was `95c91a8035197e15f29e9c1d15a9147d07b2a6959b2bb08322cb9f033b029124`. The [production study](https://www.usenix.org/system/files/osdi26-li-suyi.pdf) and [official schema](https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2026/docs/schema.md) define the infrastructure scope and execution-span fields. The reported infrastructure excludes dedicated hyperscale foundation-model pretraining clusters.
 
-Let s_c be the source resource-time share and l_c the low-priority batch share of class c, each relative to all offered work. For f ≤ L = Σl_c = 0.2202814, eligible work is l_c f/L. For L < f ≤ B = s_training + s_offline = 0.4094199, it is l_c + (s_c − l_c)(f − L)/(B − L). The 60% case transfers f − B = 0.1905801 from online to offline inference and makes all training and offline inference eligible. Other classes remain in the source denominator and are rigid. Full-precision shares are provided in case_definitions.json; rounding in Table 2 does not drive simulations.
+We allocate deferral permission in stages. Let s_c be class c's share of all requested resource-time, and l_c its low-priority batch share with the same denominator. Low-priority training and offline inference together contribute L = Σl_c = 0.2202814. For f ≤ L, the permitted share in class c is l_c f/L.
 
-### 2. Paired scenarios and baseline gate
+Above L, permission extends proportionally to the remaining training and offline-inference work. With B = s_training + s_offline = 0.4094199 and L < f ≤ B, the permitted share is l_c + (s_c − l_c)(f − L)/(B − L). The 60% scenario additionally reallocates f − B = 0.1905801 from online to offline inference and permits all training and offline inference to wait. Other classes remain in the denominator and cannot be deferred. Simulations use the full-precision shares in case_definitions.json rather than the rounded entries in Table 2.
 
-Development used seeds 930000–930099 and confirmation used 960000–960299. Within each seed, a single 60%-case job template supplied the releases, deadlines and class records. Scaling only the class GPU-hours produced the remaining cases; record counts and timing were held identical. The template sampled existing low-priority training/offline job shapes, including for the explicitly hypothetical 40% and 60% cases. Total offered work was 374.4 GPU-h/h for 168 h, followed by 48 h without new arrivals. The flexible GPU count was round(576f), and rigid utilisation was 374.4(1 − f)/(576 − round(576f)). Every no-response scenario had to satisfy service and PCC limits before downstream analysis.
+### 2. Matching task inputs and checking operation without demand response
+
+The five configurations share task timing so that changes in eligibility do not introduce different arrival or deadline samples. Development uses seeds 930000–930099 and confirmation uses 960000–960299. Each seed creates a common template at the 60% setting; scaling class-specific GPU-hours produces the other configurations without changing record counts, release times or deadlines. The template samples the existing low-priority training and offline-inference job shapes, including for the explicitly assumed 40% and 60% cases.
+
+Work arrives at 374.4 GPU-hours per hour for 168 h, followed by 48 h without new arrivals. The flexible pool contains round(576f) GPUs; rigid-pool utilisation is 374.4(1 − f)/(576 − round(576f)). Before subsequent analysis, the no-response run must satisfy both task-service requirements and the power limit at the point of common coupling (PCC).
 
 Training deadlines were 2–6 times runtime, clipped to 6–48 h; offline-inference deadlines were 1.5–4 times runtime, clipped to 2–24 h. These are synthetic service rules. Single events began at one of 24 hours between 63 and 140, sampled before testing; exact starts are stored with each scenario. Community demand used a 75:25 residential/office mixed-3A profile, scaled to an 800-kW peak. A common 1,100-kW import rating and no-export rule applied to all cases. Initial development baselines under a 1,000-kW rating exceeded it in three cases at seed 930096; the common rating was raised before PI optimisation or offer selection, and the initial gate results were preserved.
 
-### 3. Power conversion, queues and observations
+### 3. Measuring GPU power and converting task execution into facility demand
 
-Each workload ran in one- and four-GPU conditions with three repeats. After a 5-s warm-up, read-only nvidia-smi telemetry sampled board power and utilisation every second for 20 s. Repeats 1–2 supplied calibration and repeat 3 was held out. For each four-GPU repeat, readings were averaged first over time within each GPU, then across GPUs. The resulting run means were the independent units. Student t 95% intervals used the two calibration means per active class; prediction error used only the held-out repeat (Supplementary Table 1).
+Training and offline-inference loads each run on one GPU and on four GPUs, with three repeated runs per condition. After a 5-s warm-up, read-only nvidia-smi telemetry samples board power and utilisation once per second for 20 s. Runs 1–2 fit the power coefficients; run 3 is withheld to test prediction error.
+
+Within a four-GPU run, we first average each board's time series and then average the four board means. This run mean, rather than each board or each telemetry sample, is the independent observation. Student-t 95% intervals use the two calibration-run means for each workload class. Prediction errors use only the held-out run (Supplementary Table 1).
 
 Facility power retained the execution class,
 
 \[
-P^{\mathrm{DC}}_t=P_{\mathrm{fixed}}+\sum_c e_cX_{c,t},
+\begin{aligned}
+P^{\mathrm{DC}}_t=\frac{\mathrm{PUE}}{1000}\Big[&N_{\mathrm{node}}p_{\mathrm{node}}+N_{\mathrm{GPU}}p_{\mathrm{idle}}\\
+&+N_{\mathrm{rigid}}u_{\mathrm{rigid}}(\bar p_{\mathrm{rigid}}-p_{\mathrm{idle}})
++\sum_c(p_c-p_{\mathrm{idle}})\frac{X_{c,t}}{\Delta t}\Big].
+\end{aligned}
 \]
 
-In this expression, \(X_{c,t}\) is flexible work executed in class c during interval t, measured in GPU-h. Its coefficient is \(e_c=\mathrm{PUE}(p_c-p_{\mathrm{idle}})/(1000\Delta t)\), in kW per GPU-h. Board powers p are measured in W and \(\Delta t=1\) h. Subtracting idle power ensures that scheduled work contributes only incremental active power. Fixed facility power contains rigid-pool draw, flexible-pool idle draw and node overhead, all multiplied by PUE = 1.20.
+where power p is in watts, X is executed flexible GPU-hours and Δt = 1 h. Node overhead applies to all 144 nodes and idle power to all 576 GPUs. The rigid pool contains 518 GPUs at utilisation 0.65050193; its class-weighted active power is 291.42199 W/GPU. The reference flexible mix has 297.90848 W/GPU active power. At PUE 1.2 and idle power 13.935625 W/GPU, the operating peak is 51.840000 + 9.632304 + 112.202165 + 19.764511 = 193.438980 kW: node overhead, all-GPU idle draw, rigid increment and full flexible-pool reference increment, respectively. Thus the compact form \(P^{\mathrm{DC}}_t=P_{\mathrm{fixed}}+\sum_c e_cX_{c,t}\) uses \(P_{\mathrm{fixed}}=173.674469\) kW and \(e_c=\mathrm{PUE}(p_c-p_{\mathrm{idle}})/(1000\Delta t)\).
 
 Jobs were stored by class and remaining deadline at one-hour resolution, up to 48 h. The labels {0, 1, 2, 3, 6, 12, 24, 48} h grouped this state for reporting and observation; they were not the queue's internal time resolution. Execution followed earliest deadline first, could not precede release and could not exceed cumulative arrivals. Work remaining when its deadline expired was counted as missed. Controlled and no-response queues received identical arrivals.
 
-Idle board power was 13.935625 W per GPU and node overhead was assumed to be 300 W. Online, development, other and unknown work used 300.022174 W per active rigid GPU as an engineering proxy, with 150- and 225-W controls. Rigid power was fixed at its class-weighted mean. Online latency was not separately simulated, so preserving batch deadlines is not a measured online-serving SLO test. The controller retained the existing 63-feature firm_v5 observation interface; its six-hour forecasts and queue features were causally masked. The stored compute_debt_kwh field describes the whole controlled queue. Exported excess_queue_energy_kwh explicitly subtracts the matched no-response value.
+Idle board power is 13.935625 W/GPU, and node overhead is assumed to be 300 W. Online, development, other and unknown work use an engineering active-power proxy of 300.022174 W/GPU, with separate 150-W and 225-W controls. Rigid demand uses the class-weighted mean. Online response latency is not simulated, so the batch deadline check does not test online-service latency requirements.
 
-### 4. Success criteria and statistics
+The controller retains the 63-dimensional firm_v5 observation interface. Its six-hour forecast and queue features expose only causally available information. In saved outputs, compute_debt_kwh describes the whole controlled queue, whereas excess_queue_energy_kwh subtracts the paired no-response queue. Only the latter directly measures extra queued work relative to that baseline.
 
-Successful demand response required both electrical delivery and acceptable computing service. For each fixed capacity, duration, notice and controller, an episode received one binary outcome after all six criteria below were evaluated. Delivery was the non-negative reduction in point-of-common-coupling power relative to the matched baseline, capped at the request. A high mean could not compensate for an hour below the interval threshold. Peak relief was evaluated over the event and its 24-h recovery window.
+### 4. Deciding whether a response succeeds and whether an offer qualifies
+
+A simulation succeeds only when it satisfies all six electrical-delivery and computing-service criteria below. Capacity, event duration, advance notice and controller are fixed before testing. Delivered power is the non-negative PCC reduction relative to the matched no-response run, capped at the request. Both average delivery and delivery in every event hour must pass. Peak relief is evaluated across the event and its following 24-h recovery window.
 
 | Criterion | Headline threshold | Operational interpretation |
 |---|---:|---|
@@ -107,99 +146,209 @@ Successful demand response required both electrical delivery and acceptable comp
 | Event-and-recovery peak relief | ≥0.50 | baseline peak minus controlled peak over the event plus 24-h recovery window, divided by R |
 | Terminal-backlog fraction | ≤0.02 | positive controlled-minus-baseline backlog at the end of the 48-h tail divided by total eligible arrivals |
 
-Failure attribution retained combined labels rather than assigning only the first failed criterion. Mean and interval failures could occur together, and delivery failures could coincide with rebound or window-relief failures. Recovery-time non-resolution was a separate diagnostic, not an additional certificate criterion.
+We record every criterion that fails in a scenario. For example, low average delivery can occur together with an inadequate event hour, and either can accompany excessive rebound or insufficient window-wide peak relief. These categories can overlap. Failure to identify a recovery time within the window is retained as an additional diagnostic, not a seventh qualification criterion.
 
-The structural study additionally required zero total missed eligible work, allowing only 10<sup>−7</sup> GPU-h for numerical round-off. Both response and no-response trajectories had to satisfy that zero criterion; all electrical and terminal-backlog thresholds were unchanged. The 0.1% allowance was a secondary reported endpoint without offer selection. Baseline failures remained failures rather than exclusions. Earlier selected offers were also rescored at zero loss, explicitly as a retrospective check.
+The utilisation, deadline and allocation tests also require zero missed eligible work, allowing only a numerical tolerance of 10<sup>−7</sup> GPU-h. Both response and no-response runs must meet this rule; electrical criteria and the terminal-backlog threshold are unchanged. A no-response baseline failure counts as failure and is retained. We also report a 0.1% missed-work threshold without using it for offer selection. Rescoring previously selected offers under the zero-miss rule is labelled retrospective because it adds no new qualification sample.
 
-For 100 PI optima, binomial inversion selected the second order statistic at q = 0.95 and confidence 0.95. For controller testing, a one-sided 95% Wilson interval used z = 1.6448536. Development and confirmation applied the same lower-bound threshold of 0.95. Each condition contained 100 development or 300 confirmation seeds; extra notices and calls did not create additional independent seeds. Notice comparisons used exact paired McNemar tests with Holm correction across 20 contrasts. Repeated-minus-fresh differences used 10,000 paired bootstrap resamples of 300 seeds. Renewable mean differences used 10,000 paired resamples of 100 seeds. These intervals and qualifications are pointwise, apart from the declared notice-test correction.
+For the relaxed PI calculation, binomial inversion at q = 0.95 and confidence 0.95 selects the second-smallest of 100 optima. Controller tests use a one-sided 95% Wilson lower bound with z = 1.6448536. The same lower-bound threshold, 0.95, applies during development and confirmation. Each condition has 100 development or 300 confirmation seeds; extra notice settings and calls reuse those seeds rather than add independent observations.
 
-### 5. Causal controller and development correction
+All 20 notice comparisons have identical paired success flags, so we report that agreement directly. Repeated-minus-separate-call differences use 10,000 paired bootstrap resamples of 300 seeds. Renewable mean differences use 10,000 paired resamples of 100 seeds. Each interval or qualification statement applies to its specified comparison or offer, rather than simultaneously to every reported condition.
 
-The six-hour robust MPC retained its historical-arrival uncertainty envelope, objective weights and release-only queue information. Development exposed a dimensional mismatch in the former recovery guard: it allowed an overshoot of 0.25R, whereas rebound was evaluated relative to actual peak delivery, which could be as low as 0.95R. The revised guard uses 0.25 × 0.95R, along with the existing event-and-window-relief envelopes. When float32 conversion would cross an electrical limit, actions are rounded towards zero. All success criteria remain unchanged. Regression checks cover the delivered-power rebound denominator, event-boundary rounding and unchanged actions outside event/recovery windows. This is a new controller version, not a reinterpretation of the original locked certificate.
+### 5. Controller information, recovery limits and single-offer selection
 
-Each duration tested 50%, 75%, 90% and 100% of its development Relaxed PI statistic. The largest candidate meeting the development Wilson criterion was frozen before confirmation. After the final controller correction, 300 previously unexamined seeds were reserved for confirmation; earlier original-controller and intermediate development outputs were retained as diagnostics. No confirmation outcome was used to choose a smaller replacement offer.
+The robust model predictive controller (MPC) plans over six hours using its existing historical-arrival uncertainty range, objective weights and information on released jobs. Development identified a mismatch between its recovery cap and the scoring rule. The old cap allowed power to exceed baseline by 0.25R, but scoring divided rebound by the actual peak reduction, which could be only 0.95R.
 
-### 6. Repeated programmes
+The corrected cap uses 0.25 × 0.95R and retains the event-delivery and full-window peak-relief limits. If converting an action to float32 would cross an electrical limit, the action is rounded towards zero. Regression checks cover the rebound denominator, rounding at event boundaries and unchanged actions outside event and recovery windows. This correction creates a new controller version, evaluated independently of the original frozen results.
 
-For the original controller study (confirmation seeds 960000–960299): Four event starts were 63 + j(H + G), j = 0, 1, 2, 3, for (H,G) = (4,8) or (8,12) hours. Development tested 25%, 50%, 75% and 100% of the selected single-event offer without assuming monotonic success. Confirmation tested the prespecified original single offer repeated, plus four single-call counterfactuals at matching clock times. The protocol additionally provided for testing a development-selected repeated offer if one qualified; none did. The no-response reference was the same full-capacity schedule in every paired comparison. The experiment covers two declared programmes, not every recovery gap or a continuous-year guarantee.
+For each duration, development tests requests at 50%, 75%, 90% and 100% of the development relaxed-PI statistic. The largest candidate meeting the Wilson rule is fixed before confirmation. After the final controller correction, 300 previously unseen seeds test that fixed offer. Earlier controller outputs remain diagnostic records. Confirmation results are never used to replace a failed offer with a smaller one.
 
-For the follow-up, H and G were (4,8), (8,8), (8,12) and (8,16) h, with the same first start at hour 63. After a later call ends, the preceding 24-h recovery remains active for max(0, 24 − H − G) h. This overlap is zero for H = 8 h and G = 16 h, although changing G also changes the clock alignment of later calls. Final recovery ends no later than hour 167, before arrivals stop at hour 168. Every replay then retains the full 216-h horizon, including the clearance tail. No gap comparison isolates spacing from time-of-day effects.
+### 6. Repeated-call tests, workload comparisons and failure diagnosis
 
-For an observed call j, let B_j(t) be the greatest baseline PCC power observed so far in its event-and-recovery window, and R_j its request. The wrapper constrains the current proposal by every live ceiling B_j(t) − 0.5R_j. It also preserves the active-event delivery ceiling and the rebound ceiling baseline(t) + 0.25 × 0.95R_j during recovery. With fixed PCC demand F(t) and flexible full-allocation contribution A(t), the additional allocation cap is clip[(min_j(B_j(t) − 0.5R_j) − F(t))/A(t), 0, 1]. Actions are rounded towards the feasible side. The controller learns a call’s remaining duration only from the current observation and expires it after its 24-h recovery. Running baseline peaks can be lower than their eventual values, making this causal guard conservative. A target below F(t) cannot be made feasible by clipping, and electrical clipping alone does not guarantee job deadlines.
+#### 6.1 Call timing and the comparison without preceding calls
+
+H denotes event duration and G the gap from one event's end to the next event's start. In the original-controller study, four calls started at 63 + j(H + G), j = 0, 1, 2, 3, with (H,G) = (4,8) or (8,12) h. Development tested 25%, 50%, 75% and 100% of the selected single-event offer, without assuming monotonic success as the request increased.
+
+Confirmation seeds 960000–960299 tested the original single-event offer repeated four times and four separate calls at the same clock times. Each comparison used the same full-capacity no-response schedule. The protocol also provided for independent confirmation of a repeated offer selected during development, but no candidate passed that development screen. This study evaluates two specified programmes; it does not establish performance for every recovery gap or continuous operation throughout a year.
+
+The recovery-controller comparison uses (H,G) = (4,8), (8,8), (8,12) and (8,16) h, again starting at hour 63. Each call has a 24-h recovery window. When a later call ends, the preceding call's recovery constraint remains active for max(0, 24 − H − G) h. This overlap is zero at H = 8 h and G = 16 h.
+
+Changing G also shifts later calls to different clock times. These comparisons therefore change both spacing and alignment with the workload. The final recovery ends by hour 167, before arrivals stop at hour 168. Every replay continues through all 216 h, including the period used to clear remaining work.
+
+#### 6.2 Enforcing every recovery window that is still active
+
+For call j, B_j(t) is the largest baseline PCC power observed so far within its event-and-recovery window, and R_j is the request. Before applying a proposed control action, the power-limit layer checks all active ceilings B_j(t) − 0.5R_j and uses the lowest. It also enforces event delivery and the recovery rebound ceiling baseline(t) + 0.25 × 0.95R_j.
+
+Let F(t) be PCC demand excluding flexible execution, and A(t) the power added when the flexible pool receives its full allocation. The extra allocation cap is clip[(min_j(B_j(t) − 0.5R_j) − F(t))/A(t), 0, 1]. Here clip limits the calculated fraction to the allowed range. Actions are rounded towards the feasible side. The controller obtains remaining call duration from the current observation and removes a call only after its 24-h recovery ends.
+
+The running baseline peak may still be below its eventual value, so this rule can be conservative. If the required ceiling is below F(t), stopping all flexible work cannot meet it. Conversely, satisfying a power ceiling does not establish that urgent jobs will meet their deadlines.
 
 The extension reused 100 previously examined development seeds (930000–930099); four of these also informed an exploratory pilot. The frozen protocol then enumerated 10,100 development replays: five workload configurations, two MPC versions, four programmes, a full-only four-hour candidate and 50%, 75% and 100% eight-hour candidates, plus 100 full-request greedy diagnostics at 10% eligibility and (8,12). The largest candidate with one-sided 95% Wilson lower bound at least 0.95 was selected. The frozen selection scheduled 13,800 replays on 300 new confirmation seeds (970000–970299). For each configuration, method and programme, confirmation tested the selected offer or the full-request comparator if none was selected. Full-request comparisons for both MPC versions at (8,12) and the greedy diagnostic were additionally retained. No confirmation result was pooled with the earlier 960000–960299 set or used for reselection. Every full series, including all failures, was analysed.
 
 The primary intervention contrast is the full-request original versus per-call-recovery MPC at 10% eligibility and (8,12). Paired success differences use 10,000 resamples of complete seeds; exact McNemar tests receive Holm correction across all controller contrasts reported in the source table. Non-exclusive failure families and paired rescue/loss counts are also retained. Qualification is pointwise for each frozen candidate. A selected candidate that fails confirmation would remain failed, with no test-set replacement. The illustrated trace is the lowest development seed for which the full-request original fails and the revised MPC passes; this transparent illustrative selection is separate from inference on all confirmation seeds.
 
-At fixed 10% work eligibility and 576 GPUs, offered utilisation was total work divided by installed GPU-hours, set to 50%, 65% or 80%. Deadline slack was unchanged or halved with a one-hour floor; flexible GPU allocation was 10%, with 20% controls at 65% and 80% utilisation under tight deadlines. The final event started at hour 111 plus a seeded uniform integer from 0 to 23; preceding starts were spaced backwards by 16 or 24 h. All eight variants tested eight-hour calls, and the reference also tested four-hour calls at 16-h spacing. A fresh eight-hour final call at the same time removed the preceding calls. All recovery windows ended during 168 h of arrivals, followed by a 48-h clearance tail. Development seeds 984000–984099 and confirmation seeds 985000–985299 supplied 7,600 and 13,200 complete replays, respectively. Two pilot seeds were excluded.
+#### 6.3 Changing utilisation, task deadlines and GPU allocation
 
-For the external timing stress test, hourly submission counts from the Alibaba 2020 GPU trace<sup>28</sup> supplied eight consecutive 168-h blocks. Counts set the hourly weights of synthetic class-specific work, preserving each class total and reference deadlines. The paired alternative permuted complete hourly blocks within the same week. Ten synthetic realisations per week crossed both orderings and 10%/20% GPU allocations with five frozen programme–request combinations, giving 1,600 replays without retuning. Results are reported by observed week and descriptively across 80 realisations per condition; they are not 80 independent production weeks.
+These tests keep 10% work eligibility and 576 installed GPUs. Offered utilisation, defined as total work divided by installed GPU-hours, is 50%, 65% or 80%. Deadline slack is retained or halved, with a one-hour floor. The flexible pool receives 10% of GPUs; tight-deadline controls also allocate 20% at 65% and 80% utilisation.
 
-Structural contrasts resampled 300 complete paired scenario seeds 5,000 times. Exact McNemar tests were Holm-adjusted over the 36 binary structural contrasts; the 16 additional matched-target electrical contrasts formed a separate family. The zero-loss and 1% offer tests each retained the pointwise one-sided 95% Wilson lower-bound criterion of 0.95. Multiple successful selections do not create a simultaneous confidence guarantee. Submission-order comparisons retained the observed week as the external sampling unit and were not assigned binomial certificates from pooled synthetic realisations.
+The final call starts at hour 111 plus a seeded uniform integer from 0 to 23. Earlier calls are placed 16 or 24 h apart going backwards from that time. All eight variants test eight-hour calls; the reference also tests four-hour calls at 16-h start spacing. A separate run retains only the eight-hour final call at the same clock time. All recovery windows finish within the 168-h arrival period, followed by 48 h for clearance.
 
-A necessary supply diagnostic compared each active hour’s matched baseline PCC power minus community load and idle-plus-rigid data-centre power with 0.95 times the request. If the former was smaller, even zero flexible execution could not meet the interval requirement. This lower-envelope test identifies immediate shortage but does not prove feasibility when passed. Deadline and terminal criteria were scored over the whole 216-h episode. Last-call electrical scoring excluded those global service quantities, matched the final clock exactly and used the fresh run’s reindexed event 0. All 16 paired differences were zero. Programme-wide criteria were not substituted for local electrical outcomes.
+Development seeds 984000–984099 and confirmation seeds 985000–985299 produce 7,600 and 13,200 full replays, respectively. Two pilot seeds are excluded from these analyses.
+
+Structural contrasts resampled 300 complete paired scenario seeds 5,000 times. Exact McNemar tests were Holm-adjusted over the 36 binary structural contrasts; the 16 additional matched-target electrical contrasts formed a separate family. The zero-miss and 1% offer tests each retained the pointwise one-sided 95% Wilson lower-bound criterion of 0.95. Multiple successful selections do not create a simultaneous confidence guarantee. Submission-order comparisons retained the observed week as the external sampling unit and were not assigned binomial certificates from pooled synthetic realisations.
+
+The available-load check asks whether the baseline contains enough flexible power to deliver the request in every event hour. We subtract community demand and idle-plus-rigid data-centre demand from matched baseline PCC power, then compare the remainder with 0.95 times the request. A smaller remainder proves that stopping all flexible execution would still be insufficient. Passing this check leaves deadlines and other constraints to be tested.
+
+Deadline and terminal-backlog criteria apply to the full 216-h episode. For the final-call comparison alone, we score only electrical conditions, align the clock time exactly and use event 0 in the separately run call. All 16 paired electrical differences are zero. This call-specific comparison is kept distinct from success of the entire sequence, which also includes task service.
+
+#### 6.4 Using observed hourly submissions and changing their order
+
+The first workload-timing test uses hourly submission counts from eight consecutive 168-h blocks of the Alibaba 2020 GPU trace.<sup>28</sup> Those counts determine how each week's synthetic class-specific work is distributed across hours. Weekly class totals and the reference deadlines remain fixed. A paired input reorders complete hourly blocks within the same week.
+
+Ten synthetic realisations per week cross the two orders, 10%/20% GPU allocations and five prespecified programme–request combinations, giving 1,600 replays without retuning. Results are shown by observed week, with descriptive totals across 80 realisations per condition. The observed production records cover eight weeks, rather than 80 newly observed weeks.
 
 The timing input was the processed Alibaba 2020 job-submission table (714,903 GPU jobs), using trace hours 168–1511 inclusive. The eight 168-h weeks supplied hourly counts; each week’s class-specific synthetic total was normalised to the unchanged offered work. A whole-hour permutation preserved the marginal hourly volumes and the exact class–deadline totals. Seeds 986000 + 100w + r, for week w = 0,…,7 and realisation r = 0,…,9, generated paired inputs. Frozen tests used request fractions 0.5, 0.75 and 1 at eight-hour/16-h spacing, and 0.5 and 1 at eight-hour/24-h spacing. No external result selected a new fraction. Submission counts preserve one observed temporal feature; they do not supply real GPU-hour volumes, deadlines or job dependencies. All 320 timing input variants passed the baseline service gate.
 
-Local refinement fixed the reference workload and controller and tested fractions 0.50–0.75 for H8P16 and 0.75–1.00 for H4P16, in steps of 0.05 of the unchanged 5.898243186-kW request. H denotes duration and P start spacing. Seeds 988000–988099 supplied development; endpoint-specific selections were frozen before seeds 989000–989299 supplied confirmation. Only selected candidates and prespecified coarse comparators entered confirmation, with no reselection. The grid ceiling for eight hours was selected under both standards, so the test did not bracket a continuous maximum. Earlier seeds were not pooled with these data.
+#### 6.5 Refining the reference four- and eight-hour offers
 
-Perfect-information diagnostics fixed each request and its four event clocks, baseline and 24-h recovery windows. Non-negative execution variables existed only between each class/release/deadline work group’s own release and deadline; execution, misses and terminal work conserved every group. Constraints retained GPU and PCC limits, 95% hourly and capped-mean delivery, 25% rebound relative to actual peak event reduction, 50% full-window peak relief and the original terminal allowance. Binary peak selectors represented the rebound denominator exactly. HiGHS solved the resulting mixed-integer feasibility problem. Thirty-three prespecified structural cases comprised five configurations, three previously used seeds and two service standards, plus three reference 4.42-kW checks; five affected external weeks supplied an additional first-shortage diagnostic each. These mechanism-selected cases were not prevalence samples. All 11 feasible witnesses passed independent work-group and electrical checks. A 90-s unresolved solve was retained and resolved as infeasible after extending only its time limit to 600 s. Full-information feasibility was not treated as causal realizability.
+The reference workload and corrected controller are fixed while the request grid is made finer. H denotes event duration and P the interval between event starts. Relative to the unchanged 5.898243186-kW request, H8P16 tests fractions 0.50–0.75 and H4P16 tests 0.75–1.00, both in steps of 0.05.
 
-The resource-time transfer test reconstructed each processed job’s GPU-seconds as the sum of requested GPU-equivalents × task launch-to-completion duration across its terminated positive-resource tasks.<sup>28</sup> All 714,903 processed jobs matched the raw task reconstruction; multiplying total requested GPUs by job submission-to-completion time instead differed for 131,379 jobs. The test retained trace hours 168–1511, whose processed time origin is 542,323 s after the raw origin. Within each week, either job counts or submitted task resource-time set hourly weights; each class’s weekly work total was normalised to the reference total. Identical synthetic job classes, deadlines, community traces, event clocks and paired whole-hour permutations were used at each seed (990000 + 100w + r; eight weeks × ten realisations). Fixed 2.95- and 4.42-kW requests gave 640 complete replays. All 320 no-response input variants passed zero-loss service; no failed variant was excluded. Aggregate counts are descriptive. Allocated resource-time is not a sensor measurement of busy GPU time, and the test retains divisible work and synthetic service rules.
+Seeds 988000–988099 select an offer separately for each service criterion. Those choices are fixed before confirmation on seeds 989000–989299. Confirmation tests only the selected candidates and prespecified coarse-grid comparators; it does not select replacements. Both service criteria select the highest tested eight-hour candidate, so this grid does not locate the continuous maximum. Earlier seeds are kept separate.
 
-### 7. Renewable planning
+#### 6.6 Checking whether any schedule can satisfy the request
 
-Each configuration used its actual power model at scale one. PV hosting maximised rated PV capacity with curtailment ≤5%, zero deadline misses, terminal backlog ≤2%, imports ≤1,100 kW and no exports. Fixed-PV operation used 500 kW and lexicographic objectives: service, local PV use, grid import, then battery throughput. PV-use tolerance was 10<sup>−5</sup> kWh. BESS had 100-kW charge/discharge power, 200-kWh energy, charge and discharge efficiency 0.95, and initial/terminal state of charge 50%. Binary exclusivity prohibited simultaneous charge and discharge. The first 100 confirmation seeds were paired across rigid/flexible operation and both BESS conditions. All feasibility statuses and missed work were retained; an all-scenario capacity is not reported from a filtered subset.
+The strict perfect-information test asks whether a feasible schedule exists when all future inputs are known. It fixes the request, four call times, baseline and 24-h recovery windows. Execution variables are allowed only between each class/release/deadline work group's own release and deadline. Executed, missed and terminal work must sum to each group's supplied work.
 
-HiGHS 1.15.1 retained its default relative MIP gap 10<sup>−4</sup> and absolute gap 10<sup>−6</sup>; only solver thread count was changed. The lexicographic lock on PV use is distinct from the primary optimisation gap. Small signed BESS utilisation contrasts can lie within this numerical resolution (roughly 0.01 percentage points when most PV is used). They are retained rather than clipped to zero, but are not interpreted as a physical loss or a resolved benefit. Bootstrap intervals describe scenario sampling only. The numerical-precision audit records the solver version and options.
+The model retains GPU and PCC limits, 95% hourly and capped-mean delivery, 25% rebound relative to actual peak event reduction, 50% full-window peak relief and the original terminal allowance. Binary peak selectors represent the rebound denominator exactly. HiGHS solves the resulting mixed-integer feasibility problem.
 
-### 8. Orthogonal sensitivity controls
+The 33 prespecified structural cases cover five configurations, three previously used seeds and two service standards, plus three reference 4.42-kW checks. Five affected external weeks each supply an additional first-shortage case. These selected cases diagnose mechanisms rather than estimate failure prevalence. All 11 feasible schedules pass independent work-group and electrical checks. One solve unresolved at 90 s is retained and classified as infeasible after extending only its time limit to 600 s. Existence of a full-information schedule does not establish that the causal controller can implement it.
 
-Four controls around 10% eligibility were specified before their outcomes were examined: flexible GPU allocation 20% or 30%, and rigid-class active-power proxy 150 or 225 W. Other inputs, seed identities and event times were unchanged. Each control had 300 no-response gates, 100 PI scenarios at both durations, 300 fixed-offer tests at both durations, and 100 paired renewable scenarios. Its economic ledger used the same fixed requests. These selected controls and the five eligibility scenarios do not constitute a global sensitivity analysis over simultaneous variation in all model parameters.
+#### 6.7 Comparing job counts with task resource-time
 
-### 9. Complete ledgers and economic sensitivity
+For each processed job, we reconstruct requested GPU-seconds by summing requested GPU-equivalents × launch-to-completion duration over its terminated tasks with positive resource requests.<sup>28</sup> This matches all 714,903 processed jobs. By contrast, multiplying the job's total requested GPUs by its submission-to-completion time disagrees for 131,379 jobs. Job duration includes waiting before execution and does not replace the sum of task-level resource-time.
 
-From the first event through episode end, delay exposure was the sum of positive paired excess backlog times the one-hour interval. Incremental energy was the signed controlled-minus-baseline PCC energy. Deferred work summed positive execution shortfalls during event hours; it did not automatically imply lost work. Each repeated series contributed every hour once. The source tables retain incremental deadline misses and terminal backlog even when a programme fails.
+The comparison uses trace hours 168–1511; the processed time origin is 542,323 s after the raw origin. Within each week, we allocate the same class-specific work total across hours using either submitted job counts or submitted task resource-time. Each seed uses matching synthetic job classes, deadlines, community demand, call times and whole-hour permutations. Seeds are 990000 + 100w + r, with eight weeks and ten realisations per week.
 
-Single-event annual draws sampled 50 complete confirmation episodes; repeated draws sampled 12 complete four-call series. Two thousand common bootstrap draws were used at each price setting. Physical quantities and the offer were multiplied by 1000 divided by each configuration's own operating peak; the US$25,000 annual site charge was then added once. The required payment was max(0, the 95th percentile of net annual cost divided by offered accounting kW). Prices were US$0.10/kWh for electricity, US$50/MWh for capped delivered energy and US$0.005/GPU-h/h for waiting. All 300 trajectories were retained regardless of success.
+Fixed 2.95- and 4.42-kW requests produce 640 complete replays. All 320 no-response input variants pass zero-miss service, and none is excluded. Pooled counts remain descriptive. Requested resource-time measures allocated work rather than sensor-observed busy GPU time; task divisibility and synthetic service rules remain model assumptions.
 
-Reserve costs annualised 0.15 abstract reserved PCC-side kW per offered kW, at US$2,500 per reserved kW, 8% discount, four-year life, 10% salvage and 3% annual operation and maintenance. This is not a GPU procurement quotation or wear model. Separate assumed displaced-value exposures of US$0.25 and 0.50 per deferred GPU-h were evaluated; only the former is the main illustration. Sensitivity grids covered waiting prices 0, 0.001, 0.005 and 0.01; fixed site costs 10,000, 25,000 and 50,000; displaced values 0, 0.25, 0.5 and 1; missed-work prices 0, 0.25 and 1; and reserve lives 3–6 years. Contract-specific non-performance penalties were not priced. The original price-source register is retained in the archive; these inputs remain scenarios rather than observed operator accounts.
+#### 6.8 Selecting and independently testing an offer for each workload representation
 
-Recovery-extension costs use the same full-series ledger, twelve independent series per year and 2,000 common annual draws on the new confirmation set. All 300 series enter each calculation, irrespective of success. The crossed grid uses waiting prices 0, 0.005 and 0.01, annual site costs US$10,000, 25,000 and 50,000 and displaced values US$0, 0.25 and 0.50 per deferred GPU-h. Reserved-headroom costs retain the stated four-year reference assumptions. This extension does not rerun the original missed-work-price or reserve-life screens. Source tables identify development selection and independent qualification separately, so a low-cost failed comparator cannot be mistaken for an offerable choice.
+This experiment asks which request each workload representation can support within the fixed eight-week dataset. Each new seed independently selects one week with equal probability. Fresh job templates, community conditions and a random final-call phase are paired between submission-count and task-resource-time weights. Four eight-hour calls start 16 h apart, with zero advance notice.
 
-The fee decomposition used common annual draws and the same linear-interpolation weights at the total net-cost 95th percentile for every component; it did not add marginal component quantiles. Additional screens crossed site fees US$0, 1,000, 2,500, 5,000, 10,000 and 25,000, waiting prices US$0, 0.005 and 0.01 per GPU-h/h, and missed-work prices US$0 and 1 per GPU-h. Sharing a US$25,000 fee among ten or five resources gave US$2,500 or 5,000 without a diversification benefit. For qualified product j with accounting capacity K_j and annual net operating cost O_j at its 95th percentile, the fifth-percentile net value was P_j K_j − O_j − F. Duration-price boundaries compared these values and the zero value of not participating. They are algebraic consequences of the stated ledgers and prices, not estimated market tariffs.
+Development seeds 1010000–1010099 test 1/64, 1/32, 1/16, 1/8, 1/4, 3/8, 1/2, 3/4 and 1 times 5.898243186 kW. For each weighting and service criterion, the largest candidate with a one-sided 95% Wilson lower bound ≥0.95 is fixed. Confirmation seeds 1011000–1011299 then test that offer and a prespecified 1/2-request comparator, retaining any baseline failures.
+
+The 1,800 development and 900 confirmation replays do not reuse the earlier 80 realisations to choose offers. The probability statements apply to independent model draws from the fixed eight-week empirical mixture, rather than additional observed production weeks.
+
+### 7. Calculating solar hosting capacity and use of a fixed solar system
+
+We use each configuration's own power model at its original facility size. The hosting calculation maximises rated PV capacity subject to the following limits: curtailment must be ≤5%, missed work zero, terminal backlog ≤2% and grid imports ≤1,100 kW, with no exports. A separate calculation fixes PV capacity at 500 kW. It prioritises service, then local solar use, grid imports and battery throughput, retaining a 10<sup>−5</sup>-kWh tolerance for solar use.
+
+The battery has 100-kW charge/discharge power and 200-kWh energy capacity. Charge and discharge efficiency are each 0.95, and initial and final state of charge are both 50%. Binary constraints prevent simultaneous charging and discharging. The first 100 confirmation seeds are paired across rigid and flexible scheduling, with and without the battery. All solution statuses and missed work are retained when reporting the capacity supported across all scenarios.
+
+For the fixed 500-kW system, objectives are solved in priority order: maximise local PV use, then minimise grid imports, then minimise battery throughput. Each later step keeps the preceding optimum within 10<sup>−5</sup> kWh. Rigid and flexible schedules share 100 inputs; mean utilisation gains use 10,000 paired bootstrap resamples with seed 20260911.
+
+Without storage these models are continuous linear programmes, so a relative mixed-integer programming (MIP) gap does not determine their precision. The stricter numerical check repeats all 800 primary 10% PV optimisations and 200 no-storage GPU20 hosting optimisations. HiGHS<sup>37</sup> uses relative and absolute MIP gaps of 10<sup>−7</sup>, with primal, dual and MIP feasibility tolerances of 10<sup>−8</sup>. Each solve has one thread and a 120-s limit.
+
+All fixed-PV problems finish. Of the flexible-storage hosting problems, 34 reach the time limit. Their feasible capacities and upper bounds are retained; none changes the minimum hosting boundary across the 100 scenarios. Table 24 reports these optimisation bounds separately from sampling uncertainty.
+
+### 8. Changing GPU allocation, rigid power and fixed node overhead
+
+Four controls are specified before their results are examined, all around the 10% eligible-work configuration. Two allocate 20% or 30% of GPUs to the flexible pool; two change the rigid-class active-power proxy to 150 or 225 W. Other inputs, seeds and event times are matched.
+
+Each control includes 300 no-response service checks, 100 PI scenarios at each duration, 300 fixed-offer tests at each duration and 100 paired renewable scenarios. Costs use the same fixed requests. These controls isolate selected assumptions; together with the five eligible-work scenarios, they do not vary all model parameters jointly.
+
+Node overhead is set to 150, 300, 450 or 600 W/node, giving operating peaks of 167.52, 193.44, 219.36 and 245.28 kW (Supplementary Fig. 10; Table 23). We retain all 600 independently confirmed reference schedules. For each overhead setting, PUE × 144 × (p_node − 300)/1000 is added to both response and no-response power, and electrical and PCC constraints are rescored.
+
+This calculation tests whether the existing schedules remain feasible after the same constant power offset is added to both runs. It does not rerun the controller or select new offers. Baseline-relative reductions, task backlog and waiting remain unchanged; absolute PCC headroom and the conversion to a 1-MW accounting scale change.
+
+### 9. Recording operating differences and calculating participation payments
+
+We record hourly differences between response and matched no-response operation from the first event to the end of the simulation. Additional waiting exposure sums positive excess backlog multiplied by the one-hour time step. It measures how much work waits longer and for how long. Incremental energy is the signed difference in PCC electricity use, so energy reductions retain a negative sign.
+
+Deferred work sums positive execution shortfalls during event hours. It is recorded separately from work that misses its deadline. Every hour appears once in a repeated-call sequence. Failed sequences remain in the records, including their extra missed work and terminal backlog.
+
+One annual draw samples 50 complete confirmation episodes for single-event service, or 12 complete four-call sequences for repeated service. Every price setting uses the same 2,000 bootstrap draws. All 300 available trajectories enter the sampling pool, including failures.
+
+Work, energy and offered capacity are multiplied by 1000 divided by the configuration's operating peak. This is proportional accounting at a 1-MW peak, not a new facility simulation. The US$25,000 annual site fee is then added once. For each draw we calculate annual net cost, sort those costs and use their 95th percentile. The required payment is max(0, that percentile divided by accounting offered kW).
+
+Reference prices are US$0.10/kWh for electricity, US$50/MWh for delivered energy capped at the request, and US$0.005/GPU-h/h for additional waiting.
+
+The reserve-cost scenario assumes 0.15 kW of reserved PCC capacity per offered kW. Annualisation uses US$2,500 per reserved kW, an 8% discount rate, four-year economic life, 10% salvage value and 3% annual operation and maintenance. This prices an assumed reserve allowance; it is not a GPU purchase or wear estimate.
+
+We compare incremental costs of demand response and matched no-response operation using the same installed, powered GPU fleet over the same evaluation period. GPU quantity, depreciation method, expected useful life and salvage value are held fixed, so existing-fleet depreciation cancels in the paired comparison. Task delay, recovery-period operating differences and service losses are evaluated separately under the stated valuation assumptions. Long-term thermal cycling and hardware degradation are outside the model. The short-duration power measurements do not assess these effects on GPU lifetime. Economic results therefore remain conditional on assigning no additional hardware-degradation cost to demand response.
+
+Displaced-work scenarios separately value deferred work at US$0.25 or 0.50/GPU-h, with 0.25 used as the main illustration. Sensitivity grids cover waiting prices 0, 0.001, 0.005 and 0.01; fixed site fees 10,000, 25,000 and 50,000; displaced-work values 0, 0.25, 0.5 and 1; missed-work prices 0, 0.25 and 1; and reserve lives of 3–6 years. Contract-specific non-performance penalties are not priced. The original price-source register is archived, and all these amounts remain scenario assumptions rather than observed operator accounts.
+
+The recovery-controller comparison uses the same hourly cost definitions, with twelve independent four-call sequences per year and 2,000 common annual draws from the new confirmation set. All 300 sequences are retained. The crossed price grid combines waiting prices 0, 0.005 and 0.01, annual site fees US$10,000, 25,000 and 50,000, and displaced-work values US$0, 0.25 and 0.50 per deferred GPU-h.
+
+Reserved-capacity costs retain the four-year reference assumptions. This comparison does not repeat the earlier missed-work-price or reserve-life screens. Source tables distinguish offers selected during development and passing independent qualification from failed or unselected comparators, even when a comparator has low calculated cost.
+
+Cost components are evaluated at the same annual draws and the same interpolation weights used for the 95th percentile of total net cost. We do not add the separate 95th percentiles of individual components, which need not occur in the same annual draw.
+
+The fee comparison combines annual site fees US$0, 1,000, 2,500, 5,000, 10,000 and 25,000; waiting prices US$0, 0.005 and 0.01/GPU-h/h; and missed-work prices US$0 and 1/GPU-h. Sharing a US$25,000 fee among ten or five resources gives US$2,500 or 5,000 per resource. This shares the fee only; no reliability or diversification benefit is added.
+
+For qualified product j, K_j is its offered capacity after scaling and O_j its 95th-percentile annual net operating cost. At capacity price P_j and fixed fee F, its fifth-percentile annual net value is P_j K_j − O_j − F. We compare this value across qualified duration products and against zero for not participating. The price boundaries are calculated from these costs and assumptions, rather than estimated from market tariffs.
 
 ## Supplementary Figures
 
-### Supplementary Figure 1 | Study inputs and evidence flow
+### Supplementary Figure 1 | From production records and power measurements to response qualification, solar analysis and economic accounting
 
-![Supplementary Figure 1](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_1.png)
+![Supplementary Figure 1](../paper/v0.27/figures/supplement/S01/AIDRBench_Supplementary_Figure_1.png)
 
-**a,** Source composition and declared permission define a paired job template, hardware allocation and hourly deadline queues in the community PCC model. **b,** Development selects requests before independent confirmation; complete trajectories supply the cost ledger. PV and BESS optimisation is a separate full-information branch. Arrows describe model inputs and analysis dependencies, not estimated causal effects.
+**a,** Observed workload shares and the assumed permission to defer tasks determine the synthetic job templates and GPU allocation. An hourly queue then tracks arrivals, execution and deadlines, and the power model combines data-centre and community demand at the PCC. **b,** Development simulations select a request; a separate confirmation set tests it. Hourly operating records supply the participation-cost calculation. Solar and storage planning is a separate optimisation with full future information. Arrows indicate inputs passed between calculations.
 
-### Supplementary Figure 2 | Four-GPU board-power calibration
+### Supplementary Figure 2 | GPU board-power measurements, calibration and held-out validation for training and offline inference
 
-![Supplementary Figure 2](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_2.png)
+![Supplementary Figure 2](../paper/v0.27/figures/supplement/S02/AIDRBench_Supplementary_Figure_2.png)
 
 **a,** All 30 per-board run averages from one- and four-GPU training and offline inference. Filled points are fitting runs 1–2; open points are held-out run 3. Boards in one run are not independent replicates. **b,** Active-power estimates and 95% Student-t intervals from two independent four-GPU run means per class. Held-out overall MAE is 3.80 W/GPU. Node overhead and online-serving power were not measured by this calibration.
 
-### Supplementary Figure 3 | Candidate resolution and structural context
+### Supplementary Figure 3 | Local offer-grid screening, supply and deadline failures, and the earlier weekly workload-transfer comparison
 
-![Supplementary Figure 3](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_3.png)
+![Supplementary Figure 3](../paper/v0.27/figures/supplement/S03/AIDRBench_Supplementary_Figure_3.png)
 
-**a,b,** Development one-sided 95% Wilson lower bounds for every four- and eight-hour local candidate (100 scenarios each, both service standards). The dashed line is the selection threshold of 0.95; the selected eight-hour grid ceiling is not a bracketed maximum. **c,** Full-request structural controls show instantaneous shortages and >1% deadline failures as potentially overlapping categories (300 scenarios). **d,** Chronological submission-count cross-scoring from the 986000-series study: stacked segments show successes and immediate shortages at 4.42 kW, and markers show 2.95-kW successes. Both service scores coincide at each request. Eight observed weeks have ten synthetic realisations each; counts are descriptive. Historical design interpretation is in Note 7; matched last-call outcomes, all of which coincide, remain in Table 15 and Source Data.
+**a,b,** Development success-probability lower bounds for each four- and eight-hour request on the finer reference grid. Each point uses 100 scenarios under both service rules and a one-sided 95% Wilson bound. The dashed line is the 0.95 selection threshold. The largest tested eight-hour request is selected, leaving the continuous maximum undetermined. **c,** Counts of immediate supply shortage and more than 1% missed work in 300 full-request control scenarios; the two failures can occur together. **d,** The earlier 986000-series test using observed submission counts in their original hourly order. Bars separate success from immediate shortage at 4.42 kW; markers show successes at 2.95 kW. The two service rules give identical scores at each request. Each of eight observed weeks has ten synthetic realisations, so pooled counts are descriptive. Note 7 explains the earlier design. Table 15 and Source Data retain the identical paired final-call outcomes.
 
-### Supplementary Figure 4 | PV benefits and fixed-request controls
+### Supplementary Figure 4 | Solar gains and fixed-request delivery across workload eligibility, GPU allocation and rigid-load power assumptions
 
-![Supplementary Figure 4](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_4.png)
+![Supplementary Figure 4](../paper/v0.27/figures/supplement/S04/AIDRBench_Supplementary_Figure_4.png)
 
-**a,** Flexible minus rigid all-scenario PV hosting capacity across the five eligibility scenarios, with and without BESS; each capacity is the minimum over 100 scenarios. **b,** Paired gain in utilisation of a fixed 500-kW PV system; points are means and whiskers are 95% paired bootstrap intervals. The intervals cover sampling, not optimisation error; small storage contrasts remain unresolved at solver precision. **c,** Four- and eight-hour success at unchanged primary single-event requests across allocation and rigid-power controls, with one-sided 95% Wilson lower bounds from 300 scenarios. **d,** Corresponding gains in all-scenario PV hosting over 100 paired scenarios. Panels c,d retain 10% eligibility and vary only GPU allocation or the stated rigid-power proxy. PV schedules use full information and zero missed work; hosting differences are differences of minima, not mean effects or confidence intervals.
+**a,** Flexible minus rigid all-scenario PV hosting capacity across the five eligibility scenarios, with and without BESS; each capacity is the minimum over 100 scenarios. **b,** Paired gain in utilisation of a fixed 500-kW PV system; points are means and whiskers are 95% paired bootstrap intervals. The intervals cover sampling, not optimisation error; small storage contrasts remain unresolved at solver precision. **c,** Four- and eight-hour success at unchanged primary single-event requests across allocation and rigid-power controls, with one-sided 95% Wilson lower bounds from 300 scenarios. **d,** Corresponding gains in all-scenario PV hosting over 100 paired scenarios. Panels c,d retain 10% eligibility and vary only GPU allocation or the stated rigid-power proxy. PV schedules use full information and zero missed work; hosting differences are differences of minima, not mean effects or confidence intervals. The 10% primary points and no-BESS GPU20 hosting point use the strict repeat audit; other points retain the original settings (Table 24).
 
-### Supplementary Figure 5 | Waiting valuation and access fees change product choice
+### Supplementary Figure 5 | Four- versus eight-hour service choice under waiting and missed-work valuations and access fees
 
-![Supplementary Figure 5](../docs/figures/commitment_narrative_v1/artwork/AIDRBench_Supplementary_Figure_5.png)
+![Supplementary Figure 5](../paper/v0.27/figures/supplement/S05/AIDRBench_Supplementary_Figure_5.png)
 
-**a,** Difference between product-specific fifth-percentile annual net values, eight minus four hours, at equal capacity prices with zero waiting price and zero access fee; zero marks indifference between participating products. **b,** Refined zero-loss product thresholds with zero or US$1/GPU-h missed-work valuation at reference waiting price and zero fee. The zero-loss qualification permits occasional failed scenarios, whose ledgers remain priced. **c,** Fifth-percentile annual net values at US$250 per kW-year, reference waiting price and zero, shared or full access fees. **d,** Eight-hour price required to match both four-hour participation and opting out at those access fees. All products use the new 300-seed confirmation ledgers, 10% eligibility, 65% offered utilisation, reference deadlines and 16-h start spacing. Annual accounting and energy prices match Fig. 6; fees are common across duration products and do not imply reliability pooling.
+**a,** Difference in fifth-percentile annual net value between the eight- and four-hour products when capacity prices are equal and waiting and access fees are zero. Zero marks equal value for the two participating products. **b,** Required compensation when missed work is valued at zero or US$1/GPU-h, with the reference waiting price and zero site fee. These refined offers were qualified using zero missed work as the success criterion, but qualification permits occasional failed scenarios; their costs remain included. **c,** Fifth-percentile annual net value at US$250/kW-year and the reference waiting price, with zero, shared or full access fees. **d,** Eight-hour price needed to be at least as valuable as both four-hour participation and not participating. All panels use 300 confirmation sequences, 10% eligible work, 65% offered utilisation, reference deadlines and 16-h start spacing. Annual accounting and energy prices follow Fig. 6. Fee sharing adds no assumption about pooled reliability.
+
+### Supplementary Figure 6 | Response delivery and deadline compliance across utilisation, task deadlines, GPU allocation and call schedules
+
+![Supplementary Figure 6](../paper/v0.27/figures/supplement/S06/AIDRBench_Supplementary_Figure_6.png)
+
+**a,b,** Numbers of scenarios satisfying all delivery and service criteria when the missed-work limit is 1% or zero. **c,d,** Numbers encountering an event-hour supply shortage or more than 1% missed work. Each cell contains 300 confirmation scenarios at 10% work eligibility and the same 5.898243-kW, eight-hour request. Columns compare a separate final call at the matched clock time with four-call sequences starting 16 or 24 h apart. Rows change utilisation, deadline slack and flexible GPU allocation. Each setting has its own matched baseline, and all no-response runs pass service checks. Numerals are counts; blue or orange intensity increases from zero to 300. Failure types can overlap. The fixed request is a common stress test, not a separately selected offer for each row. Changing spacing also moves preceding calls to different times. Tables 14–15 and Source Data retain complete outcomes and selected-offer tests.
+
+### Supplementary Figure 7 | Solar hosting capacity, curtailment and grid imports under rigid and flexible scheduling, with and without storage
+
+![Supplementary Figure 7](../paper/v0.27/figures/supplement/S07/AIDRBench_Supplementary_Figure_7.png)
+
+**a,b,** Absolute PV hosting capacities without and with BESS, for rigid and flexible schedules. Each point is the minimum over 100 scenarios. **c,d,** Arithmetic mean curtailed PV energy and grid imports per modelled horizon for a fixed 500-kW PV installation, over the same 100 paired scenarios. Blue and green identify no BESS and BESS; dashed circles and solid squares identify rigid and flexible operation. Grid-import curves nearly coincide at the displayed scale; no uncertainty or significance is inferred from their separation. These absolute outcomes complement the paired gains and bootstrap intervals in Supplementary Fig. 4a,b. Lines connect evaluated eligibility fractions only. The 40% and 60% cases retain the additional business assumptions listed in Supplementary Table 2; configuration-dependent demand also changes across fractions, so within-case rigid–flexible comparisons isolate scheduling. All schedules use full information and zero missed work. Means and minima are descriptive summaries, and do not establish the delivery reliability of a causal controller; small storage contrasts remain limited by optimisation precision. All scenario values are retained in Source Data.
+
+### Supplementary Figure 8 | Single-event participation thresholds across hardware economic lifetime, work value, waiting costs and site fees
+
+![Supplementary Figure 8](../paper/v0.27/figures/supplement/S08/AIDRBench_Supplementary_Figure_8.png)
+
+**a,** Reserved-headroom cost with a hardware economic life of three to six years. **b–d,** Effective displaced-work value, waiting valuation and fixed site fee varied separately without an added reserve cost. All panels retain the 10% eligibility single-event four- and eight-hour offers of 5.898243 kW, supported by 295/300 and 292/300 joint successes under the 1% missed-work standard. Annual accounting draws 50 independent complete event-and-recovery ledgers with replacement, scales proportionally to 1 MW and retains failures. Unvaried prices are US$0.005/GPU-h/h waiting, US$25,000/year site fee, zero displaced-work value and zero missed-work price; electricity and delivered-energy prices follow Table 9. Points are 95th-percentile annual-net-cost thresholds, not confidence limits. Lines join evaluated values without added observations. Economic life affects assumed reserve amortisation, not measured hardware ageing or failure. These single-event scenarios must not be substituted for the independently qualified repeated products and twelve-series accounting in Fig. 6. Source Data also retain the missed-work-price check, which does not visibly change these single-event thresholds.
+
+### Supplementary Figure 9 | Offer selection and independent delivery qualification under reference workloads and the eight-week empirical distribution
+
+![Supplementary Figure 9](../paper/v0.27/figures/supplement/S09/AIDRBench_Supplementary_Figure_9.png)
+
+**a,** Independent confirmation of the reference four- and eight-hour offers, 5.60 and 4.42 kW, with 300 scenarios each. **b,** Development lower bounds for all candidate requests under submission-count and task-resource-time weighting, using 100 new model draws per point. Solid circles use the 1% missed-work criterion and dashed squares use zero missed work. Both criteria select the same offer within each weighting scheme. **c,** Independent confirmation of those selected offers and the fixed 2.95-kW resource-time comparator, with 300 new draws each. Points show success fractions and lower whiskers the one-sided 95% Wilson bounds; the dashed line is the 0.95 qualification threshold. Panels b,c draw from an equal mixture of eight fixed observed weeks, with paired synthetic tasks and call phases. The calls last eight hours and start 16 h apart. Panel a uses a separate reference workload distribution; model draws in b,c do not add observed production weeks.
+
+### Supplementary Figure 10 | Data-centre peak-power decomposition, fixed node-overhead sensitivity and solar solver-precision checks
+
+![Supplementary Figure 10](../paper/v0.27/figures/supplement/S10/AIDRBench_Supplementary_Figure_10.png)
+
+**a,** Exact components of the 193.438980-kW primary operating peak; PUE applies to all components. **b,** The unchanged 5.898243-kW single-event offer as a share of peak as node overhead varies. Points are deterministic accounting values, not replicate estimates. Re-scoring all 600 reference repeated schedules preserves their success flags at each overhead; Table 23 gives PCC headroom. **c,d,** Each point compares the original and strictly solved flexible-minus-rigid utilisation contrast for one of 100 paired primary scenarios, without and with BESS. The dashed diagonal marks equality, not a fitted model. c is a continuous LP and its tiny gain is unchanged; d resolves to numerical zero after tightening MIP and feasibility tolerances. The final lexicographic difference and primary objective bounds are reported separately in Table 24. No statistical inference is assigned to pointwise solver agreement.
 
 ## Supplementary Tables
 
@@ -216,7 +365,7 @@ The fee decomposition used common annual draws and the same linear-interpolation
 
 ### Supplementary Table 2 | Five workload configurations
 
-| Eligible work (%) | Online work (%) | Eligible training (%) | Eligible offline (%) | Flexible GPUs | Operating peak (kW) |
+| Work permitted to wait (%) | Online work (%) | Eligible training (%) | Eligible offline (%) | Flexible GPUs | Operating peak (kW) |
 |---|---|---|---|---|---|
 | 5 | 54.50 | 0.26 | 4.74 | 29 | 189.94 |
 | 10 | 54.50 | 0.52 | 9.48 | 58 | 193.44 |
@@ -226,7 +375,7 @@ The fee decomposition used common annual draws and the same linear-interpolation
 
 All workload percentages use total offered GPU-hours as denominator. Total work is 374.4 GPU-h/h and installed hardware is 576 GPUs. The 40% case expands batch permission; 60% changes business composition. Mean utilisation is approximately 65% in each primary pool; operating peak is a model coefficient, not an observed event peak.
 
-### Supplementary Table 3 | Evidence partitions and execution provenance
+### Supplementary Table 3 | Simulation seeds, run counts and hourly records for each analysis
 
 | Analysis | Independent seeds | Runs or results |
 |---|---|---|
@@ -250,7 +399,7 @@ For the original controller study (confirmation seeds 960000–960299): Developm
 
 ### Supplementary Table 4 | Relaxed planning statistics and independent single-event qualification
 
-| Eligibility (%) | Duration (h) | Relaxed PI statistic (kW) | Offer (kW) | Success | Wilson lower | Qualifies |
+| Permitted work (%) | Duration (h) | Relaxed PI statistic (kW) | Offer (kW) | Success | Wilson lower | Qualifies |
 |---|---|---|---|---|---|---|
 | 5 | 4 | 2.89 | 2.95 | 295/300 | 0.9662 | Yes |
 | 5 | 8 | 2.79 | 2.95 | 292/300 | 0.9533 | Yes |
@@ -263,11 +412,11 @@ For the original controller study (confirmation seeds 960000–960299): Developm
 | 60 | 4 | 33.31 | 34.00 | 295/300 | 0.9662 | Yes |
 | 60 | 8 | 32.12 | 34.00 | 292/300 | 0.9533 | Yes |
 
-PI uses 100 confirmation scenarios; controller testing uses 300. Each offer was fixed on development data. Notice 0, 2 and 6 h is retained separately in Source Data, together with all paired binary outcomes and Holm-adjusted exact McNemar tests. Qualification is pointwise at 95% reliability and 95% one-sided confidence.
+PI uses 100 confirmation scenarios; controller testing uses 300. Each offer was fixed on development data. Notice 0, 2 and 6 h is retained separately in Source Data, together with all paired binary outcomes, which coincide across notice settings. Qualification is pointwise at 95% reliability and 95% one-sided confidence.
 
-### Supplementary Table 5 | Repeated programmes and matched fresh calls
+### Supplementary Table 5 | Original-controller success for repeated calls and separate calls at matched times
 
-| Eligibility (%) | Call/gap (h) | Fresh/repeated successes | Repeated − fresh (pp), 95% interval | Original repeated lower | Development-selected kW |
+| Permitted work (%) | Call/gap (h) | Fresh/repeated successes | Repeated − fresh (pp), 95% interval | Original repeated lower | Development-selected kW |
 |---|---|---|---|---|---|
 | 5 | 4/8 | 300/300 | 0.0 [0.0, 0.0] | 0.9911 | None |
 | 5 | 8/12 | 297/268 | -9.7 [-13.0, -6.3] | 0.8604 | None |
@@ -284,12 +433,12 @@ For the original controller study (confirmation seeds 960000–960299): Each suc
 
 ### Supplementary Table 6 | PV hosting and fixed-PV utilisation
 
-| Eligibility (%) | BESS | Rigid PV kW | Flexible PV kW | Boundary gain kW | Utilisation gain (pp), 95% interval |
+| Permitted work (%) | BESS | Rigid PV kW | Flexible PV kW | Boundary gain kW | Utilisation gain (pp), 95% interval |
 |---|---|---|---|---|---|
 | 5 | No | 604.21 | 607.03 | 2.82 | 0.0034 [0.0012, 0.0060] |
 | 5 | Yes | 672.63 | 675.22 | 2.60 | -0.0002 [-0.0004, 0.0000] |
 | 10 | No | 603.55 | 608.95 | 5.40 | 0.0057 [0.0019, 0.0106] |
-| 10 | Yes | 672.39 | 677.61 | 5.22 | 0.0000 [-0.0000, 0.0001] |
+| 10 | Yes | 672.39 | 677.61 | 5.22 | 0 (numerical; Table 24) |
 | 20 | No | 601.56 | 611.92 | 10.36 | 0.0102 [0.0030, 0.0201] |
 | 20 | Yes | 671.83 | 681.87 | 10.04 | 0.0000 [-0.0000, 0.0000] |
 | 40 | No | 597.97 | 626.96 | 28.99 | 0.0249 [0.0074, 0.0476] |
@@ -299,9 +448,11 @@ For the original controller study (confirmation seeds 960000–960299): Each suc
 
 Each hosting capacity is the minimum over all 100 confirmation scenarios at ≤5% curtailment. Utilisation uses a fixed 500-kW PV installation; means and pointwise paired bootstrap intervals are in percentage points. All current renewable solutions are retained and checked for zero deadline misses. The corresponding conditional mean hosting effects are separately available in Source Data.
 
-### Supplementary Table 7 | Single-event and complete-programme participation screens
+The 10% entries use the strict precision audit in Table 24; other eligibility cases retain their original solver settings. The no-BESS utilisation gain is an LP result, unchanged to 2.9 × 10<sup>−14</sup> percentage points in the paired contrast after tightening tolerances. In the primary BESS case, the optimal PV-use contrasts are zero to numerical precision; tiny final signed differences arise within the lexicographic lock.
 
-| Eligibility (%) | Call (h) | Single slack | Single reserve | Single displacement | Repeated original, slack | Repeated confirmation passes |
+### Supplementary Table 7 | Conditional participation payments for original single and repeated offers
+
+| Permitted work (%) | Call (h) | Single slack | Single reserve | Single displacement | Repeated original, slack | Repeated confirmation passes |
 |---|---|---|---|---|---|---|
 | 5 | 4 | 1653.07 | 1769.22 | 1793.29 | 1768.26 | Yes |
 | 5 | 8 | 1739.11 | 1855.26 | 2019.54 | 1881.22 | No |
@@ -316,7 +467,7 @@ Each hosting capacity is the minimum over all 100 confirmation scenarios at ≤5
 
 For the original controller study (confirmation seeds 960000–960299): All payments are US$ per offered accounting kW-year at a proportional 1-MW operating peak. Single events use 50 independent calls/year; repeated programmes use 12 independent four-call series/year. The site charge is US$25,000 once yearly. The displacement illustration assumes US$0.25 per deferred GPU-h. The repeated-pass column applies the confirmation Wilson criterion only; the separate development rule selected no repeated candidate. Conditional costs do not change either outcome. All price-grid rows and failed-trajectory service losses are retained in Source Data.
 
-### Supplementary Table 8 | Orthogonal allocation and rigid-power controls
+### Supplementary Table 8 | Fixed-offer tests across GPU allocations and rigid-power assumptions
 
 | Control | Hours | Relaxed PI kW | Fixed offer kW | Success | Wilson lower | Slack payment |
 |---|---|---|---|---|---|---|
@@ -346,9 +497,9 @@ All controls retain 10% eligibility and the same work. g20/g30 change flexible G
 
 The main economic comparison uses the reference prices and reports the 95th percentile of net annual cost. Delay/site/displacement prices are crossed; missed-work prices are varied at the reference delay/site setting with no displacement charge; reserve life is varied separately. These are scenario inputs, not empirical distributions or a joint global uncertainty model. No actual GPU procurement price, ageing hazard or contract-specific failure tariff is inferred.
 
-### Supplementary Table 10 | Frozen repeated offers and new independent confirmation
+### Supplementary Table 10 | Repeated-offer selection and confirmation with individual recovery-window constraints
 
-| Eligibility (%) | H/G (h) | Controller | Selected fraction | kW | Successes | Wilson lower | Outcome |
+| Permitted work (%) | H/G (h) | Controller | Selected fraction | kW | Successes | Wilson lower | Outcome |
 |---|---|---|---|---|---|---|---|
 | 5 | 4/8 | Per-call MPC | 100% | 2.95 | 300/300 | 0.9911 | Pass |
 | 5 | 4/8 | Original | — | — | — | — | Not selected |
@@ -393,9 +544,9 @@ The main economic comparison uses the reference prices and reports the 95th perc
 
 The 40 method–programme–workload configurations yielded 25 development selections; 25/25 passed their new independent tests. Per-call MPC denotes MPC with a separate guard for every observed live recovery window. Each success requires all four calls to satisfy every criterion. Fractions are relative to the corresponding selected single-event offer. A dash means no qualifying development candidate, not zero capacity. Results use 100 development and 300 new confirmation seeds per condition; all bounds are pointwise.
 
-### Supplementary Table 11 | Paired recovery intervention at the full eight-hour request
+### Supplementary Table 11 | Paired effects of recovery constraints at the same full eight-hour request
 
-| Eligibility (%) | Revised controller | Original/revised successes | Difference (pp), 95% interval | Window-only rescues | New deadline failures | Holm P |
+| Permitted work (%) | Revised controller | Original/revised successes | Difference (pp), 95% interval | Window-only rescues | New deadline failures | Holm P |
 |---|---|---|---|---|---|---|
 | 5 | Per-call MPC | 262/294 | 10.7 [7.3, 14.3] | 32 | 0 | 5.12e-09 |
 | 10 | Per-call greedy | 252/294 | 14.0 [10.3, 18.0] | 42 | 0 | 5.91e-12 |
@@ -406,9 +557,9 @@ The 40 method–programme–workload configurations yielded 25 development selec
 
 All contrasts use the same full request, eight-hour calls, twelve-hour gaps and 300 paired new seeds. The primary contrast is 10% eligibility with per-call MPC. Intervals resample complete seeds 10,000 times; exact McNemar P values are adjusted across all 16 reported controller contrasts, including unchanged comparisons in Source Data. Window-only rescues require original failure confined to window peak relief and revised success on all criteria. New deadline failures identify seeds without an original deadline failure but with one under the revised controller. These counts are paired classifications, not independent samples or a complete decomposition of every gain and loss.
 
-### Supplementary Table 12 | Participation thresholds for development-selected repeated offers
+### Supplementary Table 12 | Required payments for selected repeated offers under alternative operating costs
 
-| Eligibility (%) | H/G (h) | Controller | kW | Slack | Reserve | Displacement | Confirmation |
+| Permitted work (%) | H/G (h) | Controller | kW | Slack | Reserve | Displacement | Confirmation |
 |---|---|---|---|---|---|---|---|
 | 5 | 4/8 | Per-call MPC | 2.95 | 1774.02 | 1890.17 | 1909.23 | Pass |
 | 5 | 8/8 | Per-call MPC | 2.21 | 2461.22 | 2577.37 | 2733.14 | Pass |
@@ -438,7 +589,7 @@ All contrasts use the same full request, eight-hour calls, twelve-hour gaps and 
 
 Payments are US$ per offered accounting kW-year, at a proportional 1-MW operating peak, twelve independent four-call series per year, US$25,000 annual site cost and US$0.005/GPU-h/h waiting price. Displacement assumes US$0.25 per deferred GPU-h; reserve uses the stated reference capital assumptions. Each estimate uses every complete confirmation trajectory and 2,000 common annual draws. Source Data additionally retain prices for unselected or failed full-request comparators and the crossed price grid. No continuous-year guarantee or observed operator profitability is inferred.
 
-### Supplementary Table 13 | Retrospective zero-deadline-loss check
+### Supplementary Table 13 | Rechecking existing offers under the zero-missed-work criterion
 
 | Study | Case | Programme | Fraction | Selected | 1% success | Zero success | Zero lower |
 |---|---|---|---|---|---|---|---|
@@ -480,7 +631,7 @@ Payments are US$ per offered accounting kW-year, at a proportional 1-MW operatin
 
 These are unchanged historical ledgers rescored at total missed work ≤1e−7 GPU-h, without reselection or new reliability samples. All 30 originally selected offers retain their success counts. The five unselected full H8G12 comparators remain comparators; the 10% case falls to 288/300 with lower bound 0.9369. Programme G denotes the gap after the event, unlike P (start spacing) in the new study. Yes/No identifies prior development selection.
 
-### Supplementary Table 14 | Frozen structural selections and independent confirmation
+### Supplementary Table 14 | Coarse-grid selection and confirmation across utilisation, deadlines and GPU allocation
 
 | Variant | Programme | Loss rule | kW | Development | Confirmation | Lower |
 |---|---|---|---|---|---|---|
@@ -521,7 +672,7 @@ These are unchanged historical ledgers rescored at total missed work ≤1e−7 G
 
 u is offered utilisation in percent; d100 is reference deadline slack and d50 is halved slack with a one-hour minimum; g is flexible GPU allocation in percent. Eligibility remains 10% and installed hardware remains 576 GPUs. H is duration and P is start spacing, so H8P16 has an 8-h gap. Fractions 0.25, 0.5, 0.75 and 1 multiply the fixed 5.898243186-kW request. All 26 positive endpoint-specific selections passed pointwise confirmation; eight decisions selected no candidate (NS), not zero physical capacity. Bounds are one-sided 95% Wilson limits from 300 new complete scenarios. All 3,200 development/confirmation input variants passed the no-response zero-service gate. The 1% and zero selections are separate and can coincide. These are the earlier coarse-grid selections. The reference four-hour/16-h and eight-hour/16-h products are subsequently refined with new seeds in Table 18.
 
-### Supplementary Table 15 | Full-request structural diagnostics
+### Supplementary Table 15 | Supply shortages and deadline failures at a fixed full request
 
 | Variant | Programme | Success | Supply shortage | Deadline >1% | Mean missed GPU-h |
 |---|---|---|---|---|---|
@@ -543,9 +694,9 @@ u is offered utilisation in percent; d100 is reference deadline slack and d50 is
 | u80d50g20 | H8P16 | 0/300 | 2 | 300 | 305.47 |
 | u80d50g20 | H8P24 | 4/300 | 3 | 296 | 258.87 |
 
-Every row uses the prespecified 5.90-kW comparator, independently of selection. Failure counts are non-exclusive and use 300 complete programmes. Supply shortage means at least one event hour fails the necessary zero-flexible-execution envelope; passing it does not guarantee feasibility. Mean missed work uses the entire episode. The corresponding same-clock final-call electrical outcomes coincide with the fresh-call outcomes in all 16 eight-hour comparisons. Full trial and event tables retain all failure combinations, including 0.1% and zero-loss secondary scores.
+Every row uses the prespecified 5.90-kW comparator, independently of selection. Failure counts are non-exclusive and use 300 complete programmes. Supply shortage means at least one event hour fails the necessary zero-flexible-execution envelope; passing it does not guarantee feasibility. Mean missed work uses the entire episode. The corresponding same-clock final-call electrical outcomes coincide with the fresh-call outcomes in all 16 eight-hour comparisons. Full trial and event tables retain all failure combinations, including 0.1% and zero-miss secondary scores.
 
-### Supplementary Table 16 | Observed-order and permuted-hour timing stress
+### Supplementary Table 16 | Repeated-call outcomes before and after reordering hourly submissions
 
 | Order | GPU % | Programme | kW | 1% success | Zero success |
 |---|---|---|---|---|---|
@@ -570,9 +721,9 @@ Every row uses the prespecified 5.90-kW comparator, independently of selection. 
 | permuted | 20 | H8P24 | 2.95 | 80/80 | 80/80 |
 | permuted | 20 | H8P24 | 5.90 | 20/80 | 19/80 |
 
-Chronological preserves hourly submission counts in eight observed weeks; permuted shuffles whole hours within each week. Each aggregate comprises ten synthetic realisations per week, not 80 independent production weeks. All observed-week results are supplied in temporal_week_summary.csv and Supplementary Fig. 3d displays the chronological primary requests. Work sizes, class allocation and deadlines remain synthetic. No external result retunes a request or establishes a new probability certificate; the direction of permutation effects varies with the request.
+Chronological preserves hourly submission counts in eight observed weeks; permuted shuffles whole hours within each week. Each aggregate comprises ten synthetic realisations per week, not 80 independent production weeks. All observed-week results are supplied in temporal_week_summary.csv and Supplementary Fig. 3d displays the chronological primary requests. Work sizes, class allocation and deadlines remain synthetic. No external result retunes a request or independently qualifies an offer; the direction of permutation effects varies with the request.
 
-### Supplementary Table 17 | Qualified reference products and access-fee decomposition
+### Supplementary Table 17 | Operating costs and access-fee shares for the earlier reference offers
 
 | Programme | Selected rule | Model kW | Accounting kW | Operating US$/yr | No fee | Shared 2,500 | Full 25,000 |
 |---|---|---|---|---|---|---|---|
@@ -583,7 +734,7 @@ Chronological preserves hourly submission counts in eight observed weeks; permut
 
 New reference workload: 10% eligibility, 65% offered utilisation, reference deadlines and corrected MPC. Twelve complete four-call series/year, 2,000 common annual draws, waiting US$0.005/GPU-h/h and missed-work price zero. The last three columns are US$ per offered accounting kW-year at a proportional 1-MW operating peak. Shared fees do not imply risk pooling. In the earlier single-event f10/H4 ledger, net operating exposure 43.3554 plus fixed allocation 819.9008 reproduces 863.2562 exactly; the fixed share is 94.9777%. All 30 earlier thresholds reconcile within 1e−9. Full component attribution, price grids, annual choices and duration-price boundaries are delivered as ready CSV tables; failed unselected comparators retain diagnostic costs only. This table prices the earlier coarse-grid selections. Table 21 and Figs. 6 and S5 price the later refined products using their own new confirmation ledgers.
 
-### Supplementary Table 18 | Local candidate refinement and independent confirmation
+### Supplementary Table 18 | Finer-grid selection and independent confirmation of reference duration offers
 
 | Program | kW | Dev 1% | Dev zero | Confirm 1% | Confirm zero | Selected |
 |---|---|---|---|---|---|---|
@@ -602,7 +753,7 @@ New reference workload: 10% eligibility, 65% offered utilisation, reference dead
 
 Each grid step is 0.294912159 kW. Both standards selected 5.603331 kW (H4P16) and 4.423682 kW (H8P16). Their confirmation lower bounds are 0.975244 for both four-hour scores, and 0.991062 / 0.970633 for the eight-hour 1% / zero scores. Unselected coarse comparators were prespecified; a dash means not tested on confirmation. The eight-hour upper grid point does not establish a continuous maximum. No confirmatory outcome was used to reselect. These fresh seeds are distinct from Table 14.
 
-### Supplementary Table 19 | Same-scenario exact-window feasibility diagnostics
+### Supplementary Table 19 | Schedule feasibility under each work group’s release and deadline constraints
 
 | Variant | Request kW | Miss allowance | Cases | Supply impossible | Other infeasible | PI feasible | PI rescue |
 |---|---|---|---|---|---|---|---|
@@ -623,9 +774,11 @@ Each grid step is 0.294912159 kW. Both standards selected 5.603331 kW (H4P16) an
 | Week 6 | 4.4237 | 0 | 1 | 1 | 0 | 0 | 0 |
 | Week 7 | 4.4237 | 0 | 1 | 1 | 0 | 0 | 0 |
 
-Structural cases use seeds 985000–985002 and H8P16. Supply impossible is an analytical certificate; other infeasible is an infeasible HiGHS mixed-integer solve after passing the supply condition. PI rescue means the original causal outcome failed the same service standard while a verified exact-window schedule is feasible. The reference rescue occurs at seed 985002; halved deadlines at the same seed remain infeasible with either 10% or 20% GPU allocation. Five external rows are the first shortage in each affected week, not random samples. All 38 diagnoses are resolved; the first 90-s unresolved run is archived beside its 600-s extension. Exact constraints preserve individual release/deadline groups and the actual event-peak rebound denominator.
+The structural cases use seeds 985000–985002 and H8P16. Immediate shortage means that baseline flexible power is analytically insufficient even if all flexible execution stops. Other infeasibility means the supply check passes but the HiGHS mixed-integer model finds no schedule satisfying the remaining constraints. PI rescue means the tested controller failed while an independently checked full-information schedule meets the same service rule.
 
-### Supplementary Table 20 | Matched submission-count and task-resource-time transfer
+In reference seed 985002, such a feasible schedule exists. Halving its deadline slack makes the request infeasible at either 10% or 20% GPU allocation. The five external rows use the first shortage in each affected week, rather than random cases. All 38 diagnoses are resolved. The original 90-s unresolved run and its 600-s continuation are both archived. Execution remains restricted to each release–deadline group, and rebound uses the actual event peak reduction.
+
+### Supplementary Table 20 | Delivery under count and task-resource-time weights with matched weekly work
 
 | Weight | Order | Request kW | Success 1% | Success zero | Shortage | Baseline failures |
 |---|---|---|---|---|---|---|
@@ -640,11 +793,48 @@ Structural cases use seeds 985000–985002 and H8P16. Supply impossible is an an
 
 Eight observed weeks × ten synthetic realisations per week; 80 is not a count of independent production weeks. All baseline variants had zero missed work. The eight-hour calls have 16-h start spacing. Weekly class totals, synthetic deadlines, community, phase and within-week permutation are matched across weights. Resource time is reconstructed from task resource allocations and launch/completion intervals, not job sojourn time. At 2.949122 kW under chronological resource-time weighting, weekly successes are 1, 6, 1, 0, 3, 0, 10 and 10. All 49 failures trigger immediate shortage; at 4.423682 kW all 80 do. The earlier 986000-series count test is separate: its 4.423682-kW request has 63/80 successes under either score, with weekly shortages 6, 2, 0, 2, 0, 3, 4 and 0. Full per-week cross-scores and every input are delivered.
 
-### Supplementary Table 21 | Physical operating exposure and conditional refined-product costs
+### Supplementary Table 21 | Additional waiting, missed work and required payments for qualified reference repeated offers
 
 | Program | Model kW | Mean waiting GPU-h×h/series | Mean excess missed GPU-h/series | Annual q95 USD | USD/offered kW-year |
 |---|---|---|---|---|---|
 | H4P16 | 5.6033 | 16491.33 | 0.0000 | 5309.65 | 183.30 |
 | H8P16 | 4.4237 | 24509.47 | 0.1996 | 7549.21 | 330.11 |
 
-Means retain all 300 complete confirmation series, including zero-standard failures. Small numerical missed-work residuals are not operational failures at the 1e−7 tolerance. Eight-hour mean excess missed work is 0.1996 GPU-h/series even though the request meets the probabilistic zero-loss qualification. Costs use waiting US$0.005/GPU-h/h, no missed-work charge, no fixed fee, twelve independently sampled four-call series/year and proportional 1-MW accounting. Separate CSVs give all physical percentiles, price combinations and component attribution. The refined equal-value boundary is P8 = (19/15)P4 + 97.931286 when participating; the opt-out floor is P8 = 330.112105 at these prices. Waiting-price changes require recomputing the total-cost quantile rather than adding marginal component quantiles.
+Means use all 300 confirmation sequences, including failures under the zero-miss criterion. Residual missed work within the 1e−7 GPU-h numerical tolerance does not count as operational failure. Qualification is probabilistic, so the eight-hour product can qualify while its full sample still has mean additional missed work of 0.1996 GPU-h per sequence.
+
+Costs use US$0.005/GPU-h/h for waiting, zero missed-work charge, zero fixed fee and twelve independently sampled four-call sequences per year, scaled proportionally to a 1-MW operating peak. Separate CSV files retain physical quantiles, price combinations and cost components. At these prices, equal value between participating products occurs at P8 = (19/15)P4 + 97.931286. The eight-hour participation threshold relative to not participating is P8 = 330.112105. Changing the waiting price requires recalculating the total-cost quantile, rather than adding separate component quantiles.
+
+### Supplementary Table 22 | Selected offers and new independent confirmation for each workload representation
+
+| Weight | Role | Request (kW) | Development | Confirmation (both rules) | Lower (both rules) |
+|---|---|---|---|---|---|
+| Submission counts | Selected | 2.9491 | 100/100 | 300/300 | 0.991062 |
+| Task resource-time | Selected | 1.4746 | 100/100 | 300/300 | 0.991062 |
+| Task resource-time | Fixed comparator | 2.9491 | 53/100 | 120/300 | 0.354570 |
+
+Four eight-hour calls, 16-h start spacing, zero notice, 10% eligible work and 58 flexible GPUs. All 800 count/resource-time input baselines pass zero-miss service. Development and confirmation seeds are disjoint; the latter never reselects an offer. Each model draw independently samples one of eight fixed weeks with equal probability. The ratio 2.0 compares independently confirmed finite-grid offers; the 180 failed comparator draws all encounter instantaneous shortage. All nine candidate values and outcomes are in Source Data.
+
+### Supplementary Table 23 | Delivery outcomes and grid headroom after changing fixed node power
+
+| W/node | Peak (kW) | 5.90 kW / peak (%) | 4 h zero successes | 8 h zero successes | Minimum PCC headroom (kW) |
+|---|---|---|---|---|---|
+| 150 | 167.52 | 3.52 | 297/300 | 296/300 | 297.25 |
+| 300 | 193.44 | 3.05 | 297/300 | 296/300 | 271.33 |
+| 450 | 219.36 | 2.69 | 297/300 | 296/300 | 245.41 |
+| 600 | 245.28 | 2.40 | 297/300 | 296/300 | 219.49 |
+
+The repeated schedules retain requests of 5.603331 kW for four hours and 4.423682 kW for eight hours. The 5.898243-kW column is a separate single-event accounting comparison. For each row, the same constant power offset is added to response and baseline trajectories for all 600 retained schedules, then the outcomes are rescored. This checks those schedules at the stated requests without new controller selection or independent trials. Original success and failure flags are unchanged. The PCC import rating remains 1,100 kW.
+
+### Supplementary Table 24 | Solar results and optimisation bounds after tightening solver tolerances
+
+| Quantity | Strict result | Numerical evidence |
+|---|---|---|
+| 10%, no BESS, hosting gain | 5.395897 kW | LP; all 200 solves optimal |
+| 10%, BESS, hosting gain | 5.222051 kW | Minimum-bound interval width <0.000001 kW |
+| GPU20, no BESS, hosting gain | 24.987573 kW | LP; all 200 solves optimal |
+| 10%, no BESS, mean utilisation gain | 0.005716203 pp; 95% paired interval [0.001893867, 0.010571870] | Maximum paired change 2.84 × 10<sup>−14</sup> pp |
+| 10%, BESS, mean utilisation gain | Numerical zero; final signed mean −7.09 × 10<sup>−10</sup> pp | Mean primary-objective contrast bounds [−8.53 × 10<sup>−16</sup>, 8.53 × 10<sup>−16</sup>] pp |
+
+The strict settings use relative and absolute MIP gaps of 1e−7, primal/dual/MIP feasibility tolerances of 1e−8, one thread and 120 s per solve. All 400 fixed-PV and 400 no-storage hosting problems finish. Among 200 storage-hosting problems, 166 finish and 34 flexible cases reach the limit.
+
+For maximisation, a feasible solution is a lower bound on the optimum and the dual bound is an upper bound. Taking the minimum of each bound over all 100 scenarios brackets the capacity supported across the scenarios. Every unfinished case has a feasible capacity above the solved limiting case, so all cases are retained. The primary-objective bounds assess uncertainty in PV-use differences; final utilisation also reflects the 1e−5-kWh tolerance used to preserve earlier objectives during later optimisation steps. Sampling intervals do not include this numerical uncertainty.

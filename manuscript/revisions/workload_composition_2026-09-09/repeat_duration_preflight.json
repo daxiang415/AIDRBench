@@ -1,0 +1,125 @@
+{
+  "status": "PASS",
+  "tests": [
+    {
+      "file": "results/nature_mainline/workload_composition_v4/repeat_duration_corrected_v2/development/f05/H4G8_duration_fresh_preflight_930000.json",
+      "case": {
+        "role": "development",
+        "case": "f05",
+        "seed": 930000,
+        "duration_h": 4,
+        "program": "H4G8",
+        "capacity_kw": 0.7372803982806178,
+        "tag": "duration_fresh_preflight",
+        "event_ids": [
+          3
+        ]
+      },
+      "actual_events": [
+        {
+          "event_id": 0,
+          "start_hour": 99,
+          "duration_h": 4
+        }
+      ],
+      "runtime_duration_verified": true,
+      "sha256": "c5ee9239db3332280288ab617ac709f037c4d12c363dd7fb57ce3db55ac96228"
+    },
+    {
+      "file": "results/nature_mainline/workload_composition_v4/repeat_duration_corrected_v2/development/f05/H4G8_duration_preflight_930000.json",
+      "case": {
+        "role": "development",
+        "case": "f05",
+        "seed": 930000,
+        "duration_h": 4,
+        "program": "H4G8",
+        "capacity_kw": 0.7372803982806178,
+        "tag": "duration_preflight"
+      },
+      "actual_events": [
+        {
+          "event_id": 0,
+          "start_hour": 63,
+          "duration_h": 4
+        },
+        {
+          "event_id": 1,
+          "start_hour": 75,
+          "duration_h": 4
+        },
+        {
+          "event_id": 2,
+          "start_hour": 87,
+          "duration_h": 4
+        },
+        {
+          "event_id": 3,
+          "start_hour": 99,
+          "duration_h": 4
+        }
+      ],
+      "runtime_duration_verified": true,
+      "sha256": "f53bc2c731cf85ba4a61f8bfa407a9bfc864259fbaae8093e8c207c28a98eae2"
+    },
+    {
+      "file": "results/nature_mainline/workload_composition_v4/repeat_duration_corrected_v2/development/f05/H8G12_duration_fresh_preflight_930000.json",
+      "case": {
+        "role": "development",
+        "case": "f05",
+        "seed": 930000,
+        "duration_h": 8,
+        "program": "H8G12",
+        "capacity_kw": 0.7372803982806178,
+        "tag": "duration_fresh_preflight",
+        "event_ids": [
+          3
+        ]
+      },
+      "actual_events": [
+        {
+          "event_id": 0,
+          "start_hour": 123,
+          "duration_h": 8
+        }
+      ],
+      "runtime_duration_verified": true,
+      "sha256": "5d4369383472935ae278637ca3f23d658295dff774f8494641159ec9877bfe39"
+    },
+    {
+      "file": "results/nature_mainline/workload_composition_v4/repeat_duration_corrected_v2/development/f05/H8G12_duration_preflight_930000.json",
+      "case": {
+        "role": "development",
+        "case": "f05",
+        "seed": 930000,
+        "duration_h": 8,
+        "program": "H8G12",
+        "capacity_kw": 0.7372803982806178,
+        "tag": "duration_preflight"
+      },
+      "actual_events": [
+        {
+          "event_id": 0,
+          "start_hour": 63,
+          "duration_h": 8
+        },
+        {
+          "event_id": 1,
+          "start_hour": 83,
+          "duration_h": 8
+        },
+        {
+          "event_id": 2,
+          "start_hour": 103,
+          "duration_h": 8
+        },
+        {
+          "event_id": 3,
+          "start_hour": 123,
+          "duration_h": 8
+        }
+      ],
+      "runtime_duration_verified": true,
+      "sha256": "4e2e14bb8feb16cd7f1a21d683a0d131cf1c2a8dbf3f9a9057a30775dee0c80b"
+    }
+  ]
+}

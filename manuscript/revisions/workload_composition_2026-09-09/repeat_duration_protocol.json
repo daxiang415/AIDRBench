@@ -1,0 +1,32 @@
+{
+  "parent_protocol_sha256": "3e0cbff2eb4430121a71900208552e4b5b6c24d5fe46ac6f1d3a2b7a5813a919",
+  "runner_sha256": "fd045db99e925efba0f91db3e10a4fb5f824ae6f5838859a1ccd972d67a70e49",
+  "development_seeds": [
+    930000,
+    930099
+  ],
+  "confirmation_seeds": [
+    960000,
+    960299
+  ],
+  "duration_h": [
+    4,
+    8
+  ],
+  "gaps_h": [
+    8,
+    12
+  ],
+  "event_count": 4,
+  "first_start_hour": 63,
+  "fractions": [
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "selection": "largest development candidate with Wilson one-sided95 lower >= .95; same rule independently tested",
+  "correction": "metadata stop_hour did not override dr.event_duration_hours=1 in frozen repeated replays. Re-execute development and confirmation with explicit requested duration and runtime assertions. No controller, threshold, capacity grid or job input changed.",
+  "invalid_previous_results": "parent v4 repeat_* files: actual one-hour calls; not evidence for H4/H8",
+  "confirmation_scope": "Earlier erroneous-repeat pipeline stopped before examining its confirmation outcomes; independently selected corrected-duration offers use the previously declared paired confirmation seeds. Single-event confirmation results already reported remain valid."
+}

@@ -1,0 +1,20 @@
+{
+  "main": {
+    "status": "PASS",
+    "pages": 15,
+    "file": "/home/user/projects/AIDRBench/manuscript/exports/AIDRBench_Nature_Communications_v0.21_content_revision.pdf",
+    "sha256": "80fa7bf61a6fe607e70146eeba99a26a5e4519ce6c39e0f719ed1d46c7910ede",
+    "figures": 6,
+    "numbered_tables": 0,
+    "no_text_outside_page": true
+  },
+  "supplement": {
+    "status": "PASS",
+    "pages": 17,
+    "file": "/home/user/projects/AIDRBench/manuscript/exports/AIDRBench_Nature_Communications_v0.21_Supplementary_Information_content_revision.pdf",
+    "sha256": "7d14c13c7f2c84edc90fd4f5797d9c50d39160c50b4b66867782b829290f6664",
+    "figures": 5,
+    "numbered_tables": 12,
+    "no_text_outside_page": true
+  }
+}

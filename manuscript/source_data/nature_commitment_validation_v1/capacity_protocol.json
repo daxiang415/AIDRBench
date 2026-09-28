@@ -1,0 +1,38 @@
+{
+  "frozen_at_utc": "2026-09-11T13:08:41.369331+00:00",
+  "design_sha256": "1059828fb9b3b46e80d1155e229420fe872fcecab66a1b1e0f6b6d20a94db890",
+  "runner_sha256": "834dcc7ce61b33b9c6939dbf4a57443eb20a83bdc786502f0468ff7fa0437f26",
+  "parent_runner_sha256": "7e7916b40e2c81d03d6da769e5afbf6fbb6cec906ccbf8ff7a4a0b4f05d25b14",
+  "controller_sha256": "8100cd41124a1ac8d9fb6212a118fbc91aa6667e25805591151fbf3567bbca7d",
+  "source_weights_sha256": "19a88d18c4153d34e1096d6eddde3ecd5b2d5bd371065be3f2f23eee0fbbd54a",
+  "development_seeds": [
+    1010000,
+    1010099
+  ],
+  "confirmation_seeds": [
+    1011000,
+    1011299
+  ],
+  "grid": [
+    0.015625,
+    0.03125,
+    0.0625,
+    0.125,
+    0.25,
+    0.375,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "reference_capacity_kw": 5.898243186244942,
+  "weights": [
+    "job_count",
+    "resource_gpu_h"
+  ],
+  "week_sampling": "independent uniform integer [0,8), RNG seed = simulation seed + 2000000",
+  "selection": "largest grid point with development one-sided Wilson95 >= .95, separately for 1% and zero deadlines; no confirmation reselection",
+  "confirmation_comparators": [
+    0.5
+  ],
+  "scope": "pointwise qualification conditional on eight fixed observed weeks, synthetic job templates and community profiles; not population production-week reliability"
+}

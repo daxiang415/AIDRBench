@@ -3,14 +3,14 @@
   "schema_version": "aidrbench.manuscript_source_data_manifest.v1",
   "software": {
     "git": {
-      "commit": "78b2dbb86a708765067928891f220308991a19da",
+      "commit": "50dad4e37d725d9cae1e8313b9c7db51459aec9f",
       "working_tree_dirty": false
     }
   },
   "source_specification": {
     "path": "configs/paper/nature_source_data_v1.yaml",
     "schema_version": "aidrbench.manuscript_source_data_specification.v1",
-    "sha256": "726deb1d27752508edacb5b588539be63e429088903b13833cb6c34b261ca065"
+    "sha256": "5b74e5f65eaa3e62b45b740adbaf9a20aad5450c08175d8099a5761e081d2d51"
   },
   "tables": [
     {
@@ -966,7 +966,7 @@
         "profile_id"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {
@@ -1020,7 +1020,7 @@
         "firm_capacity_delta_from_reference_kw"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {
@@ -1061,7 +1061,7 @@
         "p05_window_peak_relief_fraction"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {
@@ -1096,7 +1096,7 @@
         "q95_scenario_pv_hosting_kw"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {
@@ -1133,7 +1133,7 @@
         "bootstrap_resamples"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {
@@ -1166,7 +1166,7 @@
         "paired_capacity_ratio"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {
@@ -1205,7 +1205,7 @@
         "failure_reasons"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {
@@ -1245,7 +1245,7 @@
         "terminal_backlog_fraction"
       ],
       "figures": [
-        6
+        "S5"
       ],
       "inputs": [
         {

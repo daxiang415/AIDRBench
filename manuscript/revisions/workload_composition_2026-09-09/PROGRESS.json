@@ -1,0 +1,80 @@
+{
+  "status": "COMPLETE",
+  "manuscript": "v0.20",
+  "chinese_reader": "v14",
+  "fractions": [
+    0.05,
+    0.1,
+    0.2,
+    0.4,
+    0.6
+  ],
+  "current_live_sessions": {},
+  "results": "results/nature_mainline/workload_composition_v4",
+  "valid_repeated_results": "results/nature_mainline/workload_composition_v4/repeat_duration_corrected_v2",
+  "source_data": "manuscript/source_data/nature_workload_composition_v1",
+  "figures": "docs/figures/workload_composition_v1/artwork",
+  "scientific_checks": [
+    "numerical_audit.json",
+    "text_audit.json",
+    "figure_validation.json",
+    "pdf_validation.json",
+    "recovery_restoration_audit.json",
+    "restored_replay_audit.json"
+  ],
+  "numerical_acceleration": "All original solver groups completed. No alternate result used. Speculative trials stopped; numerical_reconciliation.json records original cache hashes.",
+  "completed_counts": {
+    "controller_replays": 34400,
+    "event_outcomes": 55400,
+    "hourly_rows": 7430400,
+    "renewable_optimisations": 7200,
+    "recovery_scenarios": 3200,
+    "figures": 11
+  },
+  "main_findings": {
+    "selected_single_kw": [
+      2.949121593,
+      5.898243186,
+      11.796486372,
+      22.194450842,
+      34.001303058
+    ],
+    "single_4h_successes": 295,
+    "single_8h_successes": 292,
+    "confirmation_n": 300,
+    "repeated_4h_successes": [
+      300,
+      300,
+      300,
+      300,
+      300
+    ],
+    "repeated_8h_successes": [
+      268,
+      256,
+      250,
+      249,
+      241
+    ],
+    "repeated_development_selected": 0
+  },
+  "package_target": "results/exports/AIDRBench_All_Figures_2026-09-09_v9.zip",
+  "package_completion": {
+    "status": "PASS",
+    "path": "/home/user/projects/AIDRBench/results/exports/AIDRBench_All_Figures_2026-09-09_v9.zip",
+    "bytes": 4396692696,
+    "sha256": "eec57b6cdc962841aaab1b718cdb9df0d4d8a615309d40ef284e7fc957427e7a",
+    "staging": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v9",
+    "files": 12388,
+    "redraw_test": "PASS:11 current PNGs byte-identical using only delivered source/code",
+    "all_payload_checksums_pass": true,
+    "zip_crc_pass": true
+  },
+  "previous_execution_checkpoint": "before/PROGRESS_during_execution.json",
+  "preferences": [
+    "No subagents unless requested",
+    "Local Python figures authorised",
+    "Author metadata, software licence and public DOI pending"
+  ],
+  "recovery_warning": "Do not use run_study_final.py init or its legacy repeat stages; read frozen protocols and the corrected repeated driver. No new confirmation offer selection."
+}

@@ -1,4 +1,13 @@
-# Preserve the exact bytes and hashes of the frozen CSV source tables.
-*.csv -text whitespace=cr-at-eol
-# Matplotlib SVG path serialization has meaningful frozen bytes; keep its export intact.
-docs/figures/commitment_narrative_v1/artwork/*.svg -text -whitespace
+# Preserve byte-identical scientific inputs and frozen portable deliveries.
+* -text
+*.pdf binary
+*.png binary
+*.jpg binary
+*.pptx binary
+*.xlsx binary
+*.parquet binary
+
+# Frozen CSV bytes include CRLF; generated SVG paths include trailing spaces.
+*.csv whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+*.svg -whitespace
+*.bat whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -1,0 +1,9 @@
+{
+  "status": "COMPLETE",
+  "priced_candidates": 36,
+  "sensitivity_rows": 1296,
+  "duration_price_rows": 108,
+  "complete_confirmation_ledgers_included": true,
+  "quantile_components_are_additive": true,
+  "offers_require_development_selection_and_confirmation": true
+}

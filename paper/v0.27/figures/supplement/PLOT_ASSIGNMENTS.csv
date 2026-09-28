@@ -1,0 +1,64 @@
+﻿figure,panel,file,series,kind,x_column,y_column,lower_column,upper_column,stack_start_column,matrix_columns,transpose
+S02,a,S02/S02a.csv,All board means,points,x_position,board_power_w,,,,,False
+S02,b,S02/S02b.csv,Active coefficients,errorbar,x_position,estimate_w_per_gpu,interval_lower_w_per_gpu,interval_upper_w_per_gpu,,,False
+S03,a,S03/S03a.csv,success_1pct,points,request_kw,success_1pct_lower,,,,,False
+S03,a,S03/S03a.csv,success_zero,points,request_kw,success_zero_lower,,,,,False
+S03,b,S03/S03b.csv,success_1pct,points,request_kw,success_1pct_lower,,,,,False
+S03,b,S03/S03b.csv,success_zero,points,request_kw,success_zero_lower,,,,,False
+S03,c,S03/S03c.csv,Immediate shortage,bar,x_shortage,shortage_pct,,,,,False
+S03,c,S03/S03c.csv,Deadline failure,bar,x_deadline,deadline_miss_pct,,,,,False
+S03,d,S03/S03d.csv,Success 4.42,bar,week_position,successes_at_4p42,,,,,False
+S03,d,S03/S03d.csv,Shortage 4.42,bar,week_position,shortage_at_4p42,,,shortage_bottom,,False
+S03,d,S03/S03d.csv,Success 2.95,points,week_position,successes_at_2p95,,,,,False
+S04,a,S04/S04a.csv,no_BESS,points,x_no_BESS,no_BESS_hosting_gain_kw,,,,,False
+S04,a,S04/S04a.csv,with_BESS,points,x_with_BESS,with_BESS_hosting_gain_kw,,,,,False
+S04,b,S04/S04b.csv,no_BESS,errorbar,x_no_BESS,no_BESS_mean_pp,no_BESS_lower_pp,no_BESS_upper_pp,,,False
+S04,b,S04/S04b.csv,with_BESS,errorbar,x_with_BESS,with_BESS_mean_pp,with_BESS_lower_pp,with_BESS_upper_pp,,,False
+S04,c,S04/S04c.csv,4 h,errorbar,x_4h,success_4h_pct,lower_4h_pct,success_4h_pct,,,False
+S04,c,S04/S04c.csv,8 h,errorbar,x_8h,success_8h_pct,lower_8h_pct,success_8h_pct,,,False
+S04,d,S04/S04d.csv,no_BESS,points,x_no_BESS,no_BESS_hosting_gain_kw,,,,,False
+S04,d,S04/S04d.csv,with_BESS,points,x_with_BESS,with_BESS_hosting_gain_kw,,,,,False
+S05,a,S05/S05a.csv,Annual value difference,points,equal_capacity_price,annual_value_8h_minus_4h_usd,,,,,False
+S05,b,S05/S05b.csv,Missed-work price 0,bar,x_missed_price_0,threshold_missed_price_0,,,,,False
+S05,b,S05/S05b.csv,Missed-work price 1,bar,x_missed_price_1,threshold_missed_price_1,,,,,False
+S05,c,S05/S05c.csv,4 h,bar,x_4h,net_4h_thousand_usd,,,,,False
+S05,c,S05/S05c.csv,8 h,bar,x_8h,net_8h_thousand_usd,,,,,False
+S05,d,S05/S05d_fee0.csv,Fee 0,points,price_4h,required_price_8h,,,,,False
+S05,d,S05/S05d_fee2500.csv,Fee 2500,points,price_4h,required_price_8h,,,,,False
+S05,d,S05/S05d_fee25000.csv,Fee 25000,points,price_4h,required_price_8h,,,,,False
+S06,a,S06/S06a.csv,successes,matrix,,,,,,"fresh_last_call,repeated_16h,repeated_24h",False
+S06,b,S06/S06b.csv,successes,matrix,,,,,,"fresh_last_call,repeated_16h,repeated_24h",False
+S06,c,S06/S06c.csv,instantaneous_supply_limited_trials,matrix,,,,,,"fresh_last_call,repeated_16h,repeated_24h",False
+S06,d,S06/S06d.csv,failed_deadline_miss,matrix,,,,,,"fresh_last_call,repeated_16h,repeated_24h",False
+S07,a,S07/S07a.csv,rigid,points,eligible_work_pct,rigid_hosting_kw,,,,,False
+S07,a,S07/S07a.csv,flexible,points,eligible_work_pct,flexible_hosting_kw,,,,,False
+S07,b,S07/S07b.csv,rigid,points,eligible_work_pct,rigid_hosting_kw,,,,,False
+S07,b,S07/S07b.csv,flexible,points,eligible_work_pct,flexible_hosting_kw,,,,,False
+S07,c,S07/S07c.csv,rigid_no_BESS_kwh,points,eligible_work_pct,rigid_no_BESS_kwh,,,,,False
+S07,c,S07/S07c.csv,flexible_no_BESS_kwh,points,eligible_work_pct,flexible_no_BESS_kwh,,,,,False
+S07,c,S07/S07c.csv,rigid_with_BESS_kwh,points,eligible_work_pct,rigid_with_BESS_kwh,,,,,False
+S07,c,S07/S07c.csv,flexible_with_BESS_kwh,points,eligible_work_pct,flexible_with_BESS_kwh,,,,,False
+S07,d,S07/S07d.csv,rigid_no_BESS_mwh,points,eligible_work_pct,rigid_no_BESS_mwh,,,,,False
+S07,d,S07/S07d.csv,flexible_no_BESS_mwh,points,eligible_work_pct,flexible_no_BESS_mwh,,,,,False
+S07,d,S07/S07d.csv,rigid_with_BESS_mwh,points,eligible_work_pct,rigid_with_BESS_mwh,,,,,False
+S07,d,S07/S07d.csv,flexible_with_BESS_mwh,points,eligible_work_pct,flexible_with_BESS_mwh,,,,,False
+S08,a,S08/S08a.csv,4 h,points,x_plot,threshold_4h_usd_per_kw_year,,,,,False
+S08,a,S08/S08a.csv,8 h,points,x_plot,threshold_8h_usd_per_kw_year,,,,,False
+S08,b,S08/S08b.csv,4 h,points,x_plot,threshold_4h_usd_per_kw_year,,,,,False
+S08,b,S08/S08b.csv,8 h,points,x_plot,threshold_8h_usd_per_kw_year,,,,,False
+S08,c,S08/S08c.csv,4 h,points,x_plot,threshold_4h_usd_per_kw_year,,,,,False
+S08,c,S08/S08c.csv,8 h,points,x_plot,threshold_8h_usd_per_kw_year,,,,,False
+S08,d,S08/S08d.csv,4 h,points,x_plot,threshold_4h_usd_per_kw_year,,,,,False
+S08,d,S08/S08d.csv,8 h,points,x_plot,threshold_8h_usd_per_kw_year,,,,,False
+S09,a,S09/S09a.csv,success_1pct,errorbar,x_success_1pct,success_1pct_fraction,success_1pct_lower,success_1pct_fraction,,,False
+S09,a,S09/S09a.csv,success_zero,errorbar,x_success_zero,success_zero_fraction,success_zero_lower,success_zero_fraction,,,False
+S09,b,S09/S09b.csv,job_count success_1pct,points,request_kw,job_count_success_1pct_lower,,,,,False
+S09,b,S09/S09b.csv,job_count success_zero,points,request_kw,job_count_success_zero_lower,,,,,False
+S09,b,S09/S09b.csv,resource_gpu_h success_1pct,points,request_kw,resource_gpu_h_success_1pct_lower,,,,,False
+S09,b,S09/S09b.csv,resource_gpu_h success_zero,points,request_kw,resource_gpu_h_success_zero_lower,,,,,False
+S09,c,S09/S09c.csv,success_1pct,errorbar,x_success_1pct,success_1pct_fraction,success_1pct_lower,success_1pct_fraction,,,False
+S09,c,S09/S09c.csv,success_zero,errorbar,x_success_zero,success_zero_fraction,success_zero_lower,success_zero_fraction,,,False
+S10,a,S10/S10a.csv,Power components,barh,facility_power_kw,y_position,,,,,False
+S10,b,S10/S10b.csv,Overhead sensitivity,points,node_overhead_w,single_offer_pct_peak,,,,,False
+S10,c,S10/S10c.csv,Precision pairs,points,original_utilisation_gain_pp,strict_utilisation_gain_pp,,,,,False
+S10,d,S10/S10d.csv,Precision pairs,points,original_utilisation_gain_pp,strict_utilisation_gain_pp,,,,,False

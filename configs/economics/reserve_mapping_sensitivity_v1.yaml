@@ -1,0 +1,62 @@
+schema_version: aidrbench.economic_reserve_mapping.v1
+analysis_id: nature_economic_reserve_mapping_sensitivity_v1
+analysis_role: supplementary_diagnostic_physical_mapping
+
+inputs:
+  ledger_directory: results/economics/economic_participation_v1/ledger
+  ledger_manifest_sha256: deaa3c1f2325a3963f2232fc3df9e1b0a4c29f65a37ca44aa8fab85f007be967
+  episode_ledger_sha256: 7f9b64bc5b8cea1026e279f83d9cb15bbbf0c980d256f7bb7215896ffc5d3a02
+  interval_ledger_sha256: 90b9172a2d84fe02605d41b5ba46ddb44c5fd36e92da2e70b24ec2f841b8e2dd
+  calibration_artifact: data/calibration/rtx6000pro_4gpu_v1.yaml
+  calibration_file_sha256: 92eae659e628ed3bd76e07f9667235de96a3672bd9dd2a931b9617932ac1d856
+  calibration_artifact_sha256: ef1e474a95b7139f6fd25b4deb733a81dfa0616c8245e101fcc62f437ffc5193
+  expected_ledger_analysis_id: nature_economic_development_screening_v1
+  expected_ledger_analysis_role: development_parameterized_screening
+
+selection:
+  duration_hours: [2, 4, 8]
+  notice_hours: 0
+  offer_fraction_of_technical_ceiling: 1.0
+  event_id: 0
+  expected_scenarios_per_duration: 100
+
+mapping:
+  debt_quantiles: [0.50, 0.95]
+  quantile_method: linear
+  recovery_target_hours: [2, 4, 8, 12, 24]
+  recovery_execution_efficiencies: [0.70, 0.85, 1.00]
+  gpus_per_node: 4
+  pue: 1.20
+  pue_parameter_status: engineering_assumption_from_model_a
+  node_overhead_cases:
+    - case_id: lower_bound
+      artifact_statistic: lower_bound
+      parameter_status: engineering_assumption_range_no_node_meter
+    - case_id: nominal
+      artifact_statistic: nominal
+      parameter_status: engineering_assumption_range_no_node_meter
+    - case_id: upper_bound
+      artifact_statistic: upper_bound
+      parameter_status: engineering_assumption_range_no_node_meter
+  active_power_cases:
+    - case_id: training
+      class_weights: {training: 1.0}
+      parameter_status: measured_board_power_estimate
+    - case_id: declared_flexible_mix
+      # 0.50 fully flexible training and 0.50 half-flexible offline inference
+      # normalize to 2/3 and 1/3 within the flexible job pool.
+      class_weights:
+        training: 0.6666666666666666
+        offline_inference: 0.3333333333333333
+      parameter_status: model_weighted_measured_board_power_estimate
+    - case_id: offline_inference
+      class_weights: {offline_inference: 1.0}
+      parameter_status: measured_board_power_estimate
+
+interpretation:
+  gpu_count_term: recovery-throughput-equivalent reserved GPU count
+  capital_cost_evaluation: disabled
+  prohibited_claims:
+    - firm_gpu_count
+    - required_gpu_count
+    - hardware_purchase_requirement

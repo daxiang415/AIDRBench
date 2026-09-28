@@ -10,10 +10,10 @@
   "minimum_configured_font_pt": 6.5,
   "outputs": [
     {
-      "bytes": 43704,
+      "bytes": 43220,
       "format": "svg",
       "path": "supplementary_figure_4.svg",
-      "sha256": "12dbe9c9ef61e698faa12278328ab4e65938e9a98debf050f943a207897fff44"
+      "sha256": "d557a47d26924f8626ef27fe99cc84135b3ad24b37faad07d8bc7b83087a1a1a"
     },
     {
       "bytes": 28269,
@@ -42,6 +42,7 @@
   "source_data": [
     {
       "columns": [
+        "relative_hour",
         "hour",
         "arrival_gpu_h",
         "executed_gpu_h",
@@ -59,8 +60,8 @@
         "is_clearance_tail"
       ],
       "path": "supplementary_figure_4_trajectory.csv",
-      "rows": 216,
-      "sha256": "c62ea85e736bf24d1052e979eba0c4d8e072cc63396e2a2f4c5b52aa4fd199ac"
+      "rows": 40,
+      "sha256": "77d63b8e0006014d4929cf153d0680186f39eb8e79016c15239d4b2cca42285b"
     }
   ],
   "sources": [
@@ -110,9 +111,9 @@
       "sha256": "8f9eb0592a3fdd117c96ccad633c1b415c26ced7bd936838e92c5166b2daaa2b"
     },
     {
-      "bytes": 555,
+      "bytes": 622,
       "path": "/home/user/projects/AIDRBench/results/figures/nature_supplementary_v1/representative_trajectory_metadata.json",
-      "sha256": "15acb52871b4df53ac15d4a51a4df71d05de9602d475892684c78fb12225e2e3"
+      "sha256": "ebcecc3bd42a199ddbe657eb3c867ab8ed3decf279d67cbd2c2c4561455971b6"
     }
   ]
 }

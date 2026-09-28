@@ -1,0 +1,530 @@
+{
+  "version": "0.26",
+  "new_simulations": 0,
+  "new_offer_selection": false,
+  "unchanged_evidence": {
+    "all_21_SI_tables_byte_identical": true,
+    "abstract_and_references_byte_identical": true
+  },
+  "words": {
+    "abstract": 182,
+    "results": 1680
+  },
+  "main_aligned_blocks": 171,
+  "supplement_aligned_blocks": 162,
+  "new_panels": {
+    "illustrated_hours": 432,
+    "trace_power_and_backlog_identities": true,
+    "structural_summary_rows": 48,
+    "all_heatmap_counts_match": true,
+    "pv_scenario_rows": 4000,
+    "all_pv_summaries_recomputed_match": true,
+    "monetary_inputs": "existing single-event sensitivity rows; no resampling"
+  },
+  "figures": {
+    "AIDRBench_Figure_1.pdf": {
+      "min_pt": 6.199999809265137,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_1.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.2,
+        "text_run_count": 92,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Figure_2.pdf": {
+      "min_pt": 6.5,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_2.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.5,
+        "text_run_count": 56,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Figure_3.pdf": {
+      "min_pt": 6.099999904632568,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_3.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.1,
+        "text_run_count": 84,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Figure_4.pdf": {
+      "min_pt": 6.099999904632568,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_4.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.1,
+        "text_run_count": 82,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Figure_5.pdf": {
+      "min_pt": 6.5,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_5.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.5,
+        "text_run_count": 56,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Figure_6.pdf": {
+      "min_pt": 6.099999904632568,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Figure_6.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.1,
+        "text_run_count": 88,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_1.pdf": {
+      "min_pt": 6.5,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_1.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.5,
+        "text_run_count": 27,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_2.pdf": {
+      "min_pt": 6.5,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_2.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.5,
+        "text_run_count": 42,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_3.pdf": {
+      "min_pt": 6.199999809265137,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_3.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.2,
+        "text_run_count": 88,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_4.pdf": {
+      "min_pt": 6.199999809265137,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_4.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.2,
+        "text_run_count": 96,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_5.pdf": {
+      "min_pt": 6.099999904632568,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_5.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.1,
+        "text_run_count": 98,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_6.pdf": {
+      "min_pt": 6.199999809265137,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_6.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.2,
+        "text_run_count": 173,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_7.pdf": {
+      "min_pt": 6.099999904632568,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_7.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.1,
+        "text_run_count": 91,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    },
+    "AIDRBench_Supplementary_Figure_8.pdf": {
+      "min_pt": 6.199999809265137,
+      "width_mm": 183.00700344509548,
+      "editable_svg": true,
+      "pdf_glyph_audit": {
+        "pdf": "/home/user/projects/AIDRBench/docs/figures/figure_completeness_v1/artwork/AIDRBench_Supplementary_Figure_8.pdf",
+        "auditable": true,
+        "minimum_required_pt": 6.0,
+        "minimum_found_pt": 6.2,
+        "text_run_count": 81,
+        "below_minimum_count": 0,
+        "below_minimum": [],
+        "warnings": []
+      },
+      "tiff_dpi": [
+        600.0,
+        600.0
+      ]
+    }
+  },
+  "main_pdf": {
+    "pages": 17,
+    "figure_bookmarks": [
+      [
+        1,
+        "Figure 1 | Workload composition and commitment assessment",
+        3
+      ],
+      [
+        1,
+        "Figure 2 | Relaxed planning statistics and independently tested single offers",
+        4
+      ],
+      [
+        1,
+        "Figure 3 | Separate qualification, feasibility and workload transfer",
+        5
+      ],
+      [
+        1,
+        "Figure 4 | Supply limits and the response–recovery trajectory",
+        6
+      ],
+      [
+        1,
+        "Figure 5 | Separate controls for GPU allocation and rigid-load power",
+        7
+      ],
+      [
+        1,
+        "Figure 6 | Price the operating exposure of qualified commitments",
+        8
+      ]
+    ],
+    "serious_tex_warnings": [],
+    "underfull_lines": [
+      "Underfull \\hbox (badness 10000) in paragraph at lines 453--454"
+    ],
+    "sha256": "8852df8b3975d796c4f3a605d24b79c2808729a8df31267476f68c709cf7db42"
+  },
+  "supplement_pdf": {
+    "pages": 27,
+    "figure_bookmarks": [
+      [
+        2,
+        "Supplementary Figure 1 | Study inputs and evidence flow",
+        10
+      ],
+      [
+        2,
+        "Supplementary Figure 2 | Four-GPU board-power calibration",
+        11
+      ],
+      [
+        2,
+        "Supplementary Figure 3 | Candidate resolution and structural context",
+        12
+      ],
+      [
+        2,
+        "Supplementary Figure 4 | PV benefits and fixed-request controls",
+        13
+      ],
+      [
+        2,
+        "Supplementary Figure 5 | Waiting valuation and access fees change product choice",
+        14
+      ],
+      [
+        2,
+        "Supplementary Figure 6 | Joint service and delivery across structural conditions",
+        15
+      ],
+      [
+        2,
+        "Supplementary Figure 7 | PV hosting and operation on their absolute scales",
+        16
+      ],
+      [
+        2,
+        "Supplementary Figure 8 | Hardware and service-cost assumptions for single events",
+        17
+      ]
+    ],
+    "serious_tex_warnings": [],
+    "underfull_lines": [
+      "Underfull \\hbox (badness 1496) in paragraph at lines 697--698"
+    ],
+    "sha256": "dfceb314843f6c4241d6aa4323b9b84f7f26178fce713bcc0dc21b1c769a6ecf"
+  },
+  "portable_redraw": {
+    "figures": 14,
+    "all_pngs_identical": true,
+    "source": "independently extracted final plotting ZIP"
+  },
+  "source_preflight": {
+    "source": "/home/user/projects/AIDRBench/manuscript/revisions/figure_completeness_2026-09-11/plot_completeness.py",
+    "backend": "python",
+    "summary": {
+      "ready": true,
+      "strict": false,
+      "counts": {
+        "PASS": 19,
+        "WARN": 1,
+        "FAIL": 0
+      }
+    },
+    "findings": [
+      {
+        "check_id": "SOURCE-SYNTAX",
+        "level": "PASS",
+        "message": "Python source parses successfully",
+        "evidence": []
+      },
+      {
+        "check_id": "FONT-FAMILY",
+        "level": "PASS",
+        "message": "A publication-safe sans-serif family is configured",
+        "evidence": [
+          "sans-serif"
+        ]
+      },
+      {
+        "check_id": "FONT-SIZE",
+        "level": "PASS",
+        "message": "All detected text sizes are at least 5 pt (minimum 6.1 pt)",
+        "evidence": []
+      },
+      {
+        "check_id": "FONT-GLYPH-FLOOR",
+        "level": "PASS",
+        "message": "No mathtext superscript/subscript expression detected",
+        "evidence": []
+      },
+      {
+        "check_id": "LEGEND-LABEL-CASE",
+        "level": "PASS",
+        "message": "Detected literal legend labels start with display-style capitalization",
+        "evidence": []
+      },
+      {
+        "check_id": "COLOR-MAP",
+        "level": "PASS",
+        "message": "No rainbow/jet/hsv color mapping detected",
+        "evidence": []
+      },
+      {
+        "check_id": "EDITABLE-TEXT",
+        "level": "PASS",
+        "message": "SVG and PDF editable-text settings are configured",
+        "evidence": []
+      },
+      {
+        "check_id": "EXPORT-VECTOR",
+        "level": "PASS",
+        "message": "Both SVG and PDF exports are present",
+        "evidence": []
+      },
+      {
+        "check_id": "EXPORT-RASTER",
+        "level": "PASS",
+        "message": "TIFF raster export is present",
+        "evidence": []
+      },
+      {
+        "check_id": "RASTER-DPI",
+        "level": "PASS",
+        "message": "A raster export of at least 600 dpi is configured",
+        "evidence": [
+          "600"
+        ]
+      },
+      {
+        "check_id": "FINAL-WIDTH",
+        "level": "PASS",
+        "message": "Detected width 183.0 mm matches a common journal column width",
+        "evidence": []
+      },
+      {
+        "check_id": "DATA-SAMPLING",
+        "level": "PASS",
+        "message": "No high-confidence row-sampling operation detected",
+        "evidence": []
+      },
+      {
+        "check_id": "DATA-EXCLUSION",
+        "level": "PASS",
+        "message": "No high-confidence missing-data exclusion detected",
+        "evidence": []
+      },
+      {
+        "check_id": "DEMO-DATA",
+        "level": "PASS",
+        "message": "No obvious simulated-data generator detected",
+        "evidence": []
+      },
+      {
+        "check_id": "LOG-GUARD",
+        "level": "PASS",
+        "message": "No logarithmic transform or axis detected",
+        "evidence": []
+      },
+      {
+        "check_id": "INTERP-MONOTONIC",
+        "level": "PASS",
+        "message": "No NumPy interpolation requiring an increasing x-grid detected",
+        "evidence": []
+      },
+      {
+        "check_id": "UNCERTAINTY-ENCODING",
+        "level": "WARN",
+        "message": "Seed/fold/split aggregates are present without an obvious error bar or uncertainty band",
+        "evidence": [
+          "seed",
+          "Mean"
+        ]
+      },
+      {
+        "check_id": "ROTATION-ANCHOR",
+        "level": "PASS",
+        "message": "No rotated Matplotlib text detected",
+        "evidence": []
+      },
+      {
+        "check_id": "ANNOTATION-WORKAROUND",
+        "level": "PASS",
+        "message": "No high-risk hard-coded label height or opaque white text mask detected",
+        "evidence": []
+      },
+      {
+        "check_id": "BACKEND-EXCLUSIVE",
+        "level": "PASS",
+        "message": "No obvious cross-backend plotting reference found for python",
+        "evidence": []
+      }
+    ]
+  },
+  "status": "PASS"
+}

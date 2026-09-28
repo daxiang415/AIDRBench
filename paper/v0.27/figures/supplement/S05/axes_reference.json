@@ -1,0 +1,247 @@
+{
+  "a": {
+    "title": "Free waiting permits a rank reversal",
+    "xlabel": "Equal capacity price (USD / kW-year)",
+    "ylabel": "Annual value: eight minus four hours (USD)",
+    "xlim": [
+      0.0,
+      75.0
+    ],
+    "ylim": [
+      -330.0,
+      220.0
+    ],
+    "xticks": [
+      0.0,
+      10.0,
+      20.0,
+      30.0,
+      40.0,
+      50.0,
+      60.0,
+      70.0,
+      80.0
+    ],
+    "xticklabels": [
+      "0",
+      "10",
+      "20",
+      "30",
+      "40",
+      "50",
+      "60",
+      "70",
+      "80"
+    ],
+    "yticks": [
+      -400.0,
+      -300.0,
+      -200.0,
+      -100.0,
+      0.0,
+      100.0,
+      200.0,
+      300.0
+    ],
+    "yticklabels": [
+      "−400",
+      "−300",
+      "−200",
+      "−100",
+      "0",
+      "100",
+      "200",
+      "300"
+    ],
+    "text": [
+      {
+        "text": "Equal value: USD 25.57",
+        "position": [
+          30.0,
+          80.0
+        ]
+      },
+      {
+        "text": "a",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "b": {
+    "title": "Price every failed trajectory",
+    "xlabel": "",
+    "ylabel": "Threshold (USD per offered kW-year)",
+    "xlim": [
+      -0.36900000000000005,
+      1.3689999999999998
+    ],
+    "ylim": [
+      0.0,
+      450.0
+    ],
+    "xticks": [
+      0.0,
+      1.0
+    ],
+    "xticklabels": [
+      "Four hours\n5.60 kW",
+      "Eight hours\n4.42 kW"
+    ],
+    "yticks": [
+      0.0,
+      50.0,
+      100.0,
+      150.0,
+      200.0,
+      250.0,
+      300.0,
+      350.0,
+      400.0,
+      450.0
+    ],
+    "yticklabels": [
+      "0",
+      "50",
+      "100",
+      "150",
+      "200",
+      "250",
+      "300",
+      "350",
+      "400",
+      "450"
+    ],
+    "text": [
+      {
+        "text": "b",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "c": {
+    "title": "Fees change whether to participate",
+    "xlabel": "",
+    "ylabel": "Annual net-value q05 (1,000 USD)",
+    "xlim": [
+      -0.4355,
+      2.4355
+    ],
+    "ylim": [
+      -28.270259621464135,
+      3.37028109500394
+    ],
+    "xticks": [
+      0.0,
+      1.0,
+      2.0
+    ],
+    "xticklabels": [
+      "No fee",
+      "Shared\nUSD 2,500",
+      "Full\nUSD 25,000"
+    ],
+    "yticks": [
+      -30.0,
+      -25.0,
+      -20.0,
+      -15.0,
+      -10.0,
+      -5.0,
+      0.0,
+      5.0
+    ],
+    "yticklabels": [
+      "−30",
+      "−25",
+      "−20",
+      "−15",
+      "−10",
+      "−5",
+      "0",
+      "5"
+    ],
+    "text": [
+      {
+        "text": "c",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "d": {
+    "title": "Entry floors shift with shared fees",
+    "xlabel": "Four-hour price (USD / kW-year)",
+    "ylabel": "Required eight-hour price\n(USD / kW-year)",
+    "xlim": [
+      0.0,
+      1500.0
+    ],
+    "ylim": [
+      246.7211456613827,
+      2081.3222453153076
+    ],
+    "xticks": [
+      0.0,
+      200.0,
+      400.0,
+      600.0,
+      800.0,
+      1000.0,
+      1200.0,
+      1400.0,
+      1600.0
+    ],
+    "xticklabels": [
+      "0",
+      "200",
+      "400",
+      "600",
+      "800",
+      "1000",
+      "1200",
+      "1400",
+      "1600"
+    ],
+    "yticks": [
+      0.0,
+      250.0,
+      500.0,
+      750.0,
+      1000.0,
+      1250.0,
+      1500.0,
+      1750.0,
+      2000.0,
+      2250.0
+    ],
+    "yticklabels": [
+      "0",
+      "250",
+      "500",
+      "750",
+      "1000",
+      "1250",
+      "1500",
+      "1750",
+      "2000",
+      "2250"
+    ],
+    "text": [
+      {
+        "text": "d",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  }
+}

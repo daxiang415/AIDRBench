@@ -1,0 +1,102 @@
+{
+  "a": {
+    "title": "All board-level run means",
+    "xlabel": "",
+    "ylabel": "Board power (W/GPU)",
+    "xlim": [
+      -0.294875,
+      3.332375
+    ],
+    "ylim": [
+      200.0,
+      315.0
+    ],
+    "xticks": [
+      0.0,
+      1.0,
+      2.0,
+      3.0
+    ],
+    "xticklabels": [
+      "Train\n1 GPU",
+      "Train\n4 GPUs",
+      "Offline\n1 GPU",
+      "Offline\n4 GPUs"
+    ],
+    "yticks": [
+      200.0,
+      220.0,
+      240.0,
+      260.0,
+      280.0,
+      300.0,
+      320.0
+    ],
+    "yticklabels": [
+      "200",
+      "220",
+      "240",
+      "260",
+      "280",
+      "300",
+      "320"
+    ],
+    "text": [
+      {
+        "text": "a",
+        "position": [
+          -0.13,
+          1.09
+        ]
+      }
+    ]
+  },
+  "b": {
+    "title": "Calibration uncertainty",
+    "xlabel": "",
+    "ylabel": "Active coefficient (W/GPU)",
+    "xlim": [
+      -0.5,
+      1.5
+    ],
+    "ylim": [
+      200.0,
+      315.0
+    ],
+    "xticks": [
+      0.0,
+      1.0
+    ],
+    "xticklabels": [
+      "Training",
+      "Offline inference"
+    ],
+    "yticks": [
+      200.0,
+      220.0,
+      240.0,
+      260.0,
+      280.0,
+      300.0,
+      320.0
+    ],
+    "yticklabels": [
+      "200",
+      "220",
+      "240",
+      "260",
+      "280",
+      "300",
+      "320"
+    ],
+    "text": [
+      {
+        "text": "b",
+        "position": [
+          -0.13,
+          1.09
+        ]
+      }
+    ]
+  }
+}

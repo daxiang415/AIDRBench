@@ -1,0 +1,15 @@
+{
+  "pages": 18,
+  "figure_pages": {
+    "1": 3,
+    "2": 4,
+    "3": 5,
+    "4": 6,
+    "5": 7,
+    "6": 8
+  },
+  "legend_pages": {},
+  "si_pages": 32,
+  "scientific_text_unchanged": true,
+  "supplement_tex_unchanged": true
+}

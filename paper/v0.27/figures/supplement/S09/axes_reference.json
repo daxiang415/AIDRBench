@@ -1,0 +1,185 @@
+{
+  "a": {
+    "title": "Reference workload: duration products",
+    "xlabel": "",
+    "ylabel": "Success fraction and lower bound",
+    "xlim": [
+      -0.5,
+      1.5
+    ],
+    "ylim": [
+      0.942,
+      1.04
+    ],
+    "xticks": [
+      0.0,
+      1.0
+    ],
+    "xticklabels": [
+      "Four hours",
+      "Eight hours"
+    ],
+    "yticks": [
+      0.95,
+      0.975,
+      1.0
+    ],
+    "yticklabels": [
+      "0.950",
+      "0.975",
+      "1.000"
+    ],
+    "text": [
+      {
+        "text": "5.60 kW",
+        "position": [
+          0.0,
+          1.015
+        ]
+      },
+      {
+        "text": "4.42 kW",
+        "position": [
+          1.0,
+          1.015
+        ]
+      },
+      {
+        "text": "a",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "b": {
+    "title": "Observed-week mixture: candidate grid",
+    "xlabel": "Tested request (kW)",
+    "ylabel": "Development Wilson lower bound",
+    "xlim": [
+      -0.19814410703791607,
+      6.188547343067936
+    ],
+    "ylim": [
+      -0.03,
+      1.08
+    ],
+    "xticks": [
+      -1.0,
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0
+    ],
+    "xticklabels": [
+      "−1",
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "yticks": [
+      -0.2,
+      0.0,
+      0.2,
+      0.4000000000000001,
+      0.6000000000000001,
+      0.8,
+      1.0000000000000002,
+      1.2000000000000002
+    ],
+    "yticklabels": [
+      "−0.2",
+      "0.0",
+      "0.2",
+      "0.4",
+      "0.6",
+      "0.8",
+      "1.0",
+      "1.2"
+    ],
+    "text": [
+      {
+        "text": "b",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "c": {
+    "title": "Observed-week mixture: independent confirmation",
+    "xlabel": "",
+    "ylabel": "Success fraction and lower bound",
+    "xlim": [
+      -0.45,
+      2.45
+    ],
+    "ylim": [
+      0.28,
+      1.13
+    ],
+    "xticks": [
+      0.0,
+      1.0,
+      2.0
+    ],
+    "xticklabels": [
+      "Counts: 2.95 kW\nSelected",
+      "Resource-time: 1.47 kW\nSelected",
+      "Resource-time: 2.95 kW\nFixed comparator"
+    ],
+    "yticks": [
+      0.4,
+      0.6,
+      0.8,
+      1.0
+    ],
+    "yticklabels": [
+      "0.4",
+      "0.6",
+      "0.8",
+      "1.0"
+    ],
+    "text": [
+      {
+        "text": "300/300",
+        "position": [
+          0.0,
+          1.045
+        ]
+      },
+      {
+        "text": "300/300",
+        "position": [
+          1.0,
+          1.045
+        ]
+      },
+      {
+        "text": "120/300",
+        "position": [
+          2.0,
+          0.45
+        ]
+      },
+      {
+        "text": "c",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  }
+}

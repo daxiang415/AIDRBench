@@ -1,0 +1,486 @@
+[
+  {
+    "table": "S02a",
+    "series": "All board means",
+    "kind": "points",
+    "x": "x_position",
+    "y": "board_power_w"
+  },
+  {
+    "table": "S02b",
+    "series": "Active coefficients",
+    "kind": "errorbar",
+    "x": "x_position",
+    "y": "estimate_w_per_gpu",
+    "lower": "interval_lower_w_per_gpu",
+    "upper": "interval_upper_w_per_gpu"
+  },
+  {
+    "table": "S03a",
+    "series": "success_1pct",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "success_1pct_lower"
+  },
+  {
+    "table": "S03a",
+    "series": "success_zero",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "success_zero_lower"
+  },
+  {
+    "table": "S03b",
+    "series": "success_1pct",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "success_1pct_lower"
+  },
+  {
+    "table": "S03b",
+    "series": "success_zero",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "success_zero_lower"
+  },
+  {
+    "table": "S03c",
+    "series": "Immediate shortage",
+    "kind": "bar",
+    "x": "x_shortage",
+    "y": "shortage_pct"
+  },
+  {
+    "table": "S03c",
+    "series": "Deadline failure",
+    "kind": "bar",
+    "x": "x_deadline",
+    "y": "deadline_miss_pct"
+  },
+  {
+    "table": "S03d",
+    "series": "Success 4.42",
+    "kind": "bar",
+    "x": "week_position",
+    "y": "successes_at_4p42"
+  },
+  {
+    "table": "S03d",
+    "series": "Shortage 4.42",
+    "kind": "bar",
+    "x": "week_position",
+    "y": "shortage_at_4p42",
+    "bottom": "shortage_bottom"
+  },
+  {
+    "table": "S03d",
+    "series": "Success 2.95",
+    "kind": "points",
+    "x": "week_position",
+    "y": "successes_at_2p95"
+  },
+  {
+    "table": "S04a",
+    "series": "no_BESS",
+    "kind": "points",
+    "x": "x_no_BESS",
+    "y": "no_BESS_hosting_gain_kw"
+  },
+  {
+    "table": "S04b",
+    "series": "no_BESS",
+    "kind": "errorbar",
+    "x": "x_no_BESS",
+    "y": "no_BESS_mean_pp",
+    "lower": "no_BESS_lower_pp",
+    "upper": "no_BESS_upper_pp"
+  },
+  {
+    "table": "S04a",
+    "series": "with_BESS",
+    "kind": "points",
+    "x": "x_with_BESS",
+    "y": "with_BESS_hosting_gain_kw"
+  },
+  {
+    "table": "S04b",
+    "series": "with_BESS",
+    "kind": "errorbar",
+    "x": "x_with_BESS",
+    "y": "with_BESS_mean_pp",
+    "lower": "with_BESS_lower_pp",
+    "upper": "with_BESS_upper_pp"
+  },
+  {
+    "table": "S04c",
+    "series": "4 h",
+    "kind": "errorbar",
+    "x": "x_4h",
+    "y": "success_4h_pct",
+    "lower": "lower_4h_pct",
+    "upper": "success_4h_pct"
+  },
+  {
+    "table": "S04c",
+    "series": "8 h",
+    "kind": "errorbar",
+    "x": "x_8h",
+    "y": "success_8h_pct",
+    "lower": "lower_8h_pct",
+    "upper": "success_8h_pct"
+  },
+  {
+    "table": "S04d",
+    "series": "no_BESS",
+    "kind": "points",
+    "x": "x_no_BESS",
+    "y": "no_BESS_hosting_gain_kw"
+  },
+  {
+    "table": "S04d",
+    "series": "with_BESS",
+    "kind": "points",
+    "x": "x_with_BESS",
+    "y": "with_BESS_hosting_gain_kw"
+  },
+  {
+    "table": "S05a",
+    "series": "Annual value difference",
+    "kind": "points",
+    "x": "equal_capacity_price",
+    "y": "annual_value_8h_minus_4h_usd"
+  },
+  {
+    "table": "S05b",
+    "series": "Missed-work price 0",
+    "kind": "bar",
+    "x": "x_missed_price_0",
+    "y": "threshold_missed_price_0"
+  },
+  {
+    "table": "S05b",
+    "series": "Missed-work price 1",
+    "kind": "bar",
+    "x": "x_missed_price_1",
+    "y": "threshold_missed_price_1"
+  },
+  {
+    "table": "S05c",
+    "series": "4 h",
+    "kind": "bar",
+    "x": "x_4h",
+    "y": "net_4h_thousand_usd"
+  },
+  {
+    "table": "S05c",
+    "series": "8 h",
+    "kind": "bar",
+    "x": "x_8h",
+    "y": "net_8h_thousand_usd"
+  },
+  {
+    "table": "S05d_fee0",
+    "series": "Fee 0",
+    "kind": "points",
+    "x": "price_4h",
+    "y": "required_price_8h"
+  },
+  {
+    "table": "S05d_fee2500",
+    "series": "Fee 2500",
+    "kind": "points",
+    "x": "price_4h",
+    "y": "required_price_8h"
+  },
+  {
+    "table": "S05d_fee25000",
+    "series": "Fee 25000",
+    "kind": "points",
+    "x": "price_4h",
+    "y": "required_price_8h"
+  },
+  {
+    "table": "S06a",
+    "series": "successes",
+    "kind": "matrix",
+    "x": null,
+    "y": null,
+    "columns": [
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "transpose": false
+  },
+  {
+    "table": "S06b",
+    "series": "successes",
+    "kind": "matrix",
+    "x": null,
+    "y": null,
+    "columns": [
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "transpose": false
+  },
+  {
+    "table": "S06c",
+    "series": "instantaneous_supply_limited_trials",
+    "kind": "matrix",
+    "x": null,
+    "y": null,
+    "columns": [
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "transpose": false
+  },
+  {
+    "table": "S06d",
+    "series": "failed_deadline_miss",
+    "kind": "matrix",
+    "x": null,
+    "y": null,
+    "columns": [
+      "fresh_last_call",
+      "repeated_16h",
+      "repeated_24h"
+    ],
+    "transpose": false
+  },
+  {
+    "table": "S07a",
+    "series": "rigid",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "rigid_hosting_kw"
+  },
+  {
+    "table": "S07a",
+    "series": "flexible",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "flexible_hosting_kw"
+  },
+  {
+    "table": "S07b",
+    "series": "rigid",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "rigid_hosting_kw"
+  },
+  {
+    "table": "S07b",
+    "series": "flexible",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "flexible_hosting_kw"
+  },
+  {
+    "table": "S07c",
+    "series": "rigid_no_BESS_kwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "rigid_no_BESS_kwh"
+  },
+  {
+    "table": "S07c",
+    "series": "flexible_no_BESS_kwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "flexible_no_BESS_kwh"
+  },
+  {
+    "table": "S07c",
+    "series": "rigid_with_BESS_kwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "rigid_with_BESS_kwh"
+  },
+  {
+    "table": "S07c",
+    "series": "flexible_with_BESS_kwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "flexible_with_BESS_kwh"
+  },
+  {
+    "table": "S07d",
+    "series": "rigid_no_BESS_mwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "rigid_no_BESS_mwh"
+  },
+  {
+    "table": "S07d",
+    "series": "flexible_no_BESS_mwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "flexible_no_BESS_mwh"
+  },
+  {
+    "table": "S07d",
+    "series": "rigid_with_BESS_mwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "rigid_with_BESS_mwh"
+  },
+  {
+    "table": "S07d",
+    "series": "flexible_with_BESS_mwh",
+    "kind": "points",
+    "x": "eligible_work_pct",
+    "y": "flexible_with_BESS_mwh"
+  },
+  {
+    "table": "S08a",
+    "series": "4 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_4h_usd_per_kw_year"
+  },
+  {
+    "table": "S08a",
+    "series": "8 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_8h_usd_per_kw_year"
+  },
+  {
+    "table": "S08b",
+    "series": "4 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_4h_usd_per_kw_year"
+  },
+  {
+    "table": "S08b",
+    "series": "8 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_8h_usd_per_kw_year"
+  },
+  {
+    "table": "S08c",
+    "series": "4 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_4h_usd_per_kw_year"
+  },
+  {
+    "table": "S08c",
+    "series": "8 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_8h_usd_per_kw_year"
+  },
+  {
+    "table": "S08d",
+    "series": "4 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_4h_usd_per_kw_year"
+  },
+  {
+    "table": "S08d",
+    "series": "8 h",
+    "kind": "points",
+    "x": "x_plot",
+    "y": "threshold_8h_usd_per_kw_year"
+  },
+  {
+    "table": "S09a",
+    "series": "success_1pct",
+    "kind": "errorbar",
+    "x": "x_success_1pct",
+    "y": "success_1pct_fraction",
+    "lower": "success_1pct_lower",
+    "upper": "success_1pct_fraction"
+  },
+  {
+    "table": "S09a",
+    "series": "success_zero",
+    "kind": "errorbar",
+    "x": "x_success_zero",
+    "y": "success_zero_fraction",
+    "lower": "success_zero_lower",
+    "upper": "success_zero_fraction"
+  },
+  {
+    "table": "S09b",
+    "series": "job_count success_1pct",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "job_count_success_1pct_lower"
+  },
+  {
+    "table": "S09b",
+    "series": "job_count success_zero",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "job_count_success_zero_lower"
+  },
+  {
+    "table": "S09b",
+    "series": "resource_gpu_h success_1pct",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "resource_gpu_h_success_1pct_lower"
+  },
+  {
+    "table": "S09b",
+    "series": "resource_gpu_h success_zero",
+    "kind": "points",
+    "x": "request_kw",
+    "y": "resource_gpu_h_success_zero_lower"
+  },
+  {
+    "table": "S09c",
+    "series": "success_1pct",
+    "kind": "errorbar",
+    "x": "x_success_1pct",
+    "y": "success_1pct_fraction",
+    "lower": "success_1pct_lower",
+    "upper": "success_1pct_fraction"
+  },
+  {
+    "table": "S09c",
+    "series": "success_zero",
+    "kind": "errorbar",
+    "x": "x_success_zero",
+    "y": "success_zero_fraction",
+    "lower": "success_zero_lower",
+    "upper": "success_zero_fraction"
+  },
+  {
+    "table": "S10a",
+    "series": "Power components",
+    "kind": "barh",
+    "x": "facility_power_kw",
+    "y": "y_position"
+  },
+  {
+    "table": "S10b",
+    "series": "Overhead sensitivity",
+    "kind": "points",
+    "x": "node_overhead_w",
+    "y": "single_offer_pct_peak"
+  },
+  {
+    "table": "S10c",
+    "series": "Precision pairs",
+    "kind": "points",
+    "x": "original_utilisation_gain_pp",
+    "y": "strict_utilisation_gain_pp"
+  },
+  {
+    "table": "S10d",
+    "series": "Precision pairs",
+    "kind": "points",
+    "x": "original_utilisation_gain_pp",
+    "y": "strict_utilisation_gain_pp"
+  }
+]

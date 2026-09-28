@@ -8,6 +8,7 @@ import pandas as pd
 import pytest
 import yaml
 
+import aidrbench.evaluation.source_data as source_data_module
 from aidrbench.evaluation.source_data import (
     export_manuscript_source_data,
     load_source_data_specification,
@@ -41,6 +42,11 @@ def test_default_nature_source_data_specification_is_valid() -> None:
         "fig6_community_profile_pv_hosting_contrasts",
         "fig6_community_profile_pv_hosting_scenarios",
     }
+    community_tables = [
+        table for table in specification.tables if table.table_id.startswith("fig6_")
+    ]
+    assert community_tables
+    assert {figure for table in community_tables for figure in table.figures} == {"S5"}
 
 
 def test_export_source_data_combines_labels_sorts_and_hashes(tmp_path: Path) -> None:
@@ -89,6 +95,7 @@ def test_export_source_data_combines_labels_sorts_and_hashes(tmp_path: Path) -> 
     )
     assert summary["table_count"] == 1
     assert summary["row_count"] == 4
+    assert summary["final_publish"] == "atomic_directory_rename"
 
     exported_path = tmp_path / "bundle" / "fig2_capacity.csv"
     exported = pd.read_csv(exported_path)
@@ -121,6 +128,54 @@ def test_export_source_data_combines_labels_sorts_and_hashes(tmp_path: Path) -> 
         manifest["tables"][0]["output_sha256"]
         == hashlib.sha256(exported_path.read_bytes()).hexdigest()
     )
+    with pytest.raises(FileExistsError, match="already exists"):
+        export_manuscript_source_data(
+            specification,
+            tmp_path / "bundle",
+            repository_root=tmp_path,
+        )
+
+
+def test_source_data_manifest_captures_git_state_before_staging(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    pd.DataFrame({"duration_h": [4], "capacity_kw": [40.0]}).to_csv(
+        tmp_path / "input.csv", index=False
+    )
+    specification = tmp_path / "source_data.yaml"
+    _write_specification(
+        specification,
+        [
+            {
+                "table_id": "fig2_capacity",
+                "figures": [2],
+                "panels": ["a"],
+                "output": "fig2_capacity.csv",
+                "inputs": [{"path": "input.csv"}],
+                "columns": ["duration_h", "capacity_kw"],
+                "sort_by": ["duration_h"],
+            }
+        ],
+    )
+    destination = tmp_path / "bundle"
+    observed_calls = 0
+    expected_git_state = {"commit": "a" * 40, "working_tree_dirty": False}
+
+    def capture_git_state(root: Path) -> dict[str, object]:
+        nonlocal observed_calls
+        observed_calls += 1
+        assert root == tmp_path.resolve()
+        assert not destination.exists()
+        assert not list(tmp_path.glob(".bundle.*.source-data.tmp"))
+        return expected_git_state
+
+    monkeypatch.setattr(source_data_module, "_git_state", capture_git_state)
+    export_manuscript_source_data(specification, destination, repository_root=tmp_path)
+
+    manifest = json.loads((destination / "source_data_manifest.json").read_text())
+    assert observed_calls == 1
+    assert manifest["software"]["git"] == expected_git_state
 
 
 def test_export_source_data_fails_closed_on_missing_columns(tmp_path: Path) -> None:

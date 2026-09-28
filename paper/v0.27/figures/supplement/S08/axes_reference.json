@@ -1,0 +1,210 @@
+{
+  "a": {
+    "title": "Reserved hardware amortisation",
+    "xlabel": "Hardware economic life (years)",
+    "ylabel": "Threshold (US$/offered kW/year)",
+    "xlim": [
+      2.85,
+      6.15
+    ],
+    "ylim": [
+      0.0,
+      1102.1618959358766
+    ],
+    "xticks": [
+      3.0,
+      4.0,
+      5.0,
+      6.0
+    ],
+    "xticklabels": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "yticks": [
+      0.0,
+      200.0,
+      400.0,
+      600.0,
+      800.0,
+      1000.0,
+      1200.0
+    ],
+    "yticklabels": [
+      "0",
+      "200",
+      "400",
+      "600",
+      "800",
+      "1000",
+      "1200"
+    ],
+    "text": [
+      {
+        "text": "a",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "b": {
+    "title": "Opportunity cost of displaced work",
+    "xlabel": "Displaced-work value (US$/GPU-h)",
+    "ylabel": "Threshold (US$/offered kW/year)",
+    "xlim": [
+      -0.05,
+      1.05
+    ],
+    "ylim": [
+      0.0,
+      2131.740258527154
+    ],
+    "xticks": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "xticklabels": [
+      "0.00",
+      "0.25",
+      "0.50",
+      "1.00"
+    ],
+    "yticks": [
+      0.0,
+      500.0,
+      1000.0,
+      1500.0,
+      2000.0,
+      2500.0
+    ],
+    "yticklabels": [
+      "0",
+      "500",
+      "1000",
+      "1500",
+      "2000",
+      "2500"
+    ],
+    "text": [
+      {
+        "text": "b",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "c": {
+    "title": "Valuation of additional waiting",
+    "xlabel": "Waiting price (10⁻³ US$/GPU-h/h)",
+    "ylabel": "Threshold (US$/offered kW/year)",
+    "xlim": [
+      -0.5,
+      10.5
+    ],
+    "ylim": [
+      0.0,
+      1113.353648864888
+    ],
+    "xticks": [
+      0.0,
+      1.0,
+      5.0,
+      10.0
+    ],
+    "xticklabels": [
+      "0",
+      "1",
+      "5",
+      "10"
+    ],
+    "yticks": [
+      0.0,
+      200.0,
+      400.0,
+      600.0,
+      800.0,
+      1000.0,
+      1200.0
+    ],
+    "yticklabels": [
+      "0",
+      "200",
+      "400",
+      "600",
+      "800",
+      "1000",
+      "1200"
+    ],
+    "text": [
+      {
+        "text": "c",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "d": {
+    "title": "Fixed participation fees",
+    "xlabel": "Annual site fee (thousand US$)",
+    "ylabel": "Threshold (US$/offered kW/year)",
+    "xlim": [
+      8.0,
+      52.0
+    ],
+    "ylim": [
+      0.0,
+      1839.5457401871704
+    ],
+    "xticks": [
+      10.0,
+      25.0,
+      50.0
+    ],
+    "xticklabels": [
+      "10",
+      "25",
+      "50"
+    ],
+    "yticks": [
+      0.0,
+      250.0,
+      500.0,
+      750.0,
+      1000.0,
+      1250.0,
+      1500.0,
+      1750.0,
+      2000.0
+    ],
+    "yticklabels": [
+      "0",
+      "250",
+      "500",
+      "750",
+      "1000",
+      "1250",
+      "1500",
+      "1750",
+      "2000"
+    ],
+    "text": [
+      {
+        "text": "d",
+        "position": [
+          -23.0,
+          0.0
+        ]
+      }
+    ]
+  }
+}

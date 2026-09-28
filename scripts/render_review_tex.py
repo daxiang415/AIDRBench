@@ -27,16 +27,7 @@ parser.add_argument(
 )
 args = parser.parse_args()
 if args.current_figures is None and args.local_figures is None and args.web_figures is None:
-    if "docs/figures/commitment_narrative_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/commitment_narrative_v1/artwork"
-    elif "docs/figures/commitment_mechanisms_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/commitment_mechanisms_v1/artwork"
-    elif "docs/figures/operating_tradeoffs_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/operating_tradeoffs_v1/artwork"
-    elif "docs/figures/repeat_mechanism_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/repeat_mechanism_v1/artwork"
-    elif "docs/figures/workload_composition_v1/artwork/" in SOURCE.read_text():
-        args.current_figures = ROOT / "docs/figures/workload_composition_v1/artwork"
+    args.current_figures = ROOT / "paper/v0.27/latex/figures"
 if args.local_figures is not None and args.web_figures is not None:
     parser.error("choose local drafts or accepted web figures")
 LOCAL = args.local_figures is not None
@@ -301,7 +292,7 @@ for line in lines:
             formal = args.current_figures / f"AIDRBench_Figure_{figure_number}.pdf"
             image_path = "../../" + formal.resolve().relative_to(ROOT).as_posix()
             graphic = (
-                "\\makebox[\\textwidth][c]{\\includegraphics[width=183mm]"
+                "\\makebox[\\textwidth][c]{\\includegraphics[width=180mm]"
                 f"{{\\detokenize{{{image_path}}}}}}}"
             )
         elif figure_number == "1":

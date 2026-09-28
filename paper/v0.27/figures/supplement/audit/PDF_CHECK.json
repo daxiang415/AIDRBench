@@ -1,0 +1,182 @@
+[
+  {
+    "mode": "reference",
+    "figure": "S1",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.5,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S2",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.5,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S3",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.199999809265137,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S4",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.199999809265137,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S5",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.099999904632568,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S6",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.199999809265137,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S7",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.099999904632568,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S8",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.199999809265137,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S9",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.099999904632568,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "reference",
+    "figure": "S10",
+    "pages": 1,
+    "width_mm": 183.01,
+    "minimum_font_pt": 6.099999904632568,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S1",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S2",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S3",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S4",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S5",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S6",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S7",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S8",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S9",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  },
+  {
+    "mode": "csv_renderer",
+    "figure": "S10",
+    "pages": 1,
+    "width_mm": 180.0,
+    "minimum_font_pt": 6.0,
+    "embedded_fonts": true,
+    "no_type3": true
+  }
+]

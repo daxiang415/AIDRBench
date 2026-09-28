@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "all_price_rows": 1296,
+  "all_candidate_ledgers": 36,
+  "all_duration_frontier_rows": 108,
+  "max_price_error": 9.094947017729282e-13,
+  "selection_flags_independently_checked": true,
+  "fixed_fee_additivity_checked": true
+}

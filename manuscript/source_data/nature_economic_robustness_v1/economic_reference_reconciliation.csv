@@ -1,0 +1,10 @@
+duration_h,regime,annual_event_count,facility_site_scale_mw,risk_adjusted_break_even_capacity_payment_per_kw_year_recomputed,risk_adjusted_break_even_capacity_payment_per_kw_year_published,absolute_difference_per_kw_year
+2,reserved_headroom,50,1,280.820706944,280.820706944,9.93622961687e-11
+2,slack_backed,50,1,164.672435441,164.672435441,1.38840050568e-10
+2,throughput_displacing,50,1,247.773419267,247.773419267,2.13987050302e-10
+4,reserved_headroom,50,1,362.748007223,362.748007223,9.94191395876e-11
+4,slack_backed,50,1,246.59973572,246.59973572,3.37593064614e-10
+4,throughput_displacing,50,1,414.993953702,414.993953702,3.19460013998e-11
+8,reserved_headroom,50,1,553.355273358,553.355273358,3.92446963815e-10
+8,slack_backed,50,1,437.207001854,437.207001854,3.6925484892e-10
+8,throughput_displacing,50,1,774.37081969,774.37081969,1.06638253783e-10

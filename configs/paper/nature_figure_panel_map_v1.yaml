@@ -166,42 +166,6 @@ figures:
         interpretation: Fixed candidates fail to retain the declared reliability under the joint OOD shift.
         boundary: OOD capacity was not reselected, so failure is not evidence of zero OOD capacity; H=5 and H=7 were not evaluated.
 
-  "6":
-    title: Community profiles condition system value but not job-derived firm capacity
-    panels:
-      a:
-        kind: representative time-series curves
-        plot_data: figure_6_panel_a.csv
-        question: How do the three climate-zone community net-load profiles differ?
-        encoding: Elapsed day is x, net community load is y and line style/colour identifies zone.
-        statistic: Earliest 168 chronological hours per zone; no smoothing.
-        interpretation: The community contexts differ while jobs, hardware and events remain paired.
-        boundary: Zones are profile archetypes, not named or geocoded sites.
-      b:
-        kind: paired firm-capacity curves
-        plot_data: figure_6_panel_b.csv
-        question: Does changing only the community profile alter job-derived PI firm capacity?
-        encoding: Duration is x, PI tolerance lower bound is y and line style/marker identifies zone; the axis displays all integer hours and markers identify evaluated durations.
-        statistic: 100 paired development scenarios per zone at q=0.95 and H={1,2,3,4,6,8}; H=5 and H=7 were not evaluated.
-        interpretation: The three curves coincide to numerical precision.
-        boundary: This controlled invariance does not cover different job or hardware distributions; line segments do not create H=5 or H=7 estimates.
-      c:
-        kind: empirical fraction and Wilson-bound comparison
-        plot_data: figure_6_panel_c.csv
-        question: Does the fixed causal controller transfer across the three community profiles?
-        encoding: Filled markers are empirical success and open markers are one-sided 95% Wilson lower bounds.
-        statistic: 100 development episodes per zone and duration for H=4 and 8 h.
-        interpretation: Success counts are unchanged in this profile-only sensitivity.
-        boundary: This is a development transfer diagnostic, not a new locked certificate.
-      d:
-        kind: paired rigid-flexible hosting segments
-        plot_data: figure_6_panel_d.csv
-        question: How does community profile alter the PV-hosting value of workload flexibility?
-        encoding: Open marker is rigid, filled marker is flexible and rows split zone and BESS status.
-        statistic: 100-scenario all-feasible planning boundary for each design cell.
-        interpretation: Absolute hosting and the flexible-workload gain remain profile-dependent.
-        boundary: PV hosting is a perfect-information planning result, not a causal-controller effect.
-
 supplementary_figures:
   S1:
     title: AIDRBench environment and evidence flow
@@ -295,3 +259,39 @@ supplementary_figures:
         statistic: Same representative episode and 12-h pre/24-h post plotting window.
         interpretation: The power response is coupled to deferred service state.
         boundary: Dual axes have different units and must not be compared by visual slope alone.
+  S5:
+    title: Community profiles condition system value but not job-derived firm capacity
+    artwork_route: web_gpt_from_exact_panel_data
+    panels:
+      a:
+        kind: representative time-series curves
+        plot_data: figure_s5_panel_a.csv
+        question: How do the three climate-zone community net-load profiles differ?
+        encoding: Elapsed day is x, net community load is y and line style/colour identifies zone.
+        statistic: Earliest 168 chronological hours per zone; no smoothing.
+        interpretation: The community contexts differ while jobs, hardware and events remain paired.
+        boundary: Zones are profile archetypes, not named or geocoded sites.
+      b:
+        kind: paired firm-capacity curves
+        plot_data: figure_s5_panel_b.csv
+        question: Does changing only the community profile alter job-derived PI firm capacity?
+        encoding: Duration is x, PI tolerance lower bound is y and line style/marker identifies zone; the axis displays all integer hours and markers identify evaluated durations.
+        statistic: 100 paired development scenarios per zone at q=0.95 and H={1,2,3,4,6,8}; H=5 and H=7 were not evaluated.
+        interpretation: The three curves coincide to numerical precision.
+        boundary: This controlled invariance does not cover different job or hardware distributions; line segments do not create H=5 or H=7 estimates.
+      c:
+        kind: empirical fraction and Wilson-bound comparison
+        plot_data: figure_s5_panel_c.csv
+        question: Does the fixed causal controller transfer across the three community profiles?
+        encoding: Filled markers are empirical success and open markers are one-sided 95% Wilson lower bounds.
+        statistic: 100 development episodes per zone and duration for H=4 and 8 h.
+        interpretation: Success counts are unchanged in this profile-only sensitivity.
+        boundary: This is a development transfer diagnostic, not a new locked certificate.
+      d:
+        kind: paired rigid-flexible hosting segments
+        plot_data: figure_s5_panel_d.csv
+        question: How does community profile alter the PV-hosting value of workload flexibility?
+        encoding: Open marker is rigid, filled marker is flexible and rows split zone and BESS status.
+        statistic: 100-scenario all-feasible planning boundary for each design cell.
+        interpretation: Absolute hosting and the flexible-workload gain remain profile-dependent.
+        boundary: PV hosting is a perfect-information planning result, not a causal-controller effect.

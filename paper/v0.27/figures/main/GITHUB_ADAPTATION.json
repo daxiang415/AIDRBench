@@ -1,0 +1,100 @@
+{
+  "date": "2026-09-28",
+  "reason": "GitHub secret scanning matched an encoded JPEG fragment in the self-contained SVG. Extracted raster assets without changing their bytes or SVG geometry.",
+  "file": "01_FIGURES/AIDRBench_Figure_1.svg",
+  "original_svg_sha256": "4784f705d74ee3e920e3ea237495d58292e4215d2a1bc80913d3bb91ac2c1b59",
+  "github_svg_sha256": "84e0eb953768c2d921b7c9f993e84fdc7c6bca603fa6cdbaf877762f7d9fe6c1",
+  "assets": [
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_01.png",
+      "bytes": 27335,
+      "sha256": "630c7e9ea1f1e50b89cb8eabcac6e8bc471fb21a71dcff466025de2c9166cff8",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_02.png",
+      "bytes": 102878,
+      "sha256": "9ae54b1267c865af554d8aa54174ed8a120a81ddb0d3f10f825ea37db3a5ab5f",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_03.png",
+      "bytes": 465223,
+      "sha256": "3c03bbedb4466bd9229fb7e9ef713acf1725388c3d26057eb21a8e379d4ee332",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_04.png",
+      "bytes": 19341,
+      "sha256": "cd434518c3232fde165858b1cea75f929037735cb130480a1bd070974acdea85",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_05.png",
+      "bytes": 11583,
+      "sha256": "ab3e173a094d8c03349608a60ffbc46b2a73edf232d888361ea6c93614a2a921",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_06.png",
+      "bytes": 21818,
+      "sha256": "872e22f172cb3e45d28d378102a15a378e95c16c12b7190e1604935a50ec203e",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_07.png",
+      "bytes": 18400,
+      "sha256": "eb3336fe95372a083d208768eb884e794bd18bab2f2e30a5c69631df4dc54d3e",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_08.jpg",
+      "bytes": 58773,
+      "sha256": "62437590630b8cef4d13c74d7e8817f9b95dc73bba6f8828fe754a1f07a6edd4",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_09.jpg",
+      "bytes": 95334,
+      "sha256": "9bfaaf4476c416ffd7ba760c9f5c7e741d23a51201c65a775c97d99cee6d9f25",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_10.jpg",
+      "bytes": 335584,
+      "sha256": "fb8bc4b2ae8a2278ff2abdae0ea4c8c08a0588fe668569d236cf54888d1eec76",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_11.jpg",
+      "bytes": 170937,
+      "sha256": "eb8559d333e53ec078868266e2695503b322bb290fd8142865e7bd025e2e365d",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_12.jpg",
+      "bytes": 23411,
+      "sha256": "dbaece0e10e4a63ecf6f8e6d1e2ab066d8c31b75aa5e2b188f332a13e1ab18cc",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_13.jpg",
+      "bytes": 22401,
+      "sha256": "7ef8f23dc82d8fa21b5de3d3ee0430e8da9f239ff1a659dafd6b2c6903fe77a5",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_14.jpg",
+      "bytes": 31546,
+      "sha256": "e9986982780aba550af33f0bc632ce3e813bfa190d580a335c3ac82085089898",
+      "unchanged_decoded_original": true
+    },
+    {
+      "file": "01_FIGURES/Figure_1_assets/image_15.jpg",
+      "bytes": 32027,
+      "sha256": "f31440c4d80045751654dee8238ea5f8eab4f2c47ca87705d23e820784d16ed4",
+      "unchanged_decoded_original": true
+    }
+  ],
+  "pdf_png_pptx_unchanged": true
+}

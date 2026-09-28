@@ -53,3 +53,22 @@ external/
 manuscript/source_data/**/ready_hourly_curves.csv
 manuscript/source_data/**/recovery_inputs/
 manuscript/source_data/**/hourly/
+
+# Small frozen fixtures and plotted summary curves are included intentionally.
+!data/calibration/**/*.parquet
+!data/examples/**/*.parquet
+!manuscript/source_data/**/ready_hourly_curves.csv
+!results/exports/AIDRBench_Figure6_WebGPT_v2.zip
+!results/exports/AIDRBench_Supplementary_Figure_S5_WebGPT_v1.zip
+
+# Local compilation and drawing products; preserve supplied reference PDFs.
+paper/v0.27/figures/main/rebuild/
+paper/v0.27/figures/supplement/MY_REDRAW/
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.out
+
+# Markdown-generated review TeX; current editable submission sources live in paper/.
+manuscript/exports/AIDRBench_Nature_Communications_v0.27_content_revision.tex
+manuscript/exports/AIDRBench_Nature_Communications_v0.27_Supplementary_Information_content_revision.tex

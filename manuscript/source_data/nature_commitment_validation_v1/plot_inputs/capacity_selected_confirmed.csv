@@ -1,0 +1,5 @@
+weight,endpoint,selected_fraction,selected_capacity_kw,development_successes,confirmation_successes,confirmation_lower,offerable
+job_count,success_1pct,0.5,2.949121593122471,100,300,0.9910621278248719,True
+job_count,success_zero,0.5,2.949121593122471,100,300,0.9910621278248719,True
+resource_gpu_h,success_1pct,0.25,1.4745607965612355,100,300,0.9910621278248719,True
+resource_gpu_h,success_zero,0.25,1.4745607965612355,100,300,0.9910621278248719,True

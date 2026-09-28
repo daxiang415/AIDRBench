@@ -1,0 +1,439 @@
+schema_version: aidrbench.manuscript_source_data_specification.v1
+bundle_id: nature_economic_development_screening_v1
+
+# Standalone exact-data contract for the proposed economic Figure 6. The four
+# panel tables below are already reduced to the exact rows and quantities drawn;
+# the renderer performs no hidden aggregation or spreadsheet transformation.
+tables:
+  - table_id: fig6_technical_economic_boundary
+    figures: [6]
+    panels: [supporting]
+    output: fig6_technical_economic_boundary.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/evaluation/technical_economic_boundary.csv
+    columns:
+      - analysis_id
+      - analysis_role
+      - currency_basis
+      - annualization_scope
+      - performance_payment_basis
+      - reserved_capacity_basis
+      - facility_scale_interpretation
+      - technical_certificate_scope
+      - reference_module_operating_peak_kw
+      - facility_site_scale_mw
+      - proportional_reference_module_scale_factor
+      - regime
+      - duration_h
+      - notice_h
+      - reliability_target
+      - annual_event_count
+      - annual_event_count_class
+      - annual_event_count_is_stress
+      - technical_capacity_ceiling_kw
+      - candidate_reduction_kw
+      - scaled_accounting_technical_capacity_ceiling_kw
+      - scaled_accounting_candidate_reduction_kw
+      - technical_qualification
+      - economic_offer_definition
+      - break_even_capacity_payment_per_kw_year
+      - risk_adjusted_break_even_capacity_payment_per_kw_year
+      - break_even_capacity_payment_excluding_fixed_site_per_kw_year
+      - risk_adjusted_break_even_capacity_payment_excluding_fixed_site_per_kw_year
+      - break_even_performance_payment_per_mwh
+      - risk_adjusted_break_even_performance_payment_per_mwh
+      - break_even_performance_payment_excluding_fixed_site_per_mwh
+      - risk_adjusted_break_even_performance_payment_excluding_fixed_site_per_mwh
+      - fixed_site_enablement_cost
+      - variable_enablement_cost
+      - enablement_cost
+      - fixed_site_enablement_cost_per_offer_kw
+      - annual_net_value
+      - annual_net_value_excluding_fixed_site
+      - annual_net_value_p05
+      - annual_net_value_excluding_fixed_site_p05
+    sort_by: [regime, duration_h]
+
+  - table_id: fig6_mechanism_sensitivity
+    figures: [6]
+    panels: [b]
+    output: fig6_mechanism_sensitivity.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/evaluation/mechanism_sensitivity.csv
+    columns:
+      - analysis_id
+      - analysis_role
+      - currency_basis
+      - annualization_scope
+      - performance_payment_basis
+      - reserved_capacity_basis
+      - facility_scale_interpretation
+      - technical_certificate_scope
+      - reference_module_operating_peak_kw
+      - facility_site_scale_mw
+      - proportional_reference_module_scale_factor
+      - regime
+      - driver_id
+      - driver_label
+      - driver_value
+      - driver_unit
+      - driver_value_display
+      - driver_normalized_position
+      - duration_h
+      - annual_event_count
+      - annual_event_count_class
+      - annual_event_count_is_stress
+      - reliability_target
+      - risk_adjusted_break_even_capacity_payment_per_kw_year
+      - technical_capacity_ceiling_kw
+      - candidate_reduction_kw
+      - scaled_accounting_technical_capacity_ceiling_kw
+      - scaled_accounting_candidate_reduction_kw
+      - technical_qualification
+      - opportunity_exposure_alpha
+      - value_per_gpu_h
+      - effective_displaced_compute_value_per_gpu_h
+    sort_by: [regime, driver_normalized_position]
+
+  - table_id: fig6_break_even_decomposition
+    figures: [6]
+    panels: [c]
+    output: fig6_break_even_decomposition.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/evaluation/break_even_decomposition.csv
+    columns:
+      - analysis_id
+      - analysis_role
+      - currency_basis
+      - annualization_scope
+      - performance_payment_basis
+      - reserved_capacity_basis
+      - facility_scale_interpretation
+      - technical_certificate_scope
+      - reference_module_operating_peak_kw
+      - facility_site_scale_mw
+      - proportional_reference_module_scale_factor
+      - regime
+      - duration_h
+      - notice_h
+      - reliability_target
+      - annual_event_count
+      - annual_event_count_class
+      - annual_event_count_is_stress
+      - technical_capacity_ceiling_kw
+      - candidate_reduction_kw
+      - scaled_accounting_technical_capacity_ceiling_kw
+      - scaled_accounting_candidate_reduction_kw
+      - technical_qualification
+      - component_id
+      - component_label
+      - contribution_per_kw_year
+      - risk_adjusted_break_even_capacity_payment_per_kw_year
+    sort_by: [regime, component_id]
+
+  - table_id: fig6_duration_break_even
+    figures: [6]
+    panels: [d]
+    output: fig6_duration_break_even.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/evaluation/duration_break_even.csv
+    columns:
+      - analysis_id
+      - analysis_role
+      - currency_basis
+      - annualization_scope
+      - performance_payment_basis
+      - reserved_capacity_basis
+      - facility_scale_interpretation
+      - technical_certificate_scope
+      - reference_module_operating_peak_kw
+      - facility_site_scale_mw
+      - proportional_reference_module_scale_factor
+      - regime
+      - duration_h
+      - notice_h
+      - reliability_target
+      - annual_event_count
+      - annual_event_count_class
+      - annual_event_count_is_stress
+      - technical_capacity_ceiling_kw
+      - candidate_reduction_kw
+      - scaled_accounting_technical_capacity_ceiling_kw
+      - scaled_accounting_candidate_reduction_kw
+      - technical_qualification
+      - break_even_capacity_payment_per_kw_year
+      - risk_adjusted_break_even_capacity_payment_per_kw_year
+      - break_even_capacity_payment_excluding_fixed_site_per_kw_year
+      - risk_adjusted_break_even_capacity_payment_excluding_fixed_site_per_kw_year
+    sort_by: [regime, duration_h]
+
+  # This exact supporting table makes the two economics interpretations
+  # inspectable without implying a 0.2--20 MW technical certificate.  The
+  # site-scale rows are a proportional-reference-module accounting sensitivity
+  # with no portfolio-diversification assumption.
+  - table_id: fig6_fixed_site_overlay_scale_sensitivity
+    figures: [6]
+    panels: [a]
+    output: fig6_fixed_site_overlay_scale_sensitivity.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/evaluation/fixed_site_overlay_scale_sensitivity.csv
+    columns:
+      - analysis_id
+      - analysis_role
+      - currency_basis
+      - annualization_scope
+      - performance_payment_basis
+      - reserved_capacity_basis
+      - facility_scale_interpretation
+      - technical_certificate_scope
+      - reference_module_operating_peak_kw
+      - facility_site_scale_mw
+      - proportional_reference_module_scale_factor
+      - regime
+      - duration_h
+      - notice_h
+      - reliability_target
+      - annual_event_count
+      - annual_event_count_class
+      - annual_event_count_is_stress
+      - technical_capacity_ceiling_kw
+      - candidate_reduction_kw
+      - scaled_accounting_technical_capacity_ceiling_kw
+      - scaled_accounting_candidate_reduction_kw
+      - technical_qualification
+      - fixed_site_enablement_annual_cost
+      - variable_enablement_cost_per_offer_kw
+      - fixed_site_enablement_cost
+      - variable_enablement_cost
+      - enablement_cost
+      - fixed_site_enablement_cost_per_offer_kw
+      - accounting_perspective
+      - annual_net_value_usd_per_year
+      - annual_net_value_p05_usd_per_year
+      - break_even_capacity_payment_per_kw_year
+      - risk_adjusted_break_even_capacity_payment_per_kw_year
+    sort_by: [regime, facility_site_scale_mw, accounting_perspective]
+
+  - table_id: fig6_paired_event_ledger
+    figures: [6]
+    panels: [supporting]
+    output: fig6_paired_event_ledger.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/ledger/episode_ledger.parquet
+    columns:
+      - evaluation_split
+      - scenario_id
+      - scenario_hash
+      - episode_seed
+      - event_id
+      - event_start_hour
+      - event_stop_hour
+      - recovery_stop_hour
+      - duration_h
+      - notice_h
+      - reliability_target
+      - confidence_level
+      - technical_capacity_ceiling_kw
+      - offer_fraction_of_technical_ceiling
+      - candidate_reduction_kw
+      - technical_success
+      - technical_failure_reasons
+      - delivery_ratio
+      - minimum_interval_delivery_ratio
+      - delivered_energy_kwh
+      - capped_delivered_energy_kwh
+      - shortfall_energy_kwh
+      - deferred_gpu_h
+      - recovered_within_recovery_window_gpu_h
+      - recovered_through_episode_end_gpu_h
+      - unrecovered_at_recovery_stop_gpu_h_proxy
+      - unrecovered_at_episode_end_gpu_h_proxy
+      - missed_gpu_h
+      - backlog_at_recovery_stop_gpu_h
+      - terminal_backlog_gpu_h
+      - incremental_backlog_area_within_recovery_gpu_h_h
+      - incremental_backlog_area_through_episode_end_gpu_h_h
+      - incremental_energy_within_recovery_kwh
+      - incremental_energy_through_episode_end_kwh
+      - event_peak_delta_kw
+      - recovery_peak_delta_kw
+      - checkpoint_count_or_proxy
+      - checkpoint_proxy_method
+      - paired_pcc_match_max_abs_kw
+      - controlled_work_conservation_error_gpu_h
+      - no_dr_work_conservation_error_gpu_h
+    sort_by: [duration_h, notice_h, offer_fraction_of_technical_ceiling, episode_seed]
+
+  - table_id: fig6_paired_interval_ledger
+    figures: [6]
+    panels: [supporting]
+    output: fig6_paired_interval_ledger.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/ledger/interval_ledger.parquet
+    columns:
+      - scenario_id
+      - scenario_hash
+      - episode_seed
+      - event_id
+      - duration_h
+      - notice_h
+      - candidate_reduction_kw
+      - hour
+      - relative_hour
+      - event_active
+      - recovery_active
+      - within_recovery_window
+      - clearance_tail_active
+      - controlled_pcc_power_kw
+      - no_dr_pcc_power_kw
+      - controlled_executed_gpu_h
+      - no_dr_executed_gpu_h
+      - controlled_backlog_gpu_h
+      - no_dr_backlog_gpu_h
+      - controlled_missed_gpu_h
+      - no_dr_missed_gpu_h
+      - pcc_delta_kw
+      - execution_delta_gpu_h
+      - backlog_delta_gpu_h
+    sort_by: [duration_h, notice_h, candidate_reduction_kw, episode_seed, relative_hour]
+
+  - table_id: fig6_economic_parameter_provenance
+    figures: [6]
+    panels: [supporting]
+    output: fig6_economic_parameter_provenance.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/evaluation/economic_parameter_provenance.csv
+    columns:
+      - analysis_id
+      - analysis_role
+      - monetary_basis
+      - input_id
+      - description
+      - value_or_range
+      - unit
+      - currency_basis
+      - source_type
+      - source_reference
+      - source_url
+      - access_date
+      - status
+      - permitted_interpretation
+      - support_level
+      - replaceability
+      - original_currency_year
+      - external_evidence_reference
+      - external_evidence_url
+      - external_evidence_value_or_range
+      - forbidden_interpretation
+      - specification_sha256
+      - physical_ledger_contract_sha256
+      - controller_config_sha256
+      - technical_certificate_manifest_sha256
+      - ledger_event_sha256
+      - ledger_manifest_sha256
+      - external_parameter_evidence_path
+      - external_parameter_evidence_sha256
+      - input_source_path
+      - input_source_sha256
+      - formula
+    sort_by: [input_id]
+
+  # External observations anchor selected sensitivity ranges but are not copied
+  # into the model as point estimates unless the permitted-use field says so.
+  # The whole rectangular evidence register is exported so every citation and
+  # interpretation boundary remains inspectable outside the repository.
+  - table_id: fig6_external_parameter_evidence
+    figures: [6]
+    panels: [supporting]
+    output: fig6_external_parameter_evidence.csv
+    inputs:
+      - path: data/economics/external_parameter_evidence.csv
+    columns:
+      - evidence_id
+      - input_id
+      - parameter_family
+      - source_title
+      - source_organization
+      - source_url
+      - publication_or_reporting_year
+      - access_date
+      - observed_value
+      - unit
+      - currency_year
+      - support_level
+      - replaceability
+      - permitted_use
+      - forbidden_interpretation
+    sort_by: [input_id, evidence_id]
+
+  # Supplementary physical mapping from event-end paired compute debt to a
+  # recovery-throughput-equivalent GPU count and explicit IT/facility power
+  # layers.  Capital cost is deliberately disabled; these rows are not a GPU
+  # purchase requirement or a scaled technical certificate.
+  - table_id: fig6_reserve_mapping_summary
+    figures: [6]
+    panels: [supporting]
+    output: fig6_reserve_mapping_summary.csv
+    inputs:
+      - path: results/economics/economic_participation_v1/reserve_mapping/reserve_mapping_summary.csv
+    columns:
+      - analysis_id
+      - analysis_role
+      - duration_h
+      - notice_h
+      - offer_fraction_of_technical_ceiling
+      - technical_capacity_ceiling_kw
+      - candidate_reduction_kw
+      - event_sample_count
+      - technical_success_count
+      - technical_success_rate
+      - event_debt_quantile
+      - event_debt_quantile_label
+      - event_end_paired_backlog_debt_gpu_h
+      - event_debt_definition
+      - recovery_target_h
+      - recovery_execution_efficiency
+      - continuous_recovery_throughput_equivalent_gpu_count
+      - recovery_throughput_equivalent_gpu_count_node_rounded
+      - recovery_throughput_equivalent_node_count
+      - gpus_per_node
+      - gpu_count_interpretation
+      - active_power_case
+      - active_power_class_weights_json
+      - active_board_power_w_per_gpu
+      - active_board_power_lower_w_per_gpu
+      - active_board_power_upper_w_per_gpu
+      - active_board_power_parameter_status
+      - idle_board_power_w_per_gpu
+      - idle_board_power_lower_w_per_gpu
+      - idle_board_power_upper_w_per_gpu
+      - idle_board_power_parameter_status
+      - node_overhead_case
+      - node_overhead_w_per_node
+      - node_overhead_parameter_status
+      - pue
+      - pue_parameter_status
+      - installed_it_power_kw
+      - installed_it_power_lower_kw
+      - installed_it_power_upper_kw
+      - installed_facility_power_kw
+      - installed_facility_power_lower_kw
+      - installed_facility_power_upper_kw
+      - recovery_dynamic_facility_power_kw
+      - recovery_dynamic_facility_power_lower_kw
+      - recovery_dynamic_facility_power_upper_kw
+      - power_uncertainty_interpretation
+      - capital_cost_evaluation
+      - capital_cost
+      - hardware_identifier
+      - topology_identifier
+      - calibration_artifact_id
+      - calibration_artifact_sha256
+      - calibration_evidence_class
+    sort_by:
+      - duration_h
+      - event_debt_quantile
+      - recovery_target_h
+      - recovery_execution_efficiency
+      - active_power_case
+      - node_overhead_case

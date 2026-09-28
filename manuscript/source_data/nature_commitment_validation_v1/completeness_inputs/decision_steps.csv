@@ -1,0 +1,10 @@
+step,criterion,decision
+1  Check event-hour supply,Baseline reducible power must cover the delivery requirement.,"Deficit → this series cannot succeed.
+Retain the failure in qualification."
+2  Diagnose remaining failures,Apply strict task windows and the same electrical obligations.,"PI infeasible → revisit operating terms.
+PI feasible + causal failure → improve control.
+Unresolved → no feasibility conclusion."
+3  Qualify a fixed causal offer,Test joint delivery and service on independent scenarios.,"No qualifying probability bound →
+no supported offer for this distribution."
+4  Compare qualified products,Price full operating ledgers against non-participation.,"Insufficient compensation → do not
+participate at the stated prices."

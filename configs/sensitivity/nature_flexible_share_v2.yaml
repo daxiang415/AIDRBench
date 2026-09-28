@@ -1,0 +1,83 @@
+schema_version: 1
+evidence_scope: post_hoc_nonlocked_paired_sensitivity
+development_scenarios: results/nature_mainline/development_v2_nominal
+validation_scenarios: results/nature_mainline/validation_nominal
+development_seeds:
+- 10000
+- 10099
+validation_seeds:
+- 20000
+- 20099
+workload_fractions:
+- 0.4
+- 0.5
+- 0.6
+- 0.7
+- 0.75
+- 0.8
+- 0.9
+- 0.95
+gpu_pool_fractions:
+- 0.4
+- 0.5
+- 0.55
+- 0.6
+- 0.7
+- 0.8
+reference_workload_fraction: 0.75
+reference_gpu_pool_fraction: 0.6
+total_gpu_count: 576
+total_work_gpu_h_per_hour: 374.4
+class_shares:
+  training: 0.5
+  offline_inference: 0.5
+eligibility_rule: training_first_then_offline_inference
+pi_durations_h:
+- 1
+- 2
+- 3
+- 4
+- 6
+- 8
+notice_durations_h:
+- 4
+- 8
+notices_h:
+- 0
+- 2
+- 6
+reliability_target: 0.95
+confidence_level: 0.95
+nominal_proxy_fractions:
+- 0.2
+- 0.3
+- 0.4
+- 0.5
+- 0.6
+- 0.7
+- 0.8
+controller_config: configs/controller/nature_robust_mpc_v1.yaml
+fixed_offer_rule: development_pi_q95_c95_lower_tolerance_limit
+baseline_gate: all_200_paired_episodes_meet_existing_service_and_pcc_limits
+paired_contrast_family: all_nonreference_by_duration_plus_primary_curve_vs_f010
+notice_contrast_family: all_case_by_duration_by_positive_notice_success_differences
+output_directory: results/nature_mainline/flexible_share_sensitivity_v2
+source_data_directory: manuscript/source_data/nature_flexible_share_v2
+extension_version: 2
+prior_results: results/nature_mainline/flexible_share_sensitivity_v1
+new_workload_fractions:
+- 0.1
+- 0.2
+- 0.3
+- 0.4
+- 0.5
+- 0.6
+new_gpu_pool_fraction: 0.4
+rigid_screen_workload_fractions:
+- 0.1
+- 0.2
+- 0.3
+extension_directory: results/nature_mainline/flexible_share_low_extension_v2
+revision_directory: manuscript/revisions/flexible_share_low_range_2026-09-07
+protocol: docs/flexible_share_sensitivity/protocol_v2.md
+primary_pi_reference_case: work_low_010

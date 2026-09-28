@@ -1,0 +1,454 @@
+{
+  "series": 63,
+  "passed": 63,
+  "all_series_pass": true,
+  "quantitative_panels": 33,
+  "uncovered_panels": [],
+  "tolerance": {
+    "rtol": 1e-12,
+    "atol": 1e-12
+  },
+  "checks": [
+    {
+      "table": "S02a",
+      "series": "All board means",
+      "kind": "points",
+      "passed": true,
+      "comparison": "individual_markers"
+    },
+    {
+      "table": "S02b",
+      "series": "Active coefficients",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03a",
+      "series": "success_1pct",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03a",
+      "series": "success_zero",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03b",
+      "series": "success_1pct",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03b",
+      "series": "success_zero",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03c",
+      "series": "Immediate shortage",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03c",
+      "series": "Deadline failure",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03d",
+      "series": "Success 4.42",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03d",
+      "series": "Shortage 4.42",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S03d",
+      "series": "Success 2.95",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04a",
+      "series": "no_BESS",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04b",
+      "series": "no_BESS",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04a",
+      "series": "with_BESS",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04b",
+      "series": "with_BESS",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04c",
+      "series": "4 h",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04c",
+      "series": "8 h",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04d",
+      "series": "no_BESS",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S04d",
+      "series": "with_BESS",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05a",
+      "series": "Annual value difference",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05b",
+      "series": "Missed-work price 0",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05b",
+      "series": "Missed-work price 1",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05c",
+      "series": "4 h",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05c",
+      "series": "8 h",
+      "kind": "bar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05d_fee0",
+      "series": "Fee 0",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05d_fee2500",
+      "series": "Fee 2500",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S05d_fee25000",
+      "series": "Fee 25000",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S06a",
+      "series": "successes",
+      "kind": "matrix",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S06b",
+      "series": "successes",
+      "kind": "matrix",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S06c",
+      "series": "instantaneous_supply_limited_trials",
+      "kind": "matrix",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S06d",
+      "series": "failed_deadline_miss",
+      "kind": "matrix",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07a",
+      "series": "rigid",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07a",
+      "series": "flexible",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07b",
+      "series": "rigid",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07b",
+      "series": "flexible",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07c",
+      "series": "rigid_no_BESS_kwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07c",
+      "series": "flexible_no_BESS_kwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07c",
+      "series": "rigid_with_BESS_kwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07c",
+      "series": "flexible_with_BESS_kwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07d",
+      "series": "rigid_no_BESS_mwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07d",
+      "series": "flexible_no_BESS_mwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07d",
+      "series": "rigid_with_BESS_mwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S07d",
+      "series": "flexible_with_BESS_mwh",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08a",
+      "series": "4 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08a",
+      "series": "8 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08b",
+      "series": "4 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08b",
+      "series": "8 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08c",
+      "series": "4 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08c",
+      "series": "8 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08d",
+      "series": "4 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S08d",
+      "series": "8 h",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09a",
+      "series": "success_1pct",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09a",
+      "series": "success_zero",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09b",
+      "series": "job_count success_1pct",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09b",
+      "series": "job_count success_zero",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09b",
+      "series": "resource_gpu_h success_1pct",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09b",
+      "series": "resource_gpu_h success_zero",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09c",
+      "series": "success_1pct",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S09c",
+      "series": "success_zero",
+      "kind": "errorbar",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S10a",
+      "series": "Power components",
+      "kind": "barh",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S10b",
+      "series": "Overhead sensitivity",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S10c",
+      "series": "Precision pairs",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    },
+    {
+      "table": "S10d",
+      "series": "Precision pairs",
+      "kind": "points",
+      "passed": true,
+      "comparison": "whole_series"
+    }
+  ]
+}

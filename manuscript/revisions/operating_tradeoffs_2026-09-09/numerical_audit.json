@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "trials": {
+    "development": 7600,
+    "confirmation": 13200,
+    "temporal": 1600
+  },
+  "complete_trajectories_independently_recomputed": 560,
+  "individual_events_independently_recomputed": 2144,
+  "structured_inputs_verified": 3200,
+  "template_release_times_preserved": true,
+  "paired_community_inputs_identical": true,
+  "maximum_hourly_conservation_error": 5.684341886080801e-13,
+  "selection_frozen_before_confirmation": true,
+  "all_summary_counts_and_probability_bounds_recomputed": true
+}

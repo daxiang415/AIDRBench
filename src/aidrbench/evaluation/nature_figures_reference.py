@@ -1191,13 +1191,19 @@ def plot_nature_mainline_figure5_reference_style(
     )
 
 
-def plot_nature_mainline_figure6_reference_style(
+def _plot_legacy_community_profile_sensitivity_reference_style(
     source_data_directory: str | Path,
     output_directory: str | Path,
     *,
     formats: Sequence[str] = ("svg", "pdf", "tiff", "png"),
 ) -> dict[str, object]:
-    """Plot the controlled climate-zone community-profile sensitivity."""
+    """Reproduce the pre-migration preview retained for the S5 audit trail.
+
+    This private renderer preserves the historical pixels and manifests only;
+    it is deliberately absent from the current main-figure registry. Current
+    Supplementary Figure S5 artwork is assembled by Web-GPT from the exact
+    ``figure_s5_panel_*.csv`` exports.
+    """
 
     _reference_publication_style()
     manifest_path, manifest = _load_manifest(source_data_directory)
@@ -1501,7 +1507,6 @@ _REFERENCE_PLOTTERS: dict[int, Callable[..., dict[str, object]]] = {
     3: plot_nature_mainline_figure3_reference_style,
     4: plot_nature_mainline_figure4_reference_style,
     5: plot_nature_mainline_figure5_reference_style,
-    6: plot_nature_mainline_figure6_reference_style,
 }
 
 
@@ -1529,7 +1534,7 @@ def plot_nature_mainline_figures_reference_style(
     source_data_directory: str | Path,
     output_directory: str | Path,
     *,
-    figures: Sequence[int] = (1, 2, 3, 4, 5, 6),
+    figures: Sequence[int] = (1, 2, 3, 4, 5),
     formats: Sequence[str] = ("svg", "pdf", "tiff", "png"),
 ) -> dict[str, object]:
     """Generate selected reference-led figures and a portable bundle manifest."""
@@ -1571,5 +1576,4 @@ def plot_nature_mainline_figures_reference_style(
 
 # Public aliases used by focused tests and downstream scripts.
 plot_nature_mainline_figure2 = plot_nature_mainline_figure2_reference_style
-plot_nature_mainline_figure6 = plot_nature_mainline_figure6_reference_style
 plot_nature_mainline_figures = plot_nature_mainline_figures_reference_style

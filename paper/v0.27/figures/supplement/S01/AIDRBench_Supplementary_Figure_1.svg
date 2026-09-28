@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="518.76pt" height="302.4pt" viewBox="0 0 518.76 302.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-12T15:07:18.282497</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 302.4 
+L 518.76 302.4 
+L 518.76 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 63.833418 98.047385 
+L 176.663718 98.047385 
+L 176.663718 71.994462 
+L 63.833418 71.994462 
+z
+" clip-path="url(#pd0e8440e70)" style="fill: #f4f7f8; stroke: #235a78; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 226.30905 98.047385 
+L 339.13935 98.047385 
+L 339.13935 71.994462 
+L 226.30905 71.994462 
+z
+" clip-path="url(#pd0e8440e70)" style="fill: #f4f7f8; stroke: #235a78; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 388.784682 98.047385 
+L 501.614982 98.047385 
+L 501.614982 71.994462 
+L 388.784682 71.994462 
+z
+" clip-path="url(#pd0e8440e70)" style="fill: #f4f7f8; stroke: #235a78; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_1">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(80.866693 82.298267)">Source class shares</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(75.191068 91.900454)">+ declared permission</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(241.591075 82.298267)">Paired job templates</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(239.6817 91.900454)">+ GPU / power model</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(399.801707 82.298267)">Hourly deadline queue</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(408.751082 91.900454)">+ community PCC</text>
+   </g>
+   <g id="patch_5">
+    <path d="M 180.922952 85.020923 
+Q 201.488696 85.020923 220.936407 85.020923 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+    <path d="M 217.736407 83.420923 
+L 220.936407 85.020923 
+L 217.736407 86.620923 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 343.398584 85.020923 
+Q 363.964328 85.020923 383.412039 85.020923 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+    <path d="M 380.212039 83.420923 
+L 383.412039 85.020923 
+L 380.212039 86.620923 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle" x="282.7242" y="122.472" transform="rotate(-0 282.7242 122.472)">5%, 10%, 20%: source mix retained     40%: wider opt-in     60%: changed business mix</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans', sans-serif; text-anchor: start" x="27.727722" y="41.056615" transform="rotate(-0 27.727722 41.056615)">a</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: start" x="57.0636" y="36.384" transform="rotate(-0 57.0636 36.384)">From workload composition to electrical response</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_7">
+    <path d="M 63.833418 224.241231 
+L 176.663718 224.241231 
+L 176.663718 198.188308 
+L 63.833418 198.188308 
+z
+" clip-path="url(#p87280866e1)" style="fill: #f4f7f8; stroke: #235a78; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 226.30905 224.241231 
+L 339.13935 224.241231 
+L 339.13935 198.188308 
+L 226.30905 198.188308 
+z
+" clip-path="url(#p87280866e1)" style="fill: #f4f7f8; stroke: #235a78; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 388.784682 224.241231 
+L 501.614982 224.241231 
+L 501.614982 198.188308 
+L 388.784682 198.188308 
+z
+" clip-path="url(#p87280866e1)" style="fill: #f4f7f8; stroke: #235a78; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(72.053568 208.492113)">100 development seeds</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(71.656068 218.0943)">PI → candidate selection</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(235.632325 208.492113)">300 confirmation seeds</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(235.45795 218.0943)">Single + repeated tests</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(395.879832 208.492113)">Complete paired ledgers</text>
+    <text style="font-size: 8px; font-family: 'DejaVu Sans', sans-serif" transform="translate(403.645457 218.0943)">+ participation costs</text>
+   </g>
+   <g id="patch_10">
+    <path d="M 180.922952 211.214769 
+Q 201.488696 211.214769 220.936407 211.214769 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+    <path d="M 217.736407 209.614769 
+L 220.936407 211.214769 
+L 217.736407 212.814769 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 343.398584 211.214769 
+Q 363.964328 211.214769 383.412039 211.214769 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+    <path d="M 380.212039 209.614769 
+L 383.412039 211.214769 
+L 380.212039 212.814769 
+" style="fill: none; stroke: #7c8790; stroke-linecap: round"/>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 7px; font-family: 'DejaVu Sans', sans-serif; text-anchor: middle" x="282.7242" y="253.550769" transform="rotate(-0 282.7242 253.550769)">Separate full-information branch: PV hosting and utilisation, with / without BESS (100 seeds)</text>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 11px; font-family: 'DejaVu Sans', sans-serif; text-anchor: start" x="27.727722" y="171.321231" transform="rotate(-0 27.727722 171.321231)">b</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 9px; font-family: 'DejaVu Sans', sans-serif; text-anchor: start" x="57.0636" y="166.648615" transform="rotate(-0 57.0636 166.648615)">Evidence flow and independent qualification</text>
+   </g>
+  </g>
+  <g id="text_13">
+   <text style="font-size: 6.5px; font-family: 'DejaVu Sans', sans-serif; text-anchor: start" x="15.5628" y="293.278477" transform="rotate(-0 15.5628 293.278477)">Schematic of the declared study. Online work is rigid. Batteries act only in renewable planning.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pd0e8440e70">
+   <rect x="57.0636" y="48.384" width="451.3212" height="81.415385"/>
+  </clipPath>
+  <clipPath id="p87280866e1">
+   <rect x="57.0636" y="178.648615" width="451.3212" height="81.415385"/>
+  </clipPath>
+ </defs>
+</svg>

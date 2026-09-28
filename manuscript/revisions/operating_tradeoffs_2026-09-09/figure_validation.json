@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "figures": [
+    {
+      "figure": "Figure_3",
+      "status": "PASS",
+      "minimum_actual_font_pt": 6.300000190734863,
+      "no_text_outside_page": true,
+      "width_mm": 183.00700344509548,
+      "height_mm": 165.1
+    },
+    {
+      "figure": "Figure_6",
+      "status": "PASS",
+      "minimum_actual_font_pt": 6.199999809265137,
+      "no_text_outside_page": true,
+      "width_mm": 183.00700344509548,
+      "height_mm": 158.75
+    },
+    {
+      "figure": "Supplementary_Figure_3",
+      "status": "PASS",
+      "minimum_actual_font_pt": 6.0,
+      "no_text_outside_page": true,
+      "width_mm": 183.00700344509548,
+      "height_mm": 185.41999138726126
+    },
+    {
+      "figure": "Supplementary_Figure_5",
+      "status": "PASS",
+      "minimum_actual_font_pt": 6.0,
+      "no_text_outside_page": true,
+      "width_mm": 183.00700344509548,
+      "height_mm": 165.1
+    }
+  ],
+  "total_artwork_files": 44
+}

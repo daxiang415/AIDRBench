@@ -1,0 +1,18 @@
+{
+  "main": {
+    "status": "PASS",
+    "source_sha256": "f3859aaf476921223484cd6cfcb638534dc46f2b54002733b586bac906ae8a55",
+    "aligned_blocks": 170,
+    "figures": 6,
+    "tables": 0,
+    "english_words_including_captions_tables_references": 8786
+  },
+  "supplement": {
+    "status": "PASS",
+    "source_sha256": "a30e3b6b8608ae5498caebecbc0bfc04f41e3d885f70387c6897eedfd66dbcb0",
+    "aligned_blocks": 135,
+    "figures": 5,
+    "tables": 17,
+    "english_words_including_captions_tables_references": 9411
+  }
+}

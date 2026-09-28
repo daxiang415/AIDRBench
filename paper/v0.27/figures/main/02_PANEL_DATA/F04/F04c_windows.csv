@@ -1,0 +1,6 @@
+﻿event_id,start_hour,end_hour_exclusive,kind
+0,75,83,eight_hour_call
+1,91,99,eight_hour_call
+2,107,115,eight_hour_call
+3,123,131,eight_hour_call
+-1,168,216,clearance

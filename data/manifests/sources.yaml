@@ -42,8 +42,10 @@ sources:
         bytes: 217312026
 
   alibaba_gpu_v2020:
-    used_in_formal_mainline: false
-    role: empirically_parameterized_batch_arrivals_sizes_and_gpu_demand
+    used_in_formal_mainline: true
+    role: chronological_submission_counts_and_task_resource_time_for_v024_transfer_tests
+    mainline_scope: eight_observed_weeks_with_verified_task_resource_time_weights_normalised_totals_and_synthetic_classes_and_deadlines
+    historical_role: empirically_parameterized_batch_arrivals_sizes_and_gpu_demand_in_earlier_benchmark
     official_repository: https://github.com/alibaba/clusterdata
     schema_url: https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2020/README.md
     collection_period: July-August 2020

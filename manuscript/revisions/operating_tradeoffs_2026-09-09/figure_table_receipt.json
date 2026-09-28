@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "matched_target_pairs": 16,
+  "same_clock_verified": true,
+  "bootstrap_unit": "complete scenario seed",
+  "bootstrap_resamples": 5000,
+  "adjusted_family": "16 target-call exact McNemar comparisons",
+  "fresh_event_index_metadata_corrected": true,
+  "temporal_unit": "eight observed weeks, ten synthetic realizations per week"
+}

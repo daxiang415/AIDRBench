@@ -1,0 +1,231 @@
+{
+  "status": "PASS",
+  "restored_scenarios": 28,
+  "all_original_file_hashes_match": true,
+  "scenarios": [
+    {
+      "case": "f05",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "a14b08271f577805d3c3f7dc02f399ebf850375fee2f7519891591f7ee876612",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f05/960000"
+    },
+    {
+      "case": "f10",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "056b733304d659dbd4ff96e312666b3ee3b0c8e45e715046fcafcab6175f5d54",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10/960000"
+    },
+    {
+      "case": "f20",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "f8067658f6886e1d1b92a928fcca9147d2c4c1eb774b739f0156a17fd0392505",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f20/960000"
+    },
+    {
+      "case": "f40",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "e0db3a32994c24accc40eb55662f50eaf8d6f47654afb6021906c954e6217d29",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f40/960000"
+    },
+    {
+      "case": "f60",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "9169976ac7132d882d6fc4067d124dc731040988b50a742715d9d8f67109fc8b",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f60/960000"
+    },
+    {
+      "case": "f10_g20",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "8f8c59637c7e06e8d178926ca19ebec19047e615555a318405aaa5df4047a3f9",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_g20/960000"
+    },
+    {
+      "case": "f10_g30",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "ea0da5a5af17409a81a298616cac7f24dc42a3fe3d123d03b29c876f7c6ec0e7",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_g30/960000"
+    },
+    {
+      "case": "f10_rigid150",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "21c9e0d86e7513ee82dddc3cc3841ddd879caf249df7796ecd6579c893e45ed3",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_rigid150/960000"
+    },
+    {
+      "case": "f10_rigid225",
+      "seed": 960000,
+      "role": "confirmation",
+      "scenario_hash": "0d6b78d4743eec4ad126d754d6a3c5f0fa0a25aa1d7f6368693d52c9b8fabfb0",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_rigid225/960000"
+    },
+    {
+      "case": "f05",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "061718f703829b79029d2dcf00d91ba4dd041b79893b43ef286094b6007e3ae7",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f05/960299"
+    },
+    {
+      "case": "f10",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "6c0541739ba808db147f463fe9e80702e3938bcd647a909aeddcafd97967041b",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10/960299"
+    },
+    {
+      "case": "f20",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "cd3d9c2dee7225fefa5e9929b70470b5b264262663c3cf0f2f2254ad54774f8d",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f20/960299"
+    },
+    {
+      "case": "f40",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "27b4de81e2ad9df71b1e0248bf6b077351374d10ffea30cbc3981993e5517a92",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f40/960299"
+    },
+    {
+      "case": "f60",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "e13ed602d013c988c139329c77a24946849b6359c0a3805d2ccd9d296cb4054e",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f60/960299"
+    },
+    {
+      "case": "f10_g20",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "d540fc87e8e9ca184d9c9c8d583c0e0a1d7fc522cfd46203ba49c746834a2d02",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_g20/960299"
+    },
+    {
+      "case": "f10_g30",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "6e98d66907b8da658c9fa3f9b07feb2f1488f4d0adab4d6e0255ecec72628b21",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_g30/960299"
+    },
+    {
+      "case": "f10_rigid150",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "aa89eff67e667b329dd62a5e66efe0680268b8caf4f5eb5fba6099265741b5a8",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_rigid150/960299"
+    },
+    {
+      "case": "f10_rigid225",
+      "seed": 960299,
+      "role": "confirmation",
+      "scenario_hash": "af557065f8d4b472accaf8be4f931346711d2511becbba08a842aef4b3a8b2ca",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/confirmation/f10_rigid225/960299"
+    },
+    {
+      "case": "f05",
+      "seed": 930000,
+      "role": "development",
+      "scenario_hash": "5e73cb66ff29da85b5fc32630772576b73dc43a222fdf6509d1632f457ec20eb",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f05/930000"
+    },
+    {
+      "case": "f10",
+      "seed": 930000,
+      "role": "development",
+      "scenario_hash": "f137bfb98d63caa89887e4a82f4b54c6a716b745d84ee0c5cd058492db55406a",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f10/930000"
+    },
+    {
+      "case": "f20",
+      "seed": 930000,
+      "role": "development",
+      "scenario_hash": "0c2410a244909eafe4a6e6bc8e21ca4fcdae29f68f8cd2ede85a4d9dde12461d",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f20/930000"
+    },
+    {
+      "case": "f40",
+      "seed": 930000,
+      "role": "development",
+      "scenario_hash": "227f7f945690931e9b9c0cb3545782c707e0d7a821dbcafa3d508b6281d44079",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f40/930000"
+    },
+    {
+      "case": "f60",
+      "seed": 930000,
+      "role": "development",
+      "scenario_hash": "8441e04b0678e0389a6b630f30487fa1a22e3797032d14262fc87cceb0e51f52",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f60/930000"
+    },
+    {
+      "case": "f05",
+      "seed": 930099,
+      "role": "development",
+      "scenario_hash": "f92c6971efada6e7681ff4bddb33fc41e55be602caad58f204cc08bb8fdfd7b2",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f05/930099"
+    },
+    {
+      "case": "f10",
+      "seed": 930099,
+      "role": "development",
+      "scenario_hash": "97cc8466ad5193485a997e1463263fc3c176246bf15e30ff89a652a96dd5a0ab",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f10/930099"
+    },
+    {
+      "case": "f20",
+      "seed": 930099,
+      "role": "development",
+      "scenario_hash": "85d16e82eb3de80d86f0bfea6917fe73d226cc74ad16bf72d6a4032a6c14cbae",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f20/930099"
+    },
+    {
+      "case": "f40",
+      "seed": 930099,
+      "role": "development",
+      "scenario_hash": "be9dcac9d88a9f5b711a2b1bfdcab9c40a2e2c7c7c1e9f50ea4f221c4d31b43c",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f40/930099"
+    },
+    {
+      "case": "f60",
+      "seed": 930099,
+      "role": "development",
+      "scenario_hash": "84250a06b8bdd9d6ca07bce623f081c08a8e43c87854e818a1c3568d30d9439a",
+      "all_file_hashes_match": true,
+      "path": "/tmp/aidrbench_restoration_v020/development/f60/930099"
+    }
+  ]
+}

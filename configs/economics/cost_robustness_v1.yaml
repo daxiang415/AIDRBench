@@ -1,0 +1,26 @@
+schema_version: 1
+analysis_id: nature_economic_cost_robustness_v1
+analysis_role: post_hoc_development_parameterized_sensitivity
+
+# Added after inspection of the original economic results. This is not a
+# preregistered or independently validated economic result. No technical
+# certificate, controller, scenario, or original Figure 6 table is changed.
+economic_specification: configs/economics/economic_participation_v1.yaml
+economic_specification_sha256: 187ee05954d93ed3f4e8f292f7c868d787ecb69eadfbc2faf69be43039dfc8c2
+ledger: results/economics/economic_participation_v1/ledger/episode_ledger.parquet
+ledger_sha256: 7f9b64bc5b8cea1026e279f83d9cb15bbbf0c980d256f7bb7215896ffc5d3a02
+reference_table: manuscript/source_data/nature_economic_v1/fig6_duration_break_even.csv
+reference_table_sha256: a31903fa47e6777c1e12d7c7c7552082d1aaeb5d4f1a77efef7e9f01449cf8e3
+
+# Cross the two assumptions, holding all other economic inputs fixed within
+# each regime. Zero is an explicit lower-bound coordinate, not a market quote.
+# Delay unit: USD / (GPU-hour of backlog * hour of waiting), NOT USD/GPU-hour.
+delay_cost_multipliers: [0.0, 0.5, 1.0, 2.0]
+fixed_site_cost_multipliers: [0.0, 0.5, 1.0, 2.0]
+annual_event_counts: [1, 12, 50]
+
+# Preserve the original 200-draw calculation for exact reconciliation. The
+# larger, nested draws diagnose Monte Carlo sensitivity at the main coordinate;
+# they are not confidence intervals or additional physical scenarios.
+bootstrap_draw_counts: [200, 2000, 10000]
+work_zero_tolerance_gpu_h: 0.000001

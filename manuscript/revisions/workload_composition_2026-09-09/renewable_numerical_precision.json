@@ -1,0 +1,11 @@
+{
+  "status": "NUMERICAL_LIMIT_DECLARED",
+  "highs_version": "1.15.1",
+  "relative_mip_gap": 0.0001,
+  "absolute_mip_gap": 1e-06,
+  "threads_per_solve": 1,
+  "lexicographic_pv_lock_kwh": 1e-05,
+  "interpretation": "Small signed BESS utilisation contrasts near configured relative-gap resolution are preserved but not interpreted as resolved benefit or physical loss; sampling CIs exclude solver uncertainty. No tighter-gap rerun or per-solve dual-gap certificate is claimed.",
+  "core_solver_file_sha256": "271fbddf0b119cd4211ec9e42a02610ca1ede64f827c8a4aa969cefab5f0962b",
+  "numerical_acceleration": "All 900 original cached groups completed. No alternate group used; speculative alternate attempts stopped after original completion. See numerical_reconciliation.json."
+}

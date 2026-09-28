@@ -1,0 +1,10 @@
+{
+  "status": "analysis_export_complete",
+  "source_rows": 40522321,
+  "formal_scenarios": 2000,
+  "baseline_all_feasible": true,
+  "single_confirmation_replays": 9000,
+  "repeat_confirmation_replays": 15000,
+  "renewable_optimisations": 7200,
+  "source_files": 41
+}

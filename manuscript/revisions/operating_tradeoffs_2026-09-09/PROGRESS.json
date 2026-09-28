@@ -1,0 +1,32 @@
+{
+  "status": "COMPLETE",
+  "updated_utc": "2026-09-09T15:47:18.561031+00:00",
+  "current_manuscript": "v0.23",
+  "chinese_reader": "v17",
+  "formal_replays": {
+    "development": 7600,
+    "confirmation": 13200,
+    "temporal": 1600
+  },
+  "selected_positive": 26,
+  "confirmation_passed": 26,
+  "no_development_candidate": 8,
+  "completed": [
+    "frozen design and selection",
+    "all simulation runs",
+    "independent numerical and economic audits",
+    "English/Chinese integration",
+    "four redrawn and seven retained figures",
+    "all 11 PNG redraws hash-identical",
+    "four 216-hour replays: 92 numeric columns exact",
+    "current PDFs: 6 main figures, 5 supplementary figures, 17 tables",
+    "complete package CRC and checksum checks",
+    "portable current image and entry links",
+    "all current project indexes updated"
+  ],
+  "remaining": [],
+  "agents": "disabled per author request",
+  "package": "/home/user/projects/AIDRBench/results/exports/AIDRBench_All_Figures_2026-09-10_v12.zip",
+  "package_sha256": "1afbe5cf6503f5f5d07b4d9e8d50898e8c2cf2c70eb1d4f2aaffa0c9590603ed",
+  "package_bytes": 12566282310
+}

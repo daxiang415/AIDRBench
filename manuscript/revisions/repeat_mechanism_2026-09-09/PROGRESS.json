@@ -1,0 +1,29 @@
+{
+  "status": "COMPLETE",
+  "manuscript": "v0.21",
+  "chinese_reader": "v15",
+  "main_pdf_pages": 15,
+  "supplement_pdf_pages": 17,
+  "main_figures": 6,
+  "supplementary_figures": 5,
+  "supplementary_tables": 12,
+  "development_replays": 10100,
+  "confirmation_replays": 13800,
+  "selected_offers": 25,
+  "qualified_selected_offers": 25,
+  "package": {
+    "status": "PASS",
+    "path": "/home/user/projects/AIDRBench/results/exports/AIDRBench_All_Figures_2026-09-09_v10.zip",
+    "bytes": 8229492527,
+    "sha256": "3f636fea762202904885d8cd7d0bae2b2d4bd87623e1ea4de23e96702a3983c3",
+    "staging": "/home/user/projects/AIDRBench/results/exports/AIDRBench_Figures_v10",
+    "files": 24947,
+    "all_eleven_redraws_identical": true,
+    "delivered_replay_pass": true,
+    "all_payload_checksums_pass": true,
+    "zip_crc_pass": true
+  },
+  "subagents_used": false,
+  "author_metadata_pending": true,
+  "publication_or_commit_performed": false
+}

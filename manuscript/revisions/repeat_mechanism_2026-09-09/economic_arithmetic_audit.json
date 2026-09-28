@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "rows": 1288,
+  "complete_confirmation_groups": 46,
+  "independent_price_equation": true,
+  "all_failed_trajectories_included": true,
+  "annual_draws": 2000,
+  "series_per_draw": 12
+}

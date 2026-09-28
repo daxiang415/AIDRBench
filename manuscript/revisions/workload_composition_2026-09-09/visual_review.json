@@ -1,0 +1,59 @@
+{
+  "status": "PASS",
+  "reviewer": "primary assistant; no subagents",
+  "figures": [
+    {
+      "file": "AIDRBench_Figure_1.png",
+      "sha256": "dac1fad592e24f5b9dc522287591acc07e2a4c12c9c699237b8fd9e89ab65738"
+    },
+    {
+      "file": "AIDRBench_Figure_2.png",
+      "sha256": "49e063fcf70b323130c883d1e45667ad639bf320263df2e563659d9c4f3bded1"
+    },
+    {
+      "file": "AIDRBench_Figure_3.png",
+      "sha256": "9971ee3408d860acb7803bb678f5adf126bddc9f594337e32f06726eb17e10bf"
+    },
+    {
+      "file": "AIDRBench_Figure_4.png",
+      "sha256": "e35200b692e182136997691bdf3f955db2b0757b6d584641edef15c5dc9572c6"
+    },
+    {
+      "file": "AIDRBench_Figure_5.png",
+      "sha256": "cb54500aa20fc3c0ecca9b7cd04fd4ddac9ae2042512044b8c5aede8062b751f"
+    },
+    {
+      "file": "AIDRBench_Figure_6.png",
+      "sha256": "4d7a9845ca88f1bcb3d4b6c41b1ebca3802a6d679e5adfcb0c6f30c46296e862"
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_1.png",
+      "sha256": "44666af5b40652685a768a2dc2ba137071fbcea8313059b95d7dac020e0bfe1e"
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_2.png",
+      "sha256": "2aaae875c920faee8d961260969287c90501c3d2cb161956182e78d0f1e1c92f"
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_3.png",
+      "sha256": "aa2d7945bfbc69eabc6479441e3d6a93c901754d756cb604714cd7836fbf1a03"
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_4.png",
+      "sha256": "5132d7e197c71a4ec1c8d576093f986179e069051abc23aec9568f67ef7513ad"
+    },
+    {
+      "file": "AIDRBench_Supplementary_Figure_5.png",
+      "sha256": "7836c8934b17ea9a31de7f6db0c5e92216da79108f8628de41e9abc41846e817"
+    }
+  ],
+  "fixes": [
+    "Figure3 lower legend moved below development points",
+    "Figure5 upper PI limits expanded to retain markers",
+    "Figure5/6 cost labels wrapped and repeated legend uses actual pass/fail markers",
+    "Supplement3 PCC capitalisation and complete tail retained",
+    "Supplement4/5 legends moved clear of plotted data"
+  ],
+  "pdf_review": "Both contact sheets visually inspected; main compacted from18 to14 pages, all six figure legends fit on final page; SI14 pages,5 figures9 tables",
+  "limits": "Visual QA does not establish journal acceptance or external validation."
+}

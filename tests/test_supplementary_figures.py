@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 
+import pandas as pd
 import pytest
 import yaml
 
@@ -48,6 +49,30 @@ def test_supplementary_specification_fails_closed_on_locked_scenarios(
         _load_specification(altered)
 
 
+def test_supplementary_s5_is_declared_as_non_locked_web_gpt_artwork(
+    tmp_path: Path,
+) -> None:
+    root = Path(__file__).resolve().parents[1]
+    source = root / "configs/paper/nature_supplementary_figures_v1.yaml"
+    document = yaml.safe_load(source.read_text())
+    document["external_artwork"]["S5"]["renderer"] = "python_matplotlib"
+    altered = tmp_path / "supplementary_local_s5.yaml"
+    altered.write_text(yaml.safe_dump(document, sort_keys=False))
+
+    with pytest.raises(ValueError, match="Web-GPT route"):
+        _load_specification(altered)
+
+
+def test_local_supplementary_renderer_rejects_external_s5(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="S5 uses Web-GPT"):
+        plot_nature_supplementary_figures(
+            "configs/paper/nature_supplementary_figures_v1.yaml",
+            tmp_path,
+            figures=(5,),
+            formats=("svg",),
+        )
+
+
 def test_all_supplementary_figures_render_from_tracked_non_locked_inputs(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -66,3 +91,16 @@ def test_all_supplementary_figures_render_from_tracked_non_locked_inputs(
     assert (tmp_path / "supplementary_figure_2.svg").is_file()
     assert (tmp_path / "supplementary_figure_3.svg").is_file()
     assert (tmp_path / "supplementary_figure_4.svg").is_file()
+
+    trajectory = pd.read_csv(tmp_path / "supplementary_figure_4_trajectory.csv")
+    metadata = json.loads(
+        (tmp_path / "representative_trajectory_metadata.json").read_text(encoding="utf-8")
+    )
+    assert trajectory["relative_hour"].tolist() == list(range(-12, 28))
+    assert trajectory["hour"].tolist() == list(range(103, 143))
+    assert (
+        trajectory["relative_hour"]
+        == trajectory["hour"] - int(metadata["event_start_hour"])
+    ).all()
+    assert metadata["plot_window_pre_event_h"] == 12
+    assert metadata["plot_window_post_event_h"] == 24

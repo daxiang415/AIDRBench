@@ -1,0 +1,15 @@
+{
+  "project_check": "PASS",
+  "historical_protocol_check": "PASS",
+  "mypy": "PASS:75 source files",
+  "pytest_initial": "264 passed;1 manuscript-literal assertion failed before v0.20 integration",
+  "test_correction": "Historical economic table checks read archived v0.19 source; obsolete exact-sentence requirement removed, numeric denominator assertion retained. Focused economic tests passed before and after v0.20 integration.",
+  "ruff_whole_tree": {
+    "status": "FAIL_STYLE",
+    "findings": 1527,
+    "scope": "1525 in manuscript/revisions;2 in previous nature_repeat_capacity_v1/LOAD_TABLES.py",
+    "note": "Frozen simulation drivers and historical audit code preserved byte-for-byte; this is not a claim that full-tree lint passes."
+  },
+  "focused_economic_tests": "PASS:25 after v0.20 integration, 2.11s",
+  "source_scripts_tests_ruff": "PASS"
+}

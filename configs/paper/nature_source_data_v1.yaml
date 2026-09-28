@@ -554,8 +554,11 @@ tables:
       - firm_capacity_delta_from_reference_kw
     sort_by: [infrastructure_case, duration_h]
 
+  # The stable fig6_* table identifiers are retained for compatibility with
+  # the existing hash-bound bundle. Their publication placement is
+  # now Supplementary Figure S5; the new main Figure 6 is the economic figure.
   - table_id: fig6_community_profile_representative_curves
-    figures: [6]
+    figures: ["S5"]
     panels: [a]
     output: fig6_community_profile_representative_curves.csv
     inputs:
@@ -576,7 +579,7 @@ tables:
     sort_by: [community_profile_case, timestamp]
 
   - table_id: fig6_community_profile_pi_firm_boundaries
-    figures: [6]
+    figures: ["S5"]
     panels: [b]
     output: fig6_community_profile_pi_firm_boundaries.csv
     inputs:
@@ -596,7 +599,7 @@ tables:
     sort_by: [community_profile_case, duration_h]
 
   - table_id: fig6_community_profile_causal_transfer
-    figures: [6]
+    figures: ["S5"]
     panels: [c]
     output: fig6_community_profile_causal_transfer.csv
     inputs:
@@ -624,7 +627,7 @@ tables:
     sort_by: [community_profile_case, duration_h]
 
   - table_id: fig6_community_profile_pv_hosting_summary
-    figures: [6]
+    figures: ["S5"]
     panels: [d]
     output: fig6_community_profile_pv_hosting_summary.csv
     inputs:
@@ -646,7 +649,7 @@ tables:
     sort_by: [community_profile_case, bess_enabled, dc_operation]
 
   - table_id: fig6_community_profile_pv_hosting_contrasts
-    figures: [6]
+    figures: ["S5"]
     panels: [d]
     output: fig6_community_profile_pv_hosting_contrasts.csv
     inputs:
@@ -670,7 +673,7 @@ tables:
     sort_by: [community_profile_case, bess_enabled]
 
   - table_id: fig6_community_profile_pi_scenario_frontier
-    figures: [6]
+    figures: ["S5"]
     panels: [source_data]
     output: fig6_community_profile_pi_scenario_frontier.csv
     inputs:
@@ -690,7 +693,7 @@ tables:
     sort_by: [community_profile_case, generation_seed, duration_h]
 
   - table_id: fig6_community_profile_causal_outcomes
-    figures: [6]
+    figures: ["S5"]
     panels: [source_data]
     output: fig6_community_profile_causal_outcomes.csv
     inputs:
@@ -716,7 +719,7 @@ tables:
     sort_by: [community_profile_case, duration_h, episode_seed]
 
   - table_id: fig6_community_profile_pv_hosting_scenarios
-    figures: [6]
+    figures: ["S5"]
     panels: [source_data]
     output: fig6_community_profile_pv_hosting_scenarios.csv
     inputs:

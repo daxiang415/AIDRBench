@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "verified_utc": "2026-09-09T14:56:19.227393+00:00",
+  "official_schema": "https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2020/README.md",
+  "schema_basis": "pai_job_table.start_time is job submission timestamp; source dates desensitized",
+  "processed_rows": 714903,
+  "source_files": [
+    "pai_job_table.csv+pai_task_table.csv"
+  ],
+  "source_hash": "eb3e387d8ba4c5ac1de30eb1875c8a5e44e385cd559fedbd0e0ffcad29ae6929",
+  "count_hash": "5b85488af7f162d33ba7ffd10f24928883a66589becef7d584788d48f65afe43",
+  "observed_weeks": 8,
+  "hours": 1344,
+  "all_hourly_counts_independently_reproduced": true,
+  "boundary": "Submission intensity from the existing processed GPU-job table; not full production job/SLA replay. Synthetic deadlines and class GPU-hour mapping remain."
+}

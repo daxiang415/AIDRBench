@@ -1,0 +1,12 @@
+{
+  "status": "CONTROLLERS_PASS_RENEWABLE_PENDING",
+  "formal_controller_replays": {
+    "single_dev": 4000,
+    "single_confirm": 9000,
+    "repeat_dev": 4000,
+    "repeat_confirm": 15000,
+    "control_confirm": 2400
+  },
+  "inspected_ledger_traces": 444,
+  "all_formal_event_durations_verified": true
+}

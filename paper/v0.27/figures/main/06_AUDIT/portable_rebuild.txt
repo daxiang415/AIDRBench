@@ -1,0 +1,1 @@
+PASS: isolated extracted package, panels-only command succeeded; all 11 PNGs byte-identical. LibreOffice export was checked in the integration workspace, not rerun in this isolated check.

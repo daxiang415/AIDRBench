@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "new_figures_visually_inspected": [
+    "3",
+    "6",
+    "S3"
+  ],
+  "unchanged_eight_png_tiff_identical": true,
+  "revised_axes_units_match_captions": true,
+  "figure_counts": [
+    6,
+    5
+  ],
+  "pdf_contact_sheets_inspected": true,
+  "notes": "Three revised figures visually inspected; final S3 legend moved outside all data; 6/5 figures and 12 SI tables present, no clipped page text.",
+  "supplement_3_legend_outside_data": true,
+  "final_si_tables_11_12_share_page": true
+}
