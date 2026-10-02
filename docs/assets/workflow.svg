@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 352" role="img" aria-labelledby="title desc">
+<title id="title">From workload to a qualified offer</title><desc id="desc">Four steps: describe workload and power; schedule event and recovery; qualify delivery and deadlines; assess participation costs. This is a conceptual diagram, not measured data.</desc>
+<rect width="1200" height="352" rx="10" fill="#F5F8FA"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<text x="30" y="37" font-size="15" letter-spacing="1.5" fill="#52697C">THE BENCHMARK WORKFLOW</text>
+<g fill="#FFFFFF" stroke="#D7E1E8"><rect x="30" y="61" width="259" height="190" rx="7"/><rect x="323" y="61" width="259" height="190" rx="7"/><rect x="616" y="61" width="259" height="190" rx="7"/><rect x="909" y="61" width="261" height="190" rx="7"/></g>
+<g font-size="16" font-weight="700" fill="#337DA0"><text x="49" y="94">01 / INPUTS</text><text x="342" y="94">02 / SCHEDULING</text><text x="635" y="94">03 / QUALIFICATION</text><text x="928" y="94">04 / ECONOMICS</text></g>
+<g font-size="23" font-weight="700" fill="#102A43"><text x="49" y="134">Describe the work</text><text x="342" y="134">Replay the event</text><text x="635" y="134">Check the offer</text><text x="928" y="134">Assess the cost</text></g>
+<g font-size="17" fill="#52697C"><text x="49" y="174">Composition and timing</text><text x="49" y="199">Resource-time and power</text><text x="49" y="224">Task deadlines</text><text x="342" y="174">Power reduction</text><text x="342" y="199">Deferred work</text><text x="342" y="224">Recovery and completion</text><text x="635" y="174">Available load</text><text x="635" y="199">Scheduling feasibility</text><text x="635" y="224">Causal-controller delivery</text><text x="928" y="174">Waiting and service costs</text><text x="928" y="199">Access-cost assumptions</text><text x="928" y="224">Participation threshold</text></g>
+<g stroke="#758FA3" stroke-width="2" fill="none"><path d="M295 157h21m-6-6 6 6-6 6"/><path d="M588 157h21m-6-6 6 6-6 6"/><path d="M881 157h21m-6-6 6 6-6 6"/></g>
+<path d="M342 278h492" stroke="#2D8C83" stroke-width="2"/><path d="M342 270v8m492-8v8" stroke="#2D8C83" stroke-width="2"/>
+<text x="588" y="306" font-size="17" fill="#236F69" text-anchor="middle">Event + recovery + deadlines</text>
+<text x="1169" y="331" font-size="13" fill="#657D8F" text-anchor="end">Conceptual workflow · not experimental results</text>
+</g></svg>

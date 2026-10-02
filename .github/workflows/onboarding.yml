@@ -1,0 +1,36 @@
+name: Documentation and onboarding
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  onboarding:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    env:
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Verify checkout and scientific file hashes
+        run: python tools/aidr.py check --hashes
+      - name: Install test runner only
+        run: python -m pip install "pytest>=8.3,<9"
+      - name: Check documentation links and editing commands
+        run: python -m pytest -q tests/test_user_tools.py tests/test_public_panel_guides.py
+      - name: Verify dependency-free command previews
+        run: |
+          python tools/aidr.py redraw --figures S5 --dry-run
+          python tools/aidr.py main-figures --dry-run
+          python tools/aidr.py paper --engine xelatex --dry-run

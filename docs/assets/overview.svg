@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 332" role="img" aria-labelledby="title desc">
+<title id="title">AIDRBench</title><desc id="desc">Reliable demand response from AI data centres. Workload, power, deadlines and recovery determine a qualified grid commitment.</desc>
+<rect width="1200" height="332" rx="12" fill="#102A43"/>
+<path d="M48 49h46" stroke="#71C7C0" stroke-width="5"/>
+<g font-family="Arial, Helvetica, sans-serif">
+<text x="48" y="119" fill="#FFFFFF" font-size="60" font-weight="700" letter-spacing="-2">AIDRBench</text>
+<text x="50" y="165" fill="#D9E6EF" font-size="25">Reliable demand response</text>
+<text x="50" y="200" fill="#D9E6EF" font-size="25">from AI data centres</text>
+<text x="50" y="277" fill="#A8C4D8" font-size="17" letter-spacing="1.6">WORKLOAD · POWER · DEADLINES · RECOVERY</text>
+<path d="M634 57v218" stroke="#3D566D"/>
+<text x="685" y="69" fill="#A8C4D8" font-size="15" letter-spacing="1.8">A COMMITMENT IS MORE THAN A POWER DROP</text>
+<g fill="none" stroke="#D9E6EF" stroke-width="2">
+<rect x="690" y="101" width="63" height="91" rx="4"/><path d="M701 121h41m-41 18h41m-41 18h41m-41 18h41"/>
+<path d="M779 148h54m-8-7 8 7-8 7"/>
+<rect x="851" y="114" width="114" height="68" rx="4"/><path d="M863 166h20v-28h24v10h24v18h20" stroke="#71C7C0" stroke-width="3"/>
+<path d="M982 148h49m-8-7 8 7-8 7"/>
+<circle cx="1072" cy="148" r="33" stroke="#71C7C0"/><path d="m1056 148 11 11 21-24" stroke="#71C7C0" stroke-width="4"/>
+</g>
+<text x="721" y="222" fill="#FFFFFF" font-size="18" text-anchor="middle">Workload</text>
+<text x="908" y="222" fill="#FFFFFF" font-size="18" text-anchor="middle">Replay</text>
+<text x="1072" y="222" fill="#FFFFFF" font-size="18" text-anchor="middle">Qualify</text>
+<text x="687" y="278" fill="#A8C4D8" font-size="17">Check the event, the recovery and the service.</text>
+</g></svg>

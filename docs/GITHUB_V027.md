@@ -1,19 +1,51 @@
-# Editable GitHub version v0.27
+# Data and reproducibility
 
-Prepared 2026-09-28 from the checked 2026-09-17 v0.27/R8 delivery. Start with [the Windows guide](../WINDOWS_START_HERE.md).
+## Current scientific version
 
-Included: self-contained main/SI LaTeX and PDFs, current English and Chinese Markdown, six main and ten supplementary figures, both editing packs, all direct plotting tables, compact Source Data, current library/configuration/test code and seven research-driver directories supporting the final analyses.
+The manuscript is **v0.27**, with **R8 main artwork** dated 17 September 2026. The public Windows-compatible edition was prepared on 28 September 2026. The subsequent documentation refresh reorganises navigation and editing commands; it does not rerun experiments, select new offers or change statistical estimates.
 
-Portable directories are `paper/v0.27/latex`, `paper/v0.27/figures/main` and `paper/v0.27/figures/supplement`. A Windows-aware main-figure launcher accompanies the frozen files. Current reading-copy image links are repository-relative; local rendering outputs are ignored by Git.
+## What is included
 
-The scientific version is v0.27; R8 names its main-artwork revision. No new experiments, offer selection or statistical estimation were performed. Author and archive placeholders remain unfilled at the author's request.
+| Included here | Purpose |
+| --- | --- |
+| Main/supplement LaTeX and compiled PDFs | Read and edit the manuscript. |
+| Six main figures and ten supplementary figures | Inspect the reference artwork. |
+| Per-panel CSV/Excel tables, SVG and PowerPoint sources | Redraw and edit the figures. |
+| Compact Source Data and calibration evidence | Inspect reported results and supporting measurements. |
+| Library, configurations, tests and revision drivers | Inspect the implementation and run the supported checks. |
 
-`manuscript/source_data/nature_economic_robustness_v1/frozen_runtime` holds the historical files bound by that result manifest. Numerical regression tests separately require the current implementation to reproduce its published tables. Small original figure input ZIPs and an historical SI are retained for regression tests; they are not current figure-editing entry points.
+Bulk raw workloads, multi-GB hourly trajectories and full per-scenario recovery inputs are **not** included. Figure regeneration uses the supplied plotting tables; it does not establish that a fresh full-study replay has been performed. Full production-scale replay needs the separately held original inputs and the associated protocols.
 
-Bulk raw datasets, multi-GB hourly trajectories and per-scenario recovery inputs are excluded. Original research protocols may refer to those inputs. The current figure workflows use only included data. Full Git history is required for certificate-commit replay tests; use `git clone` for the complete development suite. Download ZIP suffices for paper/figure editing.
+## Three different checks
 
-The GitHub edition's [manifest](../paper/v0.27/MANIFEST.csv) records editable release files. The [validation record](github_v027_validation.json) distinguishes local checks from GitHub Windows/Linux CI.
+**Checkout verification** confirms that the expected files and their recorded hashes are present:
 
-GitHub packaging adaptation: main Figure 1 SVG references 15 byte-identical PNG/JPEG assets in its adjacent `Figure_1_assets` folder. Keep that folder with the SVG when copying it. The PDF, PNG, PowerPoint, vector geometry and scientific data are unchanged. This avoids a secret-scanning false match in inline JPEG encoding. `GITHUB_ADAPTATION.json` records original and current hashes; `ORIGINAL_FILE_MANIFEST.csv` preserves the earlier receipt.
+```bash
+python tools/aidr.py check --hashes
+```
 
-Certificate replay uses `requirements-certificate.txt`, derived from the historical certificate lockfile. Archive extraction explicitly disables Git newline conversion so Windows and Linux validate the same source bytes. Neither change relaxes source hashes or dependency checks.
+**Figure regeneration** reads the included CSV tables and recreates their plotted series. Reference artwork and template layout can differ. The existing supplementary audit scripts compare captured quantitative series with their expected coordinates.
+
+**Scientific replay** executes the original analyses with their required inputs. Regression tests include historical certificate replay and require a full Git clone. Use `requirements-certificate.txt` when installing the research dependencies; do not interpret a plotting-only installation as a complete replay environment.
+
+## Manifests and historical records
+
+`paper/v0.27/MANIFEST.csv` remains the original delivery receipt. `docs/checkout-layout.json` records the exact documentation replacements, retired reading copies and byte-preserving file renames in the maintained checkout. The checker applies this explicit update before verifying hashes; it does not exempt the scientific files from verification.
+
+The original layout is retained on the `archive/v0.27-original-layout` branch at commit `66105ccaa5629f2d24c53c6d757922e139d54440`. Older nested delivery manifests describe that earlier packaging. The maintained supplementary `VERIFY_DELIVERY.py` delegates to the current checkout verifier.
+
+Historical research records, embedded workbook notes and revision archives are retained as received. They may contain legacy language or paths. They are not current user documentation and should not be modified merely to make an old receipt pass.
+
+The historical runtime under `manuscript/source_data/nature_economic_robustness_v1/frozen_runtime/` remains unchanged. It is bound to the result manifest; numerical regression tests separately exercise the current implementation.
+
+## Figure packaging
+
+Main Figure 1's SVG references 15 adjacent image assets in `Figure_1_assets/`. Keep those files together when copying the SVG. The reference PDF, PNG and PowerPoint remain unchanged. `GITHUB_ADAPTATION.json` and `ORIGINAL_FILE_MANIFEST.csv` document the earlier packaging adaptation.
+
+The launcher writes redraws to the established output directories. It does not replace the paper's figure PDFs automatically. The English Markdown collaboration copies and submission LaTeX remain separate sources.
+
+## Software and publication status
+
+A software licence and archival identifier have not yet been finalised. Author details, funding, contributions and competing-interest declarations remain pending. No publication status or release DOI is asserted. See [submission preparation](../manuscript/submission-readiness.md).
+
+For the current commands, use [Getting started](getting-started.md) or [Windows](../WINDOWS_START_HERE.md). The older [validation record](github_v027_validation.json) documents the earlier edition; the repository's Actions page contains subsequent CI runs.

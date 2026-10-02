@@ -1,24 +1,23 @@
-# AIDRBench current editable release — v0.27
+# Current files
 
-Updated 2026-09-28. Scientific manuscript: v0.27; main artwork: R8, 2026-09-17.
+Scientific manuscript: **v0.27**. Main artwork: **R8**, 17 September 2026.
 
-Start with [Windows editing instructions](WINDOWS_START_HERE.md) and [release scope](docs/GITHUB_V027.md).
+| Material | Location |
+| --- | --- |
+| Main paper | [PDF](paper/v0.27/latex/main.pdf) · [LaTeX](paper/v0.27/latex/main.tex) |
+| Supplement | [PDF](paper/v0.27/latex/supplement.pdf) · [LaTeX](paper/v0.27/latex/supplement.tex) |
+| English collaboration copies | [Main](manuscript/nature_communications_article.md) · [supplement](manuscript/supplementary_information.md) |
+| Main figures and panel data | [Main figure guide](paper/v0.27/figures/main/README.md) |
+| Supplementary figures and panel data | [Supplementary figure guide](paper/v0.27/figures/supplement/README.md) |
+| Compact scientific evidence | [Source Data](manuscript/source_data/) |
+| Benchmark implementation | [Library](src/aidrbench/) · [configurations](configs/) · [tests](tests/) |
+| Research protocols and drivers | [Revision records](manuscript/revisions/) |
+| Setup and commands | [Getting started](docs/getting-started.md) · [Windows](WINDOWS_START_HERE.md) |
+| Release boundaries | [Data and reproducibility](docs/GITHUB_V027.md) |
+| Submission preparation | [Status](manuscript/submission-readiness.md) |
 
-| Current material | Location |
-|---|---|
-| Main/SI LaTeX, compiled PDFs and all included figure PDFs | [paper/v0.27/latex](paper/v0.27/latex) |
-| English main and SI Markdown | [main](manuscript/nature_communications_article.md), [SI](manuscript/supplementary_information.md) |
-| Chinese and bilingual readers | [paper/v0.27/chinese](paper/v0.27/chinese) |
-| Six main figures, editable PPTX/SVG and per-panel CSV/Excel | [main figure pack](paper/v0.27/figures/main) |
-| Ten supplementary figures, per-panel CSV/Excel and direct plotter | [SI figure pack](paper/v0.27/figures/supplement) |
-| Compact scientific evidence | [manuscript/source_data](manuscript/source_data) |
-| Library, configurations and tests | `src/aidrbench`, `configs`, `tests` |
-| Submission preparation status | [English](manuscript/submission-readiness.md), [中文](manuscript/submission-readiness.zh.md) |
+Edit the LaTeX files for the typeset manuscript. The Markdown collaboration copies do not synchronise with them automatically. A figure redraw must be copied into `paper/v0.27/latex/figures/` before rebuilding the paper.
 
-The September 17 LaTeX and drawing packs are retained with the SVG packaging adaptation below; their current embedded manifests verify. The added figure receipt indexes their existing hashes. The top-level release [manifest](paper/v0.27/MANIFEST.csv) binds the portable GitHub materials. After intentional edits, the original hashes describe the baseline, not the edited files.
+Figure 1's SVG uses adjacent files in `Figure_1_assets/`; retain that directory when copying the SVG. Its PDF and PNG can be used independently.
 
-Older exports, readers and figure folders remain for provenance and regression tests. Use the paths above for current editing. [The previous mainline record](docs/history/pre_v027_MAINLINE_FILES.md) is historical.
-
-Do not spawn subagents unless explicitly requested. Local Python drawing is authorised. Keep author names, affiliations, funding, contributions, competing interests, licence and archival identifiers pending until supplied by the author.
-
-GitHub packaging adaptation: main Figure 1 SVG references 15 byte-identical PNG/JPEG assets in its adjacent `Figure_1_assets` folder. Keep that folder with the SVG when copying it. The PDF, PNG, PowerPoint, vector geometry and scientific data are unchanged. This avoids a secret-scanning false match in inline JPEG encoding. `GITHUB_ADAPTATION.json` records original and current hashes; `ORIGINAL_FILE_MANIFEST.csv` preserves the earlier receipt.
+The original delivery manifest is retained, with explicit documentation changes recorded in `docs/checkout-layout.json`. `python tools/aidr.py check --hashes` verifies the maintained checkout, including unchanged scientific files and the current documentation hashes. Historical exports and receipts are provenance records, not current editing instructions.
