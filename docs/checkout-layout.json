@@ -11,7 +11,17 @@
   "retired_files": [
     "paper/v0.27/figures/main/README_中文_给合作者.md",
     "paper/v0.27/figures/supplement/README_中文_给合作者.md",
-    "paper/v0.27/figures/supplement/FIGURE_LEGENDS_ZH.md"
+    "paper/v0.27/figures/supplement/FIGURE_LEGENDS_ZH.md",
+    "paper/v0.27/figures/supplement/S01/README_中文.md",
+    "paper/v0.27/figures/supplement/S02/README_中文.md",
+    "paper/v0.27/figures/supplement/S03/README_中文.md",
+    "paper/v0.27/figures/supplement/S04/README_中文.md",
+    "paper/v0.27/figures/supplement/S05/README_中文.md",
+    "paper/v0.27/figures/supplement/S06/README_中文.md",
+    "paper/v0.27/figures/supplement/S07/README_中文.md",
+    "paper/v0.27/figures/supplement/S08/README_中文.md",
+    "paper/v0.27/figures/supplement/S09/README_中文.md",
+    "paper/v0.27/figures/supplement/S10/README_中文.md"
   ],
   "renamed_files": {
     "paper/v0.27/figures/supplement/全部补充图_参考图.pdf": "paper/v0.27/figures/supplement/ALL_FIGURES.pdf",
@@ -20,6 +30,7 @@
     "paper/v0.27/figures/supplement/一键重绘_Windows.bat": "paper/v0.27/figures/supplement/REDRAW_WINDOWS.bat"
   },
   "updated_git_blobs": {
+    ".github/workflows/onboarding.yml": "933aa42e0a1e81d475ca1b9e06544961b0d95f84",
     "README.md": "66a20037ef677237747952e7300afd141d87bdba",
     "WINDOWS_START_HERE.md": "8f042348b3795f6354ee1c82eaa450e98e851557",
     "MAINLINE_FILES.md": "2facd8c1868beab042f839acc481110487701952",
@@ -32,8 +43,19 @@
     "paper/v0.27/figures/main/README.md": "36aa3bc91e6f489e5f8abe8abd6786275b0b7ad9",
     "paper/v0.27/figures/supplement/README.md": "c06645eb6125cdd77750d78eec53ce1bd2e0939f",
     "paper/v0.27/figures/supplement/VERIFY_DELIVERY.py": "cabf891d749b06ebf37b91a43307da15e68a6c19",
+    "paper/v0.27/figures/supplement/S01/README.md": "baa08e71582613a8fa6fae206da4d6e83333eda6",
+    "paper/v0.27/figures/supplement/S02/README.md": "ed65d05cb598ab2f5dfbb148088c86b66dc46aef",
+    "paper/v0.27/figures/supplement/S03/README.md": "ed849d904c3a18a3e27296e2d199b067875fa803",
+    "paper/v0.27/figures/supplement/S04/README.md": "28db1dd1160bd382df4a7e7d30a65a1df56c91fd",
+    "paper/v0.27/figures/supplement/S05/README.md": "b5cdf6a3d22c735c3f65007b34c84ea993680352",
+    "paper/v0.27/figures/supplement/S06/README.md": "700a7102ae95e194a1f7ceb796881818cd270f33",
+    "paper/v0.27/figures/supplement/S07/README.md": "8bea60d0d4b79b26b3ffbe98c9bb357a36b92c5f",
+    "paper/v0.27/figures/supplement/S08/README.md": "1256d3d95330ce4d3f7d9df1f8b225938ac7f418",
+    "paper/v0.27/figures/supplement/S09/README.md": "af04be496074976127439763913ae124b1bc17a6",
+    "paper/v0.27/figures/supplement/S10/README.md": "38955c4de7c11b85eac1a8d1a17615c323da28fd",
     "tools/aidr.py": "d83be3fc8a91b556592926ca90b83db96c83fccb",
     "scripts/check_v027_checkout.py": "a432ee81f4e4965a07ee05685964ccf7430da4ec",
-    "tests/test_user_tools.py": "42b4ab7f8584c0842735a81d8e8e8ca30e948b1b"
+    "tests/test_user_tools.py": "42b4ab7f8584c0842735a81d8e8e8ca30e948b1b",
+    "tests/test_public_panel_guides.py": "d780a50fb41abc1f4c89567f83336065818b1ac8"
   }
 }
