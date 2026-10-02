@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "description": "Maintained documentation layout over the unchanged v0.27 delivery receipt. Scientific files retain their original SHA-256 checks; renamed binary files retain their original bytes.",
+  "baseline_commit": "66105ccaa5629f2d24c53c6d757922e139d54440",
+  "baseline_manifest_git_blob": "321f50cedbea22ca017f89265b356afc684a6179",
+  "archive_branch": "archive/v0.27-original-layout",
+  "retired_prefixes": [
+    "paper/v0.27/chinese/",
+    "docs/chinese_reader/"
+  ],
+  "retired_files": [
+    "paper/v0.27/figures/main/README_中文_给合作者.md",
+    "paper/v0.27/figures/supplement/README_中文_给合作者.md",
+    "paper/v0.27/figures/supplement/FIGURE_LEGENDS_ZH.md"
+  ],
+  "renamed_files": {
+    "paper/v0.27/figures/supplement/全部补充图_参考图.pdf": "paper/v0.27/figures/supplement/ALL_FIGURES.pdf",
+    "paper/v0.27/figures/supplement/全部补充图_直接绘图.xlsx": "paper/v0.27/figures/supplement/ALL_PANEL_DATA.xlsx",
+    "paper/v0.27/figures/supplement/当前论文补充材料.pdf": "paper/v0.27/figures/supplement/SUPPLEMENT.pdf",
+    "paper/v0.27/figures/supplement/一键重绘_Windows.bat": "paper/v0.27/figures/supplement/REDRAW_WINDOWS.bat"
+  },
+  "updated_git_blobs": {
+    "README.md": "66a20037ef677237747952e7300afd141d87bdba",
+    "WINDOWS_START_HERE.md": "8f042348b3795f6354ee1c82eaa450e98e851557",
+    "MAINLINE_FILES.md": "2facd8c1868beab042f839acc481110487701952",
+    "docs/README.md": "fad0fb64c8e0158c5af4b32664b8e8b35d749083",
+    "docs/GITHUB_V027.md": "f8e74e8b3c2be546ca53bbc629a8a3b1b1160658",
+    "docs/getting-started.md": "079a81d2f17976529625431626b6d1d00724c7ad",
+    "docs/figures.md": "82375a00ae0a04bc68e84ae6886283330c697026",
+    "docs/assets/overview.svg": "85f1eb80ad1bdc4f8fa282c155b4d0333d482bda",
+    "docs/assets/workflow.svg": "6e4d8a500b0e46b7ea1ce9323a2a83b553c84345",
+    "paper/v0.27/figures/main/README.md": "36aa3bc91e6f489e5f8abe8abd6786275b0b7ad9",
+    "paper/v0.27/figures/supplement/README.md": "c06645eb6125cdd77750d78eec53ce1bd2e0939f",
+    "paper/v0.27/figures/supplement/VERIFY_DELIVERY.py": "cabf891d749b06ebf37b91a43307da15e68a6c19",
+    "tools/aidr.py": "d83be3fc8a91b556592926ca90b83db96c83fccb",
+    "scripts/check_v027_checkout.py": "a432ee81f4e4965a07ee05685964ccf7430da4ec",
+    "tests/test_user_tools.py": "42b4ab7f8584c0842735a81d8e8e8ca30e948b1b"
+  }
+}

@@ -1,34 +1,102 @@
-# AIDRBench — manuscript v0.27 / main figures R8
+<p align="center">
+  <img src="docs/assets/overview.svg" alt="AIDRBench: reliable demand response from AI data centres" width="100%">
+</p>
 
-**当前科学稿：v0.27。** 六张正文图为2026-09-17的R8修订稿，补充图S1–S10及全部直接绘图数据已包含。2026-09-28整理为Windows可编辑的GitHub版本，科学结果未改变。
+<p align="center">
+  <a href="paper/v0.27/latex/main.pdf">Paper</a> ·
+  <a href="paper/v0.27/latex/supplement.pdf">Supplement</a> ·
+  <a href="docs/getting-started.md">Getting started</a> ·
+  <a href="docs/figures.md">Figure gallery</a> ·
+  <a href="docs/GITHUB_V027.md">Data &amp; reproducibility</a>
+</p>
 
-**Windows下载后先读：[WINDOWS_START_HERE.md](WINDOWS_START_HERE.md)。** 修改论文、图和研究代码均可在自己的电脑上完成。
+<p align="center">
+  <a href="https://github.com/daxiang415/AIDRBench/actions/workflows/ci.yml"><img src="https://github.com/daxiang415/AIDRBench/actions/workflows/ci.yml/badge.svg" alt="CI status"></a>
+  <img src="https://img.shields.io/badge/Python-3.12-3776AB" alt="Recommended Python version: 3.12">
+  <img src="https://img.shields.io/badge/Manuscript-v0.27-49686A" alt="Manuscript version 0.27">
+</p>
 
-| 内容 | 直接入口 |
-| --- | --- |
-| 英文正文：PDF / LaTeX | [main.pdf](paper/v0.27/latex/main.pdf) · [main.tex](paper/v0.27/latex/main.tex) |
-| 英文补充材料：PDF / LaTeX | [supplement.pdf](paper/v0.27/latex/supplement.pdf) · [supplement.tex](paper/v0.27/latex/supplement.tex) |
-| 中文正文与补充材料 | [正文](paper/v0.27/chinese/main_zh.md) · [补充材料](paper/v0.27/chinese/supplement_zh.md) |
-| 正文六图：PPTX、SVG、CSV/Excel与代码 | [正文绘图包](paper/v0.27/figures/main/README_中文_给合作者.md) |
-| 补充十图：CSV/Excel与直接重绘代码 | [补充绘图包](paper/v0.27/figures/supplement/README_中文_给合作者.md) |
-| 英文Markdown协作稿 | [正文](manuscript/nature_communications_article.md) · [补充材料](manuscript/supplementary_information.md) |
-| 研究代码 / 参数 / 测试 | [src/aidrbench](src/aidrbench) · [configs](configs) · [tests](tests) |
-| 版本说明及验证 | [版本说明](docs/GITHUB_V027.md) · [核验记录](docs/github_v027_validation.json) |
+# AIDRBench
 
-正文18页、6主图；补充材料32页、10补充图、24补充表。作者信息、基金、贡献、利益声明、软件许可证及归档编号仍待确认；尚未向期刊提交。
+**How much power can an AI data centre reliably offer to the grid without missing its workload deadlines?**
 
-## Research question
+AIDRBench studies demand-response commitments through workload replay, power modelling and service-constrained scheduling. It checks the reduction during an event **and the work that must be completed afterwards**, then evaluates the cost of participating.
 
-**Reliable demand-response commitments from AI data centres under service constraints.** AIDRBench connects workload composition and timing to deliverable power reductions, service-preserving scheduling and conditional participation costs.
+The repository contains the research code, manuscript, source tables and editable figures. Reading the paper and redrawing its figures do not require a GPU or access to the original research server.
 
-Within the tested eight-week workload distribution, retaining task resource-time information reduced the selected, independently confirmed eight-hour offer from 2.95 to 1.47 kW. The study distinguishes insufficient available load, strict scheduling infeasibility and causal-controller failure before pricing separately qualified reference products. These results are conditional on the stated model and workload distribution.
+## Choose a starting point
 
-## Editing and running
+| Your task | Start here | What you need |
+| --- | --- | --- |
+| Understand the study | [Paper](paper/v0.27/latex/main.pdf) · [visual walkthrough](docs/figures.md) | A PDF reader |
+| Redraw a figure | [Figure-editing guide](docs/getting-started.md#redraw-a-figure) | Python 3.12 and plotting dependencies |
+| Edit the manuscript | [LaTeX source](paper/v0.27/latex/main.tex) · [build instructions](docs/getting-started.md#build-the-paper) | XeLaTeX or Tectonic |
+| Work with the benchmark | [Code and tests](docs/getting-started.md#work-with-the-research-code) | Python 3.12, development dependencies and a full Git clone |
+| Reproduce the full study | [Available data and limits](docs/GITHUB_V027.md) | The separately held production inputs, in addition to this repository |
 
-- Compile the self-contained LaTeX with XeLaTeX (MiKTeX/TeX Live), Tectonic or Overleaf.
-- All current plotting coordinates are supplied as CSV and Excel. Supplementary figures render directly from these CSVs; main figures retain the author's editable PowerPoint and replacement-panel code.
-- Python 3.12 is required. Install with `python -m pip install -e ".[control,analysis,dev,paper]"`. PowerShell commands are in the Windows guide.
-- Editing and redraw require neither a GPU nor access to the original server.
-- Bulk raw workloads, complete hourly trajectories and simulation-recovery inputs remain outside Git. Compact evidence, plotted data, research drivers and test fixtures are included. Full-scale replay needs the separately held original inputs.
+## From workload to a qualified offer
 
-The old `codex/manuscript-v025` branch remains a historical review snapshot. Older version-labelled reports are provenance records; use the links above for current editing.
+<img src="docs/assets/workflow.svg" alt="Workload and power inputs lead to scheduling, delivery qualification, and conditional participation economics. Qualification includes the event, recovery, and task deadlines." width="100%">
+
+An observed power reduction is not automatically a reliable commitment. The analysis separates insufficient available load, scheduling infeasibility and causal-controller failure. Participation costs are evaluated for separately qualified reference products, rather than treating every apparent reduction as a saleable service.
+
+## Try the figure workflow
+
+Clone the repository and create an isolated environment. The commands below are for Linux/macOS; the [Windows guide](WINDOWS_START_HERE.md) uses PowerShell without requiring environment activation.
+
+```bash
+git clone https://github.com/daxiang415/AIDRBench.git
+cd AIDRBench
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -c requirements-certificate.txt -e ".[paper]"
+.venv/bin/python tools/aidr.py doctor
+.venv/bin/python tools/aidr.py redraw --figures S5
+```
+
+The redraw uses the included CSV tables and writes to `paper/v0.27/figures/supplement/MY_REDRAW/`. It does not overwrite the reference figures or run the underlying simulations. Omit `--figures S5` to redraw all ten supplementary figures.
+
+For a checkout check that needs no third-party packages:
+
+```bash
+python tools/aidr.py check --hashes
+```
+
+## A look at the results
+
+<table>
+<tr>
+<td width="50%"><a href="paper/v0.27/figures/main/01_FIGURES/AIDRBench_Figure_3.png"><img src="paper/v0.27/figures/main/01_FIGURES/AIDRBench_Figure_3.png" alt="Figure 3: workload representation, offer qualification and failure modes" width="100%"></a></td>
+<td width="50%"><a href="paper/v0.27/figures/main/01_FIGURES/AIDRBench_Figure_6.png"><img src="paper/v0.27/figures/main/01_FIGURES/AIDRBench_Figure_6.png" alt="Figure 6: waiting costs and participation thresholds" width="100%"></a></td>
+</tr>
+<tr>
+<td><strong>Workload realism and delivery.</strong> What changes when task resource-time information and timing are retained?</td>
+<td><strong>Participation economics.</strong> How do waiting costs and access costs affect the choice of response product?</td>
+</tr>
+</table>
+
+These are the existing v0.27/R8 paper figures, not new results. The [gallery](docs/figures.md) links all six main figures to their editable files and panel data. Definitions, sample sizes and qualifications are given in the [paper](paper/v0.27/latex/main.pdf) and [supplement](paper/v0.27/latex/supplement.pdf).
+
+## Repository map
+
+```text
+paper/v0.27/latex/              Paper, supplement, and included figure PDFs
+paper/v0.27/figures/main/       Six main figures, PowerPoint/SVG, and panel data
+paper/v0.27/figures/supplement/  Ten supplementary figures and CSV redraw scripts
+manuscript/source_data/         Compact scientific evidence
+manuscript/revisions/           Study drivers and revision protocols
+src/aidrbench/                  Benchmark library
+configs/                       Model and experiment configurations
+tests/                         Automated checks
+tools/aidr.py                   Common editing and verification commands
+docs/                          Guides, gallery, and reproducibility notes
+```
+
+See [the file index](MAINLINE_FILES.md) for the current manuscript sources. Historical exports are retained for provenance; they are not alternative starting points.
+
+## Scope and project status
+
+The scientific manuscript remains **v0.27**, with **R8 main artwork**. This documentation update does not change the research models, selected offers, plotted data or paper figures. The included tables support figure regeneration; full production-scale replay also needs raw workloads and recovery inputs that are not distributed here.
+
+A software licence and archival identifier have not yet been finalised. Author, funding and other submission declarations remain pending; no publication or release DOI is claimed. See [release scope](docs/GITHUB_V027.md) and [submission status](manuscript/submission-readiness.md).
+
+For a reproducibility question, [open an issue](https://github.com/daxiang415/AIDRBench/issues) with your operating system, Python version, exact command and error output.
