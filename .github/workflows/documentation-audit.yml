@@ -52,6 +52,14 @@ jobs:
                   new = re.sub(pattern, '', new)
               new = chinese.sub('', new)
               if new != old:
+                  old_lines = old.splitlines()
+                  new_lines = new.splitlines()
+                  for i, line in enumerate(new_lines):
+                      if i < len(old_lines) and line != old_lines[i]:
+                          new_lines[i] = line.rstrip()
+                          if new_lines[i].endswith(('，', '；')):
+                              new_lines[i] = new_lines[i][:-1] + '。'
+                  new = '\n'.join(new_lines) + '\n'
                   new = re.sub(r'(?m)^[ \t]+$', '', new)
                   new = re.sub(r'\n{3,}', '\n\n', new)
                   path.write_text(new, encoding='utf-8', newline='\n')
@@ -61,7 +69,7 @@ jobs:
                   'Common paper-editing and verification tasks; no third-party imports required.': 'Reproduction and verification commands for AIDRBench.',
                   'Required editing files:': 'Required resource files:',
                   'Figure editing': 'Figure reproduction',
-                  'ZIP editing works': 'ZIP supports figure reproduction',
+                  'ZIP editing works': 'ZIP supports plotting',
               },
               'tests/test_user_tools.py': {
                   'Regression checks for the public editing entry points and documentation.': 'Regression checks for reproduction commands and documentation.',
