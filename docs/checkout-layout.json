@@ -31,7 +31,7 @@
   },
   "updated_git_blobs": {
     ".github/workflows/onboarding.yml": "933aa42e0a1e81d475ca1b9e06544961b0d95f84",
-    "README.md": "66a20037ef677237747952e7300afd141d87bdba",
+    "README.md": "857c554393be51f514fd9fdf8df97afd9cd3f117",
     "WINDOWS_START_HERE.md": "8f042348b3795f6354ee1c82eaa450e98e851557",
     "MAINLINE_FILES.md": "2facd8c1868beab042f839acc481110487701952",
     "docs/README.md": "fad0fb64c8e0158c5af4b32664b8e8b35d749083",
@@ -40,6 +40,7 @@
     "docs/figures.md": "82375a00ae0a04bc68e84ae6886283330c697026",
     "docs/assets/overview.svg": "85f1eb80ad1bdc4f8fa282c155b4d0333d482bda",
     "docs/assets/workflow.svg": "6e4d8a500b0e46b7ea1ce9323a2a83b553c84345",
+    "docs/assets/aidrbench-mascot.webp": "46175cfa1e9a302342564f21c112063ab737cee9",
     "paper/v0.27/figures/main/README.md": "36aa3bc91e6f489e5f8abe8abd6786275b0b7ad9",
     "paper/v0.27/figures/supplement/README.md": "c06645eb6125cdd77750d78eec53ce1bd2e0939f",
     "paper/v0.27/figures/supplement/VERIFY_DELIVERY.py": "cabf891d749b06ebf37b91a43307da15e68a6c19",

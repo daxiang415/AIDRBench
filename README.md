@@ -1,5 +1,12 @@
 <p align="center">
-  <img src="docs/assets/overview.svg" alt="AIDRBench: reliable demand response from AI data centres" width="100%">
+  <img src="docs/assets/aidrbench-mascot.webp" alt="AIDRBench owl mascot with a server badge and an energy motif" width="240" height="240">
+</p>
+
+<h1 align="center">AIDRBench</h1>
+
+<p align="center">
+  <strong>Reliable demand response from AI data centres</strong><br>
+  Workload-aware scheduling · Service constraints · Event and recovery
 </p>
 
 <p align="center">
@@ -15,8 +22,6 @@
   <img src="https://img.shields.io/badge/Python-3.12-3776AB" alt="Recommended Python version: 3.12">
   <img src="https://img.shields.io/badge/Manuscript-v0.27-49686A" alt="Manuscript version 0.27">
 </p>
-
-# AIDRBench
 
 **How much power can an AI data centre reliably offer to the grid without missing its workload deadlines?**
 
