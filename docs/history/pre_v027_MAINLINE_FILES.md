@@ -17,7 +17,7 @@ F3c foregrounds the crossed weight/order comparison. F4 shows paired supply marg
 
 Interpretation: permutation changes order and alignment jointly; zero misses define a successful series, while qualification targets 95% overall success. A supply deficit rules out a successful affected series, not automatically a probabilistic offer. Strict PI feasibility is distinct from causal qualification and from economic participation.
 
-Do not spawn subagents unless the user explicitly asks. Local Python drawing remains authorised. Author metadata, licence and public archive are not to be filled without user information.
+  Author metadata, licence and public archive are not to be filled without user information.
 
 ## Archived v0.24 handoff and older records
 
@@ -47,7 +47,7 @@ The complete v13 package runs `RUN_ALL_FIGURES.py` from ready CSV tables. `04_co
 
 ## Collaboration and remaining scope
 
-Do not start sub-agents or delegated reviews unless explicitly asked. Local Python plotting is authorised; historical web-only figure instructions are superseded. Do not fill author names, affiliations, contributions, funding, licence or public archive DOI without the user's information. No publication, repository upload or commit has been performed for this revision.
+  Do not fill author names, affiliations, contributions, funding, licence or public archive DOI without the user's information. No publication, repository upload or commit has been performed for this revision.
 
 Statistical qualifications are pointwise and scenario-specific. Eight observed weeks × ten synthetic realisations are not 80 independent weeks. Task resource-time is allocated work, not measured busy-GPU activity; deadlines and permissions remain synthetic and no application pause/checkpoint/restart was measured. Economic price boundaries apply to the reference distribution only, with independent annual series rather than a continuous operating year.
 
@@ -56,7 +56,6 @@ Statistical qualifications are pointwise and scenario-specific. Eight observed w
 The sections below preserve earlier provenance, layouts, protocols and development notes. References to “current” within this archive describe that historical version. The current paths and scientific scope are specified above.
 
 ### Formal scientific assets
-
 
 - `README.md`: scientific question, estimands, hypotheses and experiment plan.
 - `manuscript/`: the article, Supplementary Information, terminology ledger,

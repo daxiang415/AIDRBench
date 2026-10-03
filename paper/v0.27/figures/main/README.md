@@ -1,39 +1,33 @@
-# Main figures: editing and panel data
+# Main figure generation
 
-Six reference figures for manuscript **v0.27**, main artwork **R8** (17 September 2026). The scientific data and reference artwork are unchanged by the documentation refresh.
+Reference figures and panel data for manuscript **v0.27**, main artwork **R8**.
 
 | Directory | Contents |
 | --- | --- |
-| `01_FIGURES/` | Reference PDF, PNG and SVG files for Figures 1–6. |
-| `02_PANEL_DATA/F01/`–`F06/` | Direct plotting tables in CSV and Excel. |
-| `03_EDITABLE/` | Corrected editable PowerPoint and SVG sources. |
-| `05_CODE/` | Scripts and plotting dependencies. |
-| `06_AUDIT/` | Existing coordinate/data checks and export records. |
+| `01_FIGURES/` | Reference PDF, PNG and SVG for Figures 1–6 |
+| `02_PANEL_DATA/F01/`–`F06/` | Panel-level CSV and Excel tables |
+| `03_EDITABLE/` | PowerPoint and SVG source artwork |
+| `05_CODE/` | Plotting scripts and requirements |
+| `06_AUDIT/` | Coordinate checks and export records |
 
-Browse the [figure gallery](../../../../docs/figures.md) before choosing a file to edit. Start from the corrected reference artwork, not the original received input in `04_ORIGINAL_INPUT/`.
+The [figure index](../../../../docs/figures.md) links each figure to its panel tables. `04_ORIGINAL_INPUT/` contains earlier source artwork, not the reference results.
 
-## Rebuild
+## Reproduction
 
-From the repository root, after installing the plotting dependencies:
+After installing the plotting dependencies, run from the repository root:
 
 ```bash
 python tools/aidr.py main-figures
 ```
 
-This builds the corrected panels and PowerPoint in `rebuild/`. The output presentation is `rebuild/corrected/AIDRBench_Figures_R8_corrected.pptx`. For automatic PDF export, install LibreOffice and add `--export-pdf`; otherwise export from PowerPoint. The lower-level entry point remains `python RUN_REBUILD.py --panels-only` from this directory.
+This regenerates corrected panels and the presentation at `rebuild/corrected/AIDRBench_Figures_R8_corrected.pptx`. PDF export requires LibreOffice and `--export-pdf`. The standalone command `python RUN_REBUILD.py --panels-only` is also available from this directory.
 
-Eleven corrected panels are embedded vector SVG; the remaining panels retain native PowerPoint objects. An SVG panel is not a native Excel chart. Change its source script/CSV and replace the regenerated SVG when necessary.
+Eleven corrected panels are embedded SVG; other panels retain native PowerPoint objects. The reconstruction therefore combines script-generated panels with the stored presentation layout.
 
-## Preserve the interpretation
+## Plot definitions
 
-Use the direct panel tables; do not retype values from a screenshot or recalculate the reported statistics for a style-only edit. Figure 3b joins the nine tested points without smoothing. Figure 6a is an empirical step distribution. Figure 5's cost points do not have error bars. Figure 6b's net-value diamonds belong at their actual data coordinates, not at a manually chosen position above a bar.
+Figure 3b connects the nine tested points without smoothing. Figure 6a uses an empirical step distribution. Figure 5's cost points do not have error bars; Figure 6b's net-value diamonds use their tabulated coordinates.
 
-Figure 4 retains the supplied hourly coordinates, event windows and recovery trajectory. Figure 1 is a conceptual overview; its displayed category shares retain the original rounding. Detailed definitions and captions are in the [paper](../../latex/main.pdf).
+Figure 4 retains the hourly coordinates, event windows and recovery trajectories supplied in the panel tables. Figure 1's category shares use the rounding shown in the paper. Full definitions are in the [paper captions](../../latex/main.pdf).
 
-Figure 1's SVG requires the neighbouring `Figure_1_assets/` directory. Its PDF and PNG are standalone.
-
-## Put an edited figure into the paper
-
-Export a single-figure PDF, copy it to `paper/v0.27/latex/figures/` under the existing filename, and rebuild the paper. Neither the PowerPoint rebuild nor a CSV redraw performs this replacement automatically.
-
-For a style-only change, preserve coordinates, samples, units, statistics and caption meaning. Keep the edited source alongside the exported PDF/SVG so the figure remains editable. Current checkout verification is `python tools/aidr.py check --hashes` from the repository root; earlier receipts remain historical records.
+The Figure 1 SVG requires its adjacent `Figure_1_assets/` directory. Its PDF and PNG are standalone. Reproduction outputs are written under `rebuild/` and do not replace the paper's reference figures.

@@ -1,4 +1,4 @@
-"""Common paper-editing and verification tasks; no third-party imports required."""
+"""Reproduction and verification commands for AIDRBench."""
 
 from __future__ import annotations
 
@@ -76,9 +76,9 @@ def doctor(root: Path) -> int:
         "paper/v0.27/figures/supplement/DRAW_SUPPLEMENT.py",
     )
     complete = all((root / path).is_file() for path in essential)
-    print(f"Required editing files: {'found' if complete else 'MISSING'}")
+    print(f"Required resource files: {'found' if complete else 'MISSING'}")
     for label, modules in (
-        ("Figure editing", ("matplotlib", "PIL", "fitz", "numpy", "pandas")),
+        ("Figure reproduction", ("matplotlib", "PIL", "fitz", "numpy", "pandas")),
         ("Optimisation", ("cvxpy", "highspy", "osqp")),
         ("Development", ("pytest", "ruff", "mypy")),
     ):
@@ -98,7 +98,7 @@ def doctor(root: Path) -> int:
         except (OSError, subprocess.SubprocessError):
             print("Git: history availability could not be determined")
     else:
-        print("Git: no usable history; ZIP editing works, certificate replay needs a clone")
+        print("Git: no usable history; ZIP supports plotting, certificate replay needs a clone")
     print("This inspection does not execute simulations, tests or hash verification.")
     return 0 if supported and complete else 1
 

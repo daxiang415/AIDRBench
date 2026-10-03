@@ -1,13 +1,13 @@
 # Documentation
 
-| Guide | Purpose |
+| Guide | Contents |
 | --- | --- |
-| [Getting started](getting-started.md) | Install only what your task needs and run the common commands. |
-| [Windows](../WINDOWS_START_HERE.md) | PowerShell commands for paper editing, figure redraws and testing. |
-| [Figure gallery](figures.md) | Browse the six main figures and find their source tables. |
-| [Data and reproducibility](GITHUB_V027.md) | Understand what is included, what is external and what the checks verify. |
-| [Current file index](../MAINLINE_FILES.md) | Find the authoritative manuscript and editing files. |
-| [Main figure guide](../paper/v0.27/figures/main/README.md) | Edit PowerPoint/SVG artwork and rebuild corrected panels. |
-| [Supplementary figure guide](../paper/v0.27/figures/supplement/README.md) | Redraw S1–S10 directly from their CSV tables. |
+| [Installation and verification](getting-started.md) | Dependencies, checkout checks and software tests |
+| [Windows](../WINDOWS_START_HERE.md) | PowerShell installation and reproduction commands |
+| [Figures and source tables](figures.md) | Main figure previews, data paths and reproduction scripts |
+| [Data availability](GITHUB_V027.md) | Included data, external inputs and reproducibility scope |
+| [Resource index](../MAINLINE_FILES.md) | Paper, supplementary information, implementation and protocols |
+| [Main figure generation](../paper/v0.27/figures/main/README.md) | Main panels, scripts and reference artwork |
+| [Supplementary figure generation](../paper/v0.27/figures/supplement/README.md) | S1–S10 and their CSV inputs |
 
-The scientific version is v0.27. Older dated documents in this directory record the study's development; use the guides above for the maintained checkout.
+The documentation above describes the v0.27 checkout. Dated records elsewhere in the repository document earlier study stages.

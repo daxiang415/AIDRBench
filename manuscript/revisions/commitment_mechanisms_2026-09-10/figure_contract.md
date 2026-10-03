@@ -7,4 +7,4 @@ Scientific plots use the existing matplotlib workflow. No image-generation model
 - S3 preserves candidate-grid development data and old structural context; S5 prices the refined ledgers under fee and waiting alternatives. Every prior analysis remains in source tables even when no longer drawn.
 - Quantitative grids, 183 mm width, 160–180 mm height, minimum 6 pt glyphs; editable text in PDF/SVG, 300 dpi PNG and 600 dpi TIFF. Preserve complete per-panel CSV inputs, no hidden simulation in plotter.
 - Main manuscript and aligned Chinese captions must define service endpoints, model versus accounting kW, exact timing, seeds or observed-week unit, and whether displayed ranges are percentiles or confidence limits.
-- Exported PDF glyph audit, actual visual inspection, package-only redraw and complete source hashes are required. No automatic sub-agent review.
+- Exported PDF glyph audit, actual visual inspection, package-only redraw and complete source hashes are required.

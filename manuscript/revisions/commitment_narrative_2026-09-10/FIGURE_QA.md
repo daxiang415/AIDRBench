@@ -12,4 +12,4 @@ The current English main PDF has 17 pages and six figure bookmarks; the SI PDF h
 
 The source title, English/Chinese blocks, Figure 5 legend and previews match. Supplementary Table 16 points to the relocated S3d cross-score, not the replacement Figure 3c. The evidence-level and selection-history corrections remain in Supplementary Note 7.
 
-Result: PASS for the stated checks. These are reproducibility and presentation checks, not independent peer review or a prediction of journal acceptance. No subagents were used.
+Result: PASS for the stated checks. These are reproducibility and presentation checks, not independent peer review or a prediction of journal acceptance.
