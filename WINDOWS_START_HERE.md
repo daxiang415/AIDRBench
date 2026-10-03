@@ -1,101 +1,68 @@
-# Using AIDRBench on Windows
+# Running AIDRBench on Windows
 
-Start with the [paper](paper/v0.27/latex/main.pdf), [figure gallery](docs/figures.md), or the workflow below. Paper editing and figure redraws do not need a GPU or the original Linux server.
+Use Python 3.12 and PowerShell. A full Git clone is required for tests that replay historical commits. GitHub's **Code → Download ZIP** is sufficient for reading the paper and reproducing figures from the supplied tables.
 
-## Download
-
-For reading and figure editing, choose **Code → Download ZIP** on GitHub and extract the archive to a short path such as `C:\research\AIDRBench`.
-
-For development, clone with Git or GitHub Desktop. A full clone preserves the history needed by the certificate-replay tests; a ZIP does not.
+## Installation
 
 ```powershell
 git clone https://github.com/daxiang415/AIDRBench.git
 cd AIDRBench
-```
-
-Run the following commands in PowerShell from the repository root.
-
-## Set up Python
-
-Install Python 3.12, then create a virtual environment:
-
-```powershell
 py -3.12 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -c requirements-certificate.txt -e ".[paper]"
+.\.venv\Scripts\python.exe -m pip install -c requirements-certificate.txt -e ".[control,analysis,dev,paper]"
 .\.venv\Scripts\python.exe tools/aidr.py doctor
 ```
 
-These commands use the environment's interpreter directly, so PowerShell execution-policy changes and activation scripts are unnecessary. `doctor` checks the checkout, lists missing optional dependencies and reports available TeX tools. Missing development dependencies are expected with a plotting-only installation.
+For figure reproduction only, replace `.[control,analysis,dev,paper]` with `.[paper]`. Use the virtual environment's interpreter directly; activation and PowerShell execution-policy changes are not required.
 
-## Redraw supplementary figures
+`doctor` reports available packages, checkout files, Git history and optional TeX tools. Missing optimisation or development packages are expected with a plotting-only installation. TeX is not needed to run the benchmark or reproduce figures.
+
+## Verify the checkout
+
+```powershell
+.\.venv\Scripts\python.exe tools/aidr.py check --hashes
+```
+
+This compares files against the release and maintained-documentation manifests. It does not run the experiments. Intentional local changes produce hash mismatches.
+
+## Reproduce figures
+
+Generate one supplementary figure, or several:
 
 ```powershell
 .\.venv\Scripts\python.exe tools/aidr.py redraw --figures S5
+.\.venv\Scripts\python.exe tools/aidr.py redraw --figures S3 S9 --tiff
 ```
 
-Omit `--figures S5` for all ten figures, or use `--figures S3 S9` for a selection. Add `--tiff` for TIFF output. Results go to `paper/v0.27/figures/supplement/MY_REDRAW/`; the reference figures are untouched.
+Omit `--figures` to generate all ten. Outputs are saved under `paper/v0.27/figures/supplement/MY_REDRAW/`. The scripts read CSV files; Excel workbooks are parallel copies of those values. Reference figures are not overwritten.
 
-The plotter reads CSV, not Excel. The Excel workbooks contain the same plotting values; a workbook edit does not update a CSV automatically. Redraws use the supplied values, not new simulations, and their layout need not match the reference artwork pixel for pixel.
-
-## Edit main figures
-
-Open the editable PowerPoint/SVG files in [the main figure pack](paper/v0.27/figures/main/README.md). The panel tables are in `02_PANEL_DATA/F01` through `F06`.
+Rebuild the main figure panels and presentation:
 
 ```powershell
 .\.venv\Scripts\python.exe tools/aidr.py main-figures
 ```
 
-This rebuilds the corrected panels and PowerPoint under `paper/v0.27/figures/main/rebuild/`. LibreOffice is not required for this step. To export the rebuilt presentation to PDF automatically, install LibreOffice and add `--export-pdf`.
+Outputs are saved under `paper/v0.27/figures/main/rebuild/`. Automatic PDF export additionally requires LibreOffice and `--export-pdf`. The existing reference PDFs can be viewed without either PowerPoint or LibreOffice.
 
-Some corrected PowerPoint panels are embedded SVG, not native Excel charts. Edit their CSV/script and replace the SVG when changing those panels. Keep `Figure_1_assets/` beside Figure 1 when copying its SVG.
+See the [figure index](docs/figures.md) for data paths and captions.
 
-## Edit and build the paper
+## Run tests
 
-Edit `paper/v0.27/latex/main.tex` and `supplement.tex`. Install MiKTeX/TeX Live with XeLaTeX, or install Tectonic:
-
-```powershell
-.\.venv\Scripts\python.exe tools/aidr.py paper --engine xelatex
-```
-
-The build updates `main.pdf` and `supplement.pdf` in the LaTeX directory. Alternatively, upload the entire `paper/v0.27/latex/` directory to Overleaf and select XeLaTeX. Keep its `figures/` subdirectory. References are included in the TeX sources.
-
-A redraw does **not** automatically replace a paper figure. Copy the approved single-figure PDF into `paper/v0.27/latex/figures/`, retain its expected filename, then rebuild. The English Markdown collaboration copies and the LaTeX sources are separate files; edits do not synchronise automatically.
-
-## Check the checkout or develop the code
-
-The file/hash check uses only the Python standard library:
+With the full dependency set installed:
 
 ```powershell
-py -3.12 tools/aidr.py check --hashes
-```
-
-For the research test suite, use a full Git clone and install the development dependencies:
-
-```powershell
-.\.venv\Scripts\python.exe -m pip install -c requirements-certificate.txt -e ".[control,analysis,dev,paper]"
 .\.venv\Scripts\python.exe tools/aidr.py test
 .\.venv\Scripts\python.exe -m ruff check src tests
 .\.venv\Scripts\python.exe -m mypy src
 ```
 
-Intentional edits change hashes; a mismatch after editing is not evidence that the original download was corrupt. Compare your changes with Git before updating any recorded hashes. Full study replay requires separately held production inputs; see [data and reproducibility](docs/GITHUB_V027.md).
+The supplied plotting and test workflows run on a CPU. Hardware power-measurement scripts require the appropriate NVIDIA GPUs. Full experiment replay also needs the external inputs listed in [data availability](docs/GITHUB_V027.md).
 
-## Common problems
+## Troubleshooting
 
-| Symptom | What to check |
+| Problem | Check |
 | --- | --- |
-| `py` is not recognised | Install Python 3.12 with its Windows launcher, or use the full path to that interpreter. |
-| A package cannot be imported | Run the installation command with the same `.venv` interpreter used for the task. |
-| TeX cannot be found | Install XeLaTeX/Tectonic and reopen PowerShell, or pass the full executable path to `--engine`. |
-| Certificate-replay tests cannot find a commit | Use a full Git clone. For a shallow clone, run `git fetch --unshallow`. |
-| A figure changed but the paper did not | Replace the corresponding PDF in `latex/figures/` and rebuild the paper. |
-
-To save edits, create a branch before working. Add only the files you intend to publish; do not add `.venv`, temporary redraw output or bulk raw data.
-
-```powershell
-git switch -c paper-edits
-git status
-git add paper/v0.27/latex/main.tex
-git commit -m "Revise manuscript text"
-git push -u origin paper-edits
-```
+| `py` is not recognised | Install Python with its Windows launcher, or use the full interpreter path. |
+| A package cannot be imported | Use the same `.venv` interpreter for installation and execution. |
+| A historical commit cannot be found | Use a full clone; run `git fetch --unshallow` for a shallow clone. |
+| A hash check fails | Compare the affected file with `git diff` to distinguish local changes from an incomplete checkout. |
+| Automatic main-figure PDF export fails | Check the LibreOffice installation; omit `--export-pdf` to generate panels and PowerPoint only. |
