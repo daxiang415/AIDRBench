@@ -11,4 +11,4 @@
 - SHA-256：`3f636fea762202904885d8cd7d0bae2b2d4bd87623e1ea4de23e96702a3983c3`
 - 校验回执：package_validation.json；压缩包旁另存 .zip.sha256。
 
-本轮没有启动子智能体；作者、基金、许可证与公开归档信息仍待作者确认，未提交或发布。包内 PROGRESS.json 是封装时的阶段记录，本文件与修订目录当前 PROGRESS.json 记录最终完成状态。
+作者、基金、许可证与公开归档信息仍待作者确认，未提交或发布。包内 PROGRESS.json 是封装时的阶段记录，本文件与修订目录当前 PROGRESS.json 记录最终完成状态。

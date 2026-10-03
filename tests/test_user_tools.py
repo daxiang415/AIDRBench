@@ -1,4 +1,4 @@
-"""Regression checks for the public editing entry points and documentation."""
+"""Regression checks for reproduction commands and documentation."""
 
 from __future__ import annotations
 
