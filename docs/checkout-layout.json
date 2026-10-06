@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "Maintained documentation layout over the unchanged v0.27 delivery receipt. Scientific files retain their original SHA-256 checks; renamed binary files retain their original bytes.",
+  "description": "PDF-only manuscript distribution over the unchanged v0.27 delivery receipt. Retired editable sources are explicitly recorded; scientific data and reference PDFs retain their original hash checks.",
   "baseline_commit": "66105ccaa5629f2d24c53c6d757922e139d54440",
   "baseline_manifest_git_blob": "321f50cedbea22ca017f89265b356afc684a6179",
   "archive_branch": "archive/v0.27-original-layout",
@@ -21,7 +21,16 @@
     "paper/v0.27/figures/supplement/S07/README_中文.md",
     "paper/v0.27/figures/supplement/S08/README_中文.md",
     "paper/v0.27/figures/supplement/S09/README_中文.md",
-    "paper/v0.27/figures/supplement/S10/README_中文.md"
+    "paper/v0.27/figures/supplement/S10/README_中文.md",
+    "manuscript/exports/AIDRBench_Nature_Communications_v0.3_Supplementary_Information.tex",
+    "manuscript/exports/AIDRBench_Nature_Communications_v0.4_review.tex",
+    "manuscript/exports/AIDRBench_Nature_Communications_v0.3_Supplementary_Information_preview.png",
+    "manuscript/exports/AIDRBench_Nature_Communications_v0.4_review_preview.png",
+    "paper/v0.27/latex/main.tex",
+    "paper/v0.27/latex/supplement.tex",
+    "paper/v0.27/latex/BUILD.py",
+    "paper/v0.27/latex/README_中文.md",
+    "paper/v0.27/latex/VERIFY_DELIVERY.py"
   ],
   "renamed_files": {
     "paper/v0.27/figures/supplement/全部补充图_参考图.pdf": "paper/v0.27/figures/supplement/ALL_FIGURES.pdf",
@@ -54,9 +63,9 @@
     "paper/v0.27/figures/supplement/S08/README.md": "1256d3d95330ce4d3f7d9df1f8b225938ac7f418",
     "paper/v0.27/figures/supplement/S09/README.md": "af04be496074976127439763913ae124b1bc17a6",
     "paper/v0.27/figures/supplement/S10/README.md": "38955c4de7c11b85eac1a8d1a17615c323da28fd",
-    "tools/aidr.py": "e632d34924779d60df30be26ebc529d99b9165d9",
-    "scripts/check_v027_checkout.py": "a432ee81f4e4965a07ee05685964ccf7430da4ec",
-    "tests/test_user_tools.py": "48c54c449b74c27c64983e345554e1f27783ebbc",
+    "tools/aidr.py": "444f5a3eb75776eb2eca4b97ccaa212f3cf4276a",
+    "scripts/check_v027_checkout.py": "19847a6233a339d26c80ec8dae5cf3a9846f33a1",
+    "tests/test_user_tools.py": "f711b6ca4eb9cd7122d1064fa654e48a87918135",
     "tests/test_public_panel_guides.py": "d780a50fb41abc1f4c89567f83336065818b1ac8",
     "docs/hardware_continuous_validation_plan_2026-09-08.md": "37dfb7eaf94b16cf6cd4ccb39d9ca8f8cfd37841",
     "docs/history/pre_v027_MAINLINE_FILES.md": "8e708d9a6912f932079846bfbbfa9d845ca0d143",
@@ -64,7 +73,7 @@
     "docs/nature-mainline-figure-preview.md": "e47f15d7a8632e936440db4cb5216721ba000a84",
     "docs/nature-supplementary-figure-preview.md": "936d660eeae75081462ad04c3c1d7f2521881097",
     "docs/paper-packaging.md": "8c1010aba9875e0a2ecaf7f0d5eee71f925c4ef0",
-    "manuscript/README.md": "92b7a67f558fa950479fd0be7fd5b478a9a9b4cb",
+    "manuscript/README.md": "d03c65daaca6cbace3cb93dd96e70aab68889a8f",
     "manuscript/results-evidence-allocation.md": "59378fb1dc8ed95d7bbae4ca51392e4be88cc870",
     "manuscript/revisions/commitment_mechanisms_2026-09-10/DESIGN_ZH.md": "5638ff8d1b5b4c644130d0313c2e75838eb4c12b",
     "manuscript/revisions/commitment_mechanisms_2026-09-10/FINAL_STATUS.md": "aadccfd6dc6483172adfdbc95f92774f4c060cf5",
@@ -86,7 +95,11 @@
     "manuscript/revisions/repeat_mechanism_2026-09-09/README.md": "beeceae631b0c5a047ea0bf7427ff898b9043e07",
     "manuscript/revisions/repeat_mechanism_2026-09-09/RESULTS_AND_REASONS_ZH.md": "85776a437184a2f3ecfa286c2a5e88af7d92065a",
     "manuscript/revisions/workload_composition_2026-09-09/README.md": "a0b63317ff1689367233614d2f123f7930fdbc32",
-    "paper/v0.27/latex/README.md": "7cde2d6d1fd36723a988db4a69ce860c084cc1f7",
-    "tests/test_public_documentation.py": "6c8f66bb8526484c47d2c58801fca09fd8045b0f"
+    "paper/v0.27/latex/README.md": "d3a7766492a5d88614fc2995cb89a5ca6f586cd8",
+    "tests/test_public_documentation.py": "6c8f66bb8526484c47d2c58801fca09fd8045b0f",
+    "manuscript/nature_communications_article.md": "f37f3afe8b9b322a5a0e2c7b7dfa1159226c475c",
+    "manuscript/supplementary_information.md": "115b179e9ff91bb68842bffca8b02a3e1ff40610",
+    ".github/workflows/ci.yml": "02744c7337a99c1922377cc0a4899149b86cc8af",
+    ".gitignore": "956364f40372aa5b0bf7569c745c05f6fad79773"
   }
 }

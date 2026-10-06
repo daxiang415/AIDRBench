@@ -18,10 +18,9 @@ def build_parser() -> argparse.ArgumentParser:
     commands = parser.add_subparsers(dest="task", required=True)
     commands.add_parser("doctor", help="Inspect the checkout and optional dependencies.")
     for name, help_text in (
-        ("check", "Verify the paper checkout."),
+        ("check", "Verify the PDF and figure checkout."),
         ("redraw", "Redraw supplementary figures from included CSV files."),
         ("main-figures", "Rebuild corrected main panels and PowerPoint."),
-        ("paper", "Compile the main paper and supplement."),
         ("test", "Run the existing pytest suite."),
     ):
         command = commands.add_parser(name, help=help_text)
@@ -34,8 +33,6 @@ def build_parser() -> argparse.ArgumentParser:
             command.add_argument("--audit", action="store_true")
         elif name == "main-figures":
             command.add_argument("--export-pdf", action="store_true", help="Requires LibreOffice.")
-        elif name == "paper":
-            command.add_argument("--engine", help="xelatex, tectonic, or an executable path")
     return parser
 
 
@@ -44,7 +41,6 @@ def command_for(args: argparse.Namespace, root: Path) -> list[str]:
         "check": "scripts/check_v027_checkout.py",
         "redraw": "paper/v0.27/figures/supplement/DRAW_SUPPLEMENT.py",
         "main-figures": "scripts/rebuild_main_figures.py",
-        "paper": "paper/v0.27/latex/BUILD.py",
     }
     if args.task == "test":
         return [sys.executable, "-m", "pytest", "-q"]
@@ -60,8 +56,6 @@ def command_for(args: argparse.Namespace, root: Path) -> list[str]:
             command.append("--audit")
     elif args.task == "main-figures" and not args.export_pdf:
         command.append("--panels-only")
-    elif args.task == "paper" and args.engine:
-        command.extend(["--engine", args.engine])
     return command
 
 
@@ -71,8 +65,8 @@ def doctor(root: Path) -> int:
     supported = sys.version_info >= (3, 12)
     print("Python 3.12 is recommended; it is the version used in the CI configuration.")
     essential = (
-        "pyproject.toml", "paper/v0.27/latex/main.tex",
-        "paper/v0.27/latex/supplement.tex",
+        "pyproject.toml", "paper/v0.27/latex/main.pdf",
+        "paper/v0.27/latex/supplement.pdf",
         "paper/v0.27/figures/supplement/DRAW_SUPPLEMENT.py",
     )
     complete = all((root / path).is_file() for path in essential)
@@ -85,8 +79,7 @@ def doctor(root: Path) -> int:
         missing = [module for module in modules if importlib.util.find_spec(module) is None]
         status = "available" if not missing else "optional packages missing: " + ", ".join(missing)
         print(f"{label}: {status}")
-    engine = shutil.which("xelatex") or shutil.which("tectonic")
-    print("TeX: " + (engine or "not found; needed only to compile the paper"))
+    print("Manuscripts: supplied as PDFs; TeX is not required.")
     if (root / ".git").exists() and shutil.which("git"):
         try:
             probe = subprocess.run(

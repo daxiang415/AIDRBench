@@ -26,7 +26,7 @@ def load_module(name: str, relative: str):
     return module
 
 
-launcher = load_module("editing_launcher", "tools/aidr.py")
+launcher = load_module("reproduction_launcher", "tools/aidr.py")
 checker = load_module("checkout_checker", "scripts/check_v027_checkout.py")
 
 
@@ -37,8 +37,6 @@ checker = load_module("checkout_checker", "scripts/check_v027_checkout.py")
         (["redraw", "--figures", "S3", "S9", "--tiff"],
          ["--figures", "S3", "S9", "--tiff"]),
         (["main-figures"], ["--panels-only"]),
-        (["paper", "--engine", "C:/TeX Tools/xelatex.exe"],
-         ["--engine", "C:/TeX Tools/xelatex.exe"]),
         (["test"], ["-m", "pytest", "-q"]),
     ],
 )
@@ -52,6 +50,25 @@ def test_command_arguments(arguments, tail, tmp_path):
 def test_pdf_export_is_explicit(tmp_path):
     args = launcher.build_parser().parse_args(["main-figures", "--export-pdf"])
     assert "--panels-only" not in launcher.command_for(args, tmp_path)
+
+
+def test_paper_compilation_is_not_a_public_command():
+    with pytest.raises(SystemExit):
+        launcher.build_parser().parse_args(["paper"])
+
+
+def test_no_tracked_manuscript_tex():
+    if (ROOT / ".git").exists():
+        result = subprocess.run(
+            ["git", "ls-files", "-z", "--", "manuscript", "paper"],
+            cwd=ROOT, capture_output=True, check=True, timeout=30,
+        )
+        paths = [Path(p.decode("utf-8")) for p in result.stdout.split(b"\0") if p]
+    else:
+        paths = [p for folder in ("manuscript", "paper") for p in (ROOT / folder).rglob("*")
+                 if p.is_file()]
+    sources = [str(p) for p in paths if p.suffix.lower() in {".tex", ".bib", ".cls", ".sty"}]
+    assert not sources, "Editable manuscript sources are not distributed: " + ", ".join(sources)
 
 
 def test_invalid_figure_is_rejected():

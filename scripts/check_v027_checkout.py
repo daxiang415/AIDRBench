@@ -1,4 +1,4 @@
-"""Verify the portable paper checkout without changing the original delivery receipt."""
+"""Verify the PDF and figure checkout without changing the original delivery receipt."""
 
 from __future__ import annotations
 
@@ -6,7 +6,6 @@ import argparse
 import csv
 import hashlib
 import json
-import re
 from pathlib import Path
 from typing import Any
 
@@ -40,7 +39,7 @@ def verify_manifest(root: Path, hashes: bool) -> tuple[list[str], int]:
         old = row["path"]
         if old in retired or (prefixes and old.startswith(prefixes)):
             if within(root, old).exists():
-                failures.append("Retired reading copy still present: " + old)
+                failures.append("Retired file still present: " + old)
             continue
         relative = renamed.get(old, old)
         if relative in active:
@@ -77,33 +76,20 @@ def verify_paper(root: Path) -> list[str]:
     paper = root / "paper/v0.27"
     failures: list[str] = []
     for name in (
-        "latex/main.tex", "latex/main.pdf", "latex/supplement.tex", "latex/supplement.pdf",
+        "latex/main.pdf", "latex/supplement.pdf",
         "figures/main/RUN_REBUILD.py", "figures/supplement/DRAW_SUPPLEMENT.py",
     ):
-        if not (paper / name).is_file():
+        path = paper / name
+        if not path.is_file():
             failures.append("Missing: " + name)
+        elif path.suffix == ".pdf":
+            with path.open("rb") as stream:
+                if stream.read(5) != b"%PDF-":
+                    failures.append("Invalid PDF header: " + name)
     for prefix, count in (("", 6), ("Supplementary_", 10)):
         for number in range(1, count + 1):
             if not (paper / f"latex/figures/AIDRBench_{prefix}Figure_{number}.pdf").is_file():
                 failures.append(f"Missing figure: {prefix}{number}")
-    for name in ("main", "supplement"):
-        source = paper / f"latex/{name}.tex"
-        if not source.is_file():
-            continue
-        text = source.read_text(encoding="utf-8")
-        if "/home/user/" in text or "/tmp/" in text:
-            failures.append(f"Nonportable path in {source}")
-        figures = re.findall(r"figures/(AIDRBench_[A-Za-z_]*\d+\.pdf)", text)
-        if len(set(figures)) != (6 if name == "main" else 10):
-            failures.append(f"Incorrect figure count in {source}")
-    for name in ("nature_communications_article.md", "supplementary_information.md"):
-        source = root / "manuscript" / name
-        if not source.is_file():
-            failures.append("Missing reading copy: " + name)
-            continue
-        for target in re.findall(r"!\[[^]]*\]\(([^)]+)\)", source.read_text(encoding="utf-8")):
-            if not (source.parent / target).is_file():
-                failures.append(f"Broken image: {source.name}: {target}")
     return failures
 
 

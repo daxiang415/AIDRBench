@@ -17,7 +17,7 @@ env:
   MPLBACKEND: Agg
 
 jobs:
-  code-and-paper:
+  code-and-figures:
     strategy:
       fail-fast: false
       matrix:
@@ -32,7 +32,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - name: Install project and editing dependencies
+      - name: Install project and figure dependencies
         run: python -m pip install -c requirements-certificate.txt -e ".[control,analysis,dev,paper]"
       - name: Lint
         run: python -m ruff check src tests scripts/check_v027_checkout.py scripts/rebuild_main_figures.py
@@ -40,7 +40,7 @@ jobs:
         run: python -m mypy src
       - name: Test
         run: python -m pytest -q
-      - name: Verify paper files and Windows paths
+      - name: Verify PDFs, source data and Windows paths
         run: python scripts/check_v027_checkout.py --hashes
       - name: Redraw supplementary figures from CSV
         run: python paper/v0.27/figures/supplement/DRAW_SUPPLEMENT.py --audit
@@ -48,7 +48,3 @@ jobs:
         run: python paper/v0.27/figures/supplement/audit/verify_panels.py --captured paper/v0.27/figures/supplement/MY_REDRAW/captured --report paper/v0.27/figures/supplement/MY_REDRAW/verification.json
       - name: Rebuild main panels and PowerPoint
         run: python scripts/rebuild_main_figures.py --panels-only
-      - name: Render Markdown review copies
-        run: |
-          python scripts/render_review_tex.py
-          python scripts/render_supplementary_tex.py
