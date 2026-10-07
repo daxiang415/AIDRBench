@@ -33,4 +33,3 @@ jobs:
         run: |
           python tools/aidr.py redraw --figures S5 --dry-run
           python tools/aidr.py main-figures --dry-run
-          python tools/aidr.py paper --engine xelatex --dry-run
